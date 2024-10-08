@@ -1,0 +1,315 @@
+﻿@page
+@model             ConnectionsModel
+@{
+}
+@{
+    Layout = "Shared/_LayoutProfile";
+}
+@section Header {
+    <link rel="icon"
+          type="image/x-icon"
+          href="~/assets/img/favicon/favicon.ico" />
+
+    @*   <!-- Icons -->
+    <link rel="stylesheet"
+          href="~/assets/vendor/fonts/materialdesignicons.css" /> *@
+
+
+    <!-- Core CSS -->
+    @*    <link rel="stylesheet"
+          href="~/assets/vendor/css/rtl/core.css"
+          class="template-customizer-core-css" />
+    <link rel="stylesheet"
+          href="~/assets/vendor/css/rtl/theme-default.css"
+          class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="~/assets/css/demo.css" />
+    <link rel="stylesheet" href="~/assets/vendor/fonts/IRANSans.css" />
+ *@
+    <!-- Vendors CSS -->
+    @* <link rel="stylesheet"
+          href="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet"
+          href="~/assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet"
+          href="~/assets/vendor/libs/typeahead-js/typeahead.css" />
+    <link rel="stylesheet"
+          href="~/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
+    <link rel="stylesheet"
+          href="~/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
+    <link rel="stylesheet"
+          href="~/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
+    <link rel="stylesheet"
+          href="~/assets/vendor/libs/animate-css/animate.css" />
+    <link rel="stylesheet"
+          href="~/assets/vendor/libs/sweetalert2/sweetalert2.css" />
+    <link rel="stylesheet"
+          href="~/assets/vendor/libs/select2/select2.css" />
+    <link rel="stylesheet"
+          href="~/assets/vendor/libs/formvalidation/dist/css/formValidation.min.css" />
+ *@
+    <!-- Page CSS -->
+
+    <link rel="stylesheet"
+          href="~/assets/vendor/css/pages/page-user-view.css" />
+    <!-- Helpers -->
+}
+<!-- User Content -->
+<div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
+    <!-- User Tabs -->
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link" asp-page="Acount">
+                <i class="mdi mdi-account-outline mdi-20px me-1"></i>حساب
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-page="Security">
+                <i class="mdi mdi-lock-open-outline mdi-20px me-1"></i>امنیت
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-page="Billing">
+                <i class="mdi mdi-bookmark-outline mdi-20px me-1"></i>صورتحساب و پلن‌ها
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " asp-page="Notification">
+                <i class="mdi mdi-bell-outline mdi-20px me-1"></i>اعلان‌ها
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="javascript:void(0);"><i class="mdi mdi-link mdi-20px me-1"></i>اتصالات</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               asp-page="Friends">
+                <i class="mdi mdi-account-supervisor-outline mdi-20px me-1"></i>‌دوستان
+            </a>
+        </li>
+    </ul>
+    <!--/ User Tabs -->
+
+    <div class="card mb-4">
+        <h5 class="card-header">حساب های متصل</h5>
+        <div class="card-body">
+            <p>محتوا را از حساب های متصل بر روی سایت خود نمایش دهید.</p>
+            <div class="d-flex mb-3">
+                <div class="flex-shrink-0">
+                    <img src="../../assets/img/icons/brands/google.png" alt="google" class="me-3" height="36">
+                </div>
+                <div class="flex-grow-1 row">
+                    <div class="col-9 mb-sm-0 mb-2">
+                        <h6 class="mb-0 fw-semibold">گوگل</h6>
+                        <small class="text-muted">تقویم و مخاطبین</small>
+                    </div>
+                    <div class="col-3 text-end">
+                        <label class="switch me-0">
+                            <input type="checkbox" class="switch-input" checked="">
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                            </span>
+                            <span class="switch-label"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex mb-3">
+                <div class="flex-shrink-0">
+                    <img src="../../assets/img/icons/brands/slack.png" alt="slack" class="me-3" height="36">
+                </div>
+                <div class="flex-grow-1 row">
+                    <div class="col-9 mb-sm-0 mb-2">
+                        <h6 class="mb-0 fw-semibold">اسلک</h6>
+                        <small class="text-muted">ارتباط</small>
+                    </div>
+                    <div class="col-3 text-end">
+                        <label class="switch me-0">
+                            <input type="checkbox" class="switch-input">
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                            </span>
+                            <span class="switch-label"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex mb-3">
+                <div class="flex-shrink-0">
+                    <img src="../../assets/img/icons/brands/github.png" alt="github" class="me-3" height="36">
+                </div>
+                <div class="flex-grow-1 row">
+                    <div class="col-9 mb-sm-0 mb-2">
+                        <h6 class="mb-0 fw-semibold">گیت هاب</h6>
+                        <small class="text-muted">مخازن گیت خود را مدیریت کنید</small>
+                    </div>
+                    <div class="col-3 text-end">
+                        <label class="switch me-0">
+                            <input type="checkbox" class="switch-input" checked="">
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                            </span>
+                            <span class="switch-label"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex mb-3">
+                <div class="flex-shrink-0">
+                    <img src="../../assets/img/icons/brands/mailchimp.png" alt="mailchimp" class="me-3" height="36">
+                </div>
+                <div class="flex-grow-1 row">
+                    <div class="col-9 mb-sm-0 mb-2">
+                        <h6 class="mb-0 fw-semibold">میل چیمپ</h6>
+                        <small class="text-muted">خدمات بازاریابی ایمیل</small>
+                    </div>
+                    <div class="col-3 text-end">
+                        <label class="switch me-0">
+                            <input type="checkbox" class="switch-input" checked="">
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                            </span>
+                            <span class="switch-label"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="flex-shrink-0">
+                    <img src="../../assets/img/icons/brands/asana.png" alt="asana" class="me-3" height="36">
+                </div>
+                <div class="flex-grow-1 row">
+                    <div class="col-9 mb-sm-0 mb-2">
+                        <h6 class="mb-0 fw-semibold">آسانا</h6>
+                        <small class="text-muted">ارتباط</small>
+                    </div>
+                    <div class="col-3 text-end">
+                        <label class="switch me-0">
+                            <input type="checkbox" class="switch-input">
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                            </span>
+                            <span class="switch-label"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <h5 class="card-header">حساب های اجتماعی</h5>
+        <div class="card-body">
+            <p>محتوا را از حساب های اجتماعی بر روی سایت خود نمایش دهید</p>
+            <div class="d-flex mb-3">
+                <div class="flex-shrink-0">
+                    <img src="../../assets/img/icons/brands/facebook.png" alt="facebook" class="me-3" height="36">
+                </div>
+                <div class="flex-grow-1 row">
+                    <div class="col-7 mb-sm-0 mb-2">
+                        <h6 class="mb-0">فیسبوک</h6>
+                        <small class="text-muted">متصل نشده</small>
+                    </div>
+                    <div class="col-5 text-end">
+                        <button class="btn btn-text-secondary btn-icon rounded-pill waves-effect waves-light"><i class="mdi mdi-link-variant mdi-24px"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex mb-3">
+                <div class="flex-shrink-0">
+                    <img src="../../assets/img/icons/brands/twitter.png" alt="twitter" class="me-3" height="36">
+                </div>
+                <div class="flex-grow-1 row">
+                    <div class="col-7 mb-sm-0 mb-2">
+                        <h6 class="mb-0">توییتر</h6>
+                        <a href="https://twitter.com/negetive2Dev" target="_blank">ticktockteam</a>
+                    </div>
+                    <div class="col-5 text-end">
+                        <button class="btn btn-text-danger btn-icon rounded-pill waves-effect waves-light"><i class="mdi mdi-delete-outline mdi-24px"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex mb-3">
+                <div class="flex-shrink-0">
+                    <img src="../../assets/img/icons/brands/instagram.png" alt="instagram" class="me-3" height="36">
+                </div>
+                <div class="flex-grow-1 row">
+                    <div class="col-7 mb-sm-0 mb-2">
+                        <h6 class="mb-0">اینستاگرام</h6>
+                        <a href="https://www.instagram.com/ticktockteam/" target="_blank"> ticktockteam</a>
+                    </div>
+                    <div class="col-5 text-end">
+                        <button class="btn btn-text-danger btn-icon rounded-pill waves-effect waves-light"><i class="mdi mdi-delete-outline mdi-24px"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex mb-3">
+                <div class="flex-shrink-0">
+                    <img src="../../assets/img/icons/brands/dribbble.png" alt="dribbble" class="me-3" height="36">
+                </div>
+                <div class="flex-grow-1 row">
+                    <div class="col-7 mb-sm-0 mb-2">
+                        <h6 class="mb-0">دریبل</h6>
+                        <small class="text-muted">متصل نشده</small>
+                    </div>
+                    <div class="col-5 text-end">
+                        <button class="btn btn-text-secondary btn-icon rounded-pill waves-effect waves-light"><i class="mdi mdi-link-variant mdi-24px"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="flex-shrink-0">
+                    <img src="../../assets/img/icons/brands/behance.png" alt="behance" class="me-3" height="36">
+                </div>
+                <div class="flex-grow-1 row">
+                    <div class="col-7 mb-sm-0 mb-2">
+                        <h6 class="mb-0">بی هانس</h6>
+                        <small class="text-muted">متصل نشده</small>
+                    </div>
+                    <div class="col-5 text-end">
+                        <button class="btn btn-text-secondary btn-icon rounded-pill waves-effect waves-light"><i class="mdi mdi-link-variant mdi-24px"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+@section Scripts {
+    <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/assets/vendor/libs/popper/popper.js"></script>
+    <script src="~/assets/vendor/js/bootstrap.js"></script>
+    <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/assets/vendor/libs/node-waves/node-waves.js"></script>
+
+    <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+
+    <script src="~/assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+    <!-- Vendors JS -->
+    <script src="~/assets/vendor/libs/moment/moment.js"></script>
+    <script src="~/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+    <script src="~/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/vendor/libs/cleavejs/cleave.js"></script>
+    <script src="~/assets/vendor/libs/cleavejs/cleave-phone.js"></script>
+    <script src="~/assets/vendor/libs/select2/select2.js"></script>
+    <script src="~/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
+    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
+    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
+
+    <!-- Main JS -->
+    <script src="~/assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="~/assets/js/modal-edit-user.js"></script>
+    <script src="~/assets/js/app-user-view.js"></script>
+    <script src="~/assets/js/app-user-view-account.js"></script>
+}

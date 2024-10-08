@@ -1,0 +1,289 @@
+﻿@page
+@model             FriendsModel
+@{
+    Layout = "Shared/_LayoutProfile";
+}
+@section Header {
+    <link rel="icon"
+          type="image/x-icon"
+          href="~/assets/img/favicon/favicon.ico" />
+
+    <link rel="stylesheet"
+          href="~/assets/vendor/css/pages/page-user-view.css" />
+
+}
+ 
+<div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
+    <!-- User Tabs -->
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);">
+                <i class="mdi mdi-account-outline mdi-20px me-1"></i>حساب
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-page="Security">
+                <i class="mdi mdi-lock-open-outline mdi-20px me-1"></i>امنیت
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-page="Billing">
+                <i class="mdi mdi-bookmark-outline mdi-20px me-1"></i>صورتحساب و پلن‌ها
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               asp-page="Notification">
+                <i class="mdi mdi-bell-outline mdi-20px me-1"></i>اعلان‌ها
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-page="Connections"><i class="mdi mdi-link mdi-20px me-1"></i>اتصالات</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active"
+               asp-page="Friends">
+                <i class="mdi mdi-account-supervisor-outline mdi-20px me-1"></i>‌دوستان
+            </a>
+        </li>
+    </ul>
+    <!--/ User Tabs -->
+    <!-- Project table -->
+@*     <div class="card mb-4">
+        <h5 class="card-header">لیست پروژه‌های کاربر</h5>
+        <div class="table-responsive mb-3">
+            <table class="table datatable-project">
+                <thead class="table-light">
+                    <tr>
+                        <th></th>
+                        <th>پروژه</th>
+                        <th class="text-nowrap">مجموع وظیفه</th>
+                        <th>پیشرفت</th>
+                        <th>ساعت</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <!-- /Project table -->
+    <!-- Activity Timeline -->
+    <div class="card mb-4">
+        <h5 class="card-header">خط زمانی فعالیت کاربر</h5>
+        <div class="card-body pb-0 pt-3">
+            <ul class="timeline mb-0">
+                <li class="timeline-item timeline-item-transparent">
+                    <span class="timeline-point timeline-point-danger"></span>
+                    <div class="timeline-event">
+                        <div class="timeline-header mb-1">
+                            <h6 class="mb-0">12 صورتحساب پرداخت شد</h6>
+                            <span class="text-muted">12 دقیقه قبل</span>
+                        </div>
+                        <p class="text-muted mb-2">
+                            صورتحساب ها به شرکت پرداخت شد
+                        </p>
+                        <div class="d-flex">
+                            <a href="javascript:void(0)" class="me-3">
+                                <img src="../../assets/img/icons/misc/pdf.png"
+                                     alt="PDF image"
+                                     width="15"
+                                     class="me-2" />
+                                <span class="fw-semibold text-heading">invoices.pdf</span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline-item timeline-item-transparent">
+                    <span class="timeline-point timeline-point-primary"></span>
+                    <div class="timeline-event">
+                        <div class="timeline-header mb-1">
+                            <h6 class="mb-0">ملاقات با مشتری</h6>
+                            <span class="text-muted">45 دقیقه قبل</span>
+                        </div>
+                        <p class="text-muted mb-2">
+                            ملاقات برای پروژه با استیو در 10:15 ق.ظ
+                        </p>
+                        <div class="d-flex flex-wrap">
+                            <div class="avatar me-3">
+                                <img src="../../assets/img/avatars/3.png"
+                                     alt="Avatar"
+                                     class="rounded-circle" />
+                            </div>
+                            <div>
+                                <h6 class="mb-0">بیل گیتس (مشتری)</h6>
+                                <span class="text-muted">بنیان‌گذار مایکروسافت</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline-item timeline-item-transparent">
+                    <span class="timeline-point timeline-point-warning"></span>
+                    <div class="timeline-event">
+                        <div class="timeline-header mb-1">
+                            <h6 class="mb-0">
+                                ایجاد یک پروژه جدید برای مشتری
+                            </h6>
+                            <span class="text-muted">2 روز قبل</span>
+                        </div>
+                        <p class="text-muted mb-2">5 عضو تیم در یک پروژه</p>
+                        <div class="d-flex align-items-center avatar-group">
+                            <div class="avatar pull-up"
+                                 data-bs-toggle="tooltip"
+                                 data-popup="tooltip-custom"
+                                 data-bs-placement="top"
+                                 title="نینا نیازی">
+                                <img src="../../assets/img/avatars/5.png"
+                                     alt="Avatar"
+                                     class="rounded-circle" />
+                            </div>
+                            <div class="avatar pull-up"
+                                 data-bs-toggle="tooltip"
+                                 data-popup="tooltip-custom"
+                                 data-bs-placement="top"
+                                 title="Marrie Patty">
+                                <img src="../../assets/img/avatars/12.png"
+                                     alt="Avatar"
+                                     class="rounded-circle" />
+                            </div>
+                            <div class="avatar pull-up"
+                                 data-bs-toggle="tooltip"
+                                 data-popup="tooltip-custom"
+                                 data-bs-placement="top"
+                                 title="Jimmy Jackson">
+                                <img src="../../assets/img/avatars/9.png"
+                                     alt="Avatar"
+                                     class="rounded-circle" />
+                            </div>
+                            <div class="avatar pull-up"
+                                 data-bs-toggle="tooltip"
+                                 data-popup="tooltip-custom"
+                                 data-bs-placement="top"
+                                 title="Kristine Gill">
+                                <img src="../../assets/img/avatars/6.png"
+                                     alt="Avatar"
+                                     class="rounded-circle" />
+                            </div>
+                            <div class="avatar pull-up"
+                                 data-bs-toggle="tooltip"
+                                 data-popup="tooltip-custom"
+                                 data-bs-placement="top"
+                                 title="Nelson Wilson">
+                                <img src="../../assets/img/avatars/14.png"
+                                     alt="Avatar"
+                                     class="rounded-circle" />
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline-item timeline-item-transparent border-0">
+                    <span class="timeline-point timeline-point-info"></span>
+                    <div class="timeline-event">
+                        <div class="timeline-header mb-1">
+                            <h6 class="mb-0">بررسی طراحی</h6>
+                            <span class="text-muted">5 روز قبل</span>
+                        </div>
+                        <p class="text-muted mb-0">
+                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
+                            صنعت چاپ
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- /Activity Timeline --> *@
+    <!-- Invoice table -->
+    
+     <div class="card mb-4">
+        <div class="table-responsive mb-3">
+            <table class="table datatable-invoice">
+                <thead class="table-light">
+                <tr>
+                    <th></th>
+                    <th>شناسه</th>
+                    <th><i class="mdi mdi-trending-up"></i></th>
+                    <th>مجموع</th>
+                    <th>تاریخ صدرو</th>
+                    <th>عملیات ها</th>
+                </tr> 
+                
+                </thead>
+                <tbody>
+               
+              @*    @{
+                     foreach (var VARIABLE in COLLECTION)
+                     { *@
+
+                            <tr class="odd">
+                                <td class="  control" tabindex="0" style="display: none;">
+                                </td>
+                                <td class="sorting_1">
+                                    <a href="app-invoice-preview.html">#5089</a>
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex" data-bs-toggle="tooltip" data-bs-html="true" aria-label="<span>Sent<br> <strong>Balance:</strong> 0<br> <strong>Due Date:</strong> 05/09/2020</span>" data-bs-original-title="<span>Sent<br> <strong>Balance:</strong> 0<br> <strong>Due Date:</strong> 05/09/2020</span>">
+
+                                        <span class="avatar avatar-sm">
+                                            <span class="avatar-initial rounded-circle bg-label-secondary">
+                                                <i class="mdi mdi-email-outline"></i>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>$3077</td>
+                                <td>05/02/2020</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <a href="javascript:;" class="btn btn-sm btn-icon btn-text-secondary rounded-pill text-body" data-bs-toggle="tooltip" aria-label="حذف فاکتور" data-bs-original-title="حذف فاکتور">
+                                            <i class="mdi mdi-delete-outline mdi-20px mx-1"></i>
+                                        </a><a href="app-invoice-preview.html" class="btn btn-sm btn-icon btn-text-secondary rounded-pill text-body" data-bs-toggle="tooltip" aria-label="پیشنمایش" data-bs-original-title="پیشنمایش">
+                                            <i class="mdi mdi-eye-outline mdi-20px mx-1"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="mdi mdi-dots-vertical mdi-20px"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end m-0"><a href="javascript:;" class="dropdown-item"><i class="mdi mdi-download-outline me-2"></i><span>دانلود</span></a><a href="javascript:;" class="dropdown-item"><i class="mdi mdi-pencil-outline me-2"></i><span>ویرایش</span></a><a href="javascript:;" class="dropdown-item delete-record"><i class="mdi mdi-checkbox-multiple-blank-outline me-2"></i><span>کپی</span></a></div>
+                                    </div>
+                                </td>
+                            </tr>
+                @*      }
+                 } *@
+                
+                </tbody>
+            </table>
+        </div>
+    </div> 
+    <!-- /Invoice table -->
+</div>
+
+@section Scripts {
+    <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/assets/vendor/libs/popper/popper.js"></script>
+    <script src="~/assets/vendor/js/bootstrap.js"></script>
+    <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/assets/vendor/libs/node-waves/node-waves.js"></script>
+
+    <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+
+    <script src="~/assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+    <!-- Vendors JS -->
+    <script src="~/assets/vendor/libs/moment/moment.js"></script>
+    <script src="~/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+    <script src="~/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+    <script src="~/assets/vendor/libs/cleavejs/cleave.js"></script>
+    <script src="~/assets/vendor/libs/cleavejs/cleave-phone.js"></script>
+    <script src="~/assets/vendor/libs/select2/select2.js"></script>
+    <script src="~/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
+    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
+    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
+
+    <!-- Main JS -->
+    <script src="~/assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="~/assets/js/modal-edit-user.js"></script>
+    <script src="~/assets/js/app-user-view.js"></script>
+    <script src="~/assets/js/app-user-view-account.js"></script>
+}

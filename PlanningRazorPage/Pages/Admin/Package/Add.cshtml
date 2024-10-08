@@ -1,0 +1,70 @@
+﻿@page
+@model PlanningRazorPage.Pages.Admin.Package.AddModel
+@{
+}
+
+<div class="col-12 container-fluid">
+            <div class="card">
+              <h5 class="card-header">تکرار کننده فرم</h5>
+        <form class="form-repeater">
+
+        <div class="card-body">
+
+<div class="form-floating form-floating-outline mb-5">
+    <input class="form-control"
+           type="text"
+           placeholder="متــریالایز"
+           id="html5-text-input" />
+    <label for="html5-text-input">متن</label>
+</div>
+<div class="mb-3">
+    <label for="formFile" class="form-label">عکس زمینه پکیج</label>
+    <input class="form-control" type="file" id="formFile" />
+</div>
+
+        <br />
+        <br />
+                <div data-repeater-list="group-a">
+                    <div data-repeater-item>
+                        <div class="row">
+                            <div class="mb-2 col-lg-2 col-xl-2 col-2 mb-0">
+                                <label class="form-label" for="form-repeater-1-1">نام ویژگی</label>
+                                <input type="text" id="form-repeater-1-1" class="form-control text-start" dir="ltr" placeholder="جان.دو">
+                            </div>
+                            <div class="mb-7 col-lg-7 col-xl-7 col-7 mb-0">
+                                <label class="form-label" for="form-repeater-1-2">توضیحات ویژگی</label>
+                                <input type="text" id="form-repeater-1-2" class="form-control text-start" dir="ltr" placeholder="توضیحات راجب ویژگی پکیج">
+                            </div>
+                            
+                            <div class="mb-3 col-lg-3 col-xl- col-3 d-flex align-items-center mb-0">
+                                <button class="btn btn-label-danger mt-4" data-repeater-delete>
+                                    <i class="bx bx-x"></i>
+                                    <span class="align-middle">حذف</span>
+                                </button>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+                <div class="mb-0">
+                    <button class="btn btn-primary" data-repeater-create>
+                        <i class="bx bx-plus"></i>
+                        <span class="align-middle">افزودن</span>
+                    </button>
+                </div>
+         
+        </div>   </form>
+    </div>
+</div>
+           
+<!-- /Form Repeater -->
+     
+@section Scripts{
+    <script src="~/assets/js/forms-extras.js"></script>
+
+    <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+
+    <script src="~/assets/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
+ }
