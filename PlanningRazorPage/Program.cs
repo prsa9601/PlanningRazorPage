@@ -1,5 +1,8 @@
 using PlanningRazorPage.Infrastructure;
 using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +28,25 @@ builder.Services.AddRazorPages()
 //    option.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
 //    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 //});
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidAudience = builder.Configuration["JwtConfig:Audience"],
+        ValidIssuer = builder.Configuration["JwtConfig:Issuer"],
+        IssuerSigningKey =
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:SignInKey"])),
+        ValidateLifetime = true,
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidateIssuerSigningKey = true
+    };
+});
 builder.Services.AddAuthentication();
 
 var app = builder.Build();
@@ -61,7 +83,7 @@ app.Use(async (context, next) =>
     if (status == 401)
     {
         var path = context.Request.Path;
-        context.Response.Redirect($"../../../../auth/login?redirectTo={path}");
+        context.Response.Redirect($"../../../../Front/Auth/Login?redirectTo={path}");
     }
 });
 app.UseAuthentication();
@@ -76,12 +98,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(name: "Default", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllerRoute(name: "Default", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-    endpoints.MapAreaControllerRoute(name: "AdminPanel", areaName: "Admin1", pattern: "CodeYad{controller-Home}/{action-Index}/{id?}");
-});
+//    endpoints.MapAreaControllerRoute(name: "AdminPanel", areaName: "Admin1", pattern: "CodeYad{controller-Home}/{action-Index}/{id?}");
+//});
 app.MapRazorPages();
 
 app.Run();

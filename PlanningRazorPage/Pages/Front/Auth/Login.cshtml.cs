@@ -1,14 +1,17 @@
-using Microsoft.AspNetCore.Components.Forms;
+﻿using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Hosting;
 using PlanningRazorPage.Models.Auth;
 using PlanningRazorPage.Services.Auth;
 using System.ComponentModel.DataAnnotations;
+using PlanningRazorPage.Infrastructure.RazorUtils;
+using PlanningRazorPage.Models;
 
 namespace PlanningRazorPage.Pages.Front.Auth
 {
-    public class LoginModel : PageModel
+    
+    public class LoginModel : BaseRazorPage
     {
         private readonly IAuthService _authService;
 
@@ -16,14 +19,15 @@ namespace PlanningRazorPage.Pages.Front.Auth
         {
             _authService = service;
         }
-
-        [Display(Name = "????? ????")]
-        [Required(ErrorMessage = "{0} ?? ???? ????")]
+        [BindProperty]
+        [Display(Name = "نام کربری")]
+        [Required(ErrorMessage = "{0} را وارد کنید")]
         public string UserName { get; set; }
 
-        [Display(Name = "???? ????")]
-        [Required(ErrorMessage = "{0} ?? ???? ????")]
-        [MinLength(5, ErrorMessage = "???? ???? ???? ?????? ?? 5 ??????? ????")]
+        [BindProperty]
+        [Display(Name = "کلمه عبور")]
+        [Required(ErrorMessage = "{0} را وارد کنید")]
+        [MinLength(5, ErrorMessage = "کلمه عبور باید مساوی یا بیشتر از 8 کاراکتر باشه")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
@@ -42,21 +46,27 @@ namespace PlanningRazorPage.Pages.Front.Auth
             var result = await _authService.Login(new LoginCommand()
             {
                 Password = Password,
-                UserName = UserName
+                UserName = UserName,
+                rememberMe = true
             });
-            if (result.IsSuccess == false)
+            if (result.MetaData.AppStatusCode == AppStatusCode.NotFound)
+            {
+                TempData["ErrorNotFound"] = "کاربر مورد نظر";
+                return Redirect("~/errors/notfound");
+            }
+            else if (result.IsSuccess == false)
             {
                 ModelState.AddModelError(nameof(UserName), result.MetaData.Message);
                 return Page();
             }
 
-            //var token = result.Data.Token;
+            var token = result.Data.Token;
             //var refreshToken = result.Data.RefreshToken;
-            //HttpContext.Response.Cookies.Append("token", token, new CookieOptions()
-            //{
-            //    HttpOnly = true,
-            //    Expires = DateTimeOffset.Now.AddDays(7)
-            //});
+            HttpContext.Response.Cookies.Append("token", token, new CookieOptions()
+            {
+                HttpOnly = true,
+                Expires = DateTimeOffset.Now.AddDays(7)
+            });
             //HttpContext.Response.Cookies.Append("refresh-token", refreshToken, new CookieOptions()
             //{
             //    HttpOnly = true,
@@ -68,7 +78,8 @@ namespace PlanningRazorPage.Pages.Front.Auth
             {
                 return LocalRedirect(RedirectTo);
             }
-            return Redirect("../Index");
+            return Redirect("~/Index");
+            //return RedirectAndShowAlert(result, Redirect("~/Index"));
             //return RedirectToPage("detail", new { slug = post.Slug });
         }
     }

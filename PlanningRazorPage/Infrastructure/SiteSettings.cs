@@ -2,6 +2,7 @@
 {
     public static class SiteSettings
     {
-        public static string ServerPath { get; set; } = "http://localhost:5131";
+        public static string ServerPath { get; set; } = "http://localhost:5130";
     }
 }
+   

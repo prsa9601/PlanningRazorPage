@@ -71,4 +71,5 @@
         public string videoPath { get; set; }
         public string thumbnail { get; set; }
     }
+
 }

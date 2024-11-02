@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PlanningRazorPage.Services.Auth;
 
@@ -15,8 +15,10 @@ namespace PlanningRazorPage.Pages.Front.Auth
 
         public string Password { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            //TempData["ErrorNotFound"] = "کاربر مورد نظر";
+            //return Redirect("~/errors/NotFound");
         }
         public void OnPost()
         {

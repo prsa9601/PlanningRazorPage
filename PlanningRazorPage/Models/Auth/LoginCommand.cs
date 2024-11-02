@@ -19,4 +19,9 @@
         public string PhoneNumber { get; set; }
         // public bool rememberMe { get; set; }
     }
+    //public class LoginResponse
+    //{
+    //    public string Token { get; set; }
+    //    public string RefreshToken { get; set; }
+    //}
 }

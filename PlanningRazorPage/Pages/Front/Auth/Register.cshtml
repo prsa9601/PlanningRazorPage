@@ -1,5 +1,5 @@
 ﻿@page
-@model             RegisterModel
+@model RegisterModel
 @{
     Layout = "../Shared/_Layout";
 }
@@ -59,19 +59,26 @@
             <h4 class="mb-2 fw-semibold">ماجراجویی اینجا شروع می‌شود 🚀</h4>
             <p class="mb-4">مدیریت برنامه خود را آسان و جذاب کنید!</p>
 
-            <form id="formAuthentication" class="mb-3" action="http://theboys.ir/html/vertical-menu-template-semi-dark/index.html" method="POST">
+            <form id="formAuthentication" class="mb-3" method="POST">
                 <div class="form-floating form-floating-outline mb-3">
-                    <input type="text" class="form-control" id="username" name="username" placeholder="نام کاربری خود را وارد کنید" autofocus>
+                    <input type="text" asp-for="@Model.UserName" class="form-control" placeholder="نام کاربری خود را وارد کنید" autofocus>
                     <label for="username">نام کاربری</label>
                 </div>
                 <div class="form-floating form-floating-outline mb-3">
-                    <input type="text" class="form-control" id="email" name="email" placeholder="ایمیل">
+                    <input type="text" class="form-control" asp-for="@Model.Email" id="email" name="email" placeholder="ایمیل">
                     <label for="email">ایمیل</label>
                 </div>
+                @* @Html.EditorFor(m=>m.PhoneNumber) *@
+                    <div class="form-floating form-floating-outline mb-3 fv-plugins-icon-container">
+                        <input asp-for="@Model.PhoneNumber" type="text" class="form-control" placeholder="شماره موبایل">
+                        <label asp-for="@Model.PhoneNumber" >شماره موبایل</label>
+                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                        <span asp-validation-for="@Model.PhoneNumber"></span>
+                    </div>
                 <div class="mb-3 form-password-toggle">
                     <div class="input-group input-group-merge">
                         <div class="form-floating form-floating-outline">
-                            <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                            <input asp-for="@Model.Password" type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
                             <label for="password">رمز عبور</label>
                         </div>
                         <span class="input-group-text cursor-pointer"><i class="mdi mdi-eye-off-outline"></i></span>
@@ -87,7 +94,7 @@
                         </label>
                     </div>
                 </div>
-                <button class="btn btn-primary d-grid w-100">
+                <button type="submit" class="btn btn-primary d-grid w-100">
                     عضویت
                 </button>
             </form>

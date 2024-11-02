@@ -21,15 +21,15 @@ namespace PlanningRazorPage.Services.Auth
         //    var result = await _client.PostAsJsonAsync("Auth/login", command);
         //    return await result.Content.ReadFromJsonAsync<ApiResult<LoginResponse>>();
         //}
-        public async Task<ApiResult?> Login(LoginCommand command)
+        public async Task<ApiResult<LoginResultDto>?> Login(LoginCommand command)
         {
-            var result = await _client.PostAsJsonAsync("Auth/login", command);
-            return await result.Content.ReadFromJsonAsync<ApiResult>();
+            var result = await _client.PostAsJsonAsync("Auth/Login", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult<LoginResultDto>>();
         }
 
         public async Task<ApiResult?> Register(RegisterCommand command)
         {
-            var result = await _client.PostAsJsonAsync($"auth/register", command);
+            var result = await _client.PostAsJsonAsync($"Auth/register", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 

@@ -1,5 +1,5 @@
 ﻿@page
-@model             LoginModel
+@model LoginModel
 @{
     Layout = "../Shared/_Layout";
 }
@@ -60,38 +60,36 @@
                 <h4 class="mb-2 fw-semibold">خوش آمدید به متــریالایز! 👋</h4>
                 <p class="mb-4">لطفا وارد حساب خود شده و ماجراجویی را شروع کنید</p>
 
-                <form id="formAuthentication" class="mb-3" action="http://theboys.ir/html/vertical-menu-template-semi-dark/index.html" method="POST">
-                    <div class="form-floating form-floating-outline mb-3">
-                        <input type="text" class="form-control" id="email" name="email-username" placeholder="ایمیل یا نام کاربری خود را وارد کنید" autofocus>
-                        <label for="email">ایمیل یا نام کاربری</label>
+                <form method="post" class="row g-4">
+
+                    @Html.HiddenFor(f=>f.RedirectTo)
+                    @* @Html.EditorFor(m => m.UserName) *@
+                    <div class="form-floating form-floating-outline mb-3 fv-plugins-icon-container">
+                        <input asp-for="UserName" type="text" class="form-control" id="email" placeholder="ایمیل یا نام کاربری خود را وارد کنید" autofocus="">
+                        <label asp-for="@Model.UserName" >نام کاربری</label>
+                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                        <span asp-validation-for="@Model.UserName"></span>
                     </div>
-                    <div class="mb-3">
+                    @* @Html.EditorFor(m => m.Password) *@
+                    <div class="mb-3 fv-plugins-icon-container">
                         <div class="form-password-toggle">
                             <div class="input-group input-group-merge">
                                 <div class="form-floating form-floating-outline">
-                                    <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
-                                    <label for="password">رمز عبور</label>
+                                    <input asp-for="Password" type="password" id="password" class="form-control" name="password" placeholder="············" aria-describedby="password">
+                                    <label asp-for="@Model.Password" for="password">رمز عبور</label>
                                 </div>
                                 <span class="input-group-text cursor-pointer"><i class="mdi mdi-eye-off-outline"></i></span>
                             </div>
+                            <span asp-validation-for="@Model.Password"></span>
+
                         </div>
+                        <div class="fv-plugins-message-container invalid-feedback"></div>
                     </div>
-                    <div class="mb-3 d-flex justify-content-between">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="remember-me">
-                            <label class="form-check-label" for="remember-me">
-                                به خاطر سپاری
-                            </label>
-                        </div>
-                        <a asp-page="ForgotPassword" class="float-end mb-1">
-                            <span>رمز عبور را فراموش کردید؟</span>
-                        </a>
-                    </div>
+
                     <div class="mb-3">
-                        <button class="btn btn-primary d-grid w-100" type="submit">ورود</button>
+                        <button class="btn btn-primary d-grid w-100 waves-effect waves-light">ورود</button>
                     </div>
                 </form>
-
                 <p class="text-center">
                     <span>کاربر جدید هستید؟</span>
                     <a asp-page="Register"> 

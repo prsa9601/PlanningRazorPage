@@ -2,11 +2,12 @@
 {
     public class AddPostInstagramCommand 
     {
-        public DateTime dateOfPosting { get; set; }
-        public string description { get; set; }
-        public string link { get; set; }
-        public string slug { get; set; }
-        public string imageName { get; set; }
+        public string InstagramId { get; set; } = string.Empty;
+        public DateTime DateOfPosting { get; set; }
+        public string Link { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string ImageName { get; set; } = string.Empty;
+        public string VideoName { get; set; } = string.Empty;
 
     }
     public class AddImageCommand 
