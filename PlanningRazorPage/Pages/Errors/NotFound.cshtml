@@ -3,6 +3,8 @@
 @{
     Layout = null;
     var ErrorMessage = TempData["ErrorNotFound"].ToString();
+    var RedirectLink = TempData["RedirectLink"].ToString();
+    RedirectLink = $"/{RedirectLink}";
 }
 
 
@@ -17,13 +19,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <title>خطا - صفحات| متــریالایز</title>
-
-
-
-
-
-
-
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="~/assets/img/favicon/favicon.ico" />
@@ -85,7 +80,7 @@
             <div class="d-flex flex-column align-items-center">
                 <img src="~/assets/img/illustrations/misc-error-illustration.png" alt="misc-error" class="img-fluid zindex-1" width="190">
                 <div>
-                    <a href="index.html" class="btn btn-primary text-center my-4">بازگشت به صفحه اصلی</a>
+                    <a href="@RedirectLink" class="btn btn-primary text-center my-4">بازگشت به صفحه اصلی</a>
                 </div>
             </div>
         </div>
@@ -118,6 +113,7 @@
     <!-- Page JS -->
     @{
         TempData["ErrorNotFound"] = null;
+        TempData["RedirectLink"] = null;
     }
 
 </body>

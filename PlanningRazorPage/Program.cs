@@ -89,13 +89,13 @@ app.Use(async (context, next) =>
 app.UseAuthentication();
 
 
-//app.UseAuthorization();
+app.UseAuthorization();
 //app.UseHttpsRedirection();
 //app.UseStaticFiles();
 
 //app.UseRouting();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 
 //app.UseEndpoints(endpoints =>

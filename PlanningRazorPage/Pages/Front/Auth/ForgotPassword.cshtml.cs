@@ -17,8 +17,9 @@ namespace PlanningRazorPage.Pages.Front.Auth
 
         public IActionResult OnGet()
         {
-            //TempData["ErrorNotFound"] = "کاربر مورد نظر";
-            //return Redirect("~/errors/NotFound");
+            TempData["RedirectLink"] = "front/auth/login";
+            TempData["ErrorNotFound"] = "کاربر مورد نظر";
+            return Redirect("~/errors/NotFound");
         }
         public void OnPost()
         {

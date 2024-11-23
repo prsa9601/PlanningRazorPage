@@ -1,5 +1,4 @@
 ﻿namespace PlanningRazorPage.Models;
-
 public class ApiResult
 {
     public bool IsSuccess { get; set; }
@@ -83,7 +82,7 @@ public class ApiResult<TData>
         return new ApiResult<TData>()
         {
             IsSuccess = true,
-            Data = default,
+            Data = default(TData),
             MetaData = new MetaData()
             {
                 AppStatusCode = AppStatusCode.LogicError,

@@ -1,6 +1,8 @@
-﻿using PlanningRazorPage.Models;
+﻿using Newtonsoft.Json;
+using PlanningRazorPage.Models;
 using PlanningRazorPage.Models.Friend;
 using PlanningRazorPage.Models.Package;
+using System.Text;
 
 namespace PlanningRazorPage.Services.Package;
 
@@ -18,7 +20,17 @@ public class PackageService : IPackageService
 
     public async Task<ApiResult> Add(AddPackageCommand command)
     {
-        var result = await _client.PostAsJsonAsync($"{ModuleName}", command);
+        var formData = new MultipartFormDataContent();
+        formData.Add(new StringContent(command.Title.ToString()), "Title");
+        formData.Add(new StringContent(command.Link.ToString()), "Link");
+        formData.Add(new StringContent(command.Price.ToString()), "Price");
+        formData.Add(new StreamContent(command.Picture.OpenReadStream()), "Picture", command.Picture.FileName);
+        
+        var specifications = JsonConvert.SerializeObject(command.Specifications);
+        formData.Add(new StringContent(specifications, Encoding.UTF8, "application/json"), "Specifications");
+
+        
+        var result = await _client.PostAsync($"{ModuleName}", formData);
         return await result.Content.ReadFromJsonAsync<ApiResult>();
     }
 
@@ -50,8 +62,8 @@ public class PackageService : IPackageService
 
     public async Task<List<PackageDto?>> GetListPackages()
     {
-        var result = await _client.GetFromJsonAsync<ApiResult<List<PackageDto>?>>($"{ModuleName}");
-        return result?.Data;
+        var result = await _client.GetFromJsonAsync<ApiResult<List<PackageDto>?>>($"{ModuleName}/GetList");
+        return result?.Data!;
     }
 
     public async Task<PackageDto?> GetPackage(long id)

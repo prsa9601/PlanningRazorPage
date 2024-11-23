@@ -4,67 +4,159 @@
 }
 
 <div class="col-12 container-fluid">
-            <div class="card">
-              <h5 class="card-header">تکرار کننده فرم</h5>
-        <form class="form-repeater">
+    <div class="card">
+        <h5 class="card-header">تکرار کننده فرم</h5>
+        <form class="card" method="post" enctype="multipart/form-data">
+            @* form-repeater *@
+            <div class="card-body">
 
-        <div class="card-body">
+                <div class="form-floating form-floating-outline  mb-5">
+                    <input asp-for="Title" id="Title" class="form-control"
+                           type="text"
+                           placeholder="متــریالایز"
+                           id="html5-text-input" />
+                    <label asp-for="Title" for="html5-text-input">title</label>
+                </div>
+                <div class="form-floating form-floating-outline mb-5">
+                    <input asp-for="Link" id="Link" class="form-control"
+                           type="text"
+                           placeholder="متــریالایز"
+                           id="html5-text-input" />
+                    <label asp-for="Link" for="html5-text-input">link</label>
+                </div>
+                <div class="mb-3">
+                    <label for="formFil" asp-for="Picture" class="form-label">عکس زمینه پکیج</label>
+                    <input asp-for="Picture" id="Picture" class="form-control" type="file" id="formFil" />
+                </div>
+                <span asp-validation-for="@Model.Picture"></span>
+                <br />
+                <br />
+                <div class="mb-3 col-6">
+                    <label for="formFile" asp-for="Price" class="form-label">قیمت پکیج</label>
+                    <input asp-for="Price" id="Price" type="number" class="form-control invoice-item-price mb-3" />
+                </div>
+                <span asp-validation-for="@Model.Price"></span>
 
-<div class="form-floating form-floating-outline mb-5">
-    <input class="form-control"
-           type="text"
-           placeholder="متــریالایز"
-           id="html5-text-input" />
-    <label for="html5-text-input">متن</label>
-</div>
-<div class="mb-3">
-    <label for="formFile" class="form-label">عکس زمینه پکیج</label>
-    <input class="form-control" type="file" id="formFile" />
-</div>
+                <br />
+                <br />
+                @{
+                    <div class="col-md-12  ">
+                        <h4>مشخصات محصول</h4>
+                        <table class="table bg-white p-0 card-primary table-bordered text-center">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>عنوان</th>
+                                    <th>مقدار</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                                @if (!Model.Keys.Any())
+                                {
+                                    <tr>
+                                        <td>
+                                            <input placeholder="وزن" autocomplete="off" type="text" name="Keys" class="form-control" />
+                                        </td>
+                                        <td>
+                                            <input placeholder="1 کیلو" autocomplete="off" type="text" name="Values" class="form-control" />
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger" onclick="removeRow(this)">حذف</button>
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    for (var i = 0; i < Model.Keys.Count; i++)
+                                    {
+                                        if (i >= Model.Values.Count)
+                                        {
+                                            break;
+                                        }
+                                        <tr>
+                                            <td>
+                                                <input autocomplete="off" type="text" name="Keys" value="@Model.Keys[i]" class="form-control" />
+                                            </td>
+                                            <td>
+                                                <input autocomplete="off" type="text" name="Values" value="@Model.Values[i]" class="form-control" />
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger" onclick="removeRow(this)">حذف</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
 
-        <br />
-        <br />
-                <div data-repeater-list="group-a">
-                    <div data-repeater-item>
-                        <div class="row">
-                            <div class="mb-2 col-lg-2 col-xl-2 col-2 mb-0">
-                                <label class="form-label" for="form-repeater-1-1">نام ویژگی</label>
-                                <input type="text" id="form-repeater-1-1" class="form-control text-start" dir="ltr" placeholder="جان.دو">
-                            </div>
-                            <div class="mb-7 col-lg-7 col-xl-7 col-7 mb-0">
-                                <label class="form-label" for="form-repeater-1-2">توضیحات ویژگی</label>
-                                <input type="text" id="form-repeater-1-2" class="form-control text-start" dir="ltr" placeholder="توضیحات راجب ویژگی پکیج">
-                            </div>
-                            
-                            <div class="mb-3 col-lg-3 col-xl- col-3 d-flex align-items-center mb-0">
-                                <button class="btn btn-label-danger mt-4" data-repeater-delete>
-                                    <i class="bx bx-x"></i>
-                                    <span class="align-middle">حذف</span>
-                                </button>
+                            </tbody>
+                        </table>
+                        <div class="form-input">
+                            <div class=" mt-2">
+                                <input id="rowCount" type="number" placeholder="تعداد مورد نظر را وارد کنید" class="form-control text-right text-right" style="width: 20%; display: inline-block" />
+                                <p style="margin: 0 10px; display: inline-block">ردیف</p>
+                                <a onclick="AddRow()" class="btn  btn-primary text-white text-center" style="height: fit-content;  display: inline"> اضافه کن</a>
                             </div>
                         </div>
-                        <hr>
                     </div>
-                </div>
-                <div class="mb-0">
-                    <button class="btn btn-primary" data-repeater-create>
-                        <i class="bx bx-plus"></i>
-                        <span class="align-middle">افزودن</span>
-                    </button>
-                </div>
-         
-        </div>   </form>
+                }
+            </div>
+            <br />
+            <br />
+            <div class="mb-3">
+                <button type="submit" class="btn btn-success waves-effect waves-light">افزودن محصول</button>
+            </div>
+        </form>
     </div>
 </div>
-           
+
+
+
+
 <!-- /Form Repeater -->
-     
-@section Scripts{
+@section Scripts {
+    <script>
+                function AddRow() {
+            var count = $("#rowCount").val();
+
+            for (var i = 0; i < count; i++) {
+                $("#table-body").append(
+                    "<tr>" +
+                    "<td><input type='text' autocomplete='off' name='Keys' class='form-control'/></td>" +
+                    "<td><input type='text' autocomplete='off' name='Values' class='form-control'/></td>"+
+                            "  <td><button type='button' class='btn btn-danger' onclick='removeRow(this)'>حذف</button></td></tr>"
+                );
+            }
+                }
+                function removeRow(button) {
+            // Find the row containing the button
+            var row = button.closest('tr');
+            // Remove the row from the table
+            row.remove();
+        }
+    </script>
     <script src="~/assets/js/forms-extras.js"></script>
+    @*     <div data-repeater-item="">
+        <div class="row">
+            <div class="mb-3 col-lg-6 col-xl-3 col-12 mb-0">
+                <label class="form-label" for="form-repeater-1-1">ویژگی</label>
+                <input name="Keys" value="@Model.Keys[i]" type="text" id="form-repeater-1-1" class="form-control text-start" dir="ltr" placeholder="وزن">
+            </div>
+            <div class="mb-6 col-lg-9 col-xl-6 col-15 mb-0">
+                <label class="form-label" for="form-repeater-1-2">توضیجات</label>
+                <input name="Values" value="@Model.Values[i]" type="text" id="form-repeater-1-2" class="form-control text-start" dir="ltr" placeholder="دو کیلوگرم">
+            </div>
+            <div class="mb-3 col-lg-12 col-xl-2 col-12 d-flex align-items-center mb-0">
+                <button type="button" class="btn btn-label-danger mt-4 waves-effect" data-repeater-delete="">
+                    <i class="bx bx-x"></i>
+                    <span class="align-middle">حذف</span>
+                </button>
+            </div>
+        </div>
+        <hr>
+    </div> *@
+    <script src="~/global.js"></script>
 
     <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
     <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
     <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
 
     <script src="~/assets/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
- }
+}
