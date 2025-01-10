@@ -1,20 +1,11 @@
-﻿@page "{handler?}"
-@model IndexModel
+﻿@page
+@model PlanningRazorPage.Pages.Admin.Package.SetPackageModel
 @{
-    ViewData["title"] = "Home page";
     Layout = null;
 }
 
+@* @section Header {
 
-<!DOCTYPE html>
-<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed " dir="rtl" data-theme="theme-semi-dark" data-assets-path="../../assets/" data-template="vertical-menu-template-semi-dark">
-
-<head>
-    <meta char
-          set="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-
-    <title>برنامه ها - تقویم |متــریالایز</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="~/assets/img/favicon/favicon.ico" />
@@ -26,778 +17,1727 @@
     <link rel="stylesheet" href="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="~/assets/vendor/libs/node-waves/node-waves.css" />
     <link rel="stylesheet" href="~/assets/vendor/libs/typeahead-js/typeahead.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/fullcalendar/fullcalendar.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/flatpickr/flatpickr.css" />
     <link rel="stylesheet" href="~/assets/vendor/libs/select2/select2.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/quill/editor.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/formvalidation/dist/css/formValidation.min.css" />
-    <link rel="stylesheet" href="~/assets/vendor/css/pages/app-calendar.css" />
+    <link rel="stylesheet" href="~/assets/vendor/libs/tagify/tagify.css" />
+    <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-select/bootstrap-select.css" />
+    <link rel="stylesheet" href="~/assets/vendor/libs/typeahead-js/typeahead.css" />
     <script src="~/assets/vendor/js/helpers.js"></script>
     <script src="~/assets/vendor/js/template-customizer.js"></script>
     <script src="~/assets/js/config.js"></script>
+
+
+}
+ *@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed " dir="rtl" data-theme="theme-semi-dark" data-assets-path="../../assets/" data-template="vertical-menu-template-semi-dark">
+
+  <head>
+    <meta char
+    set="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>برنامه ها - تقویم |متــریالایز</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../../assets/img/favicon/favicon.ico" />
+
+
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="../../assets/vendor/fonts/materialdesignicons.css" />
+    
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../../assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+   <link rel="stylesheet" href="../../assets/css/demo.css" />
+    <link rel="stylesheet" href="../../assets/vendor/fonts/IRANSans.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../../assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../../assets/vendor/libs/typeahead-js/typeahead.css" />
+    <link rel="stylesheet" href="../../assets/vendor/libs/fullcalendar/fullcalendar.css" />
+<link rel="stylesheet" href="../../assets/vendor/libs/flatpickr/flatpickr.css" />
+<link rel="stylesheet" href="../../assets/vendor/libs/select2/select2.css" />
+<link rel="stylesheet" href="../../assets/vendor/libs/quill/editor.css" />
+<link rel="stylesheet" href="../../assets/vendor/libs/formvalidation/dist/css/formValidation.min.css" />
+
+    <!-- Page CSS -->
+    
+<link rel="stylesheet" href="../../assets/vendor/css/pages/app-calendar.css" />
+    <!-- Helpers -->
+    <script src="../../assets/vendor/js/helpers.js"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
+    <script src="../../assets/vendor/js/template-customizer.js"></script>
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="../../assets/js/config.js"></script>
 </head>
 
 <body>
 
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar  ">
-        <div class="layout-container">
+  <!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar  ">
+  <div class="layout-container">
 
 
-            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
 
+  
+  <div class="app-brand demo ">
+    <a href="index.html" class="app-brand-link">
+      <span class="app-brand-logo demo">
+<span style="color:var(--bs-primary);">
+  <svg width="268" height="150" viewBox="0 0 38 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M30.0944 2.22569C29.0511 0.444187 26.7508 -0.172113 24.9566 0.849138C23.1623 1.87039 22.5536 4.14247 23.5969 5.92397L30.5368 17.7743C31.5801 19.5558 33.8804 20.1721 35.6746 19.1509C37.4689 18.1296 38.0776 15.8575 37.0343 14.076L30.0944 2.22569Z" fill="currentColor" />
+    <path d="M30.171 2.22569C29.1277 0.444187 26.8274 -0.172113 25.0332 0.849138C23.2389 1.87039 22.6302 4.14247 23.6735 5.92397L30.6134 17.7743C31.6567 19.5558 33.957 20.1721 35.7512 19.1509C37.5455 18.1296 38.1542 15.8575 37.1109 14.076L30.171 2.22569Z" fill="url(#paint0_linear_2989_100980)" fill-opacity="0.4" />
+    <path d="M22.9676 2.22569C24.0109 0.444187 26.3112 -0.172113 28.1054 0.849138C29.8996 1.87039 30.5084 4.14247 29.4651 5.92397L22.5251 17.7743C21.4818 19.5558 19.1816 20.1721 17.3873 19.1509C15.5931 18.1296 14.9843 15.8575 16.0276 14.076L22.9676 2.22569Z" fill="currentColor" />
+    <path d="M14.9558 2.22569C13.9125 0.444187 11.6122 -0.172113 9.818 0.849138C8.02377 1.87039 7.41502 4.14247 8.45833 5.92397L15.3983 17.7743C16.4416 19.5558 18.7418 20.1721 20.5361 19.1509C22.3303 18.1296 22.9391 15.8575 21.8958 14.076L14.9558 2.22569Z" fill="currentColor" />
+    <path d="M14.9558 2.22569C13.9125 0.444187 11.6122 -0.172113 9.818 0.849138C8.02377 1.87039 7.41502 4.14247 8.45833 5.92397L15.3983 17.7743C16.4416 19.5558 18.7418 20.1721 20.5361 19.1509C22.3303 18.1296 22.9391 15.8575 21.8958 14.076L14.9558 2.22569Z" fill="url(#paint1_linear_2989_100980)" fill-opacity="0.4" />
+    <path d="M7.82901 2.22569C8.87231 0.444187 11.1726 -0.172113 12.9668 0.849138C14.7611 1.87039 15.3698 4.14247 14.3265 5.92397L7.38656 17.7743C6.34325 19.5558 4.04298 20.1721 2.24875 19.1509C0.454514 18.1296 -0.154233 15.8575 0.88907 14.076L7.82901 2.22569Z" fill="currentColor" />
+    <defs>
+      <linearGradient id="paint0_linear_2989_100980" x1="5.36642" y1="0.849138" x2="10.532" y2="24.104" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-opacity="1" />
+        <stop offset="1" stop-opacity="0" />
+      </linearGradient>
+      <linearGradient id="paint1_linear_2989_100980" x1="5.19475" y1="0.849139" x2="10.3357" y2="24.1155" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-opacity="1" />
+        <stop offset="1" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+  </svg>
+</span>
+</span>
+      <span class="app-brand-text demo menu-text fw-bold ms-2">متــریالایز</span>
+    </a>
 
-                <div class="app-brand demo ">
-                    <a href="index.html" class="app-brand-link">
-                        <span class="app-brand-logo demo">
-                            <span style="color:var(--bs-primary);">
-                                <svg width="268" height="150" viewBox="0 0 38 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M30.0944 2.22569C29.0511 0.444187 26.7508 -0.172113 24.9566 0.849138C23.1623 1.87039 22.5536 4.14247 23.5969 5.92397L30.5368 17.7743C31.5801 19.5558 33.8804 20.1721 35.6746 19.1509C37.4689 18.1296 38.0776 15.8575 37.0343 14.076L30.0944 2.22569Z" fill="currentColor" />
-                                    <path d="M30.171 2.22569C29.1277 0.444187 26.8274 -0.172113 25.0332 0.849138C23.2389 1.87039 22.6302 4.14247 23.6735 5.92397L30.6134 17.7743C31.6567 19.5558 33.957 20.1721 35.7512 19.1509C37.5455 18.1296 38.1542 15.8575 37.1109 14.076L30.171 2.22569Z" fill="url(#paint0_linear_2989_100980)" fill-opacity="0.4" />
-                                    <path d="M22.9676 2.22569C24.0109 0.444187 26.3112 -0.172113 28.1054 0.849138C29.8996 1.87039 30.5084 4.14247 29.4651 5.92397L22.5251 17.7743C21.4818 19.5558 19.1816 20.1721 17.3873 19.1509C15.5931 18.1296 14.9843 15.8575 16.0276 14.076L22.9676 2.22569Z" fill="currentColor" />
-                                    <path d="M14.9558 2.22569C13.9125 0.444187 11.6122 -0.172113 9.818 0.849138C8.02377 1.87039 7.41502 4.14247 8.45833 5.92397L15.3983 17.7743C16.4416 19.5558 18.7418 20.1721 20.5361 19.1509C22.3303 18.1296 22.9391 15.8575 21.8958 14.076L14.9558 2.22569Z" fill="currentColor" />
-                                    <path d="M14.9558 2.22569C13.9125 0.444187 11.6122 -0.172113 9.818 0.849138C8.02377 1.87039 7.41502 4.14247 8.45833 5.92397L15.3983 17.7743C16.4416 19.5558 18.7418 20.1721 20.5361 19.1509C22.3303 18.1296 22.9391 15.8575 21.8958 14.076L14.9558 2.22569Z" fill="url(#paint1_linear_2989_100980)" fill-opacity="0.4" />
-                                    <path d="M7.82901 2.22569C8.87231 0.444187 11.1726 -0.172113 12.9668 0.849138C14.7611 1.87039 15.3698 4.14247 14.3265 5.92397L7.38656 17.7743C6.34325 19.5558 4.04298 20.1721 2.24875 19.1509C0.454514 18.1296 -0.154233 15.8575 0.88907 14.076L7.82901 2.22569Z" fill="currentColor" />
-                                    <defs>
-                                        <linearGradient id="paint0_linear_2989_100980" x1="5.36642" y1="0.849138" x2="10.532" y2="24.104" gradientUnits="userSpaceOnUse">
-                                            <stop offset="0" stop-opacity="1" />
-                                            <stop offset="1" stop-opacity="0" />
-                                        </linearGradient>
-                                        <linearGradient id="paint1_linear_2989_100980" x1="5.19475" y1="0.849139" x2="10.3357" y2="24.1155" gradientUnits="userSpaceOnUse">
-                                            <stop offset="0" stop-opacity="1" />
-                                            <stop offset="1" stop-opacity="0" />
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                            </span>
-                        </span>
-                        <span class="app-brand-text demo menu-text fw-bold ms-2">متــریالایز</span>
-                    </a>
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.4854 4.88844C11.0081 4.41121 10.2344 4.41121 9.75715 4.88844L4.51028 10.1353C4.03297 10.6126 4.03297 11.3865 4.51028 11.8638L9.75715 17.1107C10.2344 17.5879 11.0081 17.5879 11.4854 17.1107C11.9626 16.6334 11.9626 15.8597 11.4854 15.3824L7.96672 11.8638C7.48942 11.3865 7.48942 10.6126 7.96672 10.1353L11.4854 6.61667C11.9626 6.13943 11.9626 5.36568 11.4854 4.88844Z" fill="currentColor" fill-opacity="0.6" />
+        <path d="M15.8683 4.88844L10.6214 10.1353C10.1441 10.6126 10.1441 11.3865 10.6214 11.8638L15.8683 17.1107C16.3455 17.5879 17.1192 17.5879 17.5965 17.1107C18.0737 16.6334 18.0737 15.8597 17.5965 15.3824L14.0778 11.8638C13.6005 11.3865 13.6005 10.6126 14.0778 10.1353L17.5965 6.61667C18.0737 6.13943 18.0737 5.36568 17.5965 4.88844C17.1192 4.41121 16.3455 4.41121 15.8683 4.88844Z" fill="currentColor" fill-opacity="0.38" />
+      </svg>
+    </a>
+  </div>
 
-                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
-                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M11.4854 4.88844C11.0081 4.41121 10.2344 4.41121 9.75715 4.88844L4.51028 10.1353C4.03297 10.6126 4.03297 11.3865 4.51028 11.8638L9.75715 17.1107C10.2344 17.5879 11.0081 17.5879 11.4854 17.1107C11.9626 16.6334 11.9626 15.8597 11.4854 15.3824L7.96672 11.8638C7.48942 11.3865 7.48942 10.6126 7.96672 10.1353L11.4854 6.61667C11.9626 6.13943 11.9626 5.36568 11.4854 4.88844Z" fill="currentColor" fill-opacity="0.6" />
-                            <path d="M15.8683 4.88844L10.6214 10.1353C10.1441 10.6126 10.1441 11.3865 10.6214 11.8638L15.8683 17.1107C16.3455 17.5879 17.1192 17.5879 17.5965 17.1107C18.0737 16.6334 18.0737 15.8597 17.5965 15.3824L14.0778 11.8638C13.6005 11.3865 13.6005 10.6126 14.0778 10.1353L17.5965 6.61667C18.0737 6.13943 18.0737 5.36568 17.5965 4.88844C17.1192 4.41121 16.3455 4.41121 15.8683 4.88844Z" fill="currentColor" fill-opacity="0.38" />
-                        </svg>
-                    </a>
-                </div>
+  <div class="menu-inner-shadow"></div>
 
-                <div class="menu-inner-shadow"></div>
-
-
-
-                <ul class="menu-inner py-1">
-
-                    <li class="menu-header fw-light mt-4">
-                        <span class="menu-header-text">حساب کاربری</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="~/Front/Profile/Account" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-calendar-blank-outline"></i>
-                            <div>حساب کاربری</div>
-                        </a>
-                    </li>
-                    <!-- Layouts -->
-                    <!-- Apps & Pages -->
-                    <li class="menu-header fw-light mt-4">
-                        <span class="menu-header-text">اینستاگرام</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class='menu-icon tf-icons mdi mdi-file-document-outline'></i>
-                            <div>اینستاگرام</div>
-
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <i class='menu-icon tf-icons mdi mdi-file-document-outline'></i>
-                                    <div>پست</div>
-                                    @* <div class="badge bg-danger rounded-pill ms-auto">4</div> *@
-                                </a>
-                                <ul class="menu-sub">
-
-                                    <li class="menu-item">
-                                        <a href="~/Front/SocialMedia/Instagram/Post/Add" class="menu-link">
-                                            <div>اضافه کردن</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="~/Front/SocialMedia/Instagram/Post/Edit" class="menu-link">
-                                            <div>ویرایش</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="~/Front/SocialMedia/Instagram/Post/List" class="menu-link">
-                                            <div>لیست</div>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <i class='menu-icon tf-icons mdi mdi-file-document-outline'></i>
-                                    <div>استوری</div>
-
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="~/Front/SocialMedia/Instagram/Story/Add" class="menu-link">
-                                            <div>اضافه کردن</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="~/Front/SocialMedia/Instagram/Story/Edit" class="menu-link">
-                                            <div>ویرایش</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="~/Front/SocialMedia/Instagram/Story/List" class="menu-link">
-                                            <div>لیست</div>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </li>
-                        </ul>
-                    <li class="menu-header fw-light mt-4">
-                        <span class="menu-header-text">تلگرام</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class='menu-icon tf-icons mdi mdi-file-document-outline'></i>
-                            <div>تلگرام</div>
-
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <i class='menu-icon tf-icons mdi mdi-file-document-outline'></i>
-                                    <div>پست</div>
-                                        @* <div class="badge bg-danger rounded-pill ms-auto">4</div> *@
-                                </a>
-                                <ul class="menu-sub">
-
-                                    <li class="menu-item">
-                                        <a href="~/Front/SocialMedia/Telegram/Post/Add" class="menu-link">
-                                            <div>اضافه کردن</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="~/Front/SocialMedia/Telegram/Post/Edit" class="menu-link">
-                                            <div>ویرایش</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="~/Front/SocialMedia/Telegram/Post/List" class="menu-link">
-                                            <div>لیست</div>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="~/Index" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-calendar-blank-outline"></i>
-                            <div>تقویم</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="~/Index" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-calendar-blank-outline"></i>
-                            <div>برنامه ریزی</div>
-                        </a>
-                    </li>
-
-
-
-                        @*   <li class="menu-header fw-light mt-4">
-            <span class="menu-header-text">کامپوننت</span>
-        </li>
-        <!-- Cards -->
+  
+  
+  <ul class="menu-inner py-1">
+    <!-- Dashboards -->
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-home-outline"></i>
+        <div>داشبوردها</div>
+        <div class="badge bg-primary rounded-pill ms-auto">3</div>
+      </a>
+      <ul class="menu-sub">
         <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons mdi mdi-credit-card-outline"></i>
-                <div>کارت ها</div>
-                <div class="badge bg-primary rounded-pill ms-auto">6</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="cards-basic.html" class="menu-link">
-                        <div>پایه</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="cards-advance.html" class="menu-link">
-                        <div>پیشرفته</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="cards-statistics.html" class="menu-link">
-                        <div>آمار</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="cards-analytics.html" class="menu-link">
-                        <div>تجزیه و تحلیل</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="cards-gamifications.html" class="menu-link">
-                        <div>بازی وار سازی</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="cards-actions.html" class="menu-link">
-                        <div>عمل ها</div>
-                    </a>
-                </li>
-            </ul>
-        </li> *@
+          <a href="dashboards-ecommerce.html" class="menu-link">
+            <div>تجارت الکترونیک</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="dashboards-crm.html" class="menu-link">
+            <div>ارتباط با مشتریان</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="index.html" class="menu-link">
+            <div>تجزیه و تحلیل</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Layouts -->
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-window-maximize"></i>
+        <div>طرح بندی ها</div>
+      </a>
+
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="layouts-collapsed-menu.html" class="menu-link">
+            <div>منوی جمع شده</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-content-navbar.html" class="menu-link">
+            <div>نوار ناوبری محتوا</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-content-navbar-with-sidebar.html" class="menu-link">
+            <div>ناوبری محتوا + نوار کناری</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="../horizontal-menu-template/index.html" class="menu-link" target="_blank">
+            <div>افقی</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-without-menu.html" class="menu-link">
+            <div>بدون منو</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-without-navbar.html" class="menu-link">
+            <div>بدون نوار ناوبری</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-fluid.html" class="menu-link">
+            <div>شناور</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-container.html" class="menu-link">
+            <div>دربرگیرنده</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-blank.html" class="menu-link">
+            <div>خالی</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Apps & Pages -->
+    <li class="menu-header fw-light mt-4">
+      <span class="menu-header-text">برنامه‌ها و صفحات</span>
+    </li>
+    <li class="menu-item">
+      <a href="app-email.html" class="menu-link">
+        <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
+        <div>ایمیل</div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="app-chat.html" class="menu-link">
+        <i class="menu-icon tf-icons mdi mdi-message-outline"></i>
+        <div>چت</div>
+      </a>
+    </li>
+    <li class="menu-item active">
+      <a href="app-calendar.html" class="menu-link">
+        <i class="menu-icon tf-icons mdi mdi-calendar-blank-outline"></i>
+        <div>تقویم</div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="app-kanban.html" class="menu-link">
+        <i class="menu-icon tf-icons mdi mdi-view-grid-outline"></i>
+        <div>کانبان</div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class='menu-icon tf-icons mdi mdi-file-document-outline'></i>
+        <div>صورت حساب</div>
+        <div class="badge bg-danger rounded-pill ms-auto">4</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="app-invoice-list.html" class="menu-link">
+            <div>لیست</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="app-invoice-preview.html" class="menu-link">
+            <div>پیش نمایش</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="app-invoice-edit.html" class="menu-link">
+            <div>ویرایش</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="app-invoice-add.html" class="menu-link">
+            <div>اضافه کردن</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-account-outline"></i>
+        <div>کاربران</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="app-user-list.html" class="menu-link">
+            <div>لیست</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>نمایش</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="app-user-view-account.html" class="menu-link">
+                <div>حساب کاربری</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-user-view-security.html" class="menu-link">
+                <div>امنیت</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-user-view-billing.html" class="menu-link">
+                <div>صورتحساب و طرح ها</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-user-view-notifications.html" class="menu-link">
+                <div>اعلان ها</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-user-view-connections.html" class="menu-link">
+                <div>اتصالات</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class='menu-icon tf-icons mdi mdi-shield-outline'></i>
+        <div>نقش ها و مجوز</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="app-access-roles.html" class="menu-link">
+            <div>نقش ها</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="app-access-permission.html" class="menu-link">
+            <div>اجازه</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-file-outline"></i>
+        <div>صفحات</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>مشخصات کاربر</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="pages-profile-user.html" class="menu-link">
+                <div>پروفایل</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-profile-teams.html" class="menu-link">
+                <div>تیم ها</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-profile-projects.html" class="menu-link">
+                <div>پروژه ها</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-profile-connections.html" class="menu-link">
+                <div>اتصالات</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>تنظیمات حساب</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="pages-account-settings-account.html" class="menu-link">
+                <div>حساب کاربری</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-account-settings-security.html" class="menu-link">
+                <div>امنیت</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-account-settings-billing.html" class="menu-link">
+                <div>صورتحساب و طرح ها</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-account-settings-notifications.html" class="menu-link">
+                <div>اعلان ها</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-account-settings-connections.html" class="menu-link">
+                <div>اتصالات</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="pages-faq.html" class="menu-link">
+            <div>سوالات متداول</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>مرکز راهنمایی</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="pages-help-center-landing.html" class="menu-link">
+                <div>لندینگ</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-help-center-categories.html" class="menu-link">
+                <div>دسته بندی ها</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-help-center-article.html" class="menu-link">
+                <div>مقاله</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="pages-pricing.html" class="menu-link">
+            <div>قیمت گذاری</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>متفرقه</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="pages-misc-error.html" class="menu-link" target="_blank">
+                <div>خطا</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-misc-under-maintenance.html" class="menu-link" target="_blank">
+                <div>در دست تعمیر</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-misc-comingsoon.html" class="menu-link" target="_blank">
+                <div>به زودی</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-misc-not-authorized.html" class="menu-link" target="_blank">
+                <div>غیر مجاز</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-misc-server-error.html" class="menu-link" target="_blank">
+                <div>خطای سرور</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-lock-outline"></i>
+        <div>احراز هویت</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>ورود</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="auth-login-basic.html" class="menu-link" target="_blank">
+                <div>پایه</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="auth-login-cover.html" class="menu-link" target="_blank">
+                <div>کاور</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>ثبت نام</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="auth-register-basic.html" class="menu-link" target="_blank">
+                <div>پایه</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="auth-register-cover.html" class="menu-link" target="_blank">
+                <div>کاور</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="auth-register-multisteps.html" class="menu-link" target="_blank">
+                <div>چند مرحله ای</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>تأیید ایمیل</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="auth-verify-email-basic.html" class="menu-link" target="_blank">
+                <div>پایه</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="auth-verify-email-cover.html" class="menu-link" target="_blank">
+                <div>کاور</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>بازنشانی رمز عبور</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="auth-reset-password-basic.html" class="menu-link" target="_blank">
+                <div>پایه</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="auth-reset-password-cover.html" class="menu-link" target="_blank">
+                <div>کاور</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>رمز عبور را فراموش کرده اید</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="auth-forgot-password-basic.html" class="menu-link" target="_blank">
+                <div>پایه</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="auth-forgot-password-cover.html" class="menu-link" target="_blank">
+                <div>کاور</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>دو مرحله ای</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="auth-two-steps-basic.html" class="menu-link" target="_blank">
+                <div>پایه</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="auth-two-steps-cover.html" class="menu-link" target="_blank">
+                <div>کاور</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-transit-connection-horizontal"></i>
+        <div>نمونه های چند مرحله ای</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="wizard-ex-checkout.html" class="menu-link">
+            <div>پرداخت</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="wizard-ex-property-listing.html" class="menu-link">
+            <div>فهرست اموال</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="wizard-ex-create-deal.html" class="menu-link">
+            <div>ایجاد معامله</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="menu-item">
+      <a href="modal-examples.html" class="menu-link">
+        <i class="menu-icon tf-icons mdi mdi-vector-arrange-below"></i>
+        <div>نمونه های مدال</div>
+      </a>
+    </li>
+
+    <!-- Components -->
+    <li class="menu-header fw-light mt-4">
+      <span class="menu-header-text">کامپوننت</span>
+    </li>
+    <!-- Cards -->
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-credit-card-outline"></i>
+        <div>کارت ها</div>
+        <div class="badge bg-primary rounded-pill ms-auto">6</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="cards-basic.html" class="menu-link">
+            <div>پایه</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="cards-advance.html" class="menu-link">
+            <div>پیشرفته</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="cards-statistics.html" class="menu-link">
+            <div>آمار</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="cards-analytics.html" class="menu-link">
+            <div>تجزیه و تحلیل</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="cards-gamifications.html" class="menu-link">
+            <div>بازی وار سازی</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="cards-actions.html" class="menu-link">
+            <div>عمل ها</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <!-- User interface -->
+    <li class="menu-item">
+      <a href="javascript:void(0)" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-archive-outline"></i>
+        <div>رابط کاربری</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="ui-accordion.html" class="menu-link">
+            <div>باز و بسته شونده</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-alerts.html" class="menu-link">
+            <div>هشدارها</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-badges.html" class="menu-link">
+            <div>نشان ها</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-buttons.html" class="menu-link">
+            <div>دکمه ها</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-carousel.html" class="menu-link">
+            <div>گردونه</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-collapse.html" class="menu-link">
+            <div>جمع شونده</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-dropdowns.html" class="menu-link">
+            <div>منوی کشویی</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-footer.html" class="menu-link">
+            <div>پاورقی</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-list-groups.html" class="menu-link">
+            <div>گروه های لیست</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-modals.html" class="menu-link">
+            <div>مدال ها</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-navbar.html" class="menu-link">
+            <div>نوار ناوبری</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-offcanvas.html" class="menu-link">
+            <div>خارج از کادر</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-pagination-breadcrumbs.html" class="menu-link">
+            <div>صفحه‌بندی و مسیرهای راهنما</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-progress.html" class="menu-link">
+            <div>پیشرفت</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-spinners.html" class="menu-link">
+            <div>چرخنده ها</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-tabs-pills.html" class="menu-link">
+            <div>تب ها و سربرگ ها</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-toasts.html" class="menu-link">
+            <div>اعلان های تست</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-tooltips-popovers.html" class="menu-link">
+            <div>راهنمای ابزار و پاپاور</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="ui-typography.html" class="menu-link">
+            <div>تایپوگرافی</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Extended components -->
+    <li class="menu-item">
+      <a href="javascript:void(0)" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-star-outline"></i>
+        <div>رابط کاربری توسعه یافته</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="extended-ui-avatar.html" class="menu-link">
+            <div>آواتار</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="extended-ui-blockui.html" class="menu-link">
+            <div>رابط کاربری بلوک</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="extended-ui-drag-and-drop.html" class="menu-link">
+            <div>کشیدن و رها کردن</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="extended-ui-media-player.html" class="menu-link">
+            <div>دستگاه پخش رسانه ای</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="extended-ui-perfect-scrollbar.html" class="menu-link">
+            <div>نوار اسکرول کامل</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="extended-ui-star-ratings.html" class="menu-link">
+            <div>رتبه بندی ستاره ها</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="extended-ui-sweetalert2.html" class="menu-link">
+            <div>هشدار sweet2</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="extended-ui-text-divider.html" class="menu-link">
+            <div>تقسیم کننده متن</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div>خط زمانی</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="extended-ui-timeline-basic.html" class="menu-link">
+                <div>پایه</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="extended-ui-timeline-fullscreen.html" class="menu-link">
+                <div>تمام صفحه</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="extended-ui-tour.html" class="menu-link">
+            <div>تور</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="extended-ui-treeview.html" class="menu-link">
+            <div>نمای درختی</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="extended-ui-misc.html" class="menu-link">
+            <div>متفرقه</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Icons -->
+    <li class="menu-item">
+      <a href="icons-mdi.html" class="menu-link">
+        <i class="menu-icon tf-icons mdi mdi-google-circles-extended"></i>
+        <div>آیکون ها</div>
+      </a>
+    </li>
+
+    <!-- Forms & Tables -->
+    <li class="menu-header fw-light mt-4">
+      <span class="menu-header-text">فرم‌ها و جدول‌ها</span>
+    </li>
+    <!-- Forms -->
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-form-select"></i>
+        <div>عناصر فرم</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="forms-basic-inputs.html" class="menu-link">
+            <div>ورودی های پایه</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="forms-input-groups.html" class="menu-link">
+            <div>گروه های ورودی</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="forms-custom-options.html" class="menu-link">
+            <div>گزینه های سفارشی</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="forms-editors.html" class="menu-link">
+            <div>ویراستاران</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="forms-file-upload.html" class="menu-link">
+            <div>آپلود فایل</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="forms-pickers.html" class="menu-link">
+            <div>انتخاب کنندگان</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="forms-selects.html" class="menu-link">
+            <div>انتخاب و برچسب ها</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="forms-sliders.html" class="menu-link">
+            <div>اسلایدرها</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="forms-switches.html" class="menu-link">
+            <div>سوویچ ها</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="forms-extras.html" class="menu-link">
+            <div>موارد بیشتر</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-cube-outline"></i>
+        <div>طرح بندی فرم ها</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="form-layouts-vertical.html" class="menu-link">
+            <div>فرم عمودی</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="form-layouts-horizontal.html" class="menu-link">
+            <div>فرم افقی</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="form-layouts-sticky.html" class="menu-link">
+            <div>اقدامات چسبنده</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-dots-horizontal"></i>
+        <div>فرم مرحله ای</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="form-wizard-numbered.html" class="menu-link">
+            <div>شماره گذاری شده</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="form-wizard-icons.html" class="menu-link">
+            <div>آیکون ها</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="menu-item">
+      <a href="form-validation.html" class="menu-link">
+        <i class="menu-icon tf-icons mdi mdi-checkbox-marked-circle-outline"></i>
+        <div>فرم اعتبارسنجی</div>
+      </a>
+    </li>
+    <!-- Tables -->
+    <li class="menu-item">
+      <a href="tables-basic.html" class="menu-link">
+        <i class="menu-icon tf-icons mdi mdi-table"></i>
+        <div>جدول ها</div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-grid"></i>
+        <div>جدول های داده</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="tables-datatables-basic.html" class="menu-link">
+            <div>پایه</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="tables-datatables-advanced.html" class="menu-link">
+            <div>پیشرفته</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="tables-datatables-extensions.html" class="menu-link">
+            <div>برنامه های افزودنی</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Charts & Maps -->
+    <li class="menu-header fw-light mt-4">
+      <span class="menu-header-text">نمودارها و نقشه‌ها</span>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons mdi mdi-chart-pie-outline"></i>
+        <div>نمودارها</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="charts-apex.html" class="menu-link">
+            <div>نمودارهای اوج</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="charts-chartjs.html" class="menu-link">
+            <div>نمودار js</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="menu-item">
+      <a href="maps-leaflet.html" class="menu-link">
+        <i class="menu-icon tf-icons mdi mdi-map-outline"></i>
+        <div>نقشه های جزوه</div>
+      </a>
+    </li>
+
+    <!-- Misc -->
+    <li class="menu-header fw-light mt-4">
+      <span class="menu-header-text">پشتیبانی</span>
+    </li>
+    <li class="menu-item">
+      <a href="https://pixinvent.ticksy.com/" target="_blank" class="menu-link">
+        <i class="menu-icon tf-icons mdi mdi-lifebuoy"></i>
+        <div>پشتیبانی</div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="https://demos.pixinvent.com/materialize-html-admin-template/documentation/" target="_blank" class="menu-link">
+        <i class="menu-icon tf-icons mdi mdi-file-document-multiple-outline"></i>
+        <div>مستندات</div>
+      </a>
+    </li>
+  </ul>
+  
+  
+
+</aside>
+<!-- / Menu -->
+
+    
+
+    <!-- Layout container -->
+    <div class="layout-page">
+      
+      
 
 
-                    <!-- Charts & Maps -->
-                    <li class="menu-header fw-light mt-4">
-                        <span class="menu-header-text">نمودارها و نقشه‌ها</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-chart-pie-outline"></i>
-                            <div>نمودارها</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="charts-apex.html" class="menu-link">
-                                    <div>نمودارهای اوج</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="charts-chartjs.html" class="menu-link">
-                                    <div>نمودار js</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="maps-leaflet.html" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-map-outline"></i>
-                            <div>درباره ما</div>
-                        </a>
-                    </li>
 
+<!-- Navbar -->
 
-                </ul>
+<nav
+class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+id="layout-navbar"
+>
+<div
+  class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none"
+>
+  <a
+    class="nav-item nav-link px-0 me-xl-4"
+    href="javascript:void(0)"
+  >
+    <i class="mdi mdi-menu mdi-24px"></i>
+  </a>
+</div>
 
+<div
+  class="navbar-nav-right d-flex align-items-center"
+  id="navbar-collapse"
+>
+  <!-- Search -->
+  <div class="navbar-nav align-items-center">
+    <div class="nav-item navbar-search-wrapper mb-0">
+      <a
+        class="nav-item nav-link search-toggler fw-normal px-0"
+        href="javascript:void(0);"
+      >
+        <i class="mdi mdi-magnify mdi-24px scaleX-n1-rtl"></i>
+        <span class="d-none d-md-inline-block text-muted"
+          >جستوجو (Ctrl+/)</span
+        >
+      </a>
+    </div>
+  </div>
+  <!-- /Search -->
 
+  <ul class="navbar-nav flex-row align-items-center ms-auto">
+    <!-- Language -->
+    <li class="nav-item dropdown-language dropdown me-1 me-xl-0">
+      <a
+        class="nav-link btn btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow waves-effect waves-light"
+        href="javascript:void(0);"
+        data-bs-toggle="dropdown"
+      >
+        <i class="mdi mdi-translate mdi-24px"></i>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <a
+            class="dropdown-item waves-effect active"
+            href="javascript:void(0);"
+            data-language="fa"
+          >
+            <span class="align-middle">فارسی</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item waves-effect active"
+            href="javascript:void(0);"
+            data-language="en"
+          >
+            <span class="align-middle">انگلیسی</span>
+          </a>
+        </li>
 
-            </aside>
-            <!-- / Menu -->
-            <!-- Layout container -->
-            <div class="layout-page">
+        <li>
+          <a
+            class="dropdown-item waves-effect"
+            href="javascript:void(0);"
+            data-language="fr"
+          >
+            <span class="align-middle">فرانسوی</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item waves-effect"
+            href="javascript:void(0);"
+            data-language="de"
+          >
+            <span class="align-middle">آلمانی</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item waves-effect"
+            href="javascript:void(0);"
+            data-language="pt"
+          >
+            <span class="align-middle">پرتغالی</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <!--/ Language -->
 
+    <!-- Style Switcher -->
+    <li class="nav-item me-1 me-xl-0">
+      <a
+        class="nav-link btn btn-text-secondary rounded-pill btn-icon style-switcher-toggle hide-arrow waves-effect waves-light"
+        href="javascript:void(0);"
+      >
+        <i class="mdi mdi-24px mdi-weather-sunny"></i>
+      </a>
+    </li>
+    <!--/ Style Switcher -->
 
+    <!-- Quick links  -->
+    <li
+      class="nav-item dropdown-shortcuts navbar-dropdown dropdown me-1 me-xl-0"
+    >
+      <a
+        class="nav-link btn btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow waves-effect waves-light"
+        href="javascript:void(0);"
+        data-bs-toggle="dropdown"
+        data-bs-auto-close="outside"
+        aria-expanded="false"
+      >
+        <i class="mdi mdi-view-grid-plus-outline mdi-24px"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-end py-0">
+        <div class="dropdown-menu-header border-bottom">
+          <div
+            class="dropdown-header d-flex align-items-center py-3"
+          >
+            <h5 class="text-body mb-0 me-auto">میانبر ها</h5>
+            <a
+              href="javascript:void(0)"
+              class="dropdown-shortcuts-add text-muted"
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              aria-label="اضافه کردن میانبر"
+              data-bs-original-title="اضافه کردن میانبر"
+              ><i
+                class="mdi mdi-view-grid-plus-outline mdi-24px"
+              ></i
+            ></a>
+          </div>
+        </div>
+        <div
+          class="dropdown-shortcuts-list scrollable-container ps"
+        >
+          <div class="row row-bordered overflow-visible g-0">
+            <div class="dropdown-shortcuts-item col">
+              <span
+                class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2"
+              >
+                <i class="mdi mdi-calendar fs-4"></i>
+              </span>
+              <a href="app-calendar.html" class="stretched-link"
+                >تقویم</a
+              >
+              <small class="text-muted mb-0">قرار های ملاقات</small>
+            </div>
+            <div class="dropdown-shortcuts-item col">
+              <span
+                class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2"
+              >
+                <i class="mdi mdi-file-document-outline fs-4"></i>
+              </span>
+              <a href="app-invoice-list.html" class="stretched-link"
+                >برنامه صورتحساب</a
+              >
+              <small class="text-muted mb-0">مدیریت حساب ها</small>
+            </div>
+          </div>
+          <div class="row row-bordered overflow-visible g-0">
+            <div class="dropdown-shortcuts-item col">
+              <span
+                class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2"
+              >
+                <i class="mdi mdi-account-outline fs-4"></i>
+              </span>
+              <a href="app-user-list.html" class="stretched-link"
+                >برنامه کاربر</a
+              >
+              <small class="text-muted mb-0">مدیریت کاربران</small>
+            </div>
+            <div class="dropdown-shortcuts-item col">
+              <span
+                class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2"
+              >
+                <i class="mdi mdi-shield-check-outline fs-4"></i>
+              </span>
+              <a href="app-access-roles.html" class="stretched-link"
+                >مدیریت نقش ها</a
+              >
+              <small class="text-muted mb-0">مجوز ها</small>
+            </div>
+          </div>
+          <div class="row row-bordered overflow-visible g-0">
+            <div class="dropdown-shortcuts-item col">
+              <span
+                class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2"
+              >
+                <i class="mdi mdi-chart-pie-outline fs-4"></i>
+              </span>
+              <a href="index.html" class="stretched-link"
+                >داشبورد</a
+              >
+              <small class="text-muted mb-0">پروفایل کاربر</small>
+            </div>
+            <div class="dropdown-shortcuts-item col">
+              <span
+                class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2"
+              >
+                <i class="mdi mdi-cog-outline fs-4"></i>
+              </span>
+              <a
+                href="pages-account-settings-account.html"
+                class="stretched-link"
+                >تنظیمات</a
+              >
+              <small class="text-muted mb-0"
+                > تنظیمات حساب </small
+              >
+            </div>
+          </div>
+          <div class="row row-bordered overflow-visible g-0">
+            <div class="dropdown-shortcuts-item col">
+              <span
+                class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2"
+              >
+                <i class="mdi mdi-help-circle-outline fs-4"></i>
+              </span>
+              <a
+                href="pages-help-center-landing.html"
+                class="stretched-link"
+                >مرکز راهنمایی</a
+              >
+              <small class="text-muted mb-0"
+                >سولات متدال و مقلات</small
+              >
+            </div>
+            <div class="dropdown-shortcuts-item col">
+              <span
+                class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2"
+              >
+                <i class="mdi mdi-dock-window fs-4"></i>
+              </span>
+              <a href="modal-examples.html" class="stretched-link"
+                >مودال ها</a
+              >
+              <small class="text-muted mb-0">پاپ های کاربردی</small>
+            </div>
+          </div>
+         
+        </div>
+      </div>
+    </li>
+    <!-- Quick links -->
 
+    <!-- Notification -->
+    <li
+      class="nav-item dropdown-notifications navbar-dropdown dropdown me-2 me-xl-1"
+    >
+      <a
+        class="nav-link btn btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow waves-effect waves-light"
+        href="javascript:void(0);"
+        data-bs-toggle="dropdown"
+        data-bs-auto-close="outside"
+        aria-expanded="false"
+      >
+        <i class="mdi mdi-bell-outline mdi-24px"></i>
+        <span
+          class="position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border"
+        ></span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end py-0">
+        <li class="dropdown-menu-header border-bottom">
+          <div
+            class="dropdown-header d-flex align-items-center py-3"
+          >
+            <h6 class="mb-0 me-auto">اعلان ها</h6>
+            <span class="badge rounded-pill bg-label-primary"
+              >8 جدید</span
+            >
+          </div>
+        </li>
+        <li
+          class="dropdown-notifications-list scrollable-container ps"
+        >
+          <ul class="list-group list-group-flush">
+            <li
+              class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light"
+            >
+              <div class="d-flex gap-2">
+                <div class="flex-shrink-0">
+                  <div class="avatar me-1">
+                    <img
+                      src="../../assets/img/avatars/1.png"
+                      alt=""
+                      class="w-px-40 h-auto rounded-circle"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200"
+                >
+                  <h6 class="mb-1 text-truncate">
+                    لورم ایپسوم متن ساختگی با
+                  </h6>
+                  <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>                            </div>
+                <div
+                  class="flex-shrink-0 dropdown-notifications-actions"
+                >
+                  <small class="text-muted">1ساعت قبل</small>
+                </div>
+              </div>
+            </li>
+            <li
+              class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light"
+            >
+              <div class="d-flex gap-2">
+                <div class="flex-shrink-0">
+                  <div class="avatar me-1">
+                    <span
+                      class="avatar-initial rounded-circle bg-label-danger"
+                      >MG</span
+                    >
+                  </div>
+                </div>
+                <div
+                  class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200"
+                >
+                <h6 class="mb-1 text-truncate">
+                لورم ایپسوم متن ساختگی با
+              </h6>
+              <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small> 
+                </div>
+                <div
+                  class="flex-shrink-0 dropdown-notifications-actions"
+                >
+                  <small class="text-muted">12ساعت قبل</small>
+                </div>
+              </div>
+            </li>
+            <li
+              class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light"
+            >
+              <div class="d-flex gap-2">
+                <div class="flex-shrink-0">
+                  <div class="avatar me-1">
+                    <img
+                      src="../../assets/img/avatars/2.png"
+                      alt=""
+                      class="w-px-40 h-auto rounded-circle"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200"
+                >
+                <h6 class="mb-1 text-truncate">
+                  لورم ایپسوم متن ساختگی با
+                </h6>
+                <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
+                </div>
+                <div
+                  class="flex-shrink-0 dropdown-notifications-actions"
+                >
+                  <small class="text-muted">1ساعت قبل</small>
+                </div>
+              </div>
+            </li>
+            <li
+              class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light"
+            >
+              <div class="d-flex gap-2">
+                <div class="flex-shrink-0">
+                  <div class="avatar me-1">
+                    <span
+                      class="avatar-initial rounded-circle bg-label-success"
+                      ><i class="mdi mdi-cart-outline"></i
+                    ></span>
+                  </div>
+                </div>
+                <div
+                  class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200"
+                >
+                <h6 class="mb-1 text-truncate">
+                  لورم ایپسوم متن ساختگی با
+                </h6>
+                <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
+                </div>
+                <div
+                  class="flex-shrink-0 dropdown-notifications-actions"
+                >
+                  <small class="text-muted">1 روز قبل</small>
+                </div>
+              </div>
+            </li>
+            <li
+              class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light"
+            >
+              <div class="d-flex gap-2">
+                <div class="flex-shrink-0">
+                  <div class="avatar me-1">
+                    <img
+                      src="../../assets/img/avatars/9.png"
+                      alt=""
+                      class="w-px-40 h-auto rounded-circle"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200"
+                >
+                <h6 class="mb-1 text-truncate">
+                  لورم ایپسوم متن ساختگی با
+                </h6>
+                <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
+                </div>
+                <div
+                  class="flex-shrink-0 dropdown-notifications-actions"
+                >
+                  <small class="text-muted">2 روز قبل</small>
+                </div>
+              </div>
+            </li>
+            <li
+              class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light"
+            >
+              <div class="d-flex gap-2">
+                <div class="flex-shrink-0">
+                  <div class="avatar me-1">
+                    <span
+                      class="avatar-initial rounded-circle bg-label-success"
+                      ><i class="mdi mdi-chart-pie-outline"></i
+                    ></span>
+                  </div>
+                </div>
+                <div
+                  class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200"
+                >
+                <h6 class="mb-1 text-truncate">
+                  لورم ایپسوم متن ساختگی با
+                </h6>
+                <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
+                </div>
+                <div
+                  class="flex-shrink-0 dropdown-notifications-actions"
+                >
+                  <small class="text-muted">3 روز قبل</small>
+                </div>
+              </div>
+            </li>
+            <li
+              class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light"
+            >
+              <div class="d-flex gap-2">
+                <div class="flex-shrink-0">
+                  <div class="avatar me-1">
+                    <img
+                      src="../../assets/img/avatars/5.png"
+                      alt=""
+                      class="w-px-40 h-auto rounded-circle"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200"
+                >
+                <h6 class="mb-1 text-truncate">
+                  لورم ایپسوم متن ساختگی با
+                </h6>
+                <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
+                </div>
+                <div
+                  class="flex-shrink-0 dropdown-notifications-actions"
+                >
+                  <small class="text-muted">4 روز قبل</small>
+                </div>
+              </div>
+            </li>
+            <li
+              class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light"
+            >
+              <div class="d-flex gap-2">
+                <div class="flex-shrink-0">
+                  <div class="avatar me-1">
+                    <img
+                      src="../../assets/img/avatars/6.png"
+                      alt=""
+                      class="w-px-40 h-auto rounded-circle"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200"
+                >
+                <h6 class="mb-1 text-truncate">
+                  لورم ایپسوم متن ساختگی با
+                </h6>
+                <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
+                </div>
+                <div
+                  class="flex-shrink-0 dropdown-notifications-actions"
+                >
+                  <small class="text-muted">5روز قبل</small>
+                </div>
+              </div>
+            </li>
+            <li
+              class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light"
+            >
+              <div class="d-flex gap-2">
+                <div class="flex-shrink-0">
+                  <div class="avatar me-1">
+                    <span
+                      class="avatar-initial rounded-circle bg-label-warning"
+                      ><i class="mdi mdi-alert-circle-outline"></i
+                    ></span>
+                  </div>
+                </div>
+                <div
+                  class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200"
+                >
+                <h6 class="mb-1 text-truncate">
+                  لورم ایپسوم متن ساختگی با
+                </h6>
+                <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
+                </div>
+                <div
+                  class="flex-shrink-0 dropdown-notifications-actions"
+                >
+                  <small class="text-muted">5 روز قبل</small>
+                </div>
+              </div>
+            </li>
+          </ul>
+        
+        </li>
+        <li class="dropdown-menu-footer border-top p-2">
+          <a
+            href="javascript:void(0);"
+            class="btn btn-primary d-flex justify-content-center waves-effect waves-light"
+          >
+          مشاهده همه اعلان ها
+          </a>
+        </li>
+      </ul>
+    </li>
+    <!--/ Notification -->
 
+    <!-- User -->
+    <li class="nav-item navbar-dropdown dropdown-user dropdown">
+      <a
+        class="nav-link dropdown-toggle hide-arrow"
+        href="javascript:void(0);"
+        data-bs-toggle="dropdown"
+      >
+        <div class="avatar avatar-online">
+          <img
+            src="../../assets/img/avatars/1.png"
+            alt=""
+            class="w-px-40 h-auto rounded-circle"
+          />
+        </div>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <a
+            class="dropdown-item waves-effect"
+            href="pages-account-settings-account.html"
+          >
+            <div class="d-flex">
+              <div class="flex-shrink-0 me-3">
+                <div class="avatar avatar-online">
+                  <img
+                    src="../../assets/img/avatars/1.png"
+                    alt=""
+                    class="w-px-40 h-auto rounded-circle"
+                  />
+                </div>
+              </div>
+              <div class="flex-grow-1">
+                <span class="fw-semibold d-block">جان دو</span>
+                <small class="text-muted">مدیر</small>
+              </div>
+            </div>
+          </a>
+        </li>
+        <li>
+          <div class="dropdown-divider"></div>
+        </li>
+        <li>
+          <a
+            class="dropdown-item waves-effect"
+            href="pages-profile-user.html"
+          >
+            <i class="mdi mdi-account-outline me-2"></i>
+            <span class="align-middle">پروفایل من</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item waves-effect"
+            href="pages-account-settings-account.html"
+          >
+            <i class="mdi mdi-cog-outline me-2"></i>
+            <span class="align-middle">تنظیمات</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item waves-effect"
+            href="pages-account-settings-billing.html"
+          >
+            <span class="d-flex align-items-center align-middle">
+              <i
+                class="flex-shrink-0 mdi mdi-credit-card-outline me-2"
+              ></i>
+              <span class="flex-grow-1 align-middle">صورتحساب</span>
+              <span
+                class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20"
+                >4</span
+              >
+            </span>
+          </a>
+        </li>
+        <li>
+          <div class="dropdown-divider"></div>
+        </li>
+        <li>
+          <a
+            class="dropdown-item waves-effect"
+            href="pages-help-center-landing.html"
+          >
+            <i class="mdi mdi-lifebuoy me-2"></i>
+            <span class="align-middle">کمک</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item waves-effect"
+            href="pages-faq.html"
+          >
+            <i class="mdi mdi-help-circle-outline me-2"></i>
+            <span class="align-middle">سوالات متداول</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item waves-effect"
+            href="pages-pricing.html"
+          >
+            <i class="mdi mdi-currency-usd me-2"></i>
+            <span class="align-middle">قیمت</span>
+          </a>
+        </li>
+        <li>
+          <div class="dropdown-divider"></div>
+        </li>
+        <li>
+          <a
+            class="dropdown-item waves-effect"
+            href="auth-login-cover.html"
+            target="_blank"
+          >
+            <i class="mdi mdi-logout me-2"></i>
+            <span class="align-middle">خروج</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <!--/ User -->
+  </ul>
+</div>
 
-                <!-- Navbar -->
-                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-                     id="layout-navbar">
-                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-                        <a class="nav-item nav-link px-0 me-xl-4"
-                           href="javascript:void(0)">
-                            <i class="mdi mdi-menu mdi-24px"></i>
-                        </a>
-                    </div>
-
-                    <div class="navbar-nav-right d-flex align-items-center"
-                         id="navbar-collapse">
-                        <!-- Search -->
-                        <div class="navbar-nav align-items-center">
-                            <div class="nav-item navbar-search-wrapper mb-0">
-                                <a class="nav-item nav-link search-toggler fw-normal px-0"
-                                   href="javascript:void(0);">
-                                    <i class="mdi mdi-magnify mdi-24px scaleX-n1-rtl"></i>
-                                    <span class="d-none d-md-inline-block text-muted">جستوجو (Ctrl+/)</span>
-                                </a>
-                            </div>
-                        </div>
-                        <!-- /Search -->
-
-                        <ul class="navbar-nav flex-row align-items-center ms-auto">
-                            <!-- Language -->
-                            <li class="nav-item dropdown-language dropdown me-1 me-xl-0">
-                                <a class="nav-link btn btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow waves-effect waves-light"
-                                   href="javascript:void(0);"
-                                   data-bs-toggle="dropdown">
-                                    <i class="mdi mdi-translate mdi-24px"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item waves-effect active"
-                                           href="javascript:void(0);"
-                                           data-language="fa">
-                                            <span class="align-middle">فارسی</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item waves-effect active"
-                                           href="javascript:void(0);"
-                                           data-language="en">
-                                            <span class="align-middle">انگلیسی</span>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a class="dropdown-item waves-effect"
-                                           href="javascript:void(0);"
-                                           data-language="fr">
-                                            <span class="align-middle">فرانسوی</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item waves-effect"
-                                           href="javascript:void(0);"
-                                           data-language="de">
-                                            <span class="align-middle">آلمانی</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item waves-effect"
-                                           href="javascript:void(0);"
-                                           data-language="pt">
-                                            <span class="align-middle">پرتغالی</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <!--/ Language -->
-                            <!-- Style Switcher -->
-                        
-                            <li class="nav-item me-1 me-xl-0">
-                                <a class="nav-link btn btn-text-secondary rounded-pill btn-icon style-switcher-toggle hide-arrow waves-effect waves-light" href="javascript:void(0);">
-                                    <i class="mdi mdi-24px mdi-weather-sunny mdi-weather-night"></i>
-                                </a>
-                            </li>
-                            <!--/ Style Switcher -->
-                            <!-- Quick links  -->
-                            <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown me-1 me-xl-0">
-                                <a class="nav-link btn btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow waves-effect waves-light"
-                                   href="javascript:void(0);"
-                                   data-bs-toggle="dropdown"
-                                   data-bs-auto-close="outside"
-                                   aria-expanded="false">
-                                    <i class="mdi mdi-view-grid-plus-outline mdi-24px"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end py-0">
-                                    <div class="dropdown-menu-header border-bottom">
-                                        <div class="dropdown-header d-flex align-items-center py-3">
-                                            <h5 class="text-body mb-0 me-auto">میانبر ها</h5>
-                                            <a href="javascript:void(0)"
-                                               class="dropdown-shortcuts-add text-muted"
-                                               data-bs-toggle="tooltip"
-                                               data-bs-placement="top"
-                                               aria-label="اضافه کردن میانبر"
-                                               data-bs-original-title="اضافه کردن میانبر">
-                                                <i class="mdi mdi-view-grid-plus-outline mdi-24px"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown-shortcuts-list scrollable-container ps">
-                                        <div class="row row-bordered overflow-visible g-0">
-                                            <div class="dropdown-shortcuts-item col">
-                                                <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                    <i class="mdi mdi-calendar fs-4"></i>
-                                                </span>
-                                                <a href="app-calendar.html" class="stretched-link">تقویم</a>
-                                                <small class="text-muted mb-0">قرار های ملاقات</small>
-                                            </div>
-                                            <div class="dropdown-shortcuts-item col">
-                                                <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                    <i class="mdi mdi-file-document-outline fs-4"></i>
-                                                </span>
-                                                <a href="app-invoice-list.html" class="stretched-link">برنامه صورتحساب</a>
-                                                <small class="text-muted mb-0">مدیریت حساب ها</small>
-                                            </div>
-                                        </div>
-                                        <div class="row row-bordered overflow-visible g-0">
-                                            <div class="dropdown-shortcuts-item col">
-                                                <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                    <i class="mdi mdi-account-outline fs-4"></i>
-                                                </span>
-                                                <a href="app-user-list.html" class="stretched-link">برنامه کاربر</a>
-                                                <small class="text-muted mb-0">مدیریت کاربران</small>
-                                            </div>
-                                            <div class="dropdown-shortcuts-item col">
-                                                <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                    <i class="mdi mdi-shield-check-outline fs-4"></i>
-                                                </span>
-                                                <a href="app-access-roles.html" class="stretched-link">مدیریت نقش ها</a>
-                                                <small class="text-muted mb-0">مجوز ها</small>
-                                            </div>
-                                        </div>
-                                        <div class="row row-bordered overflow-visible g-0">
-                                            <div class="dropdown-shortcuts-item col">
-                                                <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                    <i class="mdi mdi-chart-pie-outline fs-4"></i>
-                                                </span>
-                                                <a href="index.html" class="stretched-link">داشبورد</a>
-                                                <small class="text-muted mb-0">پروفایل کاربر</small>
-                                            </div>
-                                            <div class="dropdown-shortcuts-item col">
-                                                <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                    <i class="mdi mdi-cog-outline fs-4"></i>
-                                                </span>
-                                                <a href="pages-account-settings-account.html"
-                                                   class="stretched-link">تنظیمات</a>
-                                                <small class="text-muted mb-0"> تنظیمات حساب </small>
-                                            </div>
-                                        </div>
-                                        <div class="row row-bordered overflow-visible g-0">
-                                            <div class="dropdown-shortcuts-item col">
-                                                <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                    <i class="mdi mdi-help-circle-outline fs-4"></i>
-                                                </span>
-                                                <a href="pages-help-center-landing.html"
-                                                   class="stretched-link">مرکز راهنمایی</a>
-                                                <small class="text-muted mb-0">سولات متدال و مقلات</small>
-                                            </div>
-                                            <div class="dropdown-shortcuts-item col">
-                                                <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                    <i class="mdi mdi-dock-window fs-4"></i>
-                                                </span>
-                                                <a href="modal-examples.html" class="stretched-link">مودال ها</a>
-                                                <small class="text-muted mb-0">پاپ های کاربردی</small>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </li>
-                            <!-- Quick links -->
-                            <!-- Notification -->
-                            <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-2 me-xl-1">
-                                <a class="nav-link btn btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow waves-effect waves-light"
-                                   href="javascript:void(0);"
-                                   data-bs-toggle="dropdown"
-                                   data-bs-auto-close="outside"
-                                   aria-expanded="false">
-                                    <i class="mdi mdi-bell-outline mdi-24px"></i>
-                                    <span class="position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border"></span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end py-0">
-                                    <li class="dropdown-menu-header border-bottom">
-                                        <div class="dropdown-header d-flex align-items-center py-3">
-                                            <h6 class="mb-0 me-auto">اعلان ها</h6>
-                                            <span class="badge rounded-pill bg-label-primary">8 جدید</span>
-                                        </div>
-                                    </li>
-                                    <li class="dropdown-notifications-list scrollable-container ps">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <img src="~/assets/img/avatars/1.png"
-                                                                 alt=""
-                                                                 class="w-px-40 h-auto rounded-circle" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">1ساعت قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <span class="avatar-initial rounded-circle bg-label-danger">MG</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">12ساعت قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <img src="~/assets/img/avatars/2.png"
-                                                                 alt=""
-                                                                 class="w-px-40 h-auto rounded-circle" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">1ساعت قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <span class="avatar-initial rounded-circle bg-label-success">
-                                                                <i class="mdi mdi-cart-outline"></i>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">1 روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <img src="~/assets/img/avatars/9.png"
-                                                                 alt=""
-                                                                 class="w-px-40 h-auto rounded-circle" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">2 روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <span class="avatar-initial rounded-circle bg-label-success">
-                                                                <i class="mdi mdi-chart-pie-outline"></i>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">3 روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <img src="~/assets/img/avatars/5.png"
-                                                                 alt=""
-                                                                 class="w-px-40 h-auto rounded-circle" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">4 روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <img src="~/assets/img/avatars/6.png"
-                                                                 alt=""
-                                                                 class="w-px-40 h-auto rounded-circle" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">5روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <span class="avatar-initial rounded-circle bg-label-warning">
-                                                                <i class="mdi mdi-alert-circle-outline"></i>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">5 روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-
-                                    </li>
-                                    <li class="dropdown-menu-footer border-top p-2">
-                                        <a href="javascript:void(0);"
-                                           class="btn btn-primary d-flex justify-content-center waves-effect waves-light">
-                                            مشاهده همه اعلان ها
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <!--/ Notification -->
-                            <!-- User -->
-                            <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                                <a class="nav-link dropdown-toggle hide-arrow"
-                                   href="javascript:void(0);"
-                                   data-bs-toggle="dropdown">
-                                    <div class="avatar avatar-online">
-                                        <img src="~/assets/img/avatars/1.png"
-                                             alt=""
-                                             class="w-px-40 h-auto rounded-circle" />
-                                    </div>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item waves-effect"
-                                           href="pages-account-settings-account.html">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0 me-3">
-                                                    <div class="avatar avatar-online">
-                                                        <img src="~/assets/img/avatars/1.png"
-                                                             alt=""
-                                                             class="w-px-40 h-auto rounded-circle" />
-                                                    </div>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <span class="fw-semibold d-block">جان دو</span>
-                                                    <small class="text-muted">مدیر</small>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-divider"></div>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item waves-effect"
-                                           href="pages-profile-user.html">
-                                            <i class="mdi mdi-account-outline me-2"></i>
-                                            <span class="align-middle">پروفایل من</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item waves-effect"
-                                           href="pages-account-settings-account.html">
-                                            <i class="mdi mdi-cog-outline me-2"></i>
-                                            <span class="align-middle">تنظیمات</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item waves-effect"
-                                           href="pages-account-settings-billing.html">
-                                            <span class="d-flex align-items-center align-middle">
-                                                <i class="flex-shrink-0 mdi mdi-credit-card-outline me-2"></i>
-                                                <span class="flex-grow-1 align-middle">صورتحساب</span>
-                                                <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-divider"></div>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item waves-effect"
-                                           href="pages-help-center-landing.html">
-                                            <i class="mdi mdi-lifebuoy me-2"></i>
-                                            <span class="align-middle">کمک</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item waves-effect"
-                                           href="pages-faq.html">
-                                            <i class="mdi mdi-help-circle-outline me-2"></i>
-                                            <span class="align-middle">سوالات متداول</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item waves-effect"
-                                           href="pages-pricing.html">
-                                            <i class="mdi mdi-currency-usd me-2"></i>
-                                            <span class="align-middle">قیمت</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-divider"></div>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item waves-effect"
-                                           href="auth-login-cover.html"
-                                           target="_blank">
-                                            <i class="mdi mdi-logout me-2"></i>
-                                            <span class="align-middle">خروج</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <!--/ User -->
-                        </ul>
-                    </div>
-
-                    <!-- Search Small Screens -->
-                    <div class="navbar-search-wrapper search-input-wrapper d-none">
-                        <span class="twitter-typeahead"
-                              style="position: relative; display: inline-block">
-                            <input type="text"
-                                   class="form-control search-input container-xxl border-0 tt-input"
-                                   placeholder="جست و جو..."
-                                   aria-label="جستوجو..."
-                                   autocomplete="off"
-                                   spellcheck="false"
-                                   dir="auto"
-                                   style="position: relative; vertical-align: top" />
-                            <pre aria-hidden="true"
-                                 style="
+<!-- Search Small Screens -->
+<div class="navbar-search-wrapper search-input-wrapper d-none">
+  <span
+    class="twitter-typeahead"
+    style="position: relative; display: inline-block"
+    ><input
+      type="text"
+      class="form-control search-input container-xxl border-0 tt-input"
+      placeholder="جست و جو..."
+      aria-label="جستوجو..."
+      autocomplete="off"
+      spellcheck="false"
+      dir="auto"
+      style="position: relative; vertical-align: top" />
+    <pre
+      aria-hidden="true"
+      style="
         position: absolute;
         visibility: hidden;
         white-space: pre;
@@ -813,40 +1753,49 @@
         text-indent: 0px;
         text-rendering: auto;
         text-transform: none;
-      "></pre>
-                            <div class="tt-menu navbar-search-suggestion ps"
-                                 style="
+      "
+    ></pre>
+    <div
+      class="tt-menu navbar-search-suggestion ps"
+      style="
         position: absolute;
         top: 100%;
         left: 0px;
         z-index: 100;
         display: none;
-      ">
-                                <div class="tt-dataset tt-dataset-pages"></div>
-                                <div class="tt-dataset tt-dataset-files"></div>
-                                <div class="tt-dataset tt-dataset-members"></div>
-                                <div class="ps__rail-x" style="left: 0px; bottom: 0px">
-                                    <div class="ps__thumb-x"
-                                         tabindex="0"
-                                         style="left: 0px; width: 0px"></div>
-                                </div>
-                                <div class="ps__rail-y" style="top: 0px; right: 0px">
-                                    <div class="ps__thumb-y"
-                                         tabindex="0"
-                                         style="top: 0px; height: 0px"></div>
-                                </div>
-                            </div>
-                        </span>
-                        <i class="mdi mdi-close search-toggler cursor-pointer"></i>
-                    </div>
-                </nav>
+      "
+    >
+      <div class="tt-dataset tt-dataset-pages"></div>
+      <div class="tt-dataset tt-dataset-files"></div>
+      <div class="tt-dataset tt-dataset-members"></div>
+      <div class="ps__rail-x" style="left: 0px; bottom: 0px">
+        <div
+          class="ps__thumb-x"
+          tabindex="0"
+          style="left: 0px; width: 0px"
+        ></div>
+      </div>
+      <div class="ps__rail-y" style="top: 0px; right: 0px">
+        <div
+          class="ps__thumb-y"
+          tabindex="0"
+          style="top: 0px; height: 0px"
+        ></div>
+      </div></div
+  ></span>
+  <i class="mdi mdi-close search-toggler cursor-pointer"></i>
+</div>
+</nav>
 
 
-                <!-- / Navbar -->
-                <!-- Content wrapper -->
-                <div class="content-wrapper">
+<!-- / Navbar -->
 
-                    <!-- Content -->
+      
+
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+
+       <!-- Content -->
 
                     <div class="content-wrapper">
 
@@ -1711,14 +2660,14 @@
                                                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                             </div>
                                             <div class="offcanvas-body">
-                                                <form method="post" enctype="multipart/form-data" class="event-form pt-0" id="eventForm">
+                                                <form class="event-form pt-0" id="eventForm" onsubmit="return false">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="eventTitle">عنوان</label>
-                                                        <input asp-for="Title" type="text" class="form-control" id="eventTitle" name="eventTitle" placeholder="عنوان رویداد">
+                                                        <input type="text" class="form-control" id="eventTitle" name="eventTitle" placeholder="عنوان رویداد">
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label" for="eventLabel">برچسب</label>
-                                                        <select asp-for="Tag" class="select2 select-event-label form-select" id="eventLabel" name="eventLabel">
+                                                        <select class="select2 select-event-label form-select" id="eventLabel" name="eventLabel">
                                                             <option data-label="primary" value="Business" selected>کسب و کار</option>
                                                             <option data-label="danger" value="Personal">شخصی</option>
                                                             <option data-label="warning" value="Family">خانواده</option>
@@ -1728,30 +2677,29 @@
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label" for="eventStartDate">تاریخ شروع</label>
-                                                        <input asp-for="StartTime" type="text" class="form-control" id="eventStartDate" name="eventStartDate" placeholder="تاریخ شروع">
+                                                        <input type="text" class="form-control" id="eventStartDate" name="eventStartDate" placeholder="تاریخ شروع">
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label" for="eventEndDate">تاریخ پایان</label>
-                                                        <input asp-for="EndTime" type="text" class="form-control" id="eventEndDate" name="eventEndDate" placeholder="تاریخ پایان">
+                                                        <input type="text" class="form-control" id="eventEndDate" name="eventEndDate" placeholder="تاریخ پایان">
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="switch">
-                                                            <input asp-for="@Model.AccessNotification" type="checkbox" class="switch-input allDay-switch">
+                                                            <input type="checkbox" class="switch-input allDay-switch">
                                                             <span class="switch-toggle-slider">
                                                                 <span class="switch-on"></span>
                                                                 <span class="switch-off"></span>
                                                             </span>
-                                                            <span class="switch-label">نوتیفیکیشن</span>
+                                                            <span class="switch-label">تمام روز</span>
                                                         </label>
                                                     </div>
-                                                    
                                                     <div class="mb-3">
                                                         <label class="form-label" for="eventURL">آدرس URL رویداد</label>
-                                                        <input asp-for="Link" type="url" class="form-control" id="eventURL" name="eventURL" placeholder="https://www.google.com/">
+                                                        <input type="url" class="form-control" id="eventURL" name="eventURL" placeholder="https://www.google.com/">
                                                     </div>
                                                     <div class="mb-3 select2-primary">
                                                         <label class="form-label" for="eventGuests">افزودن مهمانان</label>
-                                                        <select asp-for="UserNumber" class="select2 select-event-guests form-select" id="eventGuests" name="eventGuests" multiple>
+                                                        <select class="select2 select-event-guests form-select" id="eventGuests" name="eventGuests" multiple>
                                                             <option data-avatar="1.png" value="Jane Foster">تونی استارک</option>
                                                             <option data-avatar="3.png" value="Donna Frank">پیتر پارکر</option>
                                                             <option data-avatar="5.png" value="Gabrielle Robertson">استیو راجرز</option>
@@ -1760,14 +2708,14 @@
                                                             <option data-avatar="11.png" value="Cheryl May">کلینت بارتون</option>
                                                         </select>
                                                     </div>
-
+                                                   
                                                     <div class="mb-3">
                                                         <label class="form-label" for="eventLocation">مکان</label>
-                                                        <input asp-for="EventAddress" type="text" class="form-control" id="eventLocation" name="eventLocation" placeholder="مکان رویداد">
+                                                        <input type="text" class="form-control" id="eventLocation" name="eventLocation" placeholder="مکان رویداد">
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label" for="eventDescription">شرح</label>
-                                                        <textarea asp-for="Description" class="form-control" name="eventDescription" id="eventDescription"></textarea>
+                                                        <textarea class="form-control" name="eventDescription" id="eventDescription"></textarea>
                                                     </div>
                                                     <div class="mb-3 d-flex justify-content-sm-between justify-content-start my-4">
                                                         <div>
@@ -1815,99 +2763,663 @@
 
                         <div class="content-backdrop fade"></div>
                     </div>  <!-- / Content -->
-                    <!-- Footer -->
-                    <footer class="content-footer footer bg-footer-theme">
-                        <div class="container-fluid d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                            <div class="mb-2 mb-md-0">
-                                ©
-                                <script>
-                                    document.write(new Date().getFullYear());
-                                </script>
-                                , بومی سازی شده توسط
-                                <a href="https://www.rtl-theme.com/"
-                                   target="_blank"
-                                   class="footer-link fw-semibold">تیم تیک تاک❤️</a>
-                            </div>
-                            <div>
-                                <a href="https://www.rtl-theme.com/"
-                                   class="footer-link me-4"
-                                   target="_blank">لایسنس</a>
-                                <a href="https://www.rtl-theme.com/"
-                                   target="_blank"
-                                   class="footer-link me-4">قالب های بیشتر</a>
+
+          
+          
+
+   <!-- Footer -->
+   <footer class="content-footer footer bg-footer-theme">
+    <div
+      class="container-fluid d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column"
+    >
+      <div class="mb-2 mb-md-0">
+        ©
+        <script>
+          document.write(new Date().getFullYear());
+        </script>
+        , بومی سازی شده توسط 
+        <a
+          href="https://www.rtl-theme.com/"
+          target="_blank"
+          class="footer-link fw-semibold"
+          >تیم تیک تاک❤️</a
+        >
+      </div>
+      <div>
+        <a
+          href="https://www.rtl-theme.com/"
+          class="footer-link me-4"
+          target="_blank"
+          >لایسنس</a
+        >
+        <a
+          href="https://www.rtl-theme.com/"
+          target="_blank"
+          class="footer-link me-4"
+          >قالب های بیشتر</a
+        >
+
+        
+
+        <a
+          href="https://www.rtl-theme.com/"
+          target="_blank"
+          class="footer-link d-none d-sm-inline-block"
+          >پشتیبانی</a
+        >
+      </div>
+    </div>
+  </footer>
+  <!-- / Footer -->
 
 
 
-                                <a href="https://www.rtl-theme.com/"
-                                   target="_blank"
-                                   class="footer-link d-none d-sm-inline-block">پشتیبانی</a>
-                            </div>
-                        </div>
-                    </footer>
-                    <!-- / Footer -->
-
-
-
-
-                    <div class="content-backdrop fade"></div>
-                </div>
-                <!-- Content wrapper -->
-            </div>
-            <!-- / Layout page -->
+          
+          <div class="content-backdrop fade"></div>
         </div>
-
-
-
-        <!-- Overlay -->
-        <div class="layout-overlay layout-menu-toggle"></div>
-
-
-        <!-- Drag Target Area To SlideIn Menu On Small Screens -->
-        <div class="drag-target"></div>
-
-    </div>
-    <!-- / Layout wrapper -->
-
-
-    <div class="buy-now">
-        <a href="https://www.rtl-theme.com/"
-           target="_blank"
-           class="btn btn-danger btn-buy-now">خرید قالب</a>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
     </div>
 
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+    <div class="drag-target"></div>
+    
+  </div>
+  <!-- / Layout wrapper -->
 
+  
+  <div class="buy-now">
+    <a
+        href="https://www.rtl-theme.com/"
+        target="_blank"
+        class="btn btn-danger btn-buy-now"
+        >خرید قالب</a
+      >
+  </div>
+  
 
+  
 
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="~/assets/vendor/libs/popper/popper.js"></script>
-    <script src="~/assets/vendor/js/bootstrap.js"></script>
-    <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="~/assets/vendor/libs/node-waves/node-waves.js"></script>
-    <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
-    <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
-    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
-    <script src="~/assets/vendor/js/menu.js"></script>
-    <script src="~/assets/vendor/libs/fullcalendar/fullcalendar.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
-    <script src="~/assets/vendor/libs/select2/select2.js"></script>
-    <script src="~/assets/vendor/libs/jdate/jdate.js"></script>
-    <script src="~/assets/vendor/libs/flatpickr/flatpickr-jdate.js"></script>
-    <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script>
-    <script src="~/assets/vendor/libs/moment/moment.js"></script>
-    <script src="~/assets/js/main.js"></script>
-    <script src="~/assets/js/app-calendar-events.js"></script>
-    <script src="~/assets/js/app-calendar.js"></script>
-    <script src="~/global.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="../../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../../assets/vendor/js/bootstrap.js"></script>
+  <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="../../assets/vendor/libs/node-waves/node-waves.js"></script>
+  
+  <script src="../../assets/vendor/libs/hammer/hammer.js"></script>
+  <script src="../../assets/vendor/libs/i18n/i18n.js"></script>
+  <script src="../../assets/vendor/libs/typeahead-js/typeahead.js"></script>
+  
+  <script src="../../assets/vendor/js/menu.js"></script>
+  <!-- endbuild -->
 
+  <!-- Vendors JS -->
+  <script src="../../assets/vendor/libs/fullcalendar/fullcalendar.js"></script>
+<script src="../../assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
+<script src="../../assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
+<script src="../../assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
+<script src="../../assets/vendor/libs/select2/select2.js"></script>
+<script src="../../assets/vendor/libs/jdate/jdate.js"></script>
+<script src="../../assets/vendor/libs/flatpickr/flatpickr-jdate.js"></script>
+<script src="../../assets/vendor/libs/flatpickr/fa-jdate.js"></script>
+<script src="../../assets/vendor/libs/moment/moment.js"></script>
 
+  <!-- Main JS -->
+  <script src="../../assets/js/main.js"></script>
 
+  <!-- Page JS -->
+  <script src="../../assets/js/app-calendar-events.js"></script>
+<script src="../../assets/js/app-calendar.js"></script>
+  
 
+  
+  
 </body>
 
 </html>
 
+<!-- beautify ignore:end -->
+
+
+
+@*    <div class="container-xxl flex-grow-1 container-p-y">
+
+
+                <h4 class="fw-bold py-3 mb-4">
+                    <span class="text-muted fw-light">فرم ها/</span>  انتخاب‌ها و برچسب‌ها
+                </h4>
+
+                <div class="row">
+
+                    <!-- Select2 -->
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <h5 class="card-header">Select2</h5>
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Basic -->
+                                    <!-- Basic -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="select2Basic" class="select2 form-select form-select-lg" data-allow-clear="true">
+                                                <option value="AK">آذربایجان غربی</option>
+                                                <option value="HI">خراسان شمالی</option>
+                                                <option value="CA">البرز </option>
+                                                <option value="NV">هرمزگان </option>
+                                                <option value="OR">اصفهان</option>
+                                                <option value="WA">رشت</option>
+                                                <option value="AZ">اردبیل</option>
+                                                <option value="CO">ایلام </option>
+                                                <option value="ID">خوزستان </option>
+                                                <option value="MT">مازندران </option>
+                                                <option value="NE">مرکزی </option>
+                                                <option value="NM">کرج</option>
+                                                <option value="ND">قم</option>
+                                                <option value="UT">بندرعباس</option>
+                                                <option value="WY">کرمان</option>
+                                                <option value="AL">آذربایجان شرقی</option>
+                                                <option value="AR">اصفهان </option>
+                                                <option value="IL">زنجان </option>
+                                                <option value="IA">سیستان و بلوچستان</option>
+                                                <option value="KS">فارس </option>
+                                                <option value="KY">قزوین </option>
+                                                <option value="LA">قم </option>
+                                                <option value="MN">گلستان </option>
+                                                <option value="MS">گیلان </option>
+                                                <option value="MO">لرستان</option>
+                                                <option value="OK">لورم ایپسوم</option>
+                                                <option value="SD">لورم ایپسوم متن</option>
+                                                <option value="TX">تبریز</option>
+                                                <option value="TN">لورم ایپسوم</option>
+                                                <option value="WI">لورم ایپسوم</option>
+                                                <option value="CT">بوشهر </option>
+                                                <option value="DE">تهران </option>
+                                                <option value="FL">خراسان جنوبی</option>
+                                                <option value="GA">خراسان رضوی</option>
+                                                <option value="IN">سمنان </option>
+                                                <option value="ME">کردستان </option>
+                                                <option value="MD">کرمان </option>
+                                                <option value="MA">کرمانشاه </option>
+                                                <option value="MI">کهگیلویه و بویراحمد</option>
+                                                <option value="NH">همدان </option>
+                                                <option value="NJ">یزد</option>
+                                                <option value="NY">تبریز</option>
+                                            </select>
+                                            <label for="select2Basic">ساده</label>
+                                        </div>
+                                    </div>
+                                    <!-- Multiple -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="select2Multiple" class="select2 form-select" multiple>
+                                                <optgroup label="منطقه زمانی آلاسکا">
+                                                    <option value="AK">آذربایجان غربی</option>
+                                                    <option value="HI">خراسان شمالی</option>
+                                                </optgroup>
+                                                <optgroup label="منطقه زمانی اقیانوسیه">
+                                                    <option value="CA">البرز </option>
+                                                    <option value="NV">هرمزگان </option>
+                                                    <option value="OR">اصفهان</option>
+                                                    <option value="WA">رشت</option>
+                                                </optgroup>
+                                                <optgroup label="منطقه زمانی کوهستانی">
+                                                    <option value="AZ">اردبیل</option>
+                                                    <option value="CO" selected>ایلام </option>
+                                                    <option value="ID">خوزستان </option>
+                                                    <option value="MT">مازندران </option>
+                                                    <option value="NE">مرکزی </option>
+                                                    <option value="NM">کرج</option>
+                                                    <option value="ND">قم</option>
+                                                    <option value="UT">بندرعباس</option>
+                                                    <option value="WY">کرمان</option>
+                                                </optgroup>
+                                                <optgroup label="منطقه زمانی مرکزی">
+                                                    <option value="AL">آذربایجان شرقی</option>
+                                                    <option value="AR">اصفهان </option>
+                                                    <option value="IL">زنجان </option>
+                                                    <option value="IA">سیستان و بلوچستان</option>
+                                                    <option value="Fa" selected>فارس </option>
+                                                    <option value="KY">قزوین </option>
+                                                    <option value="LA">قم </option>
+                                                    <option value="MN">گلستان </option>
+                                                    <option value="MS">گیلان </option>
+                                                    <option value="MO">لرستان</option>
+                                                    <option value="OK">لورم ایپسوم</option>
+                                                    <option value="SD">لورم ایپسوم متن</option>
+                                                    <option value="TX">تبریز</option>
+                                                    <option value="TN">لورم ایپسوم</option>
+                                                    <option value="WI">لورم ایپسوم</option>
+                                                </optgroup>
+                                                <optgroup label="منطقه زمانی شرقی">
+                                                    <option value="CT">بوشهر </option>
+                                                    <option value="DE">تهران </option>
+                                                    <option value="FL" selected>خراسان جنوبی</option>
+                                                    <option value="GA">خراسان رضوی</option>
+                                                    <option value="IN">سمنان </option>
+                                                    <option value="ME">کردستان </option>
+                                                    <option value="MD">کرمان </option>
+                                                    <option value="MA">کرمانشاه </option>
+                                                    <option value="MI">کهگیلویه و بویراحمد</option>
+                                                    <option value="NH">همدان </option>
+                                                    <option value="NJ">یزد</option>
+                                                    <option value="NY">تبریز</option>
+
+                                                    <option value="OH">لورم</option>
+                                                </optgroup>
+                                            </select>
+                                            <label for="select2Multiple">چندگانه</label>
+                                        </div>
+                                    </div>
+                                    <!-- Disabled -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="select2Disabled" class="select2 form-select" disabled>
+                                                <option value="1">گزینه1</option>
+                                                <option value="2" selected>گزینه2</option>
+                                                <option value="3">گزینه3</option>
+                                                <option value="4">گزینه4</option>
+                                            </select>
+                                            <label for="select2Disabled">غیرفعال</label>
+                                        </div>
+                                    </div>
+                                    <!-- Icons -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="select2Icons" class="select2-icons form-select">
+                                                <optgroup label="Services">
+                                                    <option value="wordpress2" data-icon="mdi mdi-wordpress" selected>وردپرس</option>
+                                                    <option value="codepen" data-icon="mdi mdi-codepen">کدپن</option>
+                                                    <option value="drupal" data-icon="mdi mdi-drupal">دروپال</option>
+                                                    <option value="pinterest2" data-icon="mdi mdi-language-css3">CSS3</option>
+                                                    <option value="html5" data-icon="mdi mdi-language-html5">HTML5</option>
+                                                </optgroup>
+                                                <optgroup label="File types">
+                                                    <option value="pdf" data-icon="mdi mdi-file-pdf-box">PDF</option>
+                                                    <option value="word" data-icon="mdi mdi-file-word">Word</option>
+                                                    <option value="excel" data-icon="mdi mdi-file-cloud-outline">JSON</option>
+                                                    <option value="facebook" data-icon="mdi mdi-facebook">فیسبوک</option>
+                                                </optgroup>
+                                                <optgroup label="Browsers">
+                                                    <option value="chrome" data-icon="mdi mdi-google-chrome">کروک</option>
+                                                    <option value="firefox" data-icon="mdi mdi-firefox">فایرفاکس</option>
+                                                    <option value="safari" data-icon="mdi mdi-microsoft-edge">ادج</option>
+                                                    <option value="opera" data-icon="mdi mdi-opera">اپرا</option>
+                                                </optgroup>
+                                            </select>
+                                            <label for="select2Icons">ایکون ها</label>
+                                        </div>
+                                    </div>
+                                    <!-- Colors -->
+                                    <!-- Primary -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <div class="select2-primary">
+                                                <select id="select2Primary" class="select2 form-select" multiple>
+                                                    <option value="1" selected>گزینه1</option>
+                                                    <option value="2" selected>گزینه2</option>
+                                                    <option value="3">گزینه3</option>
+                                                    <option value="4">گزینه4</option>
+                                                </select>
+                                            </div>
+                                            <label for="select2Primary">اصلی</label>
+                                        </div>
+                                    </div>
+                                    <!-- Success -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <div class="select2-success">
+                                                <select id="select2Success" class="select2 form-select" multiple>
+                                                    <option value="1" selected>گزینه1</option>
+                                                    <option value="2" selected>گزینه2</option>
+                                                    <option value="3">گزینه3</option>
+                                                    <option value="4">گزینه4</option>
+                                                </select>
+                                            </div>
+                                            <label for="select2Success">موفقیت</label>
+                                        </div>
+                                    </div>
+                                    <!-- Info -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <div class="select2-info">
+                                                <select id="select2Info" class="select2 form-select" multiple>
+                                                    <option value="1" selected>گزینه1</option>
+                                                    <option value="2" selected>گزینه2</option>
+                                                    <option value="3">گزینه3</option>
+                                                    <option value="4">گزینه4</option>
+                                                </select>
+                                            </div>
+                                            <label for="select2Info">اطلاعات</label>
+                                        </div>
+                                    </div>
+                                    <!-- Warning -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <div class="select2-warning">
+                                                <select id="select2Warning" class="select2 form-select" multiple>
+                                                    <option value="1" selected>گزینه1</option>
+                                                    <option value="2" selected>گزینه2</option>
+                                                    <option value="3">گزینه3</option>
+                                                    <option value="4">گزینه4</option>
+                                                </select>
+                                            </div>
+                                            <label for="select2Warning">هشدار</label>
+                                        </div>
+                                    </div>
+                                    <!-- Danger -->
+                                    <div class="col-md-6 mb-4 mb-md-0">
+                                        <div class="form-floating form-floating-outline">
+                                            <div class="select2-danger">
+                                                <select id="select2Danger" class="select2 form-select" multiple>
+                                                    <option value="1" selected>گزینه1</option>
+                                                    <option value="2" selected>گزینه2</option>
+                                                    <option value="3">گزینه3</option>
+                                                    <option value="4">گزینه4</option>
+                                                </select>
+                                            </div>
+                                            <label for="select2Danger">اخطار</label>
+                                        </div>
+                                    </div>
+                                    <!-- Dark -->
+                                    <div class="col-md-6 ">
+                                        <div class="form-floating form-floating-outline">
+                                            <div class="select2-dark">
+                                                <select id="select2Dark" class="select2 form-select" multiple>
+                                                    <option value="1" selected>گزینه1</option>
+                                                    <option value="2" selected>گزینه2</option>
+                                                    <option value="3">گزینه3</option>
+                                                    <option value="4">گزینه4</option>
+                                                </select>
+                                            </div>
+                                            <label for="select2Dark">دارک</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Select2 -->
+                    <!-- Tagify -->
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <h5 class="card-header"> برچسب‌های Tagify</h5>
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Basic -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <input id="TagifyBasic" class="form-control" name="TagifyBasic" value="تگ1, تگ2, تگ3" />
+                                            <label for="TagifyBasic">ساده</label>
+                                        </div>
+                                    </div>
+                                    <!-- Readonly Mode -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <input id="TagifyReadonly" class="form-control" readonly value="تگ1, تگ2, تگ3" />
+                                            <label for="TagifyReadonly">خواندنی</label>
+                                        </div>
+                                    </div>
+                                    <!-- Custom Suggestions: Inline -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <input id="TagifyCustomInlineSuggestion" name="TagifyCustomInlineSuggestion" class="form-control h-auto" placeholder="select technologies" value="css, html, javascript">
+                                            <label for="TagifyCustomInlineSuggestion">پیشنهادهای درون‌خطی سفارشی</label>
+                                        </div>
+                                    </div>
+                                    <!-- Custom Suggestions: List -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <input id="TagifyCustomListSuggestion" name="TagifyCustomListSuggestion" class="form-control h-auto" placeholder="select technologies" value="css, html, php">
+                                            <label for="TagifyCustomListSuggestion">پیشنهادهای لیستی سفارشی</label>
+                                        </div>
+                                    </div>
+                                    <!-- Users List -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <input id="TagifyUserList" name="TagifyUserList" class="form-control h-auto" value="abatisse2@nih.gov, Justinian Hattersley" />
+                                            <label for="TagifyUserList">لیست کاربران</label>
+                                        </div>
+                                    </div>
+                                    <!-- Email -->
+                                    <div class="col-md-6 mb-4">
+                                        <label for="TagifyEmailList" class="form-label d-block">لیست ایمیل</label>
+                                        <input id="TagifyEmailList" class="tagify-email-list" value="some56.name@website.com">
+                                        <button type="button" class="btn btn-sm rounded-pill btn-icon btn-outline-primary mb-1"> <span class="tf-icons mdi mdi-plus"></span> </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/ Tagify -->
+                    <!-- Bootstrap Select -->
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <h5 class="card-header">انتخاب بوت‌استرپ</h5>
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Basic -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="selectpickerBasic" class="selectpicker w-100" data-style="btn-default">
+                                                <option>راکی</option>
+                                                <option>پالپ فیکشن</option>
+                                                <option>پدرخوانده</option>
+                                            </select>
+                                            <label for="selectpickerBasic">ساده</label>
+                                        </div>
+                                    </div>
+                                    <!-- Group -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="selectpickerGroups" class="selectpicker w-100" data-style="btn-default">
+                                                <optgroup label="Movies">
+                                                    <option>راکی</option>
+                                                    <option>پالپ فیکشن</option>
+                                                    <option>پدرخوانده</option>
+                                                </optgroup>
+                                                <optgroup label="سریال ها">
+                                                    <option>Breaking Bad</option>
+                                                    <option>Black Mirror</option>
+                                                    <option>Money Heist</option>
+                                                </optgroup>
+                                            </select>
+                                            <label for="selectpickerGroups">گروه‌ها</label>
+                                        </div>
+                                    </div>
+                                    <!-- Multiple -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="selectpickerMultiple" class="selectpicker w-100" data-style="btn-default" multiple data-icon-base="mdi" data-tick-icon="mdi-check text-white">
+                                                <option>راکی</option>
+                                                <option>پالپ فیکشن</option>
+                                                <option>پدرخوانده</option>
+                                            </select>
+                                            <label for="selectpickerMultiple">چندگانه</label>
+                                        </div>
+                                    </div>
+                                    <!-- Live Search -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="selectpickerLiveSearch" class="selectpicker w-100" data-style="btn-default" data-live-search="true">
+                                                <option data-tokens="ketchup mustard">هات داگ، سیب زمینی سرخ کرده و سودا</option>
+                                                <option data-tokens="mustard">برگر، شیک و لبخند</option>
+                                                <option data-tokens="frosting">شکر، ادویه و همه چیز خوب</option>
+                                            </select>
+                                            <label for="selectpickerLiveSearch">جستجوی مستقیم</label>
+                                        </div>
+                                    </div>
+                                    <!-- Icons -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select class="selectpicker w-100 show-tick" id="selectpickerIcons" data-icon-base="mdi" data-tick-icon="mdi-check" data-style="btn-default">
+                                                <option data-icon="mdi mdi-instagram">اینستاگرام</option>
+                                                <option data-icon="mdi mdi-pinterest">اینستاگرام</option>
+                                                <option data-icon="mdi mdi-twitch">تویچ</option>
+                                            </select>
+                                            <label for="selectpickerIcons">آیکن‌ها</label>
+                                        </div>
+                                    </div>
+                                    <!-- Subtext -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="selectpickerSubtext" class="selectpicker w-100" data-style="btn-default" data-show-subtext="true">
+                                                <option data-subtext="فریمورک">React</option>
+                                                <option data-subtext="طراحی">Sass</option>
+                                                <option data-subtext="Markup">HTML</option>
+                                            </select>
+                                            <label for="selectpickerSubtext">زیرمتن</label>
+                                        </div>
+                                    </div>
+                                    <!-- Selection Limit -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="selectpickerSelection" class="selectpicker w-100" data-style="btn-default" multiple data-max-options="2">
+                                                <option>راکی</option>
+                                                <option>پالپ فیکشن</option>
+                                                <option>پدرخوانده</option>
+                                            </select>
+                                            <label for="selectpickerSelection">حد گزینش</label>
+                                        </div>
+                                    </div>
+                                    <!-- Select / Deselect All -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="selectpickerSelectDeselect" class="selectpicker w-100" data-style="btn-default" multiple data-actions-box="true">
+                                                <option>راکی</option>
+                                                <option>پالپ فیکشن</option>
+                                                <option>پدرخوانده</option>
+                                            </select>
+                                            <label for="selectpickerSelectDeselect">انتخاب / انتخاب همه</label>
+                                        </div>
+                                    </div>
+                                    <!-- Divider -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="selectpickerDivider" class="selectpicker w-100" data-style="btn-default">
+                                                <option>راکی</option>
+                                                <option data-divider="true">تقسیم شده</option>
+                                                <option>پالپ فیکشن</option>
+                                                <option>پدرخوانده</option>
+                                            </select>
+                                            <label for="selectpickerDivider">تقسیم</label>
+                                        </div>
+                                    </div>
+                                    <!-- Header -->
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="selectpickerHeader" class="selectpicker w-100" data-style="btn-default" data-header="یک فیلم  را انتخاب کنید">
+                                                <option>راکی</option>
+                                                <option>پالپ فیکشن</option>
+                                                <option>پدرخوانده</option>
+                                            </select>
+                                            <label for="selectpickerHeader">سرصفحه</label>
+                                        </div>
+                                    </div>
+                                    <!-- Disabled -->
+                                    <div class="col-md-6 mb-4 mb-md-0">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="selectpickerDisabled" class="selectpicker w-100" data-style="btn-default" disabled>
+                                                <option>راکی</option>
+                                                <option>پالپ فیکشن</option>
+                                                <option>پدرخوانده</option>
+                                            </select>
+                                            <label for="selectpickerDisabled">غیر فعال</label>
+                                        </div>
+                                    </div>
+                                    <!-- Disabled Options -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating form-floating-outline">
+                                            <select id="selectpickerDisabledOptions" class="selectpicker w-100" data-style="btn-default">
+                                                <option>راکی</option>
+                                                <option disabled>پالپ فیکشن</option>
+                                                <option>پدرخوانده</option>
+                                            </select>
+                                            <label for="selectpickerDisabledOptions">گزینههای غیرفعال</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Bootstrap Select -->
+                    <!-- Typeahead -->
+                    <div class="col-12">
+                        <div class="card">
+                            <h5 class="card-header">Typeahead</h5>
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Basic -->
+                                    <div class="col-md-6 mb-4">
+                                        <label for="TypeaheadBasic" class="form-label">ساده</label>
+                                        <input id="TypeaheadBasic" class="form-control typeahead" type="text" autocomplete="off" placeholder="ایالت‌های آمریکا را وارد کنید" />
+                                    </div>
+                                    <!-- Bloodhound -->
+                                    <div class="col-md-6 mb-4">
+                                        <label for="TypeaheadBloodHound" class="form-label">BLOODHOUND (موتور پیشنهاد)</label>
+                                        <input id="TypeaheadBloodHound" class="form-control typeahead-bloodhound" type="text" autocomplete="off" placeholder="ایالت‌های آمریکا را وارد کنید" />
+                                    </div>
+                                    <!-- Prefetch -->
+                                    <div class="col-md-6 mb-4">
+                                        <label for="TypeaheadPrefetch" class="form-label">پیش واکشی</label>
+                                        <input id="TypeaheadPrefetch" class="form-control typeahead-prefetch" type="text" autocomplete="off" placeholder=ایالت‌های آمریکا را وارد کنید" />
+                                    </div>
+                                    <!-- Default Suggestions -->
+                                    <div class="col-md-6 mb-4">
+                                        <label for="TypeaheadSuggestions" class="form-label">پیشنهادهای پیش‌فرض</label>
+                                        <input id="TypeaheadSuggestions" class="form-control typeahead-default-suggestions" type="text" autocomplete="off" />
+                                    </div>
+                                    <!-- Custom Template -->
+                                    <div class="col-md-6 mb-4 mb-md-0">
+                                        <label for="TypeaheadCustom" class="form-label">قالب سفارشی</label>
+                                        <input id="TypeaheadCustom" class="form-control typeahead-custom-template" type="text" autocomplete="off" placeholder="تایپ کنید" />
+                                    </div>
+                                    <!-- Multiple Datasets -->
+                                    <div class="col-md-6">
+                                        <label for="TypeaheadMultipleDataset" class="form-label">مجموعه داده های چندگانه</label>
+                                        <input id="TypeaheadMultipleDataset" class="form-control typeahead-multi-datasets" type="text" autocomplete="off" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Typeahead -->
+
+                </div>
+
+
+            </div> *@
+
+@*             @section Scripts {
+
+                <!-- Core JS -->
+                <!-- build:js assets/vendor/js/core.js -->
+                <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
+                <script src="~/assets/vendor/libs/popper/popper.js"></script>
+                <script src="~/assets/vendor/js/bootstrap.js"></script>
+                <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+                <script src="~/assets/vendor/libs/node-waves/node-waves.js"></script>
+                <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
+                <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
+                <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+                <script src="~/assets/vendor/js/menu.js"></script>
+                <script src="~/assets/vendor/libs/select2/select2.js"></script>
+                <script src="~/assets/vendor/libs/tagify/tagify.js"></script>
+                <script src="~/assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
+                <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+                <script src="~/assets/vendor/libs/bloodhound/bloodhound.js"></script>
+                <script src="~/assets/js/main.js"></script>
+                <script src="~/assets/js/forms-selects.js"></script>
+                <script src="~/assets/js/forms-tagify.js"></script>
+                <script src="~/assets/js/forms-typeahead.js"></script>}
+
+
+ *@

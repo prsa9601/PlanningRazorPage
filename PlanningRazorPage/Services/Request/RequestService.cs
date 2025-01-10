@@ -21,7 +21,7 @@ namespace PlanningRazorPage.Services.Request
 
         public async Task<ApiResult> DeleteRequest(string FriendUserName)
         {
-            var result = await _client.DeleteAsync($"{ModuleName}/{FriendUserName}");
+            var result = await _client.DeleteAsync($"{ModuleName}?FriendUserName={FriendUserName}");
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 
@@ -33,10 +33,10 @@ namespace PlanningRazorPage.Services.Request
 
         public async Task<RequestBoxFilterResult?> GetRequestByFilter(RequestBoxFilterParam param)
         {
-            var url = $"{ModuleName}?PageId={param.PageId}&Take={param.Take}";
+            var url = $"{ModuleName}/GetFilter?PageId={param.PageId}&Take={param.Take}";
 
             if (param.filter != null)
-                url += $"&Title={param.filter}";
+                url += $"&filter={param.filter}";
 
             var result = await _client.GetFromJsonAsync<ApiResult<RequestBoxFilterResult>>(url);
             return result?.Data;

@@ -13,8 +13,12 @@
         public const string SliderImages = "/images/sliders";
 
         public const string UserAvatars = "/images/users/avatar";
+        public const string PackageImages = "/images/package/image";
 
-
+        public static string GetPackageImage(string imageName)
+        {
+            return $"{SiteSettings.ServerPath}{PackageImages}/{imageName}";
+        }
         public static string GetSliderImage(string imageName)
         {
             return $"{SiteSettings.ServerPath}{SliderImages}/{imageName}";

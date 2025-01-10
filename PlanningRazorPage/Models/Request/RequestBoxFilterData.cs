@@ -6,13 +6,15 @@
         public string UserNameSender { get; set; }
         public string UserNameReceived { get; set; }
         public string SenderId { get; set; }
+        public string Description { get; set; }
+        public string Title { get; set; }
         public string ReceivedId { get; set; }
 
     }
     public class RequestBoxFilterParam : BaseFilterParam
     {
-        public string UserName { get; set; }
-        public filter filter { get; set; }
+        //public string UserName { get; set; }
+        public filter filter { get; set; } = filter.ReceiveRequest;
     }
     public class RequestBoxFilterResult : BaseFilter<RequestBoxFilterData, RequestBoxFilterParam>
     {

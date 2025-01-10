@@ -1,9 +1,17 @@
-﻿@page
-@model             FriendsModel
+﻿@page "{handler?}"
+@using PlanningRazorPage.Infrastructure
+@using PlanningRazorPage.Models.Friend
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using PlanningRazorPage.Services.Friend
+@using System.Text
+@inject IFriendService _service;
+@model FriendsModel
 @{
     Layout = "Shared/_LayoutProfile";
 }
-@section Header {
+
+@section Header
+{
     <link rel="icon"
           type="image/x-icon"
           href="~/assets/img/favicon/favicon.ico" />
@@ -12,12 +20,12 @@
           href="~/assets/vendor/css/pages/page-user-view.css" />
 
 }
- 
+
 <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
     <!-- User Tabs -->
     <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
-            <a class="nav-link" href="javascript:void(0);">
+            <a class="nav-link" asp-page="Account">
                 <i class="mdi mdi-account-outline mdi-20px me-1"></i>حساب
             </a>
         </li>
@@ -38,6 +46,11 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" asp-page="RequestBox">
+                <i class="mdi mdi-bell-outline mdi-20px me-1"></i>‌درخواست ها
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" asp-page="Connections"><i class="mdi mdi-link mdi-20px me-1"></i>اتصالات</a>
         </li>
         <li class="nav-item">
@@ -49,7 +62,7 @@
     </ul>
     <!--/ User Tabs -->
     <!-- Project table -->
-@*     <div class="card mb-4">
+    @*     <div class="card mb-4">
         <h5 class="card-header">لیست پروژه‌های کاربر</h5>
         <div class="table-responsive mb-3">
             <table class="table datatable-project">
@@ -192,70 +205,413 @@
     </div>
     <!-- /Activity Timeline --> *@
     <!-- Invoice table -->
-    
-     <div class="card mb-4">
-        <div class="table-responsive mb-3">
-            <table class="table datatable-invoice">
-                <thead class="table-light">
-                <tr>
-                    <th></th>
-                    <th>شناسه</th>
-                    <th><i class="mdi mdi-trending-up"></i></th>
-                    <th>مجموع</th>
-                    <th>تاریخ صدرو</th>
-                    <th>عملیات ها</th>
-                </tr> 
-                
-                </thead>
-                <tbody>
-               
-              @*    @{
-                     foreach (var VARIABLE in COLLECTION)
-                     { *@
+    <form method="get">
+        <div class="card mb-4">
+            <div class="table-responsive mb-3">
+                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
 
-                            <tr class="odd">
-                                <td class="  control" tabindex="0" style="display: none;">
-                                </td>
-                                <td class="sorting_1">
-                                    <a href="app-invoice-preview.html">#5089</a>
-                                </td>
-                                <td>
-                                    <div class="d-inline-flex" data-bs-toggle="tooltip" data-bs-html="true" aria-label="<span>Sent<br> <strong>Balance:</strong> 0<br> <strong>Due Date:</strong> 05/09/2020</span>" data-bs-original-title="<span>Sent<br> <strong>Balance:</strong> 0<br> <strong>Due Date:</strong> 05/09/2020</span>">
+                    <div class="row mx-4">
 
-                                        <span class="avatar avatar-sm">
-                                            <span class="avatar-initial rounded-circle bg-label-secondary">
-                                                <i class="mdi mdi-email-outline"></i>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </td>
-                                <td>$3077</td>
-                                <td>05/02/2020</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="javascript:;" class="btn btn-sm btn-icon btn-text-secondary rounded-pill text-body" data-bs-toggle="tooltip" aria-label="حذف فاکتور" data-bs-original-title="حذف فاکتور">
-                                            <i class="mdi mdi-delete-outline mdi-20px mx-1"></i>
-                                        </a><a href="app-invoice-preview.html" class="btn btn-sm btn-icon btn-text-secondary rounded-pill text-body" data-bs-toggle="tooltip" aria-label="پیشنمایش" data-bs-original-title="پیشنمایش">
-                                            <i class="mdi mdi-eye-outline mdi-20px mx-1"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="mdi mdi-dots-vertical mdi-20px"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end m-0"><a href="javascript:;" class="dropdown-item"><i class="mdi mdi-download-outline me-2"></i><span>دانلود</span></a><a href="javascript:;" class="dropdown-item"><i class="mdi mdi-pencil-outline me-2"></i><span>ویرایش</span></a><a href="javascript:;" class="dropdown-item delete-record"><i class="mdi mdi-checkbox-multiple-blank-outline me-2"></i><span>کپی</span></a></div>
-                                    </div>
-                                </td>
+                        <div class="col-sm-6 col-12 d-flex align-items-center justify-content-center justify-content-sm-start mb-3 mb-md-0">
+                            <div class="col-6 flex-grow-1 input-group input-group-merge rounded-pill" len="282">
+                                <button type="submit" class="btn btn-outline-secondary waves-effect"><i class="mdi mdi-magnify lh-1" len="0"></i></button>
+
+                                <input id="q" style="margin-right:10px;" type="text" asp-for="FilterParams.UserName" id="search" class="form-control chat-search-input" placeholder="   جست و جو..." aria-label="  Search..." aria-describedby="basic-addon-search31" len="0">
+                            </div>
+                            <div style="float: left; margin-right: 160px; margin-top :5px;" class="col-6 dataTables_length" id="DataTables_Table_0_length">
+                                <label>
+                                    <select  aria-controls="DataTables_Table_0" class="form-select form-select-sm" style="float: left;"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
+                                </label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-12 d-flex align-items-center justify-content-center justify-content-sm-end">
+                            <div class="dt-buttons btn-group flex-wrap">
+                                <div class="btn-group"><button class="btn btn-secondary buttons-collection dropdown-toggle btn-label-primary float-sm-end mb-3 mb-sm-0" tabindex="0" aria-controls="DataTables_Table_0" type="button" aria-haspopup="dialog" aria-expanded="false"><span><i class="mdi mdi-export-variant me-1"></i>برون بری</span><span class="dt-down-arrow"></span></button></div>
+                            </div>
+                        </div>
+                    </div><table class="table datatable-invoice dataTable no-footer dtr-column" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" style="width: 802px;">
+                        <thead class="table-light">
+
+                            <tr>
+                                <th class="control sorting dtr-hidden" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 0px; display: none;" aria-label=": activate to sort column ascending"></th>
+                                <th class="sorting sorting_desc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 105px;" aria-label="شناسه: activate to sort column ascending" aria-sort="descending">شناسه</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 79px;" aria-label=": activate to sort column ascending"><i class="mdi mdi-trending-up"></i></th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 102px;" aria-label="مجموع: activate to sort column ascending"></th>
+                                <th style="width:140px;" class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 102px;" aria-label="مجموع: activate to sort column ascending"></th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 143px;" aria-label="تاریخ صدرو: activate to sort column ascending"></th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 173px;" aria-label="Actions">Actions</th>
                             </tr>
-                @*      }
-                 } *@
-                
-                </tbody>
-            </table>
+
+                        </thead>
+                        <tbody id="searchResult">
+
+                            @{
+                                // if (Model.Friends.EntityCount > 0)
+                                // {
+                                if (Model.Friends.EntityCount == 0)
+                                {
+                                    <tr class="odd">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            دوستی یافت نشد.
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+
+                                    </tr>
+                                }
+                                else
+                                {
+                                    @foreach (var item in @Model.Friends.Data)
+                                    {
+                                        <tr class="odd">
+                                            <td><img style="width:80px; height:75px;" src="@Directories.GetAvatar(item.avatar)" /></td>
+                                            <td id="userNameReceiver">@item.FriendUserName</td>
+                                            <td>
+                                            </td>
+                                            <td>
+                                            </td>
+                                            <td>
+                                            </td>
+                                            @if (item.IsFriend)
+                                            {
+                                                // <td>
+                                                //     <button type="button" class="btn rounded-pill btn-icon btn-outline-primary waves-effect">
+                                                //         <span class="tf-icons mdi mdi-checkbox-marked-circle-outline"></span>
+                                                //     </button>
+                                                // </td>
+
+                                                <td style="width:30px; height:30px;">
+                                                    <button type="button" onclick="AddFriend()" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
+
+                                                        <span class="mdi mdi-account-multiple-minus-outline"></span>
+
+                                                    </button>
+                                                </td>
+                                            }  
+                                            @if (item.IsSendRequest)
+                                            {
+                                                // <td>
+                                                //     <button type="button" class="btn rounded-pill btn-icon btn-outline-primary waves-effect">
+                                                //         <span class="tf-icons mdi mdi-checkbox-marked-circle-outline"></span>
+                                                //     </button>
+                                                // </td>
+
+                                                <td style="width:30px; height:30px; margin-left:20px; left">
+                                                    @*<button type="button" class="btn rounded-pill btn-icon btn-primary waves-effect waves-light">*@
+                                                        <button disabled="true" type="button" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
+
+                                                            <span class="mdi mdi-account-multiple-plus-outline"></span>
+
+                                                        </button>
+                                                </td>
+                                            }  
+                                          
+                                            else
+                                            {
+                                                      <td style="width:30px; height:30px; margin-left:20px; left">
+                                                              @*<button type="button" class="btn rounded-pill btn-icon btn-primary waves-effect waves-light">*@
+                                                          <add-Request url="@Url.Page("AddRequest", "AddRequest", new{ FriendUserName = @item.FriendUserName})" description="آیا از این عملیات مطمئن هستید؟">
+                                                              <button type="button" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
+
+                                                                  <span class="mdi mdi-account-multiple-plus-outline"></span>
+
+                                                               </button>
+                                                          </add-Request>
+                                                      </td>
+
+
+
+                                            }
+
+
+                </tr>
+                                    }
+
+                                }
+
+
+                            }
+
+    </tbody>
+    </table>
+    <div class="row mx-4">
+
+        <div class="col-md-12 col-lg-6 text-center text-lg-start pb-md-2 pb-lg-0">
+            <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">نمایش 1 از 10 از 50 رکورد</div>
         </div>
-    </div> 
-    <!-- /Invoice table -->
+        <div class="col-md-12 col-lg-6 d-flex justify-content-center justify-content-lg-end">
+            <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                <ul class="pagination">
+                    
+                    @{
+                        int i = 1;
+                        @if ( i <= @Model.FilterParams.PageId && @Model.Friends.EntityCount != 0)
+                        {
+
+                            @if (@Model.Friends.CurrentPage == @Model.Friends.StartPage)
+                            {
+                                int n = @Model.Friends.CurrentPage - 1;
+
+                                <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
+                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="previous" tabindex="0" class="page-link">قبلی</a>
+                                </li>
+                            }
+                            else
+                            { 
+                                int n = @Model.Friends.CurrentPage - 1;
+
+                                <li class="paginate_button page-item previous " id="DataTables_Table_0_previous">
+                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="previous" tabindex="0" class="page-link">قبلی</a>
+                                </li>
+                            }
+                        
+                            
+                            @if (i - 1 > @Model.Friends.StartPage || i - 2 > @Model.Friends.StartPage)
+                            {
+                                int n = @Model.Friends.CurrentPage - 2; 
+
+                                <li class="paginate_button page-item">
+                                    <a onclick="ChangePage(@n);" onclick="@i-=2;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link"> @n</a>
+                                </li>
+                            }
+                            @if (@Model.Friends.CurrentPage > @Model.Friends.StartPage || i - 1 >@Model.Friends.StartPage)
+                            { 
+                                 int n = @Model.Friends.CurrentPage - 1; 
+                                 
+                                 <li class="paginate_button page-item">
+                                     <a onclick="ChangePage(@n);" onclick="@i-=1;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
+                                 </li>
+                            }
+                          
+                            <li class="paginate_button page-item active">
+                                <a onclick="ChangePage(@i);" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@i</a>
+                            </li>
+                            // @if (i + 1 < @Model.Friends.EndPage)
+                            // { 
+                            //     int n = @Model.Friends.CurrentPage + 1; 
+
+                            //     <li class="paginate_button page-item">
+                            //         <a href="#" onclick="@i+=1;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
+                            //     </li>
+                            // }
+                            @if (@Model.Friends.CurrentPage + 1 <= @Model.Friends.EndPage)
+                            { 
+                                int n = @Model.Friends.CurrentPage + 1; 
+
+                                <li class="paginate_button page-item">
+                                    <a onclick="ChangePage(@n);" asp-for="@Model.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
+                                </li>
+                            }
+                            @if (i + 2 <= @Model.Friends.EndPage)
+                            { 
+                                int n = @Model.Friends.CurrentPage + 2; 
+
+                                <li class="paginate_button page-item">
+                                    <a onclick="ChangePage(@n);" onclick="@i+=2;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
+                                </li>
+                            }
+                            // @if (@Model.Friends.EndPage != @Model.Friends.StartPage)
+                            // {
+                            //     int n = @Model.Friends.CurrentPage + 1;
+
+                            //     <li class="paginate_button page-item">
+                            //         <a href="&pageId=@n" onclick="@i+=1;" asp-for="@Model.Friends.EndPage" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@Model.Friends.EndPage </a>
+                            //     </li>
+                            // }
+
+                            if (@Model.Friends.CurrentPage == @Model.Friends.EndPage)
+                            {
+                                int n = @Model.Friends.CurrentPage + 1;
+
+                                <li class="paginate_button page-item next disabled" id="DataTables_Table_0_next">
+                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="next" tabindex="0" class="page-link">بعدی</a>
+                                </li>
+                            }
+                            else
+                            { 
+                                int n = @Model.Friends.CurrentPage + 1;
+
+                                <li class="paginate_button page-item next" id="DataTables_Table_0_next">
+                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="next" tabindex="0" class="page-link">بعدی</a>
+                                </li>
+                            }
+                          
+                         
+                        }
+                     }
+                 
+                  
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+            </div>
+        </div>
+    </form>
+
+<!-- /Invoice table -->
 </div>
 
 @section Scripts {
+    
+    <script>
+        function ChangePage(pageId)
+        {
+            var q = $("#q").val();
+                 const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+
+        params.set('FilterParams.PageId', pageId);
+
+        const newUrl = `${url.origin}${url.pathname}?${params.toString()}`;
+        location.href = newUrl;
+           // alert(newUrl);
+            //location.href($"?userName={q}PageId={pageId}");
+        }
+
+    </script>
+   
+   
+    <script>
+        //  function AddFriend(url, Description) {
+        //     Swal.fire({
+        //         title: "فعال کردن پکیج",
+        //         text: Description,
+        //         icon: "warning",
+        //         confirmButtonText: "بله ، مطمعا هستم",
+        //         cancelButtonText: "خیر",
+        //         showCancelButton: true,
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+        //             $.ajax({
+        //                 url: url,
+        //                 method: "post",
+        //                 data: {
+        //                     // productId: productId
+        //                      __RequestVerificationToken: token
+        //                 },
+        //                 beforeSend: function () {
+
+        //                     $(".loading").show();
+        //                 },
+        //                 complete: function () {
+        //                     $(".loading").hide();
+        //                 },
+        //             }).done(function (data) {
+        //                 var res = JSON.parse(data);
+        //                 if (res.Status === 1) {
+        //                     Success("", res.Message, true);
+        //                 } else {
+        //                     ErrorAlert("", res.Message, res.isReloadPage);
+        //                 }
+        //             });
+        //         }
+        //     });
+        // }
+
+         function AddRequest(url, Description) {
+         Swal.fire({
+         title: "افزودن دوست",
+         text: Description,
+         icon: "warning",
+         confirmButtonText: "بله ، مطمعا هستم",
+         cancelButtonText: "خیر",
+         showCancelButton: true,
+         }).then((result) => {
+         if (result.isConfirmed) {
+        var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+         $.ajax({
+         url: url,
+         method: "post",
+         data: {
+         //productId: productId
+        __RequestVerificationToken: token
+         },
+         beforeSend: function () {
+
+         $(".loading").show();
+         },
+         complete: function () {
+         $(".loading").hide();
+         },
+         }).done(function (data) {
+         var res = JSON.parse(data);
+         if (res.Status === 1) {
+         Success("", res.Message, true);
+         } else {
+         ErrorAlert("", res.Message, res.isReloadPage);
+         }
+         });
+         }
+         });
+         }
+
+
+    </script>
+    @*     <script>
+        function AddFriend() {
+
+            var query = document.getElementById("username").value;
+            var search = document.getElementById("q").value;
+
+            $.ajax({
+                url: 'http://localhost:5250/Front/Profile/Friends/AddFriend',
+                type: 'Post',
+                data: { userName: query , Search = search, pageId: 1, take: 8 },
+                success: function (data) {
+                    //@Model.Friends = data;
+                  // alert(data);
+                },
+                // error: function (error) {
+                //    alert("e");
+                // }
+            });
+        }
+    </script> *@
+    @*     <script>
+        function search() {
+
+            var query = document.getElementById("search").value;
+            $.ajax({
+                url: 'http://localhost:5250/Front/Profile/Friends/Search',
+                type: 'GET',
+                data: { userName: query, pageId: 1, take: 8 },
+                success: function (data) {
+                    //@Model.Friends = data;
+                  // alert(data);
+                },
+                // error: function (error) {
+                //    alert("e");
+                // }
+            });
+        }
+    </script> *@
+    @*      <script>
+        function search() {
+            var query = document.getElementById("search").value;
+            $.ajax({
+                url: 'http://localhost:5250/Front/Profile/Friends/Search',
+                type: 'GET',
+                data: { userName: query, pageId: 1, take: 8 },
+                success: function (data) {
+                    for(var item in data){
+                        $("#searchResult").append(' <tr class="odd"> <td></td><td></td><td>'+data[item].FriendUserName+'</td><td></td><td></td></tr>');
+                    }
+                },
+                // error: function (error) {
+                //    alert("e");
+                // }
+            });
+        }
+        </script> *@
+
     <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="~/assets/vendor/libs/popper/popper.js"></script>
     <script src="~/assets/vendor/js/bootstrap.js"></script>
@@ -267,23 +623,25 @@
     <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
 
     <script src="~/assets/vendor/js/menu.js"></script>
+    <script src="~/global.js"></script>
     <!-- endbuild -->
     <!-- Vendors JS -->
     <script src="~/assets/vendor/libs/moment/moment.js"></script>
-    <script src="~/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
-    <script src="~/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+ @*    <script src="~/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+   
     <script src="~/assets/vendor/libs/cleavejs/cleave.js"></script>
     <script src="~/assets/vendor/libs/cleavejs/cleave-phone.js"></script>
     <script src="~/assets/vendor/libs/select2/select2.js"></script>
     <script src="~/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
     <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
     <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
-
+ *@
     <!-- Main JS -->
     <script src="~/assets/js/main.js"></script>
 
     <!-- Page JS -->
     <script src="~/assets/js/modal-edit-user.js"></script>
     <script src="~/assets/js/app-user-view.js"></script>
-    <script src="~/assets/js/app-user-view-account.js"></script>
+    @* Friends Codes*@
+    @* <script src="~/assets/js/app-user-view-account.js"></script>  *@
 }

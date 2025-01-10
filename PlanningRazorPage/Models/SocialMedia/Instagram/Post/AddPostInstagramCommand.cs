@@ -6,8 +6,8 @@
         public DateTime DateOfPosting { get; set; }
         public string Link { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string ImageName { get; set; } = string.Empty;
-        public string VideoName { get; set; } = string.Empty;
+        public IFormFile ImageName { get; set; } 
+        public IFormFile VideoName { get; set; } 
 
     }
     public class AddImageCommand 

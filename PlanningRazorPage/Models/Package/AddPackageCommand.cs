@@ -9,9 +9,18 @@
         public Dictionary<string, string> Specifications { get; set; }
 
     }
+
     public class RemovePackageCommand
     {
         public long id { get; set; }
+    }
+    public class RemoveActivePackageCommand
+    {
+        public long Id { get; set; }
+    }
+    public class SetActivePackageCommand
+    {
+        public required long Id { get; set; }
     }
 
     public class EditPackageCommand

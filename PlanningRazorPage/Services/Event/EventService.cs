@@ -22,7 +22,7 @@ namespace PlanningRazorPage.Services.Event
             formData.Add(new StringContent(command.Description.ToString()), "Description");
             formData.Add(new StringContent(command.EndTime.ToString()), "EndTime");
             formData.Add(new StringContent(command.EventAddress.ToString()), "EventAddress");
-            formData.Add(new StringContent(command.Title.ToString()), "Title");
+            formData.Add(new StringContent(command.Title.ToString()), "title");
             formData.Add(new StringContent(command.StartTime.ToString()), "StartTime");
             formData.Add(new StringContent(command.Link), "Link");
             formData.Add(new StringContent(command.userNumber.ToString()), "userNumber");
@@ -52,7 +52,7 @@ namespace PlanningRazorPage.Services.Event
             formData.Add(new StringContent(command.Description.ToString()), "Description");
             formData.Add(new StringContent(command.EndTime.ToString()), "EndTime");
             formData.Add(new StringContent(command.EventAddress.ToString()), "EventAddress");
-            formData.Add(new StringContent(command.Title.ToString()), "Title");
+            formData.Add(new StringContent(command.Title.ToString()), "title");
             formData.Add(new StringContent(command.StartTime.ToString()), "StartTime");
             formData.Add(new StringContent(command.Link), "Link");
             formData.Add(new StringContent(command.userNumber.ToString()), "userNumber");

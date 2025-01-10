@@ -17,7 +17,7 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
         Task<ApiResult> SetImage(SetImageCommand command);
         Task<ApiResult> AddImage(AddImageCommand image);
         Task<ApiResult> RemoveImage(RemoveImagePostCommand id);
-        Task<ApiResult> Add(AddPostInstagramCommand instagramCommand);
+        Task<ApiResult> Add(AddPostInstagramCommand command);
         Task<ApiResult> Edit(EditPostInstagramCommand instagramCommand);
 
         //Instagram

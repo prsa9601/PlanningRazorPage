@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using PlanningRazorPage.Infrastructure.Utils;
 using PlanningRazorPage.Models.Event;
 using PlanningRazorPage.Services.Event;
 
 namespace PlanningRazorPage.Pages
 {
+    [BindProperties]
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
@@ -15,21 +17,21 @@ namespace PlanningRazorPage.Pages
             _service = service;
         }
 
-        public string Title { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public string Description { get; set; }
-        public string Link { get; set; }
-        public string EventAddress { get; set; }
-        public bool AccessNotification { get; set; }
+        public string Title { get; set; } 
+        public string StartTime { get; set; } = new DateTime().ToString();
+        public string EndTime { get; set; } = new DateTime().ToString();
+        public string Description { get; set; } = "jhg";
+        public string Link { get; set; } = "gg";
+        public string EventAddress { get; set; } = "kjh";
+        public bool AccessNotification { get; set; } = false;
 
-        public Tagged Tag { get; set; }
-        public List<string> UserNumber { get; set; }
-        public Notification Notification { get; set; }
-        public long id { get; set; }
+        public Tagged Tag { get; set; } = Tagged.Worked;
+        public List<string> UserNumber { get; set; } = new List<string>();
+        public Notification Notification { get; set; } = Notification.Email;
+        //public long id { get; set; }
         public void OnGet()
         {
-
+            
         }
         public async Task<IActionResult> OnPost()
         {
@@ -38,11 +40,11 @@ namespace PlanningRazorPage.Pages
             {
                 accessNotification = AccessNotification,
                 Description = Description,
-                EndTime = EndTime,
+                EndTime = EndTime.ToMiladi(),
                 Link = Link,
                 EventAddress = EventAddress,
                 notification = Notification,
-                StartTime = StartTime,
+                StartTime = StartTime.ToMiladi(),
                 tag = Tag,
                 Title = Title,
                 userNumber = UserNumber  
@@ -51,27 +53,27 @@ namespace PlanningRazorPage.Pages
         }
         public async Task<IActionResult> OnPostEdit()
         {
-
+            string startTime = StartTime;
             var result = await _service.Edit(new EditEventCommand()
             {
                 accessNotification = AccessNotification,
                 Description = Description,
-                EndTime = EndTime,
+                EndTime = EndTime.ToMiladi(),
                 Link = Link,
                 EventAddress = EventAddress,
                 notification = Notification,
-                StartTime = StartTime,
+                StartTime = startTime.ToGregorianDateTime(),
                 tag = Tag,
                 Title = Title,
                 userNumber = UserNumber,
-                Id = id
+              //  Id = id,
             });
             return Page();
         }
-        public async Task<IActionResult> OnPostDelete()
-        {
-            var result = await _service.Delete(id);
-            return Page();
-        } 
+        //public async Task<IActionResult> OnPostDelete()
+        //{
+        //    var result = await _service.Delete(id);
+        //    return Page();
+        //} 
     }
 }

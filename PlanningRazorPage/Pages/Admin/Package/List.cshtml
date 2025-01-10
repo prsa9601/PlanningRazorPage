@@ -1,18 +1,23 @@
-﻿@page
+﻿@page 
+@using PlanningRazorPage.Pages.TagHelpers
+@using PlanningRazorPage.Infrastructure
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@* @inject IPackageService _service; *@
 @model PlanningRazorPage.Pages.Admin.Package.ListModel
 @{
+    Layout = "Shared/_Layout";
 }
-
+<p id="result"></p>
 <div class="card  container">
     <h5 class="card-header">جدول با سرتیتر تیره</h5>
     <div class="table-responsive text-nowrap">
         <table class="table">
             <thead class="table-dark">
                 <tr>
-                    <th>پروژه</th>
+                    <th>عکس پکیج</th>
                     <th>مشتری</th>
-                    <th>کاربران</th>
                     <th> وضعیت</th>
+                    <th> قیمت</th>
                     <th>عملیات ها</th>
                 </tr>
             </thead>
@@ -22,28 +27,44 @@
                     foreach (var item in @Model.Packages)
                     {
                         <tr>
-                            <td><i class="mdi mdi-wallet-travel mdi-20px text-danger me-3"></i> <strong>آلبرت کوک</strong></td>
-                            <td>آلبرت کوک</td>
                             <td>
-                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهدی صادقی" data-bs-original-title="مهدی صادقی">
-                                        <img src="~/assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
-                                    </li>
-                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهراد هیدن" data-bs-original-title="مهراد هیدن">
-                                        <img src="~/assets/img/avatars/6.png" alt="Avatar" class="rounded-circle">
-                                    </li>
-                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="محمد رضا رضایی" data-bs-original-title="محمد رضا رضایی">
-                                        <img src="~/assets/img/avatars/7.png" alt="Avatar" class="rounded-circle">
-                                    </li>
-                                </ul>
+                                <div class="table-image">
+                                    <img style="height:60px;weight:80px;" src="@Directories.GetPackageImage(item.ImageName)" alt="Avatar" class="rounded-circle">
+
+                                </div>
                             </td>
-                            <td><span class="badge bg-label-primary me-1">فعال</span></td>
+                            <td>@item.Title</td>
+
+                            @if (item.Active == true)
+                            {
+                                <td><span class="badge bg-label-primary me-1">فعال</span></td>
+                            }
+                            else
+                            {
+                                <td><span class="badge bg-label-warning me-1">غیر فعال</span></td>
+                            }
+                            <td>@item.Price تومان</td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item waves-effect" href="javascript:void(0);"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
-                                        <a class="dropdown-item waves-effect" href="javascript:void(0);"><i class="mdi mdi-trash-can-outline me-1"></i>حذف</a>
+                                        @if (item.Active == true)
+                                        {
+                                            <remove-active-package Url="@Url.Page("List", "RemoveActive", new{packageId = item.Id})" description=" آیا از غیر فعال کردن این پکیج اطمینان دارید ؟">
+                                                <i class="mdi mdi-pencil-outline me-1"></i> غیر فعال کردن
+                                            </remove-active-package>
+                                        }
+                                        else
+                                        {
+                                            <set-active-package Url="@Url.Page("List", "SetActive", new { packageId = item.Id })" description="آیا از فعال کردن این پکیج اطمینان دارید ؟">
+                                                <i class="mdi mdi-pencil-outline me-1"></i> فعال کردن
+                                            </set-active-package>
+                                        }
+                                        <a class="dropdown-item waves-effect" asp-page="Edit" asp-route-id="@item.Id"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
+                                        <delete-item Url="@Url.Page("List", "DeletePackage", new { packageId = item.Id })" description="آیا از حذف این پکیج اطمینان دارید ؟">
+                                            <i class="mdi mdi-trash-can-outline me-1"></i>حذف
+                                        </delete-item>
+                   
                                     </div>
                                 </div>
                             </td>
@@ -58,4 +79,174 @@
 @section Scripts
 {
     <script src="~/global.js"></script>
+    <script>
+                function PostSetActivePackage(url, Description) {
+            Swal.fire({
+                title: "فعال کردن پکیج",
+                text: Description,
+                icon: "warning",
+                confirmButtonText: "بله ، مطمعا هستم",
+                cancelButtonText: "خیر",
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+                    $.ajax({
+                        url: url,
+                        method: "post",
+                        data: {
+                            // productId: productId
+                             __RequestVerificationToken: token
+                        },
+                        beforeSend: function () {
+
+                            $(".loading").show();
+                        },
+                        complete: function () {
+                            $(".loading").hide();
+                        },
+                    }).done(function (data) {
+                        var res = JSON.parse(data);
+                        if (res.Status === 1) {
+                            Success("", res.Message, true);
+                        } else {
+                            ErrorAlert("", res.Message, res.isReloadPage);
+                        }
+                    });
+                }
+            });
+        }
+
+ 
+    </script>
+    <script>
+                function PostRemoveActivePackage(url, Description) {
+            Swal.fire({
+                title: "غیر فعال کردن پکیج",
+                text: Description,
+                icon: "warning",
+                confirmButtonText: "بله ، مطمعا هستم",
+                cancelButtonText: "خیر",
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+                    $.ajax({
+                        url: url,
+                        method: "post",
+                        data: {
+                            // productId: productId
+                             __RequestVerificationToken: token
+                        },
+                        beforeSend: function () {
+
+                            $(".loading").show();
+                        },
+                        complete: function () {
+                            $(".loading").hide();
+                        },
+                    }).done(function (data) {
+                        var res = JSON.parse(data);
+                        if (res.Status === 1) {
+                            Success("", res.Message, true);
+                        } else {
+                            ErrorAlert("", res.Message, res.isReloadPage);
+                        }
+                    });
+                }
+            });
+        }
+
+ 
+    </script>
+   
+   @*  <script>
+                function DeleteItem(url, Description) {
+            Swal.fire({
+                title: "حذف پکیج",
+                text: Description,
+                icon: "warning",
+                confirmButtonText: "بله ، مطمعا هستم",
+                cancelButtonText: "خیر",
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+                    $.ajax({
+                        url: url,
+                        method: "post",
+                        data: {
+                            // productId: productId
+                             __RequestVerificationToken: token
+                        },
+                        beforeSend: function () {
+
+                            $(".loading").show();
+                        },
+                        complete: function () {
+                            $(".loading").hide();
+                        },
+                    }).done(function (data) {
+                        var res = JSON.parse(data);
+                        if (res.Status === 1) {
+                            Success("", res.Message, true);
+                        } else {
+                            ErrorAlert("", res.Message, res.isReloadPage);
+                        }
+                    });
+                }
+            });
+        }
+
+ 
+    </script>
+     *@
+
+    
+    @*    $.ajax({
+    type: "POST",
+    url: "/Admin/Package/List?handler=SetActive&id=" + packageId,
+    success: function(response) {
+    // Handle success
+    },
+    error: function(error) {
+    // Handle error
+    }
+    });
+
+ *@
+    @*    $.ajax({
+    type: "POST",
+    url: "/Admin/Package/List?handler=SetActive",
+    data: { id: packageId },
+    success: function(response) {
+    // Handle success
+    },
+    error: function(error) {
+    // Handle error
+    }
+    });
+ *@
+
+    @*     <script>
+        function SetActivePackage(Id){
+             $.ajax({
+                url: '@Url.Page("/Admin/Package/List", "OnPostSetActivePackage")',
+             
+                type: 'POST',
+                data: { id: Id },
+                success: function(response) {
+                    $('#result').html('Response: ' + response);
+                },
+                error: function() {
+                    $('#result').html('An error occurred');
+                }
+            });
+        }
+
+    </script> *@
 }
+@* '/Admin/Package/List?handler=SetActivePackage', *@
+@* <a onclick="SetActivePackage(@item.Id)" class="dropdown-item waves-effect"><i class="mdi mdi-pencil-outline me-1"></i> فعال کردن</a>
+ *@
+@* "{handler?}" *@

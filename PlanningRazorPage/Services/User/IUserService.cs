@@ -1,7 +1,7 @@
-﻿
-using PlanningRazorPage.Models.Auth;
+﻿using PlanningRazorPage.Models.Auth;
 using PlanningRazorPage.Models;
 using PlanningRazorPage.Models.User;
+using PlanningRazorPage.Models.Friend;
 
 namespace PlanningRazorPage.Services.User
 {
@@ -13,6 +13,7 @@ namespace PlanningRazorPage.Services.User
         Task<ApiResult?> Edit(EditUserCommand command);
         Task<ApiResult?> SetEvent(SetUserEventCommand command);
         Task<UserDto?> GetByPhoneNumber(string phoneNumber);
+        Task<UserFilterResult?> SearchUser(UserFilterParam param);
         Task<UserDto?> GetByCurrentUser();
         Task<UserDto?> GetByUserName(string userName);
 

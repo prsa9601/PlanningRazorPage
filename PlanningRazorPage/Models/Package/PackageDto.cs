@@ -6,7 +6,13 @@
         public string ImageName { get; set; }
         public string Link { get; set; }
         public int Price { get; set; }
-        public List<PackageSpecificationDto> Specification { get; set; }
+        public List<PackageSpecificationDto?> Specification { get; set; } = new List<PackageSpecificationDto?>();
+        public bool Active { get; set; } = false;
+
+    }
+    public class ActivePackagesDto : BaseDto
+    {
+        public long PackageId { get; set; }
 
     }
 

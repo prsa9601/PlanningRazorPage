@@ -1,5 +1,6 @@
 ﻿using PlanningRazorPage.Models;
 using PlanningRazorPage.Models.Event;
+using PlanningRazorPage.Models.Friend;
 using PlanningRazorPage.Models.User;
 
 namespace PlanningRazorPage.Services.User
@@ -8,7 +9,7 @@ namespace PlanningRazorPage.Services.User
     {
         private readonly HttpClient _client;
         private readonly IHttpContextAccessor _accessor;
-        private const string ModuleName = "Event";
+        private const string ModuleName = "User";
 
         public UserService(IHttpContextAccessor accessor, HttpClient client)
         {
@@ -39,6 +40,16 @@ namespace PlanningRazorPage.Services.User
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 
+        public async Task<UserFilterResult?> SearchUser(UserFilterParam filterParams)
+        {
+            var url = $"{ModuleName}/searchUser?PageId={filterParams.PageId}&Take={filterParams.Take}";
+
+            if (filterParams.UserName != null)
+                url += $"&userName={filterParams.UserName}";
+
+            var result = await _client.GetFromJsonAsync<ApiResult<UserFilterResult?>>(url);
+            return result?.Data;
+        }
         public async Task<UserDto?> GetByCurrentUser()
         {
             var result = await _client.GetFromJsonAsync<ApiResult<UserDto?>>($"{ModuleName}");

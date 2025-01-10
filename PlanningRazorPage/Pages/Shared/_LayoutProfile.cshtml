@@ -511,7 +511,9 @@
     <partial name="Shared/Partials/_Scripts" />
 
     @await RenderSectionAsync("Scripts", required: false)
-
+    <div id="ajax-token">
+        @Html.AntiForgeryToken()
+    </div>
 </body>
 
 </html>

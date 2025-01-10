@@ -26,12 +26,24 @@ public class BaseRazorPage : PageModel
 
     protected IActionResult RedirectAndShowAlert(ApiResult result, IActionResult redirectPath)
     {
-
+        result.IsReload = true;
         var model = JsonConvert.SerializeObject(result);
         HttpContext.Response.Cookies.Append("SystemAlert", model);
         if (result.IsSuccess == false)
             return Page();
         return redirectPath;
+    }
+    protected async Task<ContentResult> RedirectAndShowAlertContent(ApiResult result, IActionResult redirectPath)
+    {
+        result.IsReload = true;
+        var model = JsonConvert.SerializeObject(result);
+        var modelAlert = JsonConvert.SerializeObject(result);
+        HttpContext.Response.Cookies.Append("SystemAlert", modelAlert);
+        await Task.Delay(2000);
+
+        if (result.IsSuccess == false)
+            return Content(model);
+        return Content(model);
     }
     protected IActionResult RedirectAndShowAlert(ApiResult result, IActionResult redirectPath, IActionResult errorRedirectTo)
     {
