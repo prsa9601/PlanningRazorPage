@@ -220,7 +220,7 @@
                             </div>
                             <div style="float: left; margin-right: 160px; margin-top :5px;" class="col-6 dataTables_length" id="DataTables_Table_0_length">
                                 <label>
-                                    <select  aria-controls="DataTables_Table_0" class="form-select form-select-sm" style="float: left;"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
+                                    <select aria-controls="DataTables_Table_0" class="form-select form-select-sm" style="float: left;"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
                                 </label>
 
                             </div>
@@ -285,50 +285,56 @@
                                                 // </td>
 
                                                 <td style="width:30px; height:30px;">
-                                                    <button type="button" onclick="AddFriend()" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
+                                                    <Remove-Friend url="@Url.Page("SetFriend", "RemoveFriend", new{ FriendUserName = @item.FriendUserName})" description="آیا از این عملیات مطمئن هستید؟">
 
-                                                        <span class="mdi mdi-account-multiple-minus-outline"></span>
+                                                        <button type="button" onclick="AddFriend()" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
 
-                                                    </button>
-                                                </td>
-                                            }  
-                                            @if (item.IsSendRequest)
-                                            {
-                                                // <td>
-                                                //     <button type="button" class="btn rounded-pill btn-icon btn-outline-primary waves-effect">
-                                                //         <span class="tf-icons mdi mdi-checkbox-marked-circle-outline"></span>
-                                                //     </button>
-                                                // </td>
-
-                                                <td style="width:30px; height:30px; margin-left:20px; left">
-                                                    @*<button type="button" class="btn rounded-pill btn-icon btn-primary waves-effect waves-light">*@
-                                                        <button disabled="true" type="button" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
-
-                                                            <span class="mdi mdi-account-multiple-plus-outline"></span>
+                                                            <span class="mdi mdi-account-multiple-minus-outline"></span>
 
                                                         </button>
+                                                    </Remove-Friend>
+
                                                 </td>
-                                            }  
-                                          
+                                            }
                                             else
                                             {
-                                                      <td style="width:30px; height:30px; margin-left:20px; left">
-                                                              @*<button type="button" class="btn rounded-pill btn-icon btn-primary waves-effect waves-light">*@
-                                                          <add-Request url="@Url.Page("AddRequest", "AddRequest", new{ FriendUserName = @item.FriendUserName})" description="آیا از این عملیات مطمئن هستید؟">
-                                                              <button type="button" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
 
-                                                                  <span class="mdi mdi-account-multiple-plus-outline"></span>
+                                                <td>
+                                                    @if (item.IsSendRequest)
+                                                    {
+                                                    // <td>
+                                                    //     <button type="button" class="btn rounded-pill btn-icon btn-outline-primary waves-effect">
+                                                        //         <span class="tf-icons mdi mdi-checkbox-marked-circle-outline"></span>
+                                                        //     </button>
+                                                        // </td>
 
-                                                               </button>
-                                                          </add-Request>
-                                                      </td>
+                                                        @*<button type="button" class="btn rounded-pill btn-icon btn-primary waves-effect waves-light">*@
+                                                        <Remove-Friend url="@Url.Page("SetFriend", "RemoveFriend", new{ FriendUserName = @item.FriendUserName})" description="آیا از این عملیات مطمئن هستید؟">
+                                                            <button disabled="true" type="button" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
+
+                                                                <span class="mdi mdi-account-multiple-plus-outline"></span>
+
+                                                            </button>
+                                                        </Remove-Friend>
+
+                                                    }
+
+                                                    else
+                                                    {    @*<button type="button" class="btn rounded-pill btn-icon btn-primary waves-effect waves-light">*@
+                                                        <add-Request url="@Url.Page("AddRequest", "AddRequest", new{ FriendUserName = @item.FriendUserName})" description="آیا از این عملیات مطمئن هستید؟">
+                                                            <button type="button" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
+
+                                                                <span class="mdi mdi-account-multiple-plus-outline"></span>
+
+                                                            </button>
+                                                        </add-Request>
 
 
 
+                                                    }
+                                                </td>
                                             }
-
-
-                </tr>
+                                        </tr>
                                     }
 
                                 }
@@ -336,130 +342,130 @@
 
                             }
 
-    </tbody>
-    </table>
-    <div class="row mx-4">
+                        </tbody>
+                    </table>
+                    <div class="row mx-4">
 
-        <div class="col-md-12 col-lg-6 text-center text-lg-start pb-md-2 pb-lg-0">
-            <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">نمایش 1 از 10 از 50 رکورد</div>
-        </div>
-        <div class="col-md-12 col-lg-6 d-flex justify-content-center justify-content-lg-end">
-            <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
-                <ul class="pagination">
-                    
-                    @{
-                        int i = 1;
-                        @if ( i <= @Model.FilterParams.PageId && @Model.Friends.EntityCount != 0)
-                        {
+                        <div class="col-md-12 col-lg-6 text-center text-lg-start pb-md-2 pb-lg-0">
+                            <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">نمایش 1 از 10 از 50 رکورد</div>
+                        </div>
+                        <div class="col-md-12 col-lg-6 d-flex justify-content-center justify-content-lg-end">
+                            <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                                <ul class="pagination">
 
-                            @if (@Model.Friends.CurrentPage == @Model.Friends.StartPage)
-                            {
-                                int n = @Model.Friends.CurrentPage - 1;
+                                    @{
+                                        int i = 1;
+                                        @if (i <= @Model.FilterParams.PageId && @Model.Friends.EntityCount != 0)
+                                        {
 
-                                <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
-                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="previous" tabindex="0" class="page-link">قبلی</a>
-                                </li>
-                            }
-                            else
-                            { 
-                                int n = @Model.Friends.CurrentPage - 1;
+                                            @if (@Model.Friends.CurrentPage == @Model.Friends.StartPage)
+                                            {
+                                                int n = @Model.Friends.CurrentPage - 1;
 
-                                <li class="paginate_button page-item previous " id="DataTables_Table_0_previous">
-                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="previous" tabindex="0" class="page-link">قبلی</a>
-                                </li>
-                            }
-                        
-                            
-                            @if (i - 1 > @Model.Friends.StartPage || i - 2 > @Model.Friends.StartPage)
-                            {
-                                int n = @Model.Friends.CurrentPage - 2; 
+                                                <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
+                                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="previous" tabindex="0" class="page-link">قبلی</a>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                int n = @Model.Friends.CurrentPage - 1;
 
-                                <li class="paginate_button page-item">
-                                    <a onclick="ChangePage(@n);" onclick="@i-=2;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link"> @n</a>
-                                </li>
-                            }
-                            @if (@Model.Friends.CurrentPage > @Model.Friends.StartPage || i - 1 >@Model.Friends.StartPage)
-                            { 
-                                 int n = @Model.Friends.CurrentPage - 1; 
-                                 
-                                 <li class="paginate_button page-item">
-                                     <a onclick="ChangePage(@n);" onclick="@i-=1;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
-                                 </li>
-                            }
-                          
-                            <li class="paginate_button page-item active">
-                                <a onclick="ChangePage(@i);" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@i</a>
-                            </li>
-                            // @if (i + 1 < @Model.Friends.EndPage)
-                            // { 
-                            //     int n = @Model.Friends.CurrentPage + 1; 
+                                                <li class="paginate_button page-item previous " id="DataTables_Table_0_previous">
+                                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="previous" tabindex="0" class="page-link">قبلی</a>
+                                                </li>
+                                            }
 
-                            //     <li class="paginate_button page-item">
-                            //         <a href="#" onclick="@i+=1;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
-                            //     </li>
-                            // }
-                            @if (@Model.Friends.CurrentPage + 1 <= @Model.Friends.EndPage)
-                            { 
-                                int n = @Model.Friends.CurrentPage + 1; 
 
-                                <li class="paginate_button page-item">
-                                    <a onclick="ChangePage(@n);" asp-for="@Model.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
-                                </li>
-                            }
-                            @if (i + 2 <= @Model.Friends.EndPage)
-                            { 
-                                int n = @Model.Friends.CurrentPage + 2; 
+                                            @if (i - 1 > @Model.Friends.StartPage || i - 2 > @Model.Friends.StartPage)
+                                            {
+                                                int n = @Model.Friends.CurrentPage - 2;
 
-                                <li class="paginate_button page-item">
-                                    <a onclick="ChangePage(@n);" onclick="@i+=2;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
-                                </li>
-                            }
-                            // @if (@Model.Friends.EndPage != @Model.Friends.StartPage)
-                            // {
-                            //     int n = @Model.Friends.CurrentPage + 1;
+                                                <li class="paginate_button page-item">
+                                                    <a onclick="ChangePage(@n);" onclick="@i-=2;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link"> @n</a>
+                                                </li>
+                                            }
+                                            @if (@Model.Friends.CurrentPage > @Model.Friends.StartPage || i - 1 > @Model.Friends.StartPage)
+                                            {
+                                                int n = @Model.Friends.CurrentPage - 1;
 
-                            //     <li class="paginate_button page-item">
-                            //         <a href="&pageId=@n" onclick="@i+=1;" asp-for="@Model.Friends.EndPage" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@Model.Friends.EndPage </a>
-                            //     </li>
-                            // }
+                                                <li class="paginate_button page-item">
+                                                    <a onclick="ChangePage(@n);" onclick="@i-=1;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
+                                                </li>
+                                            }
 
-                            if (@Model.Friends.CurrentPage == @Model.Friends.EndPage)
-                            {
-                                int n = @Model.Friends.CurrentPage + 1;
+                                            <li class="paginate_button page-item active">
+                                                <a onclick="ChangePage(@i);" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@i</a>
+                                            </li>
+                                            // @if (i + 1 < @Model.Friends.EndPage)
+                                            // {
+                                            //     int n = @Model.Friends.CurrentPage + 1;
 
-                                <li class="paginate_button page-item next disabled" id="DataTables_Table_0_next">
-                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="next" tabindex="0" class="page-link">بعدی</a>
-                                </li>
-                            }
-                            else
-                            { 
-                                int n = @Model.Friends.CurrentPage + 1;
+                                            //     <li class="paginate_button page-item">
+                                            //         <a href="#" onclick="@i+=1;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
+                                            //     </li>
+                                            // }
+                                            @if (@Model.Friends.CurrentPage + 1 <= @Model.Friends.EndPage)
+                                            {
+                                                int n = @Model.Friends.CurrentPage + 1;
 
-                                <li class="paginate_button page-item next" id="DataTables_Table_0_next">
-                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="next" tabindex="0" class="page-link">بعدی</a>
-                                </li>
-                            }
-                          
-                         
-                        }
-                     }
-                 
-                  
-                </ul>
-            </div>
-        </div>
-    </div>
+                                                <li class="paginate_button page-item">
+                                                    <a onclick="ChangePage(@n);" asp-for="@Model.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
+                                                </li>
+                                            }
+                                            @if (i + 2 <= @Model.Friends.EndPage)
+                                            {
+                                                int n = @Model.Friends.CurrentPage + 2;
 
-</div>
+                                                <li class="paginate_button page-item">
+                                                    <a onclick="ChangePage(@n);" onclick="@i+=2;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
+                                                </li>
+                                            }
+                                            // @if (@Model.Friends.EndPage != @Model.Friends.StartPage)
+                                            // {
+                                            //     int n = @Model.Friends.CurrentPage + 1;
+
+                                            //     <li class="paginate_button page-item">
+                                            //         <a href="&pageId=@n" onclick="@i+=1;" asp-for="@Model.Friends.EndPage" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@Model.Friends.EndPage </a>
+                                            //     </li>
+                                            // }
+
+                                            if (@Model.Friends.CurrentPage == @Model.Friends.EndPage)
+                                            {
+                                                int n = @Model.Friends.CurrentPage + 1;
+
+                                                <li class="paginate_button page-item next disabled" id="DataTables_Table_0_next">
+                                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="next" tabindex="0" class="page-link">بعدی</a>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                int n = @Model.Friends.CurrentPage + 1;
+
+                                                <li class="paginate_button page-item next" id="DataTables_Table_0_next">
+                                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="next" tabindex="0" class="page-link">بعدی</a>
+                                                </li>
+                                            }
+
+
+                                        }
+                                    }
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </form>
 
-<!-- /Invoice table -->
+    <!-- /Invoice table -->
 </div>
 
 @section Scripts {
-    
+
     <script>
         function ChangePage(pageId)
         {
@@ -476,8 +482,8 @@
         }
 
     </script>
-   
-   
+
+
     <script>
         //  function AddFriend(url, Description) {
         //     Swal.fire({
@@ -519,6 +525,43 @@
          function AddRequest(url, Description) {
          Swal.fire({
          title: "افزودن دوست",
+         text: Description,
+         icon: "warning",
+         confirmButtonText: "بله ، مطمعا هستم",
+         cancelButtonText: "خیر",
+         showCancelButton: true,
+         }).then((result) => {
+         if (result.isConfirmed) {
+        var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+         $.ajax({
+         url: url,
+         method: "post",
+         data: {
+         //productId: productId
+        __RequestVerificationToken: token
+         },
+         beforeSend: function () {
+
+         $(".loading").show();
+         },
+         complete: function () {
+         $(".loading").hide();
+         },
+         }).done(function (data) {
+         var res = JSON.parse(data);
+         if (res.Status === 1) {
+         Success("", res.Message, true);
+         } else {
+         ErrorAlert("", res.Message, res.isReloadPage);
+         }
+         });
+         }
+         });
+         }
+
+        function RemoveFriend(url, Description) {
+         Swal.fire({
+         title: "حذف دوست",
          text: Description,
          icon: "warning",
          confirmButtonText: "بله ، مطمعا هستم",
@@ -627,8 +670,8 @@
     <!-- endbuild -->
     <!-- Vendors JS -->
     <script src="~/assets/vendor/libs/moment/moment.js"></script>
- @*    <script src="~/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
-   
+    @*    <script src="~/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+
     <script src="~/assets/vendor/libs/cleavejs/cleave.js"></script>
     <script src="~/assets/vendor/libs/cleavejs/cleave-phone.js"></script>
     <script src="~/assets/vendor/libs/select2/select2.js"></script>

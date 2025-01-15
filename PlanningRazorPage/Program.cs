@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using PlanningRazorPage.Infrastructure.Utils.Decryption;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +49,8 @@ builder.Services.AddAuthentication(option =>
     };
 });
 builder.Services.AddAuthentication();
-
+builder.Services.AddDataProtection();
+builder.Services.AddScoped<DecryptionService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

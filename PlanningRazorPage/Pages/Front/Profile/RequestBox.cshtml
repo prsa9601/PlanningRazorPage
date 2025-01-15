@@ -1,5 +1,11 @@
-﻿@page
+﻿@page "{handler?}"
 @using PlanningRazorPage.Models.Request
+@using PlanningRazorPage.Pages.TagHelpers
+@using System.IdentityModel.Tokens.Jwt
+@using System.Security.Claims
+@using System.Text
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.IdentityModel.Tokens
 @model PlanningRazorPage.Pages.Front.Profile.RequestBoxModel
 @{
 }
@@ -68,8 +74,8 @@
                     <tr>
                         @if (Model.requestBox != null)
                         {
-                            <th class="text-nowrap">نوع</th>
-                            <th class="text-nowrap text-center">✉️ ایمیل</th>
+                            <th class="text-nowrap">ارسال درخواست از</th>
+                            <th class="text-nowrap text-center">به</th>
                             <th class="text-nowrap text-center">🖥 مرورگر</th>
                         }
                         else
@@ -87,11 +93,27 @@
                     @{
                         @if (Model.requestBox != null)
                         {
+                            var requestBoxUserNames = new Dictionary<int, string>();
+
                             foreach (var item in @Model.requestBox.Data)
                             {
+                                Random rnd = new Random();
+                                int id = rnd.Next();
+                                // List<string> Keys = new List<string>();
+                                // List<string> Values = new List<string>();
+                                //Values.Add(item.UserNameSender);
+                                //Keys.Add(item.Description);
+                                requestBoxUserNames.Add(id, item.UserNameSender);
+
+
                                 <tr>
                                     <td class="text-nowrap">@item.UserNameSender</td>
-
+                                    <td hidden="true">
+                                        @item.Description
+                                    </td>
+                                    <td hidden="true">
+                                        @item.Title
+                                    </td>
                                     <td>
                                         <div class="form-check d-flex justify-content-center">
                                             <p>@item.UserNameReceived</p>
@@ -100,8 +122,25 @@
 
                                     <td class="col-3" style="">
                                         <div>
+                                            @{
+                                                var tokenHandler = new JwtSecurityTokenHandler();
+                                                var key = Encoding.ASCII.GetBytes("wpqqwsdjkjslkzxdjaisoiu8uil9pdjwadqa");
+                                                var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new[] { new Claim("id", item.Id.ToString()) }),
+                        Expires = DateTime.UtcNow.AddHours(1),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    };
+                                                var token = tokenHandler.CreateToken(tokenDescriptor);
+                                                var tokenString = tokenHandler.WriteToken(token);
 
-                                            <a style="color:cornflowerblue; cursor:pointer;" data-bs-toggle="modal" data-bs-target="#modalCenter" class="col-1" style="margin-right:40px;" @*asp-page="Detail" asp-route-id="@item.Id"*@>
+                                            }
+                                            @*<a asp-page-handler="RequestModal" style="margin-right:40px; color:cornflowerblue; cursor:pointer;" data-bs-toggle="modal" data-bs-target="#modalCenter" class="col-1 OpenModal" @*asp-page="Detail" asp-route-id="@item.Id">*@
+
+                                            @*<a href="RequestBox/RequestModal?token=@tokenString" class="OpenModal col-1" style="color:cornflowerblue; cursor:pointer; margin-right:40px;" data-bs-toggle="modal" data-bs-target="#modalCenter" @*asp-page="Detail" asp-route-id="@item.Id">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                            </a>*@
+                                            <a class="OpenModal col-1" style="color:cornflowerblue; cursor:pointer; margin-right:40px;" data-bs-toggle="modal" data-bs-target="#modalCenter" @*asp-page="Detail" asp-route-id="@item.Id"*@>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                             </a>
 
@@ -112,7 +151,7 @@
                                         </a>*@
 
 
-                                            <delete-item style="color:cornflowerblue; cursor:pointer;" class="col-1" Url="@Url.Page("SetFriend" ,"RemoveRequest", new { friendUserName = item.UserNameSender  })" description="">
+                                            <delete-item style="color:cornflowerblue; cursor:pointer;" class="col-1" Url="@Url.Page("AddRequest" ,"RemoveRequest", new { friendUserName = item.UserNameSender  })" description="">
 
                                                 <svg xmlns="http:www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7zm4 12H8v-9h2zm6 0h-2v-9h2zm.618-15L15 2H9L7.382 4H3v2h18V4z" /></svg>
                                             </delete-item>
@@ -141,44 +180,30 @@
                                                                     <div class="row">
                                                                         <div class="col mb-4 mt-2">
                                                                             <div class="form-floating form-floating-outline">
-                                                                                <p disabled="true" type="text">@item.Description</p>
+                                                                                <p disabled="true" class="DescriptionRequest" type="text">@item.Description</p>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="row g-2">
-                                                                        <div class="col mb-2">
-                                                                            <div class="form-floating form-floating-outline">
-                                                                                <input type="email"
-                                                                                       id="emailWithTitle"
-                                                                                       class="form-control"
-                                                                                       placeholder="xxxx@xxx.xx" />
-                                                                                <label for="emailWithTitle">ایمیل</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col mb-2">
-                                                                            <div class="form-floating form-floating-outline">
-                                                                                <input type="date"
-                                                                                       id="dobWithTitle"
-                                                                                       class="form-control"
-                                                                                       placeholder="DD / MM / YY" />
-                                                                                <label for="dobWithTitle">تاریخ تولد</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                                    <p hidden="true" class="FriendUserNameModal"></p>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <remove-request url="@Url.Page("AddRequest", "RemoveRequest", new{ FriendUserName = @item.UserNameSender})" description="آیا از این عملیات مطمئن هستید؟">
-                                                                        <button type="button"
-                                                                                class="btn btn-label-secondary"
-                                                                                data-bs-dismiss="modal">
-                                                                            رد کردن درخواست
-                                                                        </button>
-                                                                    </remove-request>
-                                                                    <add-friend url="@Url.Page("SetFriend", "AddFriend", new{ FriendUserName = @item.UserNameSender})" description="آیا از این عملیات مطمئن هستید؟">
-                                                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-                                                                            افزودن دوست
-                                                                        </button>
-                                                                    </add-friend>
+                                                                    @*<remove-request url="@Url.Page("AddRequest", "RemoveRequest", new{ FriendUserName = @item.UserNameSender})" description="آیا از این عملیات مطمئن هستید؟">*@
+                                                                    <button id="RemoveRequest" type="button"
+                                                                            class="btn btn-label-secondary"
+                                                                            data-bs-dismiss="modal">
+                                                                        بستن پنجره     
+                                                                    </button>
+                                                                    @*<button type="button"
+                                                                            class="RemoveRequest btn btn-label-secondary"
+                                                                            data-bs-dismiss="modal">
+                                                                        لغو درخواست
+                                                                    </button>*@           
+                                                                    @*</remove-request>*@
+                                                                    @*<add-friend url="@Url.Page("SetFriend", "AddFriend", new{ FriendUserName = @item.UserNameSender})" description="آیا از این عملیات مطمئن هستید؟">*@
+                                                                    <button value="@requestBoxUserNames[id]" asp-route="SetFriend/AddFriend?FriendUserName=@requestBoxUserNames[id]" type="button" id="AddFriend" class="btn btn-primary AddFriend" data-bs-dismiss="modal">
+                                                                        افزودن دوست
+                                                                    </button>
+                                                                    @*</add-friend>*@
 
                                                                 </div>
                                                             </div>
@@ -200,16 +225,9 @@
                                 <td class="text-nowrap"></td>
                                 <td></td>
                                 <td>
-                                    @*<div class="form-check d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="defaultCheck1" checked="" />
-                                </div>*@
-
                                 </td>
                                 <td><b>NotFound</b></td>
                                 <td>
-                                    @*<div class="form-check d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="defaultCheck2" checked="">
-                                </div>*@
                                 </td>
 
                             </tr>
@@ -217,14 +235,6 @@
                         }
 
                     }
-
-
-                    @*     <td>
-                            <div class="form-check d-flex justify-content-center">
-                                <input class="form-check-input" type="checkbox" id="defaultCheck12">
-                            </div>
-                        </td> *@
-
                 </tbody>
             </table>
         </div>
@@ -325,6 +335,71 @@
          }
          });
          }
+    </script>
+    <script>
+              $(".OpenModal").click(function(){
+                  //var pr = $(this).closest("tr").find("td:eq(1)").text();
+                  // var pr = $(this).find("td:eq(0)").text();
+                   var Descriptin =  $(this).closest("tr").find("td:eq(1)").text();
+                   var Title =  $(this).closest("tr").find("td:eq(2)").text();
+                   var FriendUserName =  $(this).closest("tr").find("td:eq(0)").text();
+                  //var p = $(this).closest("tr").find("td:eq(2)").text();
+                  $("#modalCenterTitle").text(Title);
+                  $(".DescriptionRequest").text(Descriptin);
+                  $(".FriendUserNameModal").val(FriendUserName);
+
+              });
+
+        $(".AddFriend").click(function(){
+                          var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+
+            var friendUserName = $(".FriendUserNameModal").val();
+                                          $.post("/Front/Profile/SetFriend?handler=AddFriend", { FriendUserName: friendUserName,   __RequestVerificationToken: token}).done(function(){
+                                              location.reload();
+                                          });
+              });
+
+
+        $(".RemoveRequest").click(function(){
+
+             var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+
+            var friendUserName = $(".FriendUserNameModal").val();
+                                          $.post("/Front/Profile/AddRequest?handler=RemoveRequest", { FriendUserName: friendUserName,   __RequestVerificationToken: token}).done(function(){
+                                              location.reload();
+                                          });;
+              });
+
+    </script>
+    <script> 
+                       // var menuId = $( "ul.nav" ).first().attr( "id" );
+        //         var request = $.ajax({
+        //           url: "http://localhost5025/Front/Profile/RequestBox/RequestModal",
+        //           method: "GET",
+        //           data: { id : Id },
+        //           //dataType: "html"
+        //         });
+
+        //         request.done(function( msg ) {
+        //           $( "#log" ).html( msg );
+        //         });
+
+        //         request.fail(function( jqXHR, textStatus ) {
+        //           alert( "Request failed: " + textStatus );
+        //         });
+
+
+        // $.ajax({
+        //   url: "http://localhost5025/Front/Profile/RequestBox/RequestModal",
+        //   beforeSend: function( xhr ) {
+        //     xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+        //   }
+        //         })
+        //   .done(function( data ) {
+        //     if ( console && console.log ) {
+        //       console.log( "Sample of data:", data.slice( 0, 100 ) );
+        //     }
+        //   });
     </script>
     <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="~/assets/vendor/libs/popper/popper.js"></script>

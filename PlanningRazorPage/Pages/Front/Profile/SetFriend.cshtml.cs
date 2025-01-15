@@ -20,6 +20,9 @@ namespace PlanningRazorPage.Pages.Front.Profile
         public void OnGet()
         {
         }
+        public void OnPost()
+        {
+        }
         //public async Task<IActionResult> OnPostAddFriends(string FriendUserName)
         //{
         //    //var result = await _requestService.AddRequest(FriendUserName);
@@ -35,6 +38,21 @@ namespace PlanningRazorPage.Pages.Front.Profile
 
         //    }, true, true);
         //}
+        //public async Task<IActionResult> OnPostAddFriend()
+        //{
+        //    //var result = await _requestService.AddRequest(FriendUserName);
+        //    //if (!result.IsSuccess)
+        //    //{
+        //    //    return RedirectAndShowAlert(result, Redirect("Friend"));
+        //    //}
+        //    //return RedirectAndShowAlert(result, Redirect("Friend"));
+        //    return await AjaxTryCatch(() =>
+        //    {
+        //        //return _service.AddFriend(FriendUserName);
+        //        return _service.AddFriend("k");
+
+        //    }, true, true);
+        //}
         public async Task<IActionResult> OnPostAddFriend(string FriendUserName)
         {
             //var result = await _requestService.AddRequest(FriendUserName);
@@ -43,19 +61,20 @@ namespace PlanningRazorPage.Pages.Front.Profile
             //    return RedirectAndShowAlert(result, Redirect("Friend"));
             //}
             //return RedirectAndShowAlert(result, Redirect("Friend"));
-            return await AjaxTryCatch(() =>
+          
+                return await AjaxTryCatch(() =>
             {
                 //return _service.AddFriend(FriendUserName);
                 return _service.AddFriend(FriendUserName);
 
             }, true, true);
         }
-        public async Task<IActionResult> OnPostRemoveRequest(string friendUserName)
+        public async Task<IActionResult> OnPostRemoveFriend(string friendUserName)
         {
             return await AjaxTryCatch(() =>
             {
                 //return _service.AddFriend(FriendUserName);
-                return _requestService.DeleteRequest(friendUserName);
+                return _service.RemoveFriend(friendUserName);
 
             }, true, true);
 

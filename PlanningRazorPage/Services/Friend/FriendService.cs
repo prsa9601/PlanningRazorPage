@@ -58,7 +58,7 @@ namespace PlanningRazorPage.Services.Friend
 
         public async Task<ApiResult> RemoveFriend(string ReceiverUserName)
         {
-            var result = await _client.DeleteAsync($"{ModuleName}/{ReceiverUserName}");
+            var result = await _client.DeleteAsync($"{ModuleName}?ReceiverUserName={ReceiverUserName}");
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
     }
