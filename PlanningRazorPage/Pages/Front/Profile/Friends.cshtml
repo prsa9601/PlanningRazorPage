@@ -309,7 +309,7 @@
                                                         // </td>
 
                                                         @*<button type="button" class="btn rounded-pill btn-icon btn-primary waves-effect waves-light">*@
-                                                        <Remove-Friend url="@Url.Page("SetFriend", "RemoveFriend", new{ FriendUserName = @item.FriendUserName})" description="آیا از این عملیات مطمئن هستید؟">
+                                                        <Remove-Friend url="@Url.Page("AddRequest", "RemoveRequest", new{ FriendUserName = @item.FriendUserName})" description="آیا از این عملیات مطمئن هستید؟">
                                                             <button disabled="true" type="button" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
 
                                                                 <span class="mdi mdi-account-multiple-plus-outline"></span>

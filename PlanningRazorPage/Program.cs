@@ -75,7 +75,7 @@ app.Use(async (context, next) =>
 
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles(); 
 
 app.UseRouting();
 app.Use(async (context, next) =>

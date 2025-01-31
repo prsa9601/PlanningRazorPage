@@ -25,6 +25,17 @@ namespace PlanningRazorPage.Services.Friend
             return result?.Data;
         }
 
+        public async Task<SearchFriendForEventFilterResult?> SearchFriendForEvent(SearchFriendForEventFilterParamModel param)
+        {
+            var url = $"{ModuleName}/SearchFriendForEvent?PageId={param.PageId}&Take={param.Take}";
+
+            if (param.UserName != null)
+                url += $"&userName={param.UserName}";
+
+            var result = await _client.GetFromJsonAsync<ApiResult<SearchFriendForEventFilterResult?>>(url);
+            return result?.Data;
+        }
+
         public async Task<ApiResult> AddFriend(string ReceiverUserName)
         {
             var result = await _client.PostAsJsonAsync(ModuleName, ReceiverUserName);

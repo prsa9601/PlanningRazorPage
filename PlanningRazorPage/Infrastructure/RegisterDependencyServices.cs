@@ -1,4 +1,5 @@
-﻿using PlanningRazorPage.Infrastructure.CookieUtils;
+﻿using PlanningRazorPage.Gateway.Telegram;
+using PlanningRazorPage.Infrastructure.CookieUtils;
 using PlanningRazorPage.Infrastructure.FileUtil.Interfaces;
 using PlanningRazorPage.Infrastructure.FileUtil.Services;
 using PlanningRazorPage.Infrastructure.RazorUtils;
@@ -23,7 +24,11 @@ public static class RegisterDependencyServices
         services.AddTransient<IRenderViewToString, RenderViewToString>();
         services.AddTransient<IFileService, FileService>();
 
-       // services.AddAutoMapper(typeof(RegisterDependencyServices).Assembly);
+
+        // اضافه کردن TelegramService به DI
+        services.AddScoped<ITelegramService, TelegramService>();
+
+        // services.AddAutoMapper(typeof(RegisterDependencyServices).Assembly);
         //services.AddScoped<IMainPageService, MainPageService>();
 
         services.AddScoped<ShopCartCookieManager>();
@@ -31,6 +36,11 @@ public static class RegisterDependencyServices
         //services.AddCookieManager();
 
         services.AddHttpClient<IAuthService, AuthService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(baseAddress);
+        }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
+        services.AddHttpClient<ITelegramService, TelegramService>(httpClient =>
         {
             httpClient.BaseAddress = new Uri(baseAddress);
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();

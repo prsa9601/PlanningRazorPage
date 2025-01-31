@@ -22,10 +22,10 @@ namespace PlanningRazorPage.Services.Event
             formData.Add(new StringContent(command.Description.ToString()), "Description");
             formData.Add(new StringContent(command.EndTime.ToString()), "EndTime");
             formData.Add(new StringContent(command.EventAddress.ToString()), "EventAddress");
-            formData.Add(new StringContent(command.Title.ToString()), "title");
+            formData.Add(new StringContent(command.Title.ToString()), "Title");
             formData.Add(new StringContent(command.StartTime.ToString()), "StartTime");
             formData.Add(new StringContent(command.Link), "Link");
-            formData.Add(new StringContent(command.userNumber.ToString()), "userNumber");
+            formData.Add(new StringContent(command.userNumber.ToString() ?? string.Empty), "userNumber");
             formData.Add(new StringContent(command.notification.ToString()), "notification");
             formData.Add(new StringContent(command.tag.ToString()), "tag");
            // formData.Add(new StreamContent(command.ImageFile.OpenReadStream()), "ImageFile", command.ImageFile.FileName);

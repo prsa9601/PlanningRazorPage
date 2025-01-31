@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed " dir="rtl" data-theme="theme-semi-dark" data-assets-path="../../../../../assets/" data-template="vertical-menu-template-semi-dark">
+<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed " dir="rtl" data-theme="theme-semi-dark" data-assets-path="../../assets/" data-template="vertical-menu-template-semi-dark">
 
 <head>
     <meta char
@@ -26,29 +26,24 @@
     <link rel="stylesheet" href="~/assets/vendor/css/pages/app-calendar.css" />
     <script src="~/assets/vendor/js/helpers.js"></script>
     <script src="~/assets/vendor/js/template-customizer.js"></script>
-    @* <script src="~/assets/js/config.js"></script> *@
+    <script src="~/assets/js/config.js"></script> 
     @await RenderSectionAsync("Header", required: false)
 
 </head>
 
 
 <body>
-    <div class="layout-wrapper layout-content-navbar  ">
+    <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
             <partial name="Shared/Partials/_Aside" />
-
             <div class="layout-page">
-
-
-
-
-
+                @* 
                 <!-- Navbar -->
-                <partial name="Shared/Partials/_Nav" />
+                <partial name="Shared/Partials/_Nav" /> *@
+                <div class="content-wrapper">
+                                @RenderBody()
 
-                @RenderBody()
-               
-
+                </div>
             </div>
             <!-- / Layout page -->
         </div>
@@ -63,22 +58,22 @@
         <div class="drag-target"></div>
 
     </div>
-    
 
 
 
 
 
-    <partial name="Shared/Partials/_Scripts"/>
+
+    <partial name="Shared/Partials/_Scripts" />
 
     @await RenderSectionAsync("Scripts", required: false)
     <script src="~/global.js"></script>
     <div id="ajax-token">
-         @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
     </div>
-    </body>
+</body>
 
-</html> 
+</html>
 
 
 @*     <script src=" /lib/jquery/dist/jquery.min.js"></script>

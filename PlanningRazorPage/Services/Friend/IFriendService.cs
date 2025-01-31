@@ -11,5 +11,6 @@ namespace PlanningRazorPage.Services.Friend
         Task<List<FriendDto>?> GetListFriendsByUserName();
         Task<List<FriendDto>?> GetListFriendsByUserId();
         Task<UserFriendFilterResult?> GetListFriendsByUserIdForProfile(UserFriendFilterParam paramViewModel);
+        Task<SearchFriendForEventFilterResult?> SearchFriendForEvent(SearchFriendForEventFilterParamModel param);
     }
 }
