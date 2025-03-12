@@ -15,6 +15,21 @@
 
         public bool AccessNotification { get; set; } = true;
     }
+    public class EventDtoViewModel : BaseDto
+    {
+        public string Title { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public string Description { get; set; }
+        public string Link { get; set; }
+        public string EventAddress { get; set; }
+
+        public string Tag { get; set; }
+        public Notification notification { get; set; }
+        //public List<UserEvent> Participants { get; private set; }
+
+        public bool AccessNotification { get; set; } = true;
+    }
     public class EventForShopDto : BaseDto
     {
         public string Title { get; set; }
@@ -25,7 +40,11 @@
     }
     public enum Tagged
     {
-        Worked
+        Business,
+        Personal,
+        Family,
+        Holiday,
+        ETC
     }
     public enum Notification
     {

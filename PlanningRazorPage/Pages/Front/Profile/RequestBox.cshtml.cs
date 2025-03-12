@@ -9,12 +9,10 @@ namespace PlanningRazorPage.Pages.Front.Profile
 {
     public class RequestBoxModel : BaseRazorFilter<RequestBoxFilterParam>
     {
-        private readonly DecryptionService _decryptionService;
         public IRequestService _service { get; set; }
-        public RequestBoxModel(IRequestService service, DecryptionService decryptionService)
+        public RequestBoxModel(IRequestService service)
         {
             _service = service;
-            _decryptionService = decryptionService;
         }
 
         [BindProperty(SupportsGet = true)]

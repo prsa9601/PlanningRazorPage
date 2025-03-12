@@ -48,7 +48,7 @@ builder.Services.AddAuthentication(option =>
         ValidateIssuerSigningKey = true
     };
 });
-builder.Services.AddAuthentication();
+//builder.Services.AddAuthentication();
 builder.Services.AddDataProtection();
 builder.Services.AddScoped<DecryptionService>();
 var app = builder.Build();
@@ -85,7 +85,7 @@ app.Use(async (context, next) =>
     if (status == 401)
     {
         var path = context.Request.Path;
-        context.Response.Redirect($"../../../../Front/Auth/Login?redirectTo={path}");
+        context.Response.Redirect($"../../../Front/Auth/Login?redirectTo={path}");
     }
 });
 app.UseAuthentication();

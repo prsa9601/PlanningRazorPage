@@ -1,52 +1,52 @@
-﻿using System.Globalization;
-using System.Reflection;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.VisualBasic;
-using PlanningRazorPage.Infrastructure.RazorUtils;
 using PlanningRazorPage.Infrastructure.Utils;
 using PlanningRazorPage.Models.Event;
 using PlanningRazorPage.Models.Friend;
 using PlanningRazorPage.Services.Event;
+using System.Globalization;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PlanningRazorPage.Services.Friend;
+using PlanningRazorPage.Services.Notification;
+using PlanningRazorPage.Models.Notification;
 
-namespace PlanningRazorPage.Pages.Front
+namespace PlanningRazorPage.Pages
 {
-    [BindProperties]
-    public class IndexModel : BaseRazorPage
+    public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-        private readonly IEventService _service;
-        private readonly IFriendService _friendService;
-        public IndexModel(ILogger<IndexModel> logger, IEventService service, IFriendService friendService)
+        public IEventService _service { get; set; }
+        public INotificationService _notificationService { get; set; }
+        public IFriendService _friendService { get; set; }
+        public IndexModel(IEventService service, IFriendService friendService, INotificationService notificationService)
         {
-            _logger = logger;
             _service = service;
             _friendService = friendService;
+            _notificationService = notificationService;
         }
 
         public string Title { get; set; }
-        public string StartTime { get; set; } 
-        public string EndTime { get; set; } 
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
         public string Description { get; set; }
-        public string Link { get; set; } 
-        public string EventAddress { get; set; } 
+        public string Link { get; set; }
+        public string EventAddress { get; set; }
         public bool AccessNotification { get; set; }
 
-        public Tagged Tag { get; set; } 
+        public Tagged Tag { get; set; }
         public List<string>? FriendUserNames { get; set; }
-        public List<SearchFriendDto?> FriendResult { get; set; }
-        public List<EventDtoViewModel?> EventDto { get; set; }
-        //public Notification Notification { get; set; }
-        //public long id { get; set; }
+        public List<SearchFriendDto>? FriendResult { get; set; }
+        public List<EventDtoViewModel>? EventDto { get; set; }
+
+
         public async Task OnGet(CancellationToken cancel)
-        {  
+        {
 
             var friends = await _friendService.SearchFriendForEvent(
                 new SearchFriendForEventFilterParamModel()
                 {
-                    Take = 1999, 
+                    Take = 1999,
                     PageId = 1,
                     UserName = "p"
                 });
@@ -59,13 +59,13 @@ namespace PlanningRazorPage.Pages.Front
             //    item.Link = FormatDateTime(item.EndTime);
             //}
         }
-        public async Task OnGetEvents(CancellationToken cancel)
-        {  
+        public async Task<IActionResult> OnGetEvents(CancellationToken cancel)
+        {
 
             var friends = await _friendService.SearchFriendForEvent(
                 new SearchFriendForEventFilterParamModel()
                 {
-                    Take = 1999, 
+                    Take = 1999,
                     PageId = 1,
                     UserName = "p"
                 });
@@ -73,11 +73,190 @@ namespace PlanningRazorPage.Pages.Front
             FriendResult = MapFriend(friends, cancel);
             var eventDto = await _service.GetByUserId();
             EventDto = MapEvent(eventDto, cancel);
-            await Task.Delay(7000);
+            //await Task.Delay(7000);
             //foreach (var item in EventDto)
             //{
             //    item.Link = FormatDateTime(item.EndTime);
             //}
+            // Transform EventDto to FullCalendar format
+            var calendarEvents = EventDto.Select(e => new
+            {
+                id = e.Id,
+                url = e.Link,
+                title = e.Title,
+                start = e.StartTime,
+                end = e.EndTime,
+                allDay = false, // Adjust this according to your requirements
+                extendedProps = new
+                {
+                    calendar = e.Tag
+                }
+            }).ToList();
+
+            return new JsonResult(calendarEvents);
+        }
+        public async Task<IActionResult> OnPostUpdateEventDate(long id, DateTime newStart, DateTime newEnd)
+        {
+            var result = await _service.SetDates(new SetDatesEventCommand()
+            {
+                Id = id,
+                StartTime = newStart,
+                EndTime = newEnd
+            });
+            return new JsonResult(new { success = true });
+        }
+        public async Task OnPostDeleteEvent(long id)
+        {
+            await _service.Delete(id);
+            await _notificationService.Remove(new Models.Notification.RemoveNotificationCommand
+            {
+                EventId = id
+            });
+        }
+        public async Task<IActionResult> OnPostAdd(string title,
+            DateTime startTime, DateTime endTime, string link, string eventAddress,
+            string tag, string description, string[] friendUserNames, bool accessNotification,
+            string notification)
+        {
+            var notificationEnum = Notification.none;
+            switch (notification)
+            {
+                case "Sms":
+                    notificationEnum = Notification.Sms;
+                    break;
+                case "Email":
+                    notificationEnum = Notification.Email;
+                    break;
+                default:
+                    notificationEnum = Notification.none;
+                    break;
+            }
+            var notificationType = NotificationType.None;
+            switch (notification)
+            {
+                case "Sms":
+                    notificationType = NotificationType.Sms;
+                    break;
+                case "Email":
+                    notificationType = NotificationType.Email;
+                    break;
+                default:
+                    notificationType = NotificationType.None;
+                    break;
+            }
+            var tagEnum = Tagged.Business;
+            switch (tag)
+            {
+                case "Business":
+                    tagEnum = Tagged.Business;
+                    break;
+                case "Personal":
+                    tagEnum = Tagged.Personal;
+                    break;
+                case "Family":
+                    tagEnum = Tagged.Family;
+                    break;
+                case "Holiday":
+                    tagEnum = Tagged.Holiday;
+                    break;
+                case "ETC":
+                    tagEnum = Tagged.ETC;
+                    break;
+                default:
+                    tagEnum = Tagged.ETC;
+                    break;
+            }
+
+            var result = await _service.Add(new AddEventCommand()
+            {
+                accessNotification = accessNotification,
+                Description = description,
+                //EndTime = endTime,
+                EndTime = endTime.ToString().ToMiladi(),
+                Link = link,
+                EventAddress = eventAddress,
+                notification = notificationEnum,
+                //StartTime = startTime,
+                StartTime = startTime.ToString().ToMiladi(),
+                tag = tagEnum,
+                Title = title,
+                userNames = friendUserNames.ToList()
+            });
+            //if (accessNotification = Notification.Email)
+            //{
+            //long f = result.Data;
+            var AddNotificationResult = await _notificationService.Add(new Models.Notification.AddNotificationViewModel
+            {
+                EventId = result.Data,
+                SendTime = startTime,
+                EventStartTime = startTime,
+                NotificationType = notificationType,
+                UserIds = friendUserNames.ToList(),
+            });
+            //await _notificationService.SendEmail(new SendNotificationByEmailCommand
+            //{
+            //    EventId = result.Data,
+            //    notificationId = AddNotificationResult.Data
+            //});
+
+
+            return Page();
+        }
+        public async Task<IActionResult> OnPostEditEvent(string title,
+            DateTime startTime, DateTime endTime, string link, string eventAddress,
+            string tag, string description, string[] friendUserNames, bool accessNotification,
+            string notification, long id)
+        {
+            var notificationEnum = Notification.none;
+            switch (notification)
+            {
+                case "Sms":
+                    notificationEnum = Notification.Sms;
+                    break;
+                case "Email":
+                    notificationEnum = Notification.Email;
+                    break;
+                default:
+                    notificationEnum = Notification.none;
+                    break;
+            }
+            var tagEnum = Tagged.Business;
+            switch (notification)
+            {
+                case "Business":
+                    tagEnum = Tagged.Business;
+                    break;
+                case "Personal":
+                    tagEnum = Tagged.Personal;
+                    break;
+                case "Family":
+                    tagEnum = Tagged.Family;
+                    break;
+                case "Holiday":
+                    tagEnum = Tagged.Holiday;
+                    break;
+                default:
+                    tagEnum = Tagged.ETC;
+                    break;
+            }
+
+            var result = await _service.Edit(new EditEventCommand()
+            {
+                accessNotification = accessNotification,
+                Description = description,
+                //EndTime = endTime,
+                EndTime = endTime.ToString().ToMiladi(),
+                Link = link,
+                EventAddress = eventAddress,
+                notification = notificationEnum,
+                //StartTime = startTime,
+                StartTime = startTime.ToString().ToMiladi(),
+                tag = tagEnum,
+                Title = title,
+                Id = id,
+                userNames = friendUserNames.ToList()
+            });
+            return Page();
         }
         private static string FormatDateTime(DateTime dateTime)
         {
@@ -86,165 +265,9 @@ namespace PlanningRazorPage.Pages.Front
             string day = dateTime.Day.ToString("00");
             string year = dateTime.Year.ToString();
             string time = dateTime.ToString("HH:mm:ss");
-            string timeZone = dateTime.ToString("zzz");
-            return $"{dayOfWeek} {month} {day} {year} {time} GMT{timeZone} (Iran Standard Time)";
+            string timeZone = dateTime.ToString("zzz");/*{timeZone}*/
+            return $"{dayOfWeek} {month} {day} {year} {time} GMT {timeZone} (Iran Standard Time)";
         }
-        //public async Task<List<EventDto?>> OnGetEvents(CancellationToken cancel)
-        //{
-        //    return await _service.GetByUserId();
-        //}
-        public async Task<IActionResult> OnPost()
-        {
-
-            var result = await _service.Add(new AddEventCommand()
-            {
-                accessNotification = AccessNotification,
-                Description = Description,
-                EndTime = EndTime.ToMiladi(),
-                Link = Link,
-                EventAddress = EventAddress,
-                //notification = Notification,
-                StartTime = StartTime.ToMiladi(),
-                tag = Tag,
-                Title = Title,
-                //  userNames = FriendResult
-            });
-            return Page();
-        }
-        public async Task<IActionResult> OnPostCreateEvent(string title,
-            DateTime startTime, DateTime endTime, string link, string eventAddress, 
-            string tag, string description, string[] friendUserNames, bool accessNotification, 
-            string notification)
-        {
-            var notificationEnum = Notification.none;
-            switch (notification)
-            {
-                case "Sms":
-                    notificationEnum = Notification.Sms;
-                    break;
-                case "Email":
-                    notificationEnum = Notification.Email;
-                    break;
-                default:
-                    notificationEnum = Notification.none;
-                    break;
-            }
-            var tagEnum = Tagged.Business;
-            switch (notification)
-            {
-                case "Business":
-                    tagEnum = Tagged.Business;
-                    break;
-                case "Personal":
-                    tagEnum = Tagged.Personal;
-                    break;
-                case "Family":
-                    tagEnum = Tagged.Family;
-                    break;
-                case "Holiday":
-                    tagEnum = Tagged.Holiday;
-                    break;
-                default:
-                    tagEnum = Tagged.ETC;
-                    break;
-            }
-            
-            var result = await _service.Add(new AddEventCommand()
-            {
-                accessNotification = accessNotification,
-                Description = description,
-                //EndTime = endTime,
-                EndTime = endTime.ToString().ToMiladi(),
-                Link = link,
-                EventAddress = eventAddress,
-                notification = notificationEnum,
-                //StartTime = startTime,
-                StartTime = startTime.ToString().ToMiladi(),
-                tag = tagEnum,
-                Title = title,
-                userNames = friendUserNames.ToList()
-            });
-            return Page();
-        }
-        public async Task<IActionResult> OnPostEditeEvent(string title,
-            DateTime startTime, DateTime endTime, string link, string eventAddress, 
-            string tag, string description, string[] friendUserNames, bool accessNotification, 
-            string notification)
-        {
-            var notificationEnum = Notification.none;
-            switch (notification)
-            {
-                case "Sms":
-                    notificationEnum = Notification.Sms;
-                    break;
-                case "Email":
-                    notificationEnum = Notification.Email;
-                    break;
-                default:
-                    notificationEnum = Notification.none;
-                    break;
-            }
-            var tagEnum = Tagged.Business;
-            switch (notification)
-            {
-                case "Business":
-                    tagEnum = Tagged.Business;
-                    break;
-                case "Personal":
-                    tagEnum = Tagged.Personal;
-                    break;
-                case "Family":
-                    tagEnum = Tagged.Family;
-                    break;
-                case "Holiday":
-                    tagEnum = Tagged.Holiday;
-                    break;
-                default:
-                    tagEnum = Tagged.ETC;
-                    break;
-            }
-            
-            var result = await _service.Edit(new EditEventCommand()
-            {
-                accessNotification = accessNotification,
-                Description = description,
-                //EndTime = endTime,
-                EndTime = endTime.ToString().ToMiladi(),
-                Link = link,
-                EventAddress = eventAddress,
-                notification = notificationEnum,
-                //StartTime = startTime,
-                StartTime = startTime.ToString().ToMiladi(),
-                tag = tagEnum,
-                Title = title,
-                userNames = friendUserNames.ToList()
-            });
-            return Page();
-        }
-        public async Task<IActionResult> OnPostEdit()
-        {
-            string startTime = StartTime;
-            var result = await _service.Edit(new EditEventCommand()
-            {
-                accessNotification = AccessNotification,
-                Description = Description,
-                EndTime = EndTime.ToMiladi(),
-                Link = Link,
-                EventAddress = EventAddress,
-                //notification = Notification,
-                StartTime = startTime.ToGregorianDateTime(),
-                tag = Tag,
-                Title = Title,
-                // userNames = FriendsUserNames,
-                //  Id = id,
-            });
-            return Page();
-        }
-        //public async Task<IActionResult> OnPostDelete()
-        //{
-        //    var result = await _service.Delete(id);
-        //    return Page();
-        //} 
         private List<SearchFriendDto> MapFriend(SearchFriendForEventFilterResult model, CancellationToken cancel)
         {
             var result = new List<SearchFriendDto>();
@@ -340,17 +363,18 @@ namespace PlanningRazorPage.Pages.Front
                     case Tagged.Business:
                         tagBuilder.Append("Business");
                         break;
-                    //case Avatar.Woman:
-                    //    stringBuilder.Append("Woman.png");
-                    //    break;
-                    //case Avatar.Boy:
-                    //    stringBuilder.Append("Boy.png");
-                    //    break;
-                    //case Avatar.Girl:
-                    //    stringBuilder.Append("Girl.png");
-                    //    break;
+                    case Tagged.Personal:
+                        tagBuilder.Append("Personal");
+                        break;
+                    case Tagged.Family:
+                        tagBuilder.Append("Family");
+                        break;
+                    case Tagged.Holiday:
+                        tagBuilder.Append("Holiday");
+                        break;
+
                     default:
-                        tagBuilder.Append("Business");
+                        tagBuilder.Append("ETC");
                         break;
 
                 }
@@ -369,10 +393,11 @@ namespace PlanningRazorPage.Pages.Front
                     Tag = tagBuilder.ToString()
 
                 });
+                //tagBuilder.Clear();
             }
 
             return result;
         }
-        
+
     }
 }

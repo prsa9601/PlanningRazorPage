@@ -12,7 +12,7 @@
         public bool accessNotification { get; set; }
 
         public Tagged tag { get; set; }
-        public List<string> userNumber { get; set; }
+        public List<string> userNames { get; set; }
         public Notification notification { get; set; }
     }
     public class EditEventCommand 
@@ -26,12 +26,18 @@
         public string EventAddress { get; set; }
         public bool accessNotification { get; set; }
 
-        public List<string> userNumber { get; set; }
+        public List<string> userNames { get; set; }
         public Tagged tag { get; set; }
         public Notification notification { get; set; }
     }
     public class DeleteEventCommand 
     {
         public long Id { get; set; }
+    }
+    public class SetDatesEventCommand 
+    {
+        public long Id { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 }

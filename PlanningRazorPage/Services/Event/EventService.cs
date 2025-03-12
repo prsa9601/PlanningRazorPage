@@ -15,7 +15,7 @@ namespace PlanningRazorPage.Services.Event
             _accessor = accessor;
         }
 
-        public async Task<ApiResult?> Add(AddEventCommand command)
+        public async Task<ApiResult<long>?> Add(AddEventCommand command)
         {
             var formData = new MultipartFormDataContent();
             formData.Add(new StringContent(command.accessNotification.ToString()), "accessNotification");
@@ -25,11 +25,27 @@ namespace PlanningRazorPage.Services.Event
             formData.Add(new StringContent(command.Title.ToString()), "Title");
             formData.Add(new StringContent(command.StartTime.ToString()), "StartTime");
             formData.Add(new StringContent(command.Link), "Link");
-            formData.Add(new StringContent(command.userNumber.ToString() ?? string.Empty), "userNumber");
+            formData.Add(new StringContent(command.userNames.ToString() ?? string.Empty), "userNames");
             formData.Add(new StringContent(command.notification.ToString()), "notification");
-            formData.Add(new StringContent(command.tag.ToString()), "tag");
+            formData.Add(new StringContent(command.tag.ToString()), "Tag");
            // formData.Add(new StreamContent(command.ImageFile.OpenReadStream()), "ImageFile", command.ImageFile.FileName);
-            var result = await _client.PostAsync($"{ModuleName}", formData);
+            var result = await _client.PostAsJsonAsync($"{ModuleName}", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult<long>>();
+            //formData.Add(new StringContent(command.accessNotification.ToString()), "accessNotification");
+            //formData.Add(new StringContent(command.Description.ToString()), "Description");
+            //formData.Add(new StringContent(command.EndTime.ToString()), "EndTime");
+            //formData.Add(new StringContent(command.EventAddress.ToString()), "EventAddress");
+            //formData.Add(new StringContent(command.Title.ToString()), "Title");
+            //formData.Add(new StringContent(command.StartTime.ToString()), "StartTime");
+            //formData.Add(new StringContent(command.Link), "Link");
+            //formData.Add(new StringContent(command.userNames != null ? string.Join(",", command.userNames) : string.Empty), "userNames");
+            //formData.Add(new StringContent(command.notification.ToString()), "notification");
+            //formData.Add(new StringContent(command.Tag.ToString()), "Tag");
+        }
+
+        public async Task<ApiResult?> SetDates(SetDatesEventCommand command)
+        {
+            var result = await _client.PatchAsJsonAsync($"{ModuleName}/SetDates", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 
@@ -45,7 +61,7 @@ namespace PlanningRazorPage.Services.Event
         //    return await result.Content.ReadFromJsonAsync<ApiResult>();
         //}
 
-        public async Task<ApiResult?> Edit(EditEventCommand command)
+        public async Task<ApiResult<long>?> Edit(EditEventCommand command)
         {
             var formData = new MultipartFormDataContent();
             formData.Add(new StringContent(command.accessNotification.ToString()), "accessNotification");
@@ -55,12 +71,12 @@ namespace PlanningRazorPage.Services.Event
             formData.Add(new StringContent(command.Title.ToString()), "title");
             formData.Add(new StringContent(command.StartTime.ToString()), "StartTime");
             formData.Add(new StringContent(command.Link), "Link");
-            formData.Add(new StringContent(command.userNumber.ToString()), "userNumber");
+            formData.Add(new StringContent(command.userNames.ToString()), "userNames");
             formData.Add(new StringContent(command.notification.ToString()), "notification");
-            formData.Add(new StringContent(command.tag.ToString()), "tag");
+            formData.Add(new StringContent(command.tag.ToString()), "Tag");
             // formData.Add(new StreamContent(command.ImageFile.OpenReadStream()), "ImageFile", command.ImageFile.FileName);
-            var result = await _client.PatchAsync($"{ModuleName}", formData);
-            return await result.Content.ReadFromJsonAsync<ApiResult>();
+            var result = await _client.PatchAsJsonAsync($"{ModuleName}", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult<long>>();
         }
 
         public async Task<EventDto?> GetById(long id)
@@ -69,9 +85,9 @@ namespace PlanningRazorPage.Services.Event
             return result?.Data;
         }
 
-        public async Task<EventDto?> GetByUserId(string userId)
+        public async Task<List<EventDto?>> GetByUserId()
         {
-            var result = await _client.GetFromJsonAsync<ApiResult<EventDto?>>($"{ModuleName}/GetByUserId{userId}");
+            var result = await _client.GetFromJsonAsync<ApiResult<List<EventDto?>>>($"{ModuleName}/GetByUserId");
             return result?.Data;
         }
     }

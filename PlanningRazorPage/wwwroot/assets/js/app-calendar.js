@@ -498,7 +498,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Update event
     // ------------------------------------------------
-    btnUpdateEvent.addEventListener('click', e => {
+      btnUpdateEvent.addEventListener('click', e => {
       if (isFormValid) {
         let eventData = {
           id: eventToUpdate.id,

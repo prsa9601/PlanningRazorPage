@@ -6,6 +6,7 @@ using PlanningRazorPage.Infrastructure.RazorUtils;
 using PlanningRazorPage.Services.Auth;
 using PlanningRazorPage.Services.Event;
 using PlanningRazorPage.Services.Friend;
+using PlanningRazorPage.Services.Notification;
 using PlanningRazorPage.Services.Package;
 using PlanningRazorPage.Services.Request;
 using PlanningRazorPage.Services.User;
@@ -46,6 +47,11 @@ public static class RegisterDependencyServices
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
         services.AddHttpClient<IEventService, EventService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(baseAddress);
+        }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+        
+        services.AddHttpClient<INotificationService, NotificationService>(httpClient =>
         {
             httpClient.BaseAddress = new Uri(baseAddress);
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();

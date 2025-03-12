@@ -1,0 +1,65 @@
+﻿namespace PlanningRazorPage.Models.User.UserPackage
+{
+    public class UsersSinglePackagesDto : BaseDto
+    {
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+
+        public UserSinglePackageDto userPackages { get; set; }
+    }
+    public class UserPackageDto : BaseDto
+    {
+        public long PackageId { get; set; }
+        public string UserId { get; set; }
+        public int AllowedEmailCount { get; set; } = 10;
+        public int AllowedSmsCount { get; set; } = 0;
+        public TimeSpan ExpiryDate { get; set; }
+        public bool IsActive { get; set; }
+    }
+    public class UsersPackagesDto : BaseDto
+    {
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+
+        public List<UserPackageDto> userPackages { get; set; }
+
+    }
+    public class UserSinglePackageDto : BaseDto
+    {
+        //public string UserName { get; set; }
+        //public string PhoneNumber { get; set; }
+        //public string Email { get; set; }
+        public long PackageId { get; set; }
+        public string UserId { get; set; }
+        public int AllowedEmailCount { get; set; } = 10;
+        public int AllowedSmsCount { get; set; } = 0;
+        public TimeSpan ExpiryDate { get; set; }
+        public bool IsActive { get; set; }
+    }
+    public class UsersPackagesFilterParam : BaseFilterParam
+    {
+        public long? packageId { get; set; }
+        public string? packageTitle { get; set; }
+        public string? phoneNumber { get; set; }
+        public SearchUserPackage search { get; set; } 
+        public string? userName { get; set; }
+    }
+    public enum SearchUserPackage
+    {
+        None,
+        Latest,
+        //BestSeller
+    }
+
+
+
+    public class UsersPackagesFilterResult : BaseFilter<UsersPackagesDto, UsersPackagesFilterParam>
+    {
+
+    }
+
+}

@@ -10,21 +10,80 @@ public static class DateUtil
         {
             // عضو اول سال ، عضو دوم ماه ، عضو سوم روز
             //std[0]=سال | std[1]= ماه | std[2]=روز
-            string[] std = persianDate.Split("/");
+            PersianCalendar persianCalendar = new PersianCalendar();
 
-            //تبدیل تاریخ شمسی به میلادی
-            return new DateTime(
-                int.Parse(std[0]),//سال
-                int.Parse(std[1]),//ماه
-                int.Parse(std[2]),//روز
-                new PersianCalendar()//نوع تاریخ
-            );
+            // جدا کردن تاریخ و زمان از رشته ورودی
+            string[] dateTimeParts = persianDate.Split(' ');
+            string[] dateParts = dateTimeParts[0].Split('/');
+            string[] timeParts = dateTimeParts.Length > 1 ? dateTimeParts[1].Split(':') : new string[] { "0", "0" };
+
+            // استخراج سال، ماه، روز، ساعت و دقیقه
+            int year = int.Parse(dateParts[2]);
+            int month = int.Parse(dateParts[0]);
+            int day = int.Parse(dateParts[1]);
+            int hour = int.Parse(timeParts[0]);
+            int minute = int.Parse(timeParts[1]);
+
+            // بررسی مقدار ماه و روز
+            if (month < 1 || month > 12)
+            {
+                throw new ArgumentOutOfRangeException("month", "Month must be between one and twelve.");
+            }
+
+            if (day < 1 || day > 31)
+            {
+                throw new ArgumentOutOfRangeException("day", "Day must be between one and thirty-one.");
+            }
+
+            // تبدیل تاریخ شمسی به تاریخ میلادی
+            DateTime gregorianDate = persianCalendar.ToDateTime(year, month, day, hour, minute, 0, 0);
+
+            return gregorianDate;
         }
         catch
         {
             return DateTime.Now;
         }
     }
+    
+        public static DateTime ConvertToPersianDateTime(this DateTime gregorianDate)
+        {
+            PersianCalendar persianCalendar = new PersianCalendar();
+
+            // استخراج سال، ماه و روز به شمسی
+            int year = persianCalendar.GetYear(gregorianDate);
+            int month = persianCalendar.GetMonth(gregorianDate);
+            int day = persianCalendar.GetDayOfMonth(gregorianDate);
+
+            // استخراج ساعت، دقیقه و ثانیه
+            int hour = gregorianDate.Hour;
+            int minute = gregorianDate.Minute;
+            int second = gregorianDate.Second;
+
+            // ایجاد تاریخ شمسی
+           // DateTime persianDate = new DateTime(year, month, day, hour, minute, second, persianCalendar);
+            //DateTime persianDate = new DateTime(year, month, day, hour, minute, second);
+
+            // ایجاد تاریخ شمسی با استفاده از تقویم شمسی
+            DateTime persianDate = persianCalendar.ToDateTime(year, month, day, hour, minute, second, gregorianDate.Millisecond);
+            return persianDate;
+
+         }
+        public static string ConvertToPersianDateString(this DateTime gregorianDate)
+        {
+            PersianCalendar persianCalendar = new PersianCalendar();
+
+            int year = persianCalendar.GetYear(gregorianDate);
+            int month = persianCalendar.GetMonth(gregorianDate);
+            int day = persianCalendar.GetDayOfMonth(gregorianDate);
+
+            int hour = gregorianDate.Hour;
+            int minute = gregorianDate.Minute;
+            int second = gregorianDate.Second;
+
+            return $"{year}-{month:D2}-{day:D2} {hour:D2}:{minute:D2}:{second:D2}";
+        }
+     
     public static string ToPersianTime(this TimeSpan ts)
     {
         return ts.Hours.ToString().PadLeft(2, '0') + ":" + ts.Minutes.ToString().PadLeft(2, '0');
