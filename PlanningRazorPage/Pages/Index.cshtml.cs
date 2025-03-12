@@ -188,8 +188,8 @@ namespace PlanningRazorPage.Pages
             var AddNotificationResult = await _notificationService.Add(new Models.Notification.AddNotificationViewModel
             {
                 EventId = result.Data,
-                SendTime = startTime,
-                EventStartTime = startTime,
+                SendTime = startTime.ToString().ToMiladi(),
+                EventStartTime = startTime.ToString().ToMiladi(),
                 NotificationType = notificationType,
                 UserIds = friendUserNames.ToList(),
             });
