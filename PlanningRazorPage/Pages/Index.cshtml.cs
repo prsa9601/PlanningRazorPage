@@ -104,6 +104,13 @@ namespace PlanningRazorPage.Pages
                 StartTime = newStart,
                 EndTime = newEnd
             });
+            await _notificationService.ChangeDate(new ChangeDateNotificationCommand
+            {
+                EventId = id,
+                SendTime = newStart,
+                StartTime = newStart,
+                EndTime = newEnd,
+            });
             return new JsonResult(new { success = true });
         }
         public async Task OnPostDeleteEvent(long id)
@@ -266,6 +273,7 @@ namespace PlanningRazorPage.Pages
             await _notificationService.Edit(new EditNotificationViewModel()
             {
                 EventId = result.Data,
+                EventEndTime = endTime.ToString().ToMiladi(),
                 EventStartTime = startTime.ToString().ToMiladi(),
                 NotificationType = notificationType,
                 SendTime = startTime.ToString().ToMiladi(),

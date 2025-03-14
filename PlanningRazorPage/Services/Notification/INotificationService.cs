@@ -8,6 +8,7 @@ namespace PlanningRazorPage.Services.Notification
         Task<ApiResult?> SendEmail(SendNotificationByEmailCommand command);
         Task<ApiResult<long>?> Add(AddNotificationViewModel command);
         Task<ApiResult?> Edit(EditNotificationViewModel command);
+        Task<ApiResult?> ChangeDate(ChangeDateNotificationCommand command);
         Task<ApiResult?> Remove(RemoveNotificationCommand command);
     }
     public class NotificationService : INotificationService
@@ -42,6 +43,12 @@ namespace PlanningRazorPage.Services.Notification
         {
             var result = await _client.DeleteAsync($"{ModuleName}/" +
                 $"RemoveNotification?EventId={command.EventId}");
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
+
+        public async Task<ApiResult?> ChangeDate(ChangeDateNotificationCommand command)
+        {
+            var result = await _client.PatchAsJsonAsync($"{ModuleName}/ChangeDateNotification", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
     }
