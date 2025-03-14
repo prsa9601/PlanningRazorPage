@@ -95,6 +95,7 @@ namespace PlanningRazorPage.Pages
 
             return new JsonResult(calendarEvents);
         }
+       
         public async Task<IActionResult> OnPostUpdateEventDate(long id, DateTime newStart, DateTime newEnd)
         {
             var result = await _service.SetDates(new SetDatesEventCommand()
@@ -116,7 +117,7 @@ namespace PlanningRazorPage.Pages
         public async Task<IActionResult> OnPostAdd(string title,
             DateTime startTime, DateTime endTime, string link, string eventAddress,
             string tag, string description, string[] friendUserNames, bool accessNotification,
-            string notification)
+            string notification, CancellationToken cancel)
         {
             var notificationEnum = Notification.none;
             switch (notification)
@@ -193,13 +194,7 @@ namespace PlanningRazorPage.Pages
                 NotificationType = notificationType,
                 UserIds = friendUserNames.ToList(),
             });
-            //await _notificationService.SendEmail(new SendNotificationByEmailCommand
-            //{
-            //    EventId = result.Data,
-            //    notificationId = AddNotificationResult.Data
-            //});
-
-
+            //OnGetEvents(cancel);
             return Page();
         }
         public async Task<IActionResult> OnPostEditEvent(string title,
@@ -239,7 +234,19 @@ namespace PlanningRazorPage.Pages
                     tagEnum = Tagged.ETC;
                     break;
             }
-
+            var notificationType = NotificationType.None;
+            switch (notification)
+            {
+                case "Sms":
+                    notificationType = NotificationType.Sms;
+                    break;
+                case "Email":
+                    notificationType = NotificationType.Email;
+                    break;
+                default:
+                    notificationType = NotificationType.None;
+                    break;
+            }
             var result = await _service.Edit(new EditEventCommand()
             {
                 accessNotification = accessNotification,
@@ -255,6 +262,14 @@ namespace PlanningRazorPage.Pages
                 Title = title,
                 Id = id,
                 userNames = friendUserNames.ToList()
+            });
+            await _notificationService.Edit(new EditNotificationViewModel()
+            {
+                EventId = result.Data,
+                EventStartTime = startTime.ToString().ToMiladi(),
+                NotificationType = notificationType,
+                SendTime = startTime.ToString().ToMiladi(),
+                UserNames = friendUserNames.ToList(),
             });
             return Page();
         }

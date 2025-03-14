@@ -7,7 +7,7 @@ namespace PlanningRazorPage.Services.Notification
     {
         Task<ApiResult?> SendEmail(SendNotificationByEmailCommand command);
         Task<ApiResult<long>?> Add(AddNotificationViewModel command);
-        Task<ApiResult?> Edit(EditNotificationCommand command);
+        Task<ApiResult?> Edit(EditNotificationViewModel command);
         Task<ApiResult?> Remove(RemoveNotificationCommand command);
     }
     public class NotificationService : INotificationService
@@ -32,7 +32,7 @@ namespace PlanningRazorPage.Services.Notification
             return await result.Content.ReadFromJsonAsync<ApiResult<long>>();
         }
 
-        public async Task<ApiResult?> Edit(EditNotificationCommand command)
+        public async Task<ApiResult?> Edit(EditNotificationViewModel command)
         {
             var result = await _client.PatchAsJsonAsync($"{ModuleName}/EditNotification", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();

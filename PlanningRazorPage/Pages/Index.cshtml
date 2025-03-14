@@ -50,7 +50,7 @@
     <script src="~/assets/vendor/js/template-customizer.js"></script>
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="~/assets/js/config.js"></script>
-  
+
 </head>
 
 <body>
@@ -1676,7 +1676,7 @@
                                                     <label class="form-label" for="eventURL">آدرس URL رویداد</label>
                                                     <input type="url" class="form-control" id="eventURL" name="eventURL" placeholder="https://www.google.com/">
                                                 </div>
-                                               @*  <div class="mb-3 select2-primary">
+                                                @*  <div class="mb-3 select2-primary">
                                                     <label class="form-label" for="eventGuests">افزودن مهمانان</label>
                                                     <select class="select2 select-event-guests form-select" id="eventGuests" name="eventGuests" multiple>
                                                         <option data-avatar="1.png" value="Jane Foster">تونی استارک</option>
@@ -1691,10 +1691,14 @@
                                                     <label class="form-label" for="eventGuests">افزودن مهمانان</label>
                                                     <select class="select2 select-event-guests form-select" id="eventGuests" name="eventGuests" multiple>
                                                         @{
-                                                            foreach (var item in Model.FriendResult)
+                                                            if (Model.FriendResult.Count() > 0)
                                                             {
-                                                                <option data-avatar="@item.avatar" value="@item.UserName">@item.UserName</option>
+                                                                foreach (var item in Model.FriendResult)
+                                                                {
+                                                                    <option data-avatar="@item.avatar" value="@item.UserName">@item.UserName</option>
+                                                                }
                                                             }
+
                                                         }
 
 
@@ -1952,7 +1956,7 @@
         ];
 
     </script>
-     
+
     <script>
               /**
          * App Calendar
@@ -2084,9 +2088,9 @@
                          if (instance.isMobile) {
                     instance.mobileInput.setAttribute('step', '1');
                   }
-      
+
                 },
-                 
+
                 locale: 'fa',
                 disableMobile: false  //
               });
