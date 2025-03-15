@@ -1,4 +1,4 @@
-﻿@page 
+﻿@page
 @using PlanningRazorPage.Pages.TagHelpers
 @using PlanningRazorPage.Infrastructure
 @using Microsoft.AspNetCore.Mvc.TagHelpers
@@ -7,75 +7,75 @@
 @{
     Layout = "Shared/_Layout";
 }
-<p id="result"></p>
-<div class="card  container">
-    <h5 class="card-header">جدول با سرتیتر تیره</h5>
-    <div class="table-responsive text-nowrap">
-        <table class="table">
-            <thead class="table-dark">
-                <tr>
-                    <th>عکس پکیج</th>
-                    <th>مشتری</th>
-                    <th> وضعیت</th>
-                    <th> قیمت</th>
-                    <th>عملیات ها</th>
-                </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
+    @* <p id="result"></p> *@
 
-                @{
-                    foreach (var item in @Model.Packages)
-                    {
-                        <tr>
-                            <td>
-                                <div class="table-image">
-                                    <img style="height:60px;weight:80px;" src="@Directories.GetPackageImage(item.ImageName)" alt="Avatar" class="rounded-circle">
+    <div class="card container">
+        <h5 class="card-header">جدول با سرتیتر تیره</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>عکس پکیج</th>
+                        <th>مشتری</th>
+                        <th> وضعیت</th>
+                        <th> قیمت</th>
+                        <th>عملیات ها</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
 
-                                </div>
-                            </td>
-                            <td>@item.Title</td>
-
-                            @if (item.Active == true)
-                            {
-                                <td><span class="badge bg-label-primary me-1">فعال</span></td>
-                            }
-                            else
-                            {
-                                <td><span class="badge bg-label-warning me-1">غیر فعال</span></td>
-                            }
-                            <td>@item.Price تومان</td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
-                                    <div class="dropdown-menu">
-                                        @if (item.Active == true)
-                                        {
-                                            <remove-active-package Url="@Url.Page("List", "RemoveActive", new{packageId = item.Id})" description=" آیا از غیر فعال کردن این پکیج اطمینان دارید ؟">
-                                                <i class="mdi mdi-pencil-outline me-1"></i> غیر فعال کردن
-                                            </remove-active-package>
-                                        }
-                                        else
-                                        {
-                                            <set-active-package Url="@Url.Page("List", "SetActive", new { packageId = item.Id })" description="آیا از فعال کردن این پکیج اطمینان دارید ؟">
-                                                <i class="mdi mdi-pencil-outline me-1"></i> فعال کردن
-                                            </set-active-package>
-                                        }
-                                        <a class="dropdown-item waves-effect" asp-page="Edit" asp-route-id="@item.Id"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
-                                        <delete-item Url="@Url.Page("List", "DeletePackage", new { packageId = item.Id })" description="آیا از حذف این پکیج اطمینان دارید ؟">
-                                            <i class="mdi mdi-trash-can-outline me-1"></i>حذف
-                                        </delete-item>
-                   
+                    @{
+                        foreach (var item in @Model.Packages)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="table-image">
+                                        <img style="height:60px;weight:80px;" src="@Directories.GetPackageImage(item.ImageName)" alt="Avatar" class="rounded-circle">
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
+                                </td>
+                                <td>@item.Title</td>
 
-</div>
+                                @if (item.Active == true)
+                                {
+                                    <td><span class="badge bg-label-primary me-1">فعال</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="badge bg-label-warning me-1">غیر فعال</span></td>
+                                }
+                                <td>@item.Price تومان</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
+                                        <div class="dropdown-menu">
+                                            @if (item.Active == true)
+                                            {
+                                                <remove-active-package Url="@Url.Page("List", "RemoveActive", new{packageId = item.Id})" description=" آیا از غیر فعال کردن این پکیج اطمینان دارید ؟">
+                                                    <i class="mdi mdi-pencil-outline me-1"></i> غیر فعال کردن
+                                                </remove-active-package>
+                                            }
+                                            else
+                                            {
+                                                <set-active-package Url="@Url.Page("List", "SetActive", new { packageId = item.Id })" description="آیا از فعال کردن این پکیج اطمینان دارید ؟">
+                                                    <i class="mdi mdi-pencil-outline me-1"></i> فعال کردن
+                                                </set-active-package>
+                                            }
+                                            <a class="dropdown-item waves-effect" asp-page="Edit" asp-route-id="@item.Id"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
+                                            <delete-item Url="@Url.Page("List", "DeletePackage", new { packageId = item.Id })" description="آیا از حذف این پکیج اطمینان دارید ؟">
+                                                <i class="mdi mdi-trash-can-outline me-1"></i>حذف
+                                            </delete-item>
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 @section Scripts
 {
     <script src="~/global.js"></script>
@@ -117,7 +117,7 @@
             });
         }
 
- 
+
     </script>
     <script>
                 function PostRemoveActivePackage(url, Description) {
@@ -157,10 +157,10 @@
             });
         }
 
- 
+
     </script>
-   
-   @*  <script>
+
+    @*  <script>
                 function DeleteItem(url, Description) {
             Swal.fire({
                 title: "حذف پکیج",
@@ -198,11 +198,11 @@
             });
         }
 
- 
+
     </script>
      *@
 
-    
+
     @*    $.ajax({
     type: "POST",
     url: "/Admin/Package/List?handler=SetActive&id=" + packageId,
@@ -232,7 +232,7 @@
         function SetActivePackage(Id){
              $.ajax({
                 url: '@Url.Page("/Admin/Package/List", "OnPostSetActivePackage")',
-             
+
                 type: 'POST',
                 data: { id: Id },
                 success: function(response) {

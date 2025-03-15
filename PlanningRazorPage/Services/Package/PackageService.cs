@@ -24,6 +24,9 @@ public class PackageService : IPackageService
         formData.Add(new StringContent(command.Title.ToString()), "Title");
         formData.Add(new StringContent(command.Link.ToString()), "Link");
         formData.Add(new StringContent(command.Price.ToString()), "Price");
+        formData.Add(new StringContent(command.AllowedEmailCount.ToString()), "AllowedEmailCount");
+        formData.Add(new StringContent(command.AllowedSmsCount.ToString()), "AllowedSmsCount");
+        formData.Add(new StringContent(command.ExpiryTime.ToString()), "ExpiryTime");
         formData.Add(new StreamContent(command.Picture.OpenReadStream()), "Picture", command.Picture.FileName);
         
         var specifications = JsonConvert.SerializeObject(command.Specifications);
@@ -40,6 +43,9 @@ public class PackageService : IPackageService
         formData.Add(new StringContent(command.Title.ToString()), "Title");
         formData.Add(new StringContent(command.Id.ToString()), "Id");
         formData.Add(new StringContent(command.Link.ToString()), "Link");
+        formData.Add(new StringContent(command.AllowedEmailCount.ToString()), "AllowedEmailCount");
+        formData.Add(new StringContent(command.AllowedSmsCount.ToString()), "AllowedSmsCount");
+        formData.Add(new StringContent(command.ExpiryTime.ToString()), "ExpiryTime");
         formData.Add(new StringContent(command.Price.ToString()), "Price");
         formData.Add(new StreamContent(command.Picture.OpenReadStream()), "Picture", command.Picture.FileName);
 

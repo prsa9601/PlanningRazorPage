@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json.Linq;
 using PlanningRazorPage.Infrastructure.RazorUtils;
@@ -7,7 +7,7 @@ using PlanningRazorPage.Services.Package;
 
 namespace PlanningRazorPage.Pages.Admin.Package
 {
-    [BindProperties]
+    
     public class EditModel : BaseRazorPage
     {
         private readonly IPackageService _service;
@@ -16,14 +16,27 @@ namespace PlanningRazorPage.Pages.Admin.Package
         {
             _service = service;
         }
-
+        [BindProperty]
         public string title { get; set; }
+        [BindProperty]
         public long id { get; set; }
+        [BindProperty]
         public string Link { get; set; }
+        [BindProperty]
+        public ExpiryTime expiryTime { get; set; }
+        [BindProperty]
+        public int AllowedEmailCount { get; set; }
+        [BindProperty]
+        public int AllowedSmsCount { get; set; }
+        [BindProperty]
         public int price { get; set; }
-        public bool active { get; set; } = false;
-        public List<string> Keys { get; set; } = new();
+        [BindProperty]
+        public bool active { get; set; } = false; 
+        [BindProperty]
+        public List<string> Keys { get; set; } = new(); 
+        [BindProperty]
         public List<string> Values { get; set; } = new();
+        [BindProperty]
         public IFormFile Picture { get; set; }
 
         public async Task<IActionResult> OnGet(long id)
@@ -32,19 +45,25 @@ namespace PlanningRazorPage.Pages.Admin.Package
             id = result.Id;
             title = result.Title;
             Link = result.Link;
+            AllowedSmsCount = result.AllowedSmsCount;
+            AllowedEmailCount = result.AllowedEmailCount;
+            //ExpiryTime = result.ExpiryTime;
             price = result.Price;
             active = result.Active;
             InitSpecifications(result.Specification);
-            return Page(); 
+            return Page();
         }
 
         public async Task<IActionResult> OnPost(long id)
         {
             var result = await _service.Edit(new EditPackageCommand()
             {
-                Id = id, 
+                Id = id,
                 Title = title,
                 Link = Link,
+                AllowedEmailCount = AllowedEmailCount,
+                AllowedSmsCount = AllowedSmsCount,
+                ExpiryTime = expiryTime,
                 Picture = Picture,
                 Price = price,
                 Specifications = ConvertSpecifications()

@@ -1,8 +1,12 @@
-﻿@page
+﻿
+@page
 @model PlanningRazorPage.Pages.Admin.Package.AddModel
 @{
 }
+@section Header {
 
+    <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-select/bootstrap-select.css" />
+}
 <div class="col-12 container-fluid">
     <div class="card">
         <h5 class="card-header">تکرار کننده فرم</h5>
@@ -36,7 +40,29 @@
                     <input asp-for="Price" id="Price" type="number" class="form-control invoice-item-price mb-3" />
                 </div>
                 <span asp-validation-for="@Model.Price"></span>
-
+                
+                <div class="mb-3 col-6">
+                    <label for="formFile" asp-for="AllowedEmailCount" class="form-label">تعداد ایمیل های مجاز</label>
+                    <input asp-for="AllowedEmailCount" type="number" class="form-control invoice-item-price mb-3" />
+                </div>
+                <span asp-validation-for="@Model.AllowedEmailCount"></span>
+                <div class="mb-3 col-6">
+                    <label for="formFile" asp-for="AllowedSmsCount" class="form-label">تعداد پیامک های مجاز</label>
+                    <input asp-for="AllowedSmsCount" type="number" class="form-control invoice-item-price mb-3" />
+                </div>
+                <span asp-validation-for="@Model.AllowedSmsCount"></span>
+                <div class="col-6 mb-3">
+                    <div class="form-floating form-floating-outline">
+                        <select id="selectpickerBasic" asp-for="expiryTime" class="selectpicker w-100" data-style="btn-default">
+                            <option value="روزانه">روزانه</option>
+                            <option value="یک_ماهه">یک ماهه</option>
+                            <option value="سه_ماهه">سه ماهه</option>
+                            <option value="شش_ماهه">شش ماهه</option>
+                            <option value="یک_ساله">یک ساله</option>
+                        </select>
+                        <label for="selectpickerBasic">ساده</label>
+                    </div>
+                </div>
                 <br />
                 <br />
                 @{
@@ -157,6 +183,6 @@
     <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
     <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
     <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
-
+    <script src="~/assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
     <script src="~/assets/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
 }

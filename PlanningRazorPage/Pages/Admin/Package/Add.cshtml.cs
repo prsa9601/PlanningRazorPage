@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.IdentityModel.Tokens;
@@ -8,7 +8,7 @@ using PlanningRazorPage.Services.Package;
 
 namespace PlanningRazorPage.Pages.Admin.Package
 {
-    [BindProperties]
+   
     public class AddModel : BaseRazorPage
     {
         private readonly IPackageService _service;
@@ -17,11 +17,19 @@ namespace PlanningRazorPage.Pages.Admin.Package
         {
             _service = service;
         }
-      
-
+        [BindProperty]
+        public ExpiryTime expiryTime { get; set; }
+        [BindProperty]
+        public int AllowedEmailCount { get; set; }
+        [BindProperty]
+        public int AllowedSmsCount { get; set; }
+        [BindProperty]
         public string Link { get; set; }
+        [BindProperty]
         public int Price { get; set; }
+        [BindProperty]
         public IFormFile Picture { get; set; }
+        [BindProperty]
         public string Title { get; set; }
         [BindProperty]
         public List<string> Keys { get; set; } = new();
@@ -38,6 +46,9 @@ namespace PlanningRazorPage.Pages.Admin.Package
                 Link = Link,
                 Picture = Picture,
                 Price = Price,
+                AllowedSmsCount = AllowedSmsCount,
+                AllowedEmailCount = AllowedEmailCount,
+                ExpiryTime = expiryTime,
                 Specifications = ConvertSpecifications(),
                 Title = Title
             });

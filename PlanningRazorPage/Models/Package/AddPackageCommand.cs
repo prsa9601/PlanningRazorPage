@@ -5,11 +5,21 @@
         public string Link { get; set; }
         public string Title { get; set; }
         public int Price { get; set; }
+        public ExpiryTime ExpiryTime { get; set; }
+        public int AllowedEmailCount { get; set; }
+        public int AllowedSmsCount { get; set; }
         public IFormFile Picture { get; set; }
         public Dictionary<string, string> Specifications { get; set; }
 
     }
-
+    public enum ExpiryTime
+    {
+       روزانه
+        ,ماهانه
+        ,سه_ماهه
+        ,شش_ماهه
+        ,یک_ساله
+    }
     public class RemovePackageCommand
     {
         public long id { get; set; }
@@ -23,11 +33,16 @@
         public required long Id { get; set; }
     }
 
+ 
+   
     public class EditPackageCommand
     {
         public string Link { get; set; }
         public string Title { get; set; }
         public int Price { get; set; }
+        public ExpiryTime ExpiryTime { get; set; }
+        public int AllowedEmailCount { get; set; }
+        public int AllowedSmsCount { get; set; }
         public long Id { get; set; }
         public IFormFile? Picture { get; set; }
         public Dictionary<string, string> Specifications { get; set; }
