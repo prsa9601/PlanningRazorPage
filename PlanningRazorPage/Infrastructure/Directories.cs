@@ -25,7 +25,7 @@
         }
         public static string GetAvatar(string imageName)
         {
-            return $"{SiteSettings.ServerPath}{UserAvatars}/{imageName}";
+            return $"{SiteSettings.ServerPath}{UserAvatars}/{imageName}.png";
         }
         public static string GetProductImage(string imageName)
         {

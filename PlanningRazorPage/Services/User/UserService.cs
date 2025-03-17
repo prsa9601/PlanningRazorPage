@@ -36,7 +36,7 @@ namespace PlanningRazorPage.Services.User
 
         public async Task<ApiResult?> Edit(EditUserCommand command)
         {
-            var result = await _client.PutAsJsonAsync($"{ModuleName}" ,command);
+            var result = await _client.PutAsJsonAsync($"{ModuleName}", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 
@@ -78,6 +78,27 @@ namespace PlanningRazorPage.Services.User
         {
             var result = await _client.PostAsJsonAsync($"{ModuleName}/SetEvent", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
+
+        public async Task<UserFilterResultForAdmin> SearchUser(UserFilterParamForAdmin filterParams)
+        {
+            var url = $"{ModuleName}/GetUsersForAdmin?PageId={filterParams.PageId}&Take={filterParams.Take}";
+
+            if (filterParams.UserName != null)
+                url += $"&UserName={filterParams.UserName}";
+            if (filterParams.UserName != null)
+                url += $"&Name={filterParams.Name}";
+            if (filterParams.UserName != null)
+                url += $"&Family={filterParams.Family}";
+            if (filterParams.UserName != null)
+                url += $"&PhoneNumber={filterParams.PhoneNumber}";
+            if (filterParams.UserName != null)
+                url += $"&Email={filterParams.Email}";
+            if (filterParams.ActivePackage)
+                url += $"&ActivePackage={filterParams.ActivePackage}";
+
+            var result = await _client.GetFromJsonAsync<ApiResult<UserFilterResultForAdmin>>(url);
+            return result?.Data;
         }
     }
 }

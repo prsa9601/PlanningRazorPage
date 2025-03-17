@@ -1,0 +1,249 @@
+﻿@page
+@using PlanningRazorPage.Infrastructure
+@model PlanningRazorPage.Pages.Admin.User.IndexModel
+@{
+    Layout = "Shared/_Layout";
+}
+
+<div class="card container">
+    <h5 class="card-header">جدول با سرتیتر تیره</h5>
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>عکس کاربر</th>
+                    <th>نام کاربری</th>
+                    <th>نام کاربر</th>
+                    <th>فامیلی کاربر</th>
+                    <th>عملیات ها</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+
+                @{
+                    foreach (var item in @Model.Users.Data)
+                    {
+                        <tr>
+                            <td>
+                                <div class="table-image">
+                                    <img style="height:60px;weight:80px;" src="@Directories.GetAvatar(item.avatar.Avatar.ToString())" alt="Avatar" class="rounded-circle">
+                                </div>
+                            </td>
+                            <td>@item.UserName</td>
+
+                             @*if (item.Name == true)
+                             {
+                                 <td><span class="badge bg-label-primary me-1">فعال</span></td>
+                             }
+                             else
+                             {
+                                 <td><span class="badge bg-label-warning me-1">غیر فعال</span></td>
+                             }*@
+                            <td>@item.Name</td>
+                            <td>@item.Family</td>
+                            <td>
+                                @*<div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
+                                    <div class="dropdown-menu">
+                                        // @if (item.Active == true)
+                                        // {
+                                        //     <remove-active-package Url="@Url.Page("List", "RemoveActive", new{packageId = item.Id})" description=" آیا از غیر فعال کردن این پکیج اطمینان دارید ؟">
+                                        //         <i class="mdi mdi-pencil-outline me-1"></i> غیر فعال کردن
+                                        //     </remove-active-package>
+                                        // }
+                                        // else
+                                        // {
+                                        //     <set-active-package Url="@Url.Page("List", "SetActive", new { packageId = item.Id })" description="آیا از فعال کردن این پکیج اطمینان دارید ؟">
+                                        //         <i class="mdi mdi-pencil-outline me-1"></i> فعال کردن
+                                        //     </set-active-package>
+                                        // }
+                                        // <a class="dropdown-item waves-effect" asp-page="Edit" asp-route-id="@item.UserName"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
+                                        // <delete-item Url="@Url.Page("List", "DeletePackage", new { packageId = item.UserName })" description="آیا از حذف این پکیج اطمینان دارید ؟">
+                                        //     <i class="mdi mdi-trash-can-outline me-1"></i>حذف
+                                        // </delete-item>
+
+                                    </div>
+                                </div>*@
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+@section Scripts
+{
+    <script src="~/global.js"></script>
+    <script>
+                function PostSetActivePackage(url, Description) {
+            Swal.fire({
+                title: "فعال کردن پکیج",
+                text: Description,
+                icon: "warning",
+                confirmButtonText: "بله ، مطمعا هستم",
+                cancelButtonText: "خیر",
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+                    $.ajax({
+                        url: url,
+                        method: "post",
+                        data: {
+                            // productId: productId
+                             __RequestVerificationToken: token
+                        },
+                        beforeSend: function () {
+
+                            $(".loading").show();
+                        },
+                        complete: function () {
+                            $(".loading").hide();
+                        },
+                    }).done(function (data) {
+                        var res = JSON.parse(data);
+                        if (res.Status === 1) {
+                            Success("", res.Message, true);
+                        } else {
+                            ErrorAlert("", res.Message, res.isReloadPage);
+                        }
+                    });
+                }
+            });
+        }
+
+
+    </script>
+    <script>
+                function PostRemoveActivePackage(url, Description) {
+            Swal.fire({
+                title: "غیر فعال کردن پکیج",
+                text: Description,
+                icon: "warning",
+                confirmButtonText: "بله ، مطمعا هستم",
+                cancelButtonText: "خیر",
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+                    $.ajax({
+                        url: url,
+                        method: "post",
+                        data: {
+                            // productId: productId
+                             __RequestVerificationToken: token
+                        },
+                        beforeSend: function () {
+
+                            $(".loading").show();
+                        },
+                        complete: function () {
+                            $(".loading").hide();
+                        },
+                    }).done(function (data) {
+                        var res = JSON.parse(data);
+                        if (res.Status === 1) {
+                            Success("", res.Message, true);
+                        } else {
+                            ErrorAlert("", res.Message, res.isReloadPage);
+                        }
+                    });
+                }
+            });
+        }
+
+
+    </script>
+
+    @*  <script>
+                function DeleteItem(url, Description) {
+            Swal.fire({
+                title: "حذف پکیج",
+                text: Description,
+                icon: "warning",
+                confirmButtonText: "بله ، مطمعا هستم",
+                cancelButtonText: "خیر",
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+                    $.ajax({
+                        url: url,
+                        method: "post",
+                        data: {
+                            // productId: productId
+                             __RequestVerificationToken: token
+                        },
+                        beforeSend: function () {
+
+                            $(".loading").show();
+                        },
+                        complete: function () {
+                            $(".loading").hide();
+                        },
+                    }).done(function (data) {
+                        var res = JSON.parse(data);
+                        if (res.Status === 1) {
+                            Success("", res.Message, true);
+                        } else {
+                            ErrorAlert("", res.Message, res.isReloadPage);
+                        }
+                    });
+                }
+            });
+        }
+
+
+    </script>
+     *@
+
+
+    @*    $.ajax({
+    type: "POST",
+    url: "/Admin/Package/List?handler=SetActive&id=" + packageId,
+    success: function(response) {
+    // Handle success
+    },
+    error: function(error) {
+    // Handle error
+    }
+    });
+
+ *@
+    @*    $.ajax({
+    type: "POST",
+    url: "/Admin/Package/List?handler=SetActive",
+    data: { id: packageId },
+    success: function(response) {
+    // Handle success
+    },
+    error: function(error) {
+    // Handle error
+    }
+    });
+ *@
+
+    @*     <script>
+        function SetActivePackage(Id){
+             $.ajax({
+                url: '@Url.Page("/Admin/Package/List", "OnPostSetActivePackage")',
+
+                type: 'POST',
+                data: { id: Id },
+                success: function(response) {
+                    $('#result').html('Response: ' + response);
+                },
+                error: function() {
+                    $('#result').html('An error occurred');
+                }
+            });
+        }
+
+    </script> *@
+}
+@* '/Admin/Package/List?handler=SetActivePackage', *@
+@* <a onclick="SetActivePackage(@item.Id)" class="dropdown-item waves-effect"><i class="mdi mdi-pencil-outline me-1"></i> فعال کردن</a>
+ *@
+@* "{handler?}" *@

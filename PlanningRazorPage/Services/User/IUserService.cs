@@ -14,6 +14,7 @@ namespace PlanningRazorPage.Services.User
         Task<ApiResult?> SetEvent(SetUserEventCommand command);
         Task<UserDto?> GetByPhoneNumber(string phoneNumber);
         Task<UserFilterResult?> SearchUser(UserFilterParam param);
+        Task<UserFilterResultForAdmin?> SearchUser(UserFilterParamForAdmin filterParams);
         Task<UserDto?> GetByCurrentUser();
         Task<UserDto?> GetByUserName(string userName);
 
