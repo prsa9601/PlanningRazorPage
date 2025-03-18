@@ -95,7 +95,7 @@ namespace PlanningRazorPage.Pages
 
             return new JsonResult(calendarEvents);
         }
-       
+
         public async Task<IActionResult> OnPostUpdateEventDate(long id, DateTime newStart, DateTime newEnd)
         {
             var result = await _service.SetDates(new SetDatesEventCommand()
@@ -113,45 +113,45 @@ namespace PlanningRazorPage.Pages
             });
             return new JsonResult(new { success = true });
         }
-        public async Task OnPostDeleteEvent(long id)
+        public async Task<IActionResult> OnPostDeleteEvent(long id)
         {
             await _service.Delete(id);
-            await _notificationService.Remove(new Models.Notification.RemoveNotificationCommand
+            var result = await _notificationService.Remove(new Models.Notification.RemoveNotificationCommand
             {
                 EventId = id
             });
+            return new JsonResult(result.MetaData.Message);
         }
         public async Task<IActionResult> OnPostAdd(string title,
             DateTime startTime, DateTime endTime, string link, string eventAddress,
             string tag, string description, string[] friendUserNames, bool accessNotification,
-            string notification, CancellationToken cancel)
+            string[] notification, CancellationToken cancel)
         {
-            var notificationEnum = Notification.none;
-            switch (notification)
+            NotificationEnum notificationEnum = new NotificationEnum();
+            foreach (var item in notification)
             {
-                case "Sms":
-                    notificationEnum = Notification.Sms;
-                    break;
-                case "Email":
-                    notificationEnum = Notification.Email;
-                    break;
-                default:
-                    notificationEnum = Notification.none;
-                    break;
+                if (item == "Sms")
+                {
+                    notificationEnum |= NotificationEnum.Sms;
+                }
+                if (item == "Email")
+                {
+                    notificationEnum |= NotificationEnum.Email;
+                }
             }
             var notificationType = NotificationType.None;
-            switch (notification)
+            foreach (var item in notification) 
             {
-                case "Sms":
-                    notificationType = NotificationType.Sms;
-                    break;
-                case "Email":
-                    notificationType = NotificationType.Email;
-                    break;
-                default:
-                    notificationType = NotificationType.None;
-                    break;
+                if (item=="Sms") 
+                {
+                    notificationType |= NotificationType.Sms;
+                }
+                if (item=="Email") 
+                {
+                    notificationType |= NotificationType.Email;
+                }
             }
+          
             var tagEnum = Tagged.Business;
             switch (tag)
             {
@@ -174,6 +174,7 @@ namespace PlanningRazorPage.Pages
                     tagEnum = Tagged.ETC;
                     break;
             }
+
 
             var result = await _service.Add(new AddEventCommand()
             {
@@ -202,28 +203,50 @@ namespace PlanningRazorPage.Pages
                 UserIds = friendUserNames.ToList(),
             });
             //OnGetEvents(cancel);
-            return Page();
+            return new JsonResult(AddNotificationResult.MetaData.Message);
         }
+      
+        #region Edit Event
         public async Task<IActionResult> OnPostEditEvent(string title,
-            DateTime startTime, DateTime endTime, string link, string eventAddress,
-            string tag, string description, string[] friendUserNames, bool accessNotification,
-            string notification, long id)
+                  DateTime startTime, DateTime endTime, string link, string eventAddress,
+                  string tag, string description, string[] friendUserNames, bool accessNotification,
+                  string[] notification, long id)
         {
-            var notificationEnum = Notification.none;
-            switch (notification)
+            var notificationEnum = NotificationEnum.none;
+            foreach (var item in notification)
             {
-                case "Sms":
-                    notificationEnum = Notification.Sms;
-                    break;
-                case "Email":
-                    notificationEnum = Notification.Email;
-                    break;
-                default:
-                    notificationEnum = Notification.none;
-                    break;
+                if (item == "Sms")
+                {
+                    notificationEnum |= NotificationEnum.Sms;
+                }
+                if (item == "Email")
+                {
+                    notificationEnum |= NotificationEnum.Email;
+                }
+                if (item == "None")
+                {
+                    notificationEnum |= NotificationEnum.none;
+                }
             }
+            var notificationType = NotificationType.None;
+            foreach (var item in notification)
+            {
+                if (item == "Sms")
+                {
+                    notificationType = NotificationType.Sms;
+                }
+                if (item == "Email")
+                {
+                    notificationType = NotificationType.Email;
+                }
+                if (item == "None")
+                {
+                    notificationType = NotificationType.None;
+                }
+            }
+
             var tagEnum = Tagged.Business;
-            switch (notification)
+            switch (tag)
             {
                 case "Business":
                     tagEnum = Tagged.Business;
@@ -241,19 +264,7 @@ namespace PlanningRazorPage.Pages
                     tagEnum = Tagged.ETC;
                     break;
             }
-            var notificationType = NotificationType.None;
-            switch (notification)
-            {
-                case "Sms":
-                    notificationType = NotificationType.Sms;
-                    break;
-                case "Email":
-                    notificationType = NotificationType.Email;
-                    break;
-                default:
-                    notificationType = NotificationType.None;
-                    break;
-            }
+          
             var result = await _service.Edit(new EditEventCommand()
             {
                 accessNotification = accessNotification,
@@ -270,7 +281,7 @@ namespace PlanningRazorPage.Pages
                 Id = id,
                 userNames = friendUserNames.ToList()
             });
-            await _notificationService.Edit(new EditNotificationViewModel()
+            var editNotificationResult = await _notificationService.Edit(new EditNotificationViewModel()
             {
                 EventId = result.Data,
                 EventEndTime = endTime.ToString().ToMiladi(),
@@ -279,8 +290,10 @@ namespace PlanningRazorPage.Pages
                 SendTime = startTime.ToString().ToMiladi(),
                 UserNames = friendUserNames.ToList(),
             });
-            return Page();
+            return new JsonResult(editNotificationResult.MetaData.Message);
         }
+        #endregion
+
         private static string FormatDateTime(DateTime dateTime)
         {
             string dayOfWeek = dateTime.ToString("ddd", new CultureInfo("en-US"));
@@ -381,7 +394,7 @@ namespace PlanningRazorPage.Pages
                 //        break;
 
                 //}
-                switch (Tag)
+                switch (item.tag)
                 {
                     case Tagged.Business:
                         tagBuilder.Append("Business");

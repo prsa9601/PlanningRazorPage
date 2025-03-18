@@ -116,17 +116,17 @@ namespace PlanningRazorPage.Pages.Front
             string tag, string description, string[] friendUserNames, bool accessNotification, 
             string notification)
         {
-            var notificationEnum = Notification.none;
+            var notificationEnum = NotificationEnum.none;
             switch (notification)
             {
                 case "Sms":
-                    notificationEnum = Notification.Sms;
+                    notificationEnum = NotificationEnum.Sms;
                     break;
                 case "Email":
-                    notificationEnum = Notification.Email;
+                    notificationEnum = NotificationEnum.Email;
                     break;
                 default:
-                    notificationEnum = Notification.none;
+                    notificationEnum = NotificationEnum.none;
                     break;
             }
             var tagEnum = Tagged.Business;
@@ -171,17 +171,17 @@ namespace PlanningRazorPage.Pages.Front
             string tag, string description, string[] friendUserNames, bool accessNotification, 
             string notification)
         {
-            var notificationEnum = Notification.none;
+            var notificationEnum = NotificationEnum.none;
             switch (notification)
             {
                 case "Sms":
-                    notificationEnum = Notification.Sms;
+                    notificationEnum = NotificationEnum.Sms;
                     break;
                 case "Email":
-                    notificationEnum = Notification.Email;
+                    notificationEnum = NotificationEnum.Email;
                     break;
                 default:
-                    notificationEnum = Notification.none;
+                    notificationEnum = NotificationEnum.none;
                     break;
             }
             var tagEnum = Tagged.Business;

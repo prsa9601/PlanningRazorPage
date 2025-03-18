@@ -1672,6 +1672,33 @@
                                                         <span class="switch-label">تمام روز</span>
                                                     </label>
                                                 </div>
+                                                <div class="row row-bordered g-0">
+                                                    <div class="col-md p-4">
+                                                        <small class="text-light fw-semibold d-block">نوع اطلاع رسانی</small>
+                                                   @*      <div class="form-check form-check-inline mt-3">
+                                                            <input class="form-check-input"
+                                                                   type="checkbox"
+                                                                   id="inlineCheckbox1"
+                                                                   value="None" />
+                                                            <label class="form-check-label" for="inlineCheckbox1">سایت</label>
+                                                        </div> *@
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input"
+                                                                   type="checkbox"
+                                                                   id="inlineCheckbox2"
+                                                                   value="Email" />
+                                                            <label class="form-check-label" for="inlineCheckbox2">ایمیل</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input"
+                                                                   type="checkbox"
+                                                                   id="inlineCheckbox3"
+                                                                   value="Sms"/>
+                                                            <label class="form-check-label" for="inlineCheckbox3">پیامک</label>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                </div>
                                                 <div class="mb-3">
                                                     <label class="form-label" for="eventURL">آدرس URL رویداد</label>
                                                     <input type="url" class="form-control" id="eventURL" name="eventURL" placeholder="https://www.google.com/">
@@ -2568,6 +2595,20 @@
                 var eventGuests = Array.from(document.getElementById("eventGuests").selectedOptions).map(option => option.value);
                 var eventLocation = document.getElementById("eventLocation").value;
                 var eventDescription = document.getElementById("eventDescription").value;
+                // var sendType1 = document.getElementById("inlineCheckbox1");
+                var sendType2 = document.getElementById("inlineCheckbox2");
+                var sendType3 = document.getElementById("inlineCheckbox3");
+                var sendType=[];
+                // if(sendType1.checked){
+                //     sendType.push(sendType1.value);
+                // }
+                if(sendType2.checked){
+                    sendType.push(sendType2.value);
+                }
+                if(sendType3.checked){
+                    sendType.push(sendType3.value);
+                }
+
                 var AccessNotification = true;
                 if(allDaySwitch == false){
                     AccessNotification = false;
@@ -2592,7 +2633,7 @@
                         ,description: eventDescription
                         ,friendUserNames: eventGuests
                         ,accessNotification: AccessNotification
-                        ,notification: "sms"
+                        ,notification: sendType
                         ,__RequestVerificationToken: token
                     }
                 }).done(function(data) {
@@ -2600,11 +2641,11 @@
                 currentEvents.push(eventData);
                 calendar.refetchEvents();
                 bsAddEventSidebar.hide(); // پنهان کردن سایدبار
-                alert('رویداد با موفقیت به‌روزرسانی شد.');
+                alert(data);
                  }).fail(function(jqXHR, textStatus, errorThrown) {
                         console.error('There was a problem with the fetch operation:', errorThrown);
                     // در صورت خطا، پیام خطا به کاربر نمایش داده شود
-                        alert('خطا در به‌روزرسانی رویداد. لطفاً دوباره تلاش کنید.');
+                        alert(data);
                         });
 
              }
@@ -2625,6 +2666,19 @@
                 var eventGuests = Array.from(document.getElementById("eventGuests").selectedOptions).map(option => option.value);
                 var eventLocation = document.getElementById("eventLocation").value;
                 var eventDescription = document.getElementById("eventDescription").value;
+                var sendType2 = document.getElementById("inlineCheckbox2");
+                var sendType3 = document.getElementById("inlineCheckbox3");
+                var sendType=[];
+                // if(sendType1.checked){
+                //     sendType.push(sendType1.value);
+                // }
+                if(sendType2.checked){
+                    sendType.push(sendType2.value);
+                }
+                if(sendType3.checked){
+                    sendType.push(sendType3.value);
+                }
+
                 var AccessNotification = true;
                 if(allDaySwitch == false){
                     AccessNotification = false;
@@ -2659,11 +2713,11 @@
                      currentEvents[currentEvents.findIndex(el => el.id === eventData.id)] = eventData; // Update event by id
                      calendar.refetchEvents();
                       // پنهان کردن سایدبار
-                alert('رویداد با موفقیت به‌روزرسانی شد.');
+                alert(data);
                  }).fail(function(jqXHR, textStatus, errorThrown) {
                         console.error('There was a problem with the fetch operation:', errorThrown);
                     // در صورت خطا، پیام خطا به کاربر نمایش داده شود
-                        alert('خطا در به‌روزرسانی رویداد. لطفاً دوباره تلاش کنید.');
+                        alert(data);
                         });
               // eventData.id = parseInt(eventData.id);
               // currentEvents[currentEvents.findIndex(el => el.id === eventData.id)] = eventData; // Update event by id
@@ -2693,16 +2747,17 @@
                     }
                 }).done(function(data) {
                 // در صورت موفقیت‌آمیز بودن درخواست، رویداد را در تقویم به‌روزرسانی کنید
-                        currentEvents = currentEvents.filter(function (event) {
-                            return event.id != eventId;
-                        });
+                        // currentEvents = currentEvents.filter(function (event) {
+                        //     return event.id != eventId;
+                        // });
+                        removeEventInCalendar(eventId);
                         calendar.refetchEvents();
                          // پنهان کردن سایدبار
-                alert('رویداد با موفقیت به‌روزرسانی شد.');
+                alert(data);
                  }).fail(function(jqXHR, textStatus, errorThrown) {
                         console.error('There was a problem with the fetch operation:', errorThrown);
                     // در صورت خطا، پیام خطا به کاربر نمایش داده شود
-                        alert('خطا در حذف رویداد. لطفاً دوباره تلاش کنید.');
+                        alert(data);
                         });
 
 

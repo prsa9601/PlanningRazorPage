@@ -10,7 +10,7 @@
         public string EventAddress { get; set; }
 
         public Tagged tag { get; set; }
-        public Notification notification { get; set; }
+        public NotificationEnum notification { get; set; }
         //public List<UserEvent> Participants { get; private set; }
 
         public bool AccessNotification { get; set; } = true;
@@ -25,7 +25,7 @@
         public string EventAddress { get; set; }
 
         public string Tag { get; set; }
-        public Notification notification { get; set; }
+        public NotificationEnum notification { get; set; }
         //public List<UserEvent> Participants { get; private set; }
 
         public bool AccessNotification { get; set; } = true;
@@ -46,10 +46,11 @@
         Holiday,
         ETC
     }
-    public enum Notification
+    [Flags]
+    public enum NotificationEnum
     {
-        none,
-        Email,
-        Sms
+        none = 0,
+        Email = 1,
+        Sms = 2
     }
 }

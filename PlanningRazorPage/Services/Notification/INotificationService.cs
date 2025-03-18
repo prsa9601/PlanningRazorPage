@@ -42,7 +42,7 @@ namespace PlanningRazorPage.Services.Notification
         public async Task<ApiResult?> Remove(RemoveNotificationCommand command)
         {
             var result = await _client.DeleteAsync($"{ModuleName}/" +
-                $"RemoveNotification?EventId={command.EventId}");
+                $"RemoveNotification/{command.EventId}");
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 

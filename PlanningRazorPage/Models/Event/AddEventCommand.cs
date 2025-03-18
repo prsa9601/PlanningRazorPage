@@ -13,7 +13,7 @@
 
         public Tagged tag { get; set; }
         public List<string> userNames { get; set; }
-        public Notification notification { get; set; }
+        public NotificationEnum notification { get; set; }
     }
     public class EditEventCommand 
     {
@@ -28,7 +28,7 @@
 
         public List<string> userNames { get; set; }
         public Tagged tag { get; set; }
-        public Notification notification { get; set; }
+        public NotificationEnum notification { get; set; }
     }
     public class DeleteEventCommand 
     {

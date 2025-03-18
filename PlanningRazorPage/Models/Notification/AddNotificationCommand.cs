@@ -27,6 +27,7 @@ namespace PlanningRazorPage.Models.Notification
         public DateTime EventStartTime { get; set; }
         public List<string> UserIds { get; set; }
     }
+    [Flags]
     public enum NotificationType
     {
         None,
