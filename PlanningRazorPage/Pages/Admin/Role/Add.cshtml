@@ -1,0 +1,209 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using PlanningRazorPage.TagHelpers
+@using PlanningRazorPage.Infrastructure
+@model PlanningRazorPage.Pages.Admin.Role.AddModel
+@{
+    Layout = "Shared/_Layout";
+    ViewData["Title"] = "افزودن نقش ";
+    ViewData["selected"] = "roles";
+}
+@section Header
+{
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .custom-card {
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .form-control-custom {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            height: calc(3rem + 2px);
+        }
+
+            .form-control-custom:focus {
+                border-color: #3498db;
+                box-shadow: 0 0 0 3px rgba(52,152,219,0.15);
+                outline: none;
+                transform: none; /* حذف scale */
+            }
+
+        .card-header {
+            background: linear-gradient(45deg, #3498db, #2c3e50);
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        .input-group-custom {
+            margin-bottom: 2rem;
+        }
+
+        /* .form-control-custom {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            height: calc(3rem + 2px);
+        }
+
+            .form-control-custom:focus {
+                border-color: #3498db;
+                box-shadow: 0 0 0 4px rgba(52,152,219,0.2);
+                transform: scale(1.02);
+            } */
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.05rem;
+        }
+
+        .permission-group {
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 2rem;
+            background: #ffffff;
+            margin-top: 1.5rem;
+        }
+
+            .permission-group h6 {
+                color: #2c3e50;
+                border-bottom: 2px solid #3498db;
+                padding-bottom: 1rem;
+                margin-bottom: 2rem;
+                font-size: 1.2rem;
+                font-weight: 700;
+            }
+
+        .form-check-input:checked {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+
+        .form-check-label {
+            color: #4a4a4a;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .form-check:hover .form-check-label {
+            color: #3498db;
+            transform: translateX(5px);
+        }
+
+        .btn-cancel {
+            background-color: #e74c3c;
+            color: white;
+            padding: 0.7rem 2rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-submit {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 0.7rem 2.5rem;
+            border-radius: 10px;
+            border: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            margin-left: 2rem; /* اضافه کردن فاصله از چپ */
+        }
+
+        .card-footer {
+            padding-right: 1.5rem !important; /* فاصله از حاشیه سمت راست */
+        }
+            .btn-cancel:hover {
+                background-color: #c0392b;
+                transform: translateY(-2px);
+            }
+
+        .btn-submit {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 0.7rem 2.5rem;
+            border-radius: 10px;
+            border: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+            .btn-submit:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 20px rgba(46,204,113,0.4);
+            }
+    </style>
+}
+
+<div class="container py-5">
+    <div class="custom-card">
+        <div class="card-header text-white py-4">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-plus-circle me-2"></i>
+                افزودن نقش جدید
+            </h5>
+        </div>
+
+        <form method="post">
+            <div class="card-body">
+                <div class="input-group-custom">
+                    <br/>
+                    <label class="input-label">
+                        <i class="fas fa-heading me-2"></i>
+                        عنوان نقش
+                    </label>
+                    @Html.TextBoxFor(f => f.Title, new
+                        {
+                            @class = "form-control form-control-custom",
+                            placeholder = "مثال: مدیر سیستم، کاربر ارشد و..."
+                        })
+                </div>
+
+                <div class="permission-group">
+                    <h6>
+                        <i class="fas fa-shield-alt me-2"></i>
+                        دسترسی‌های نقش
+                    </h6>
+                    <div class="row g-4">
+                        @foreach (var item in Enum.GetNames(typeof(Permission)))
+                        {
+                            var id = Guid.NewGuid();
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-check">
+                                    <input name="permission[]"
+                                           class="form-check-input"
+                                           id="@id"
+                                           type="checkbox"
+                                           value="@item">
+                                    <label class="form-check-label" for="@id">
+                                        @item.Replace("_", " ")
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer d-flex justify-content-end gap-4 py-4">
+                <a href="/Admin/Role" class="btn btn-cancel">
+                    <i class="fas fa-times me-2"></i>
+                    انصراف
+                </a>
+                <button type="submit" class="btn btn-submit" style="margin-left: 1.5rem;">
+                    <i class="fas fa-check-circle me-2"></i>
+                    افزودن نقش
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

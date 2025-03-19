@@ -2,6 +2,7 @@
 using PlanningRazorPage.Models.Event;
 using PlanningRazorPage.Models.Friend;
 using PlanningRazorPage.Models.User;
+using System.Runtime.InteropServices;
 
 namespace PlanningRazorPage.Services.User
 {
@@ -55,7 +56,11 @@ namespace PlanningRazorPage.Services.User
             var result = await _client.GetFromJsonAsync<ApiResult<UserDto?>>($"{ModuleName}");
             return result?.Data;
         }
-
+        public async Task<ApiResult> SetRole(SetUserRoleCommand command)
+        {
+            var result = await _client.PatchAsJsonAsync($"{ModuleName}/setRole", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
         public async Task<UserDto?> GetByPhoneNumber(string phoneNumber)
         {
             var result = await _client.GetFromJsonAsync<ApiResult<UserDto?>>($"{ModuleName}/GetByPhoneNumber/{phoneNumber}");
@@ -98,6 +103,12 @@ namespace PlanningRazorPage.Services.User
                 url += $"&ActivePackage={filterParams.ActivePackage}";
 
             var result = await _client.GetFromJsonAsync<ApiResult<UserFilterResultForAdmin>>(url);
+            return result?.Data;
+        }
+
+        public async Task<UserDto?> GetById(string Id)
+        {
+            var result = await _client.GetFromJsonAsync<ApiResult<UserDto?>>($"{ModuleName}/GetById/{Id}");
             return result?.Data;
         }
     }

@@ -10,4 +10,9 @@
         public string FriendId { get; set; }
         public string UserId { get; set; }
     }
+    public class SetUserRoleCommand 
+    {
+        public string userId { get; set; }
+        public List<string> rolesId { get; set; }
+    }
 }

@@ -1,0 +1,170 @@
+﻿@page
+@using PlanningRazorPage.TagHelpers
+@model PlanningRazorPage.Pages.Admin.Role.RolesModel
+@{
+    Layout = "Shared/_Layout";
+    ViewData["Title"] = "مدیریت نقش ها";
+    ViewData["selected"] = "roles";
+}
+@section Header {
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #7ed321;
+            --danger-color: #ff4757;
+        }
+      /*   .element-class {
+    max-width: 100%;
+    overflow-x: hidden;
+} */
+        .custom-card {
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+        }
+
+        .table-header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+        }
+
+        .btn-edit {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white !important;
+            padding: 0.4rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            min-width: 90px;
+        }
+
+            .btn-edit:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(76,175,80,0.3);
+            }
+
+        .btn-delete {
+            background: linear-gradient(45deg, #ff6b6b, #ff4757);
+            color: white !important;
+            padding: 0.4rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            min-width: 90px;
+        }
+
+            .btn-delete:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+            }
+
+        .table-hover-effect tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .pagination-custom .page-item.active .page-link {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+    </style>
+}
+
+<div class="container py-4">
+    <div class="custom-card">
+        <div class="card-header table-header py-3">
+            <h3 class="mb-0 text-center">
+                <i class="fas fa-user-shield me-2"></i>
+                مدیریت نقش‌ها
+            </h3>
+        </div>
+
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a asp-page="Add" class="btn btn-success">
+                    <i class="fas fa-plus-circle me-2"></i>
+                    افزودن نقش جدید
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover table-hover-effect">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="d-none">#</th>
+                            <th scope="col">عنوان نقش</th>
+                            <th scope="col" class="text-center">عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.FilterResult.Data)
+                        {
+                            <tr>
+                                <td class="d-none">@item.Id</td>
+                                <td>@item.Name</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a asp-page="Edit" asp-route-id="@item.Id"
+                                           class="btn btn-edit"
+                                           data-bs-toggle="tooltip"
+                                           title="ویرایش">
+                                            <i class="fas fa-pencil-alt me-2"></i>
+                                            ویرایش
+                                        </a>
+
+                                        <delete-item Url="@Url.Page("Delete","DeleteRole",new{roleId=item.Id})"
+                                                     description="آیا از حذف این نقش اطمینان دارید؟"
+                                                     class="btn btn-delete"
+                                                     data-bs-toggle="tooltip"
+                                                     title="حذف">
+                                            <i class="fas fa-trash-alt me-2"></i>
+                                            حذف
+                                        </delete-item>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <nav class="d-flex justify-content-center mt-4">
+                <ul class="pagination pagination-custom">
+                    @if (Model.FilterResult.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="?pageId=@(Model.FilterResult.CurrentPage - 1)&take=8">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @for (var i = Model.FilterResult.StartPage; i <= Model.FilterResult.EndPage; i++)
+                    {
+                        <li class="page-item @(i == Model.FilterResult.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="?pageId=@i&take=8">@i</a>
+                        </li>
+                    }
+
+                    @if (Model.FilterResult.CurrentPage < Model.FilterResult.EndPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="?pageId=@(Model.FilterResult.CurrentPage + 1)&take=8">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

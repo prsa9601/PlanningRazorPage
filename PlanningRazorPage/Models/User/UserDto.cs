@@ -15,6 +15,7 @@ namespace PlanningRazorPage.Models.User
         public UserAvatarDto? avatar { get; set; }
         public string Email { get; set; }
 
+        public List<UserRoleDto> Roles { get; set; } = new List<UserRoleDto>();
         public List<FriendsDto> friends { get; set; }
     }
     public class UserDtoForFriendProfile : BaseDto
@@ -51,6 +52,11 @@ namespace PlanningRazorPage.Models.User
     }
     public class UserFilterResult : BaseFilter<UserDtoForFriendProfile, UserFilterParam>
     {
+    }
+    public class UserRoleDto
+    {
+        public long RoleId { get; set; }
+        public string RoleTitle { get; set; }
     }
 
     #region FilterForAdmin

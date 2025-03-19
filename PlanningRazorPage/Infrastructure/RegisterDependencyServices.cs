@@ -9,6 +9,7 @@ using PlanningRazorPage.Services.Friend;
 using PlanningRazorPage.Services.Notification;
 using PlanningRazorPage.Services.Package;
 using PlanningRazorPage.Services.Request;
+using PlanningRazorPage.Services.Role;
 using PlanningRazorPage.Services.User;
 
 namespace PlanningRazorPage.Infrastructure;
@@ -42,6 +43,11 @@ public static class RegisterDependencyServices
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
         services.AddHttpClient<ITelegramService, TelegramService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(baseAddress);
+        }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+        
+        services.AddHttpClient<IRoleService, RoleService>(httpClient =>
         {
             httpClient.BaseAddress = new Uri(baseAddress);
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
