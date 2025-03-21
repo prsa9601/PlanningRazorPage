@@ -15,4 +15,16 @@
         public string userId { get; set; }
         public List<string> rolesId { get; set; }
     }
+    public class ChangePhoneNumberConfirmedStatusCommand
+    {
+        public required string UserId { get; set; }
+    }
+    public class ChangeEmailConfirmedUserStatusCommand 
+    {
+        public required String UserId { get; set; }
+    }
+    public class ChangeActivityUserStatusCommand 
+    {
+        public required string UserId { get; set; }
+    }
 }

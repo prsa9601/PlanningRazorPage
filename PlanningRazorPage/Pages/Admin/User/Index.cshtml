@@ -3,162 +3,536 @@
 @model PlanningRazorPage.Pages.Admin.User.IndexModel
 @{
     Layout = "Shared/_Layout";
+    ViewData["Title"] = "🌈 مدیریت کاربران";
 }
 
-<div class="card container">
-    <h5 class="card-header">جدول با سرتیتر تیره</h5>
-    <div class="table-responsive text-nowrap">
-        <table class="table">
-            <thead class="table-dark">
+@section Header {
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            --secondary-gradient: linear-gradient(135deg, #4ECDC4 0%, #45B7AF 100%);
+            --glass-effect: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            --neon-shadow: 0 0 20px rgba(255,107,107,0.3);
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+        }
+
+        .user-management-card {
+            border-radius: 2rem;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin: 2rem;
+            overflow: hidden;
+            border: 2px solid #FF6B6B;
+        }
+
+        .table-header-custom {
+            background: var(--primary-gradient);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .table-header-custom::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+                animation: shine 3s infinite;
+            }
+
+        .table-responsive-xxl {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #FF6B6B #f1f1f1;
+            padding-bottom: 8px;
+        }
+
+            .table-responsive-xxl::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .table-responsive-xxl::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
+
+            .table-responsive-xxl::-webkit-scrollbar-thumb {
+                background: #FF6B6B;
+                border-radius: 10px;
+            }
+
+                .table-responsive-xxl::-webkit-scrollbar-thumb:hover {
+                    background: #e55a5a;
+                }
+
+        .user-table {
+            min-width: 1200px;
+            --hover-scale: 1.02;
+            --hover-bg: rgba(255,235,235,0.9);
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .user-table tr {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                background: rgba(255,255,255,0.9);
+            }
+
+                .user-table tr:hover {
+                    transform: scale(var(--hover-scale));
+                    background: var(--hover-bg);
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                }
+
+            .user-table th,
+            .user-table td {
+                padding: 1rem;
+            }
+
+        .table-title {
+            font-family: 'Yekan', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .user-avatar {
+            width: 72px;
+            height: 72px;
+            border: 3px solid #fff;
+            box-shadow: var(--neon-shadow);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+            .user-avatar:hover {
+                transform: rotate(15deg) scale(1.1);
+                filter: hue-rotate(45deg);
+            }
+
+        .status-toggle {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            background: var(--glass-effect);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+            .status-toggle:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--neon-shadow);
+            }
+
+        .status-badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .status-active {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status-inactive {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .verification-icon {
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+            .verification-icon.verified {
+                color: var(--success-color);
+                text-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+            }
+
+            .verification-icon.unverified {
+                color: var(--danger-color);
+                text-shadow: 0 0 15px rgba(231, 76, 60, 0.3);
+            }
+
+        .user-email,
+        .user-phone {
+            direction: ltr;
+            font-family: monospace;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            background: rgba(255,255,255,0.9);
+            transition: all 0.3s ease;
+        }
+
+        .floating-action-btn {
+            background: var(--primary-gradient);
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            box-shadow: var(--neon-shadow);
+            transition: all 0.3s ease;
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+        }
+
+            .floating-action-btn:hover {
+                transform: rotate(360deg) scale(1.1);
+            }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-edit,
+        .btn-delete,
+        .btn-roles {
+            padding: 0.8rem 1.5rem;
+            border-radius: 1.5rem;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .btn-edit {
+            background: var(--secondary-gradient);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .btn-delete {
+            background: var(--primary-gradient);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-roles {
+            background: linear-gradient(135deg, #9b59b6 0%, #e74c3c 100%);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+        }
+
+            .btn-edit:hover,
+            .btn-delete:hover,
+            .btn-roles:hover {
+                transform: translateY(-3px) scale(1.05);
+            }
+
+        .btn-edit:hover {
+            box-shadow: 0 8px 25px rgba(78, 205, 196, 0.4);
+        }
+
+        .btn-delete:hover {
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-roles:hover {
+            box-shadow: 0 8px 25px rgba(155, 89, 182, 0.4);
+        }
+
+        .btn-edit span::after {
+            content: '✏️';
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete span::after {
+            content: '🗑️';
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-roles span::after {
+            content: '👑';
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit:hover span::after,
+        .btn-delete:hover span::after,
+        .btn-roles:hover span::after {
+            transform: rotate(15deg) scale(1.2);
+        }
+
+        @@keyframes shine {
+            100% {
+                transform: translate(100%, 100%) rotate(45deg);
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .user-management-card {
+                margin: 1rem;
+                border-radius: 1.5rem;
+            }
+
+            .table-header-custom {
+                padding: 1.5rem;
+            }
+
+            .table-title {
+                font-size: 2rem;
+            }
+
+            .user-table {
+                display: block;
+                overflow-x: auto;
+                min-width: unset;
+            }
+
+                .user-table thead {
+                    display: none;
+                }
+
+                .user-table tr {
+                    display: block;
+                    margin-bottom: 1rem;
+                    border-radius: 1rem;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                }
+
+                .user-table td {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0.75rem 1rem;
+                    border-bottom: 1px solid #eee;
+                }
+
+                    .user-table td::before {
+                        content: attr(data-label);
+                        font-weight: bold;
+                        flex: 0 0 120px;
+                        color: #FF6B6B;
+                        margin-left: 1rem;
+                    }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn-edit,
+            .btn-delete,
+            .btn-roles {
+                width: 100%;
+                justify-content: center;
+                padding: 0.7rem 1rem;
+            }
+
+            .floating-action-btn {
+                width: 50px;
+                height: 50px;
+                bottom: 1rem;
+                left: 1rem;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .user-avatar {
+                width: 50px;
+                height: 50px;
+            }
+
+            .status-toggle {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .user-table td::before {
+                flex: 0 0 100px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+}
+
+<div class="user-management-card">
+    <div class="table-header-custom">
+        <h5 class="table-title mb-0">
+            🎪 مدیریت کاربران
+        </h5>
+    </div>
+
+    <div class="table-responsive-xxl p-4">
+        <table class="table user-table align-middle">
+            <thead>
                 <tr>
-                    <th>عکس کاربر</th>
-                    <th>نام کاربری</th>
-                    <th>نام کاربر</th>
-                    <th>فامیلی کاربر</th>
-                    <th>عملیات ها</th>
+                    <th data-label="تصویر">🎭 تصویر</th>
+                    <th data-label="نام کاربری">👤 نام کاربری</th>
+                    <th data-label="ایمیل">📧 ایمیل</th>
+                    <th data-label="شماره">📱 شماره</th>
+                    <th data-label="وضعیت">✅ وضعیت</th>
+                    <th data-label="تأیید شماره">📞 شماره</th>
+                    <th data-label="تأیید ایمیل">📧 ایمیل</th>
+                    <th data-label="عملیات" class="text-center">✨ عملیات</th>
                 </tr>
             </thead>
-            <tbody class="table-border-bottom-0">
-
-                @{
-                    foreach (var item in @Model.Users.Data)
-                    {
-                        <tr>
-                            <td>
-                                <div class="table-image">
-                                    <img style="height:60px;weight:80px;" src="@Directories.GetAvatar(item.avatar.Avatar.ToString())" alt="Avatar" class="rounded-circle">
+            <tbody>
+                @foreach (var item in Model.Users.Data)
+                {
+                    <tr>
+                        <td data-label="تصویر">
+                            <div class="avatar-wrapper">
+                                <img src="@Directories.GetAvatar(item.avatar.Avatar.ToString())"
+                                     class="user-avatar"
+                                     alt="آواتار کاربر"
+                                     loading="lazy">
+                            </div>
+                        </td>
+                        <td data-label="نام کاربری" class="fw-bold">@item.UserName</td>
+                        <td data-label="ایمیل">
+                            <div class="user-email">
+                                @item.Email
+                            </div>
+                        </td>
+                        <td data-label="شماره">
+                            <div class="user-phone">
+                                @item.PhoneNumber
+                            </div>
+                        </td>
+                        <td data-label="وضعیت">
+                            <div class="status-toggle"
+                                 onclick="ToggleStatus('IsActive', '@item.Id', this)">
+                                <div class="status-badge @(item.IsActive ? "status-active" : "status-inactive")">
+                                    @(item.IsActive ? "✓" : "✕")
                                 </div>
-                            </td>
-                            <td>@item.UserName</td>
-
-                             @*if (item.Name == true)
-                             {
-                                 <td><span class="badge bg-label-primary me-1">فعال</span></td>
-                             }
-                             else
-                             {
-                                 <td><span class="badge bg-label-warning me-1">غیر فعال</span></td>
-                             }*@
-                            <td>@item.Name</td>
-                            <td>@item.Family</td>
-                            <td>
-                             
-                                @*<div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
-                                    <div class="dropdown-menu">
-                                        // @if (item.Active == true)
-                                        // {
-                                        //     <remove-active-package Url="@Url.Page("List", "RemoveActive", new{packageId = item.Id})" description=" آیا از غیر فعال کردن این پکیج اطمینان دارید ؟">
-                                        //         <i class="mdi mdi-pencil-outline me-1"></i> غیر فعال کردن
-                                        //     </remove-active-package>
-                                        // }
-                                        // else
-                                        // {
-                                        //     <set-active-package Url="@Url.Page("List", "SetActive", new { packageId = item.Id })" description="آیا از فعال کردن این پکیج اطمینان دارید ؟">
-                                        //         <i class="mdi mdi-pencil-outline me-1"></i> فعال کردن
-                                        //     </set-active-package>
-                                        // }
-                                        // <a class="dropdown-item waves-effect" asp-page="Edit" asp-route-id="@item.UserName"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
-                                        // <delete-item Url="@Url.Page("List", "DeletePackage", new { packageId = item.UserName })" description="آیا از حذف این پکیج اطمینان دارید ؟">
-                                        //     <i class="mdi mdi-trash-can-outline me-1"></i>حذف
-                                        // </delete-item>
-
-                                    </div>
-                                </div>*@
-                            </td>
-                        </tr>
-                    }
+                                <span>@(item.IsActive ? "فعال" : "غیرفعال")</span>
+                            </div>
+                        </td>
+                        <td data-label="تأیید شماره">
+                            <i class="verification-icon @(item.PhoneNumberConfirmed ? "fas fa-check-circle verified" : "fas fa-times-circle unverified")"
+                               onclick="ToggleStatus('PhoneNumberConfirmed', '@item.Id', this)"></i>
+                        </td>
+                        <td data-label="تأیید ایمیل">
+                            <i class="verification-icon @(item.EmailConfirmed ? "fas fa-check-circle verified" : "fas fa-times-circle unverified")"
+                               onclick="ToggleStatus('EmailConfirmed', '@item.Id', this)"></i>
+                        </td>
+                        <td data-label="عملیات">
+                            <div class="action-buttons">
+                                <a asp-page="/Admin/User/SetRole"
+                                   asp-route-userName="@item.UserName"
+                                   class="btn-roles"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="تنظیم نقش‌ها">
+                                    <span>نقش‌ها</span>
+                                </a>
+                                <a asp-page="Edit"
+                                   asp-route-id="@item.UserName"
+                                   class="btn-edit"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="ویرایش">
+                                    <span>ویرایش</span>
+                                </a>
+                                <button class="btn-delete"
+                                        onclick="DeleteItem('@Url.Page("", "Delete", new {id = item.Id})', '@item.UserName')"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="حذف">
+                                    <span>حذف</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
     </div>
 
+    <a asp-page="Add" class="floating-action-btn">
+        ➕
+    </a>
 </div>
-@section Scripts
-{
-    <script src="~/global.js"></script>
+
+@section Scripts {
     <script>
-                function PostSetActivePackage(url, Description) {
+        function DeleteItem(url, userName) {
             Swal.fire({
-                title: "فعال کردن پکیج",
-                text: Description,
-                icon: "warning",
-                confirmButtonText: "بله ، مطمعا هستم",
-                cancelButtonText: "خیر",
+                title: 'آیا مطمئن هستید؟',
+                html: `در حال حذف کاربر <b>${userName}</b> هستید`,
+                icon: 'warning',
                 showCancelButton: true,
+                confirmButtonColor: '#FF6B6B',
+                cancelButtonColor: '#4ECDC4',
+                confirmButtonText: 'تایید حذف',
+                cancelButtonText: 'انصراف'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
-                    $.ajax({
-                        url: url,
-                        method: "post",
-                        data: {
-                            // productId: productId
-                             __RequestVerificationToken: token
-                        },
-                        beforeSend: function () {
-
-                            $(".loading").show();
-                        },
-                        complete: function () {
-                            $(".loading").hide();
-                        },
-                    }).done(function (data) {
-                        var res = JSON.parse(data);
-                        if (res.Status === 1) {
-                            Success("", res.Message, true);
-                        } else {
-                            ErrorAlert("", res.Message, res.isReloadPage);
-                        }
-                    });
+                    // عملیات حذف
                 }
             });
         }
 
+        async function ToggleStatus(fieldType, userId, element) {
+            try {
+                const response = await fetch(`?handler=Toggle${fieldType}&userId=${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-    </script>
-    <script>
-                function PostRemoveActivePackage(url, Description) {
-            Swal.fire({
-                title: "غیر فعال کردن پکیج",
-                text: Description,
-                icon: "warning",
-                confirmButtonText: "بله ، مطمعا هستم",
-                cancelButtonText: "خیر",
-                showCancelButton: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
-                    $.ajax({
-                        url: url,
-                        method: "post",
-                        data: {
-                            // productId: productId
-                             __RequestVerificationToken: token
-                        },
-                        beforeSend: function () {
-
-                            $(".loading").show();
-                        },
-                        complete: function () {
-                            $(".loading").hide();
-                        },
-                    }).done(function (data) {
-                        var res = JSON.parse(data);
-                        if (res.Status === 1) {
-                            Success("", res.Message, true);
+                if (response.ok) {
+                    if (fieldType === 'IsActive') {
+                        const badge = element.querySelector('.status-badge');
+                        const label = element.querySelector('span');
+                        if (badge.classList.contains('status-active')) {
+                            badge.classList.replace('status-active', 'status-inactive');
+                            badge.innerHTML = '✕';
+                            label.innerHTML = 'غیرفعال';
                         } else {
-                            ErrorAlert("", res.Message, res.isReloadPage);
+                            badge.classList.replace('status-inactive', 'status-active');
+                            badge.innerHTML = '✓';
+                            label.innerHTML = 'فعال';
                         }
-                    });
+                    } else {
+                        const icon = element;
+                        if (icon.classList.contains('verified')) {
+                            icon.classList.replace('fa-check-circle', 'fa-times-circle');
+                            icon.classList.replace('verified', 'unverified');
+                        } else {
+                            icon.classList.replace('fa-times-circle', 'fa-check-circle');
+                            icon.classList.replace('unverified', 'verified');
+                        }
+                    }
+                    element.classList.add('animate__animated', 'animate__rubberBand');
+                    setTimeout(() => {
+                        element.classList.remove('animate__animated', 'animate__rubberBand');
+                    }, 500);
                 }
-            });
+            } catch (error) {
+                console.error('خطا در تغییر وضعیت:', error);
+            }
         }
-
-
     </script>
-
-    @*  <script>
+}
+@*  <script>
                 function DeleteItem(url, Description) {
             Swal.fire({
                 title: "حذف پکیج",
@@ -201,7 +575,7 @@
      *@
 
 
-    @*    $.ajax({
+@*    $.ajax({
     type: "POST",
     url: "/Admin/Package/List?handler=SetActive&id=" + packageId,
     success: function(response) {
@@ -213,7 +587,7 @@
     });
 
  *@
-    @*    $.ajax({
+@*    $.ajax({
     type: "POST",
     url: "/Admin/Package/List?handler=SetActive",
     data: { id: packageId },
@@ -226,7 +600,7 @@
     });
  *@
 
-    @*     <script>
+@*     <script>
         function SetActivePackage(Id){
              $.ajax({
                 url: '@Url.Page("/Admin/Package/List", "OnPostSetActivePackage")',

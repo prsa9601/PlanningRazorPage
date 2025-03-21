@@ -12,7 +12,11 @@ namespace PlanningRazorPage.Services.User
         Task<ApiResult?> RemoveFriend(string FriendNumber);
         Task<ApiResult?> Edit(EditUserCommand command);
         Task<ApiResult?> SetEvent(SetUserEventCommand command);
-        Task<ApiResult> SetRole(SetUserRoleCommand command);
+        Task<ApiResult> SetRole(SetUserRoleCommand command); 
+        Task<ApiResult> ChangeActivityStatusUserForAdmin(ChangeActivityUserStatusCommand command);
+        Task<ApiResult> ChangeEmailConfirmedUserStatusForAdmin(ChangeEmailConfirmedUserStatusCommand command);
+        Task<ApiResult> ChangePhoneNumberConfirmedUserStatusForAdmin(ChangePhoneNumberConfirmedStatusCommand command);
+
 
         Task<UserDto?> GetById(string Id);
         Task<UserDto?> GetByPhoneNumber(string phoneNumber);

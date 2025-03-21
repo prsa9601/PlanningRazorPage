@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PlanningRazorPage.Infrastructure.RazorUtils;
@@ -40,3 +41,35 @@ namespace PlanningRazorPage.Pages.Admin.User
         }
     }
 }
+//public async Task<IActionResult> OnPostToggleIsActive(string userId)
+//{
+//    var user = await _userManager.FindByIdAsync(userId);
+//    if (user != null)
+//    {
+//        user.IsActive = !user.IsActive;
+//        await _userManager.UpdateAsync(user);
+//    }
+//    return new JsonResult(new { success = true });
+//}
+
+//public async Task<IActionResult> OnPostTogglePhoneNumberConfirmed(string userId)
+//{
+//    var user = await _userManager.FindByIdAsync(userId);
+//    if (user != null)
+//    {
+//        user.PhoneNumberConfirmed = !user.PhoneNumberConfirmed;
+//        await _userManager.UpdateAsync(user);
+//    }
+//    return new JsonResult(new { success = true });
+//}
+
+//public async Task<IActionResult> OnPostToggleEmailConfirmed(string userId)
+//{
+//    var user = await _userManager.FindByIdAsync(userId);
+//    if (user != null)
+//    {
+//        user.EmailConfirmed = !user.EmailConfirmed;
+//        await _userManager.UpdateAsync(user);
+//    }
+//    return new JsonResult(new { success = true });
+//}

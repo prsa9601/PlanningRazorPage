@@ -5,82 +5,137 @@
 @inject IRoleService _service;
 @inject IUserService _userService;
 @{
-    Layout = "Shared/AdminLayout/_AdminLayout";
-    ViewData["Title"] = "تعیین نقش";
+    Layout = "Shared/_Layout";
+    ViewData["Title"] = "🎭 تعیین نقش";
 }
 @{
     var roles = await _service.GetRoles();
     //var users = await _userService.GetCurrentUser();
+
 }
 
+@section Header {
+    <style>
+        .role-card {
+            border-radius: 1.5rem;
+            background: rgba(255,255,255,0.98);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 2px solid #FF6B6B;
+        }
 
-        <div class="page-body">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-sm-8 m-auto">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="title-header option-title">
-                                            <h5>افزودن نقش جدید</h5>
-                                        </div>
-                                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                                         
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button">دسترسی ها</button>
-                                            </li>
-                                        </ul>
+        .role-header {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            padding: 1.5rem;
+            border-radius: 1.5rem 1.5rem 0 0;
+            position: relative;
+            overflow: hidden;
+        }
 
-                                        <div class="tab-content" id="pills-tabContent">
-                                           
+        .role-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(255,255,255,0.3), 
+                transparent);
+            animation: shine 3s infinite;
+        }
 
-                                            <div class="tab-pane fade active show" id="pills-profile" role="tabpanel">
+        .role-title {
+            font-family: 'Yekan', sans-serif;
+            font-size: 2rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
 
-                                                <form class="card" method="post">
-                                                    <div class="card-body">
-                                                        <div class="row">
+        .role-checkbox {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1.5rem;
+        }
 
-                                                            <div class="col-md-6">
+        .role-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 1rem;
+            background: rgba(255,235,235,0.9);
+            transition: all 0.3s ease;
+        }
 
-                                                                @{
+        .role-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 4px 15px rgba(255,107,107,0.2);
+        }
 
+        .role-item label {
+            font-size: 1.1rem;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
 
-                                                                    @foreach (var item in roles)
-                                                                    {
-                                                                        var id = Guid.NewGuid();
+        .form-check-input {
+            width: 1.5em;
+            height: 1.5em;
+            border: 2px solid #FF6B6B;
+        }
 
-                                                                        <div class="form-check">
-                                                                            <input checked="@(@Model.role.Any(f=>f.RoleTitle==item.Name))" name="role" class="form-check-input" id="@id" type="checkbox" value="@item.Id">
-                                                                            <label class="form-check-label" for="@id">
-                                                                                @item.Name.Replace("_", " ")
-                                                                            </label>
-                                                                        </div>
-                                                                    }
-                                                                }
+        .form-check-input:checked {
+            background-color: #FF6B6B;
+            border-color: #FF6B6B;
+        }
 
-                                                            </div>
-                                                        </div>
-                                                    </div>
+        @@keyframes shine {
+            100% { transform: translate(100%, 100%) rotate(45deg); }
+        }
+    </style>
+}
 
-
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">بستن</button>
-                                                        <button type="submit" data-bs-dismiss="modal" class="btn theme-bg-color btn-md fw-bold text-light">ذخیره تغییرات</button>
-                                                    </div>
-
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="container">
+    <div class="role-card">
+        <div class="role-header">
+            <h3 class="role-title text-center">انتخاب نقش کاربری</h3>
         </div>
 
+        <form method="post">
+            <div class="role-checkbox">
+                @foreach (var item in roles)
+                {
+                    var id = Guid.NewGuid();
+                    <div class="role-item">
+                        <input checked="@Model.role.Any(f=>f.RoleTitle==item.Name)" 
+                               name="role" 
+                               class="form-check-input" 
+                               id="@id" 
+                               type="checkbox" 
+                               value="@item.Id">
+                        <label class="form-check-label" for="@id">
+                            @item.Name.Replace("_", " ")
+                        </label>
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer p-3 border-top-0">
+                <button type="button" 
+                        class="btn btn-animation btn-lg fw-bold"
+                        style="background: linear-gradient(135deg, #4ECDC4 0%, #45B7AF 100%); color: white;">
+                    بستن
+                </button>
+                <button type="submit" 
+                        class="btn btn-lg fw-bold text-light"
+                        style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);">
+                    ذخیره تغییرات
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 @* <div class="container-fluid">
     <div class="row">
         <div class="col-12">

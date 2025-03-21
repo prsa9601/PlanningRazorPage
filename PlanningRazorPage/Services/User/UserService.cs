@@ -28,6 +28,38 @@ namespace PlanningRazorPage.Services.User
             var result = await _client.PostAsJsonAsync($"{ModuleName}/AddFriend", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
+        
+        public async Task<ApiResult?> ChangeActivityStatusUserForAdmin(ChangeActivityUserStatusCommand command)
+        {
+            var result = await _client.PostAsJsonAsync($"{ModuleName}/ChangeActivityStatusForAdmin", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
+        //public async Task<ApiResult?> ChangeActivityUserStatusForAdmin()
+        //{
+        //    var result = await _client.PatchAsJsonAsync($"{ModuleName}/ChangeActivityStatus", null);
+        //    return await result.Content.ReadFromJsonAsync<ApiResult>();
+        //}
+        
+        public async Task<ApiResult?> ChangeEmailConfirmedUserStatusForAdmin(ChangeEmailConfirmedUserStatusCommand command)
+        {
+            var result = await _client.PostAsJsonAsync($"{ModuleName}/ChangeActivityStatusForAdmin", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
+        //public async Task<ApiResult?> ChangeEmailConfirmedStatusForAdmin()
+        //{
+        //    var result = await _client.PatchAsJsonAsync($"{ModuleName}/ChangeActivityStatus", null);
+        //    return await result.Content.ReadFromJsonAsync<ApiResult>();
+        //}
+        public async Task<ApiResult?> ChangePhoneNumberConfirmedUserStatusForAdmin(ChangePhoneNumberConfirmedStatusCommand command)
+        {
+            var result = await _client.PostAsJsonAsync($"{ModuleName}/ChangeActivityStatusForAdmin", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
+        //public async Task<ApiResult?> ChangePhoneNumberConfirmedStatusForAdmin()
+        //{
+        //    var result = await _client.PatchAsJsonAsync($"{ModuleName}/ChangeActivityStatus", null);
+        //    return await result.Content.ReadFromJsonAsync<ApiResult>();
+        //}
 
         public async Task<ApiResult?> Delete(string Id)
         {
