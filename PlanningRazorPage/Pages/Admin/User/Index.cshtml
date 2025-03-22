@@ -7,6 +7,7 @@
 }
 
 @section Header {
+    
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
@@ -423,18 +424,43 @@
                                 <span>@(item.IsActive ? "فعال" : "غیرفعال")</span>
                             </div>
                         </td>
-                        <td data-label="تأیید شماره">
-                            <i class="verification-icon @(item.PhoneNumberConfirmed ? "fas fa-check-circle verified" : "fas fa-times-circle unverified")"
-                               onclick="ToggleStatus('PhoneNumberConfirmed', '@item.Id', this)"></i>
+                      @*   <td data-label="تأیید شماره">
+                                <div class="status-badge @(item.IsActive ? "status-active" : "status-inactive")">
+                                    @(item.IsActive ? "✓" : "✕")
+                                </div>
+                            <span>@(item.IsActive ? "تاییدشده" : "تاییدنشده")</span>
                         </td>
                         <td data-label="تأیید ایمیل">
-                            <i class="verification-icon @(item.EmailConfirmed ? "fas fa-check-circle verified" : "fas fa-times-circle unverified")"
-                               onclick="ToggleStatus('EmailConfirmed', '@item.Id', this)"></i>
+                               <div class="status-badge @(item.IsActive ? "status-active" : "status-inactive")">
+                                    @(item.IsActive ? "✓" : "✕")
+                                </div>
+                            <span>@(item.IsActive ? "تاییدشده" : "تاییدنشده")</span>
+                        </td> *@
+                        <!-- قسمت تأیید شماره تماس -->
+                        <td data-label="تأیید شماره">
+                            <div class="status-toggle"
+                                 onclick="ToggleStatus('PhoneNumberConfirmed', '@item.Id', this)">
+                                <div class="status-badge @(item.PhoneNumberConfirmed ? "status-active" : "status-inactive")">
+                                    @(item.PhoneNumberConfirmed ? "✓" : "✕")
+                                </div>
+                                <span>@(item.PhoneNumberConfirmed ? "تایید شده" : "تایید نشده")</span>
+                            </div>
+                        </td>
+
+                        <!-- قسمت تأیید ایمیل -->
+                        <td data-label="تأیید ایمیل">
+                            <div class="status-toggle"
+                                 onclick="ToggleStatus('EmailConfirmed', '@item.Id', this)">
+                                <div class="status-badge @(item.EmailConfirmed ? "status-active" : "status-inactive")">
+                                    @(item.EmailConfirmed ? "✓" : "✕")
+                                </div>
+                                <span>@(item.EmailConfirmed ? "تایید شده" : "تایید نشده")</span>
+                            </div>
                         </td>
                         <td data-label="عملیات">
                             <div class="action-buttons">
-                                <a asp-page="/Admin/User/SetRole"
-                                   asp-route-userName="@item.UserName"
+                                <a asp-page="/Admin/User/SetRoles"
+                                   asp-route-id="@item.Id"
                                    class="btn-roles"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="top"
@@ -471,6 +497,8 @@
 
 @section Scripts {
     <script>
+         // var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+
         function DeleteItem(url, userName) {
             Swal.fire({
                 title: 'آیا مطمئن هستید؟',
@@ -487,8 +515,7 @@
                 }
             });
         }
-
-        async function ToggleStatus(fieldType, userId, element) {
+                async function ToggleStatus(fieldType, userId, element) {
             try {
                 const response = await fetch(`?handler=Toggle${fieldType}&userId=${userId}`, {
                     method: 'POST',
@@ -499,37 +526,85 @@
                 });
 
                 if (response.ok) {
-                    if (fieldType === 'IsActive') {
-                        const badge = element.querySelector('.status-badge');
-                        const label = element.querySelector('span');
-                        if (badge.classList.contains('status-active')) {
-                            badge.classList.replace('status-active', 'status-inactive');
-                            badge.innerHTML = '✕';
-                            label.innerHTML = 'غیرفعال';
-                        } else {
-                            badge.classList.replace('status-inactive', 'status-active');
-                            badge.innerHTML = '✓';
-                            label.innerHTML = 'فعال';
-                        }
-                    } else {
-                        const icon = element;
-                        if (icon.classList.contains('verified')) {
-                            icon.classList.replace('fa-check-circle', 'fa-times-circle');
-                            icon.classList.replace('verified', 'unverified');
-                        } else {
-                            icon.classList.replace('fa-times-circle', 'fa-check-circle');
-                            icon.classList.replace('unverified', 'verified');
-                        }
+                    const container = element.closest('.status-toggle');
+                    const badge = container.querySelector('.status-badge');
+                    const label = container.querySelector('span');
+
+                    // تشخیص وضعیت فعلی بر اساس کلاس
+                    const isActive = badge.classList.contains('status-active');
+
+                    // تغییر کلاس‌ها و محتوا
+                    badge.classList.toggle('status-active', !isActive);
+                    badge.classList.toggle('status-inactive', isActive);
+                    badge.innerHTML = isActive ? '✕' : '✓';
+
+                    // تنظیم متن بر اساس نوع فیلد
+                    switch(fieldType) {
+                        case 'IsActive':
+                            label.textContent = isActive ? 'غیرفعال' : 'فعال';
+                            break;
+                        case 'PhoneNumberConfirmed':
+                            label.textContent = isActive ? 'تایید نشده' : 'تایید شده';
+                            break;
+                        case 'EmailConfirmed':
+                            label.textContent = isActive ? 'تایید نشده' : 'تایید شده';
+                            break;
                     }
-                    element.classList.add('animate__animated', 'animate__rubberBand');
+
+                    // انیمیشن
+                    container.classList.add('animate__animated', 'animate__rubberBand');
                     setTimeout(() => {
-                        element.classList.remove('animate__animated', 'animate__rubberBand');
+                        container.classList.remove('animate__animated', 'animate__rubberBand');
                     }, 500);
                 }
             } catch (error) {
                 console.error('خطا در تغییر وضعیت:', error);
+                Swal.fire('خطا!', 'تغییر وضعیت انجام نشد', 'error');
             }
         }
+
+        // async function ToggleStatus(fieldType, userId, element) {
+        //     try {
+        //         const response = await fetch(`?handler=Toggle${fieldType}&userId=${userId}`, {
+        //             method: 'POST',
+        //             headers: {
+        //                 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+        //                 'Content-Type': 'application/json'
+        //             }
+        //         });
+
+        //         if (response.ok) {
+        //             if (fieldType === 'IsActive') {
+        //                 const badge = element.querySelector('.status-badge');
+        //                 const label = element.querySelector('span');
+        //                 if (badge.classList.contains('status-active')) {
+        //                     badge.classList.replace('status-active', 'status-inactive');
+        //                     badge.innerHTML = '✕';
+        //                     label.innerHTML = 'غیرفعال';
+        //                 } else {
+        //                     badge.classList.replace('status-inactive', 'status-active');
+        //                     badge.innerHTML = '✓';
+        //                     label.innerHTML = 'فعال';
+        //                 }
+        //             } else {
+        //                 const icon = element;
+        //                 if (icon.classList.contains('verified')) {
+        //                     icon.classList.replace('fa-check-circle', 'fa-times-circle');
+        //                     icon.classList.replace('verified', 'unverified');
+        //                 } else {
+        //                     icon.classList.replace('fa-times-circle', 'fa-check-circle');
+        //                     icon.classList.replace('unverified', 'verified');
+        //                 }
+        //             }
+        //             element.classList.add('animate__animated', 'animate__rubberBand');
+        //             setTimeout(() => {
+        //                 element.classList.remove('animate__animated', 'animate__rubberBand');
+        //             }, 500);
+        //         }
+        //     } catch (error) {
+        //         console.error('خطا در تغییر وضعیت:', error);
+        //     }
+        // }
     </script>
 }
 @*  <script>

@@ -55,8 +55,8 @@ namespace PlanningRazorPage.Models.User
     }
     public class UserRoleDto
     {
-        public long RoleId { get; set; }
-        public string RoleTitle { get; set; }
+        public string RoleId { get; set; }
+        public string RoleName { get; set; }
     }
 
     #region FilterForAdmin

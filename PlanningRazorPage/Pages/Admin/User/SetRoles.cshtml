@@ -11,7 +11,6 @@
 @{
     var roles = await _service.GetRoles();
     //var users = await _userService.GetCurrentUser();
-
 }
 
 @section Header {
@@ -108,7 +107,7 @@
                 {
                     var id = Guid.NewGuid();
                     <div class="role-item">
-                        <input checked="@Model.role.Any(f=>f.RoleTitle==item.Name)" 
+                        <input checked="@Model.role.Any(f=>f.RoleName==item.Name)" 
                                name="role" 
                                class="form-check-input" 
                                id="@id" 

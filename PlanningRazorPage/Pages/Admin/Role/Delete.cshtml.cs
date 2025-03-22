@@ -17,7 +17,7 @@ namespace PlanningRazorPage.Pages.Admin.Role
         public void OnGet()
         {
         }
-        public async Task<IActionResult> OnPostDeleteRole(long roleId)
+        public async Task<IActionResult> OnPostDeleteRole(string roleId)
         {
             return await AjaxTryCatch(() => { return _service.DeleteRole(roleId); });
             //var result =  _service.DeleteProduct(productId);

@@ -34,6 +34,13 @@ namespace PlanningRazorPage.Pages.Admin.User
             var users = await _userService.GetById(id);
             role = users.Roles;
         }
+        //public async Task OnGet(string id)
+        //{
+        //    Id = id;
+        //    // roles = await _service.GetRoles();
+        //    var users = await _userService.GetById(id);
+        //    role = users.Roles;
+        //}
         public async Task<IActionResult> OnPost(List<string> role)
         {
             var result = await _userService.SetRole(new Models.User.SetUserRoleCommand()

@@ -12,7 +12,7 @@ namespace PlanningRazorPage.Services.Role
         Task<ApiResult> CreateRole(CreateRoleCommand command);
         Task<ApiResult> EditRole(EditRoleCommand command);
 
-        Task<ApiResult> DeleteRole(long id);
+        Task<ApiResult> DeleteRole(string id);
 
 
     }

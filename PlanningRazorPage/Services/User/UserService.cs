@@ -42,7 +42,7 @@ namespace PlanningRazorPage.Services.User
         
         public async Task<ApiResult?> ChangeEmailConfirmedUserStatusForAdmin(ChangeEmailConfirmedUserStatusCommand command)
         {
-            var result = await _client.PostAsJsonAsync($"{ModuleName}/ChangeActivityStatusForAdmin", command);
+            var result = await _client.PostAsJsonAsync($"{ModuleName}/ChangeEmailConfirmedStatusForAdmin", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
         //public async Task<ApiResult?> ChangeEmailConfirmedStatusForAdmin()
@@ -52,7 +52,7 @@ namespace PlanningRazorPage.Services.User
         //}
         public async Task<ApiResult?> ChangePhoneNumberConfirmedUserStatusForAdmin(ChangePhoneNumberConfirmedStatusCommand command)
         {
-            var result = await _client.PostAsJsonAsync($"{ModuleName}/ChangeActivityStatusForAdmin", command);
+            var result = await _client.PostAsJsonAsync($"{ModuleName}/ChangePhoneNumberConfirmedStatusForAdmin", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
         //public async Task<ApiResult?> ChangePhoneNumberConfirmedStatusForAdmin()
@@ -101,7 +101,7 @@ namespace PlanningRazorPage.Services.User
 
         public async Task<UserDto?> GetByUserName(string userName)
         {
-            var result = await _client.GetFromJsonAsync<ApiResult<UserDto?>>($"{ModuleName}/GetByUserName/{userName}");
+            var result = await _client.GetFromJsonAsync<ApiResult<UserDto?>>($"{ModuleName}/GetUserByUserName/{userName}");
             return result?.Data;
         }
 

@@ -47,7 +47,7 @@ namespace PlanningRazorPage.Services.Role
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 
-        public async Task<ApiResult> DeleteRole(long id)
+        public async Task<ApiResult> DeleteRole(string id)
         {
             var result = await _client.DeleteAsync($"{ModuleName}/{id}");
             return await result.Content.ReadFromJsonAsync<ApiResult>();
