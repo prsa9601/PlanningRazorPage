@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PlanningRazorPage.Infrastructure.RazorUtils;
@@ -13,10 +13,12 @@ namespace PlanningRazorPage.Pages.Admin.User
     public class IndexModel : BaseRazorFilter<UserFilterParamForAdmin>
     {
         private readonly IUserService _service;
+        //private readonly ILogger _logger;
 
         public IndexModel(IUserService service)
         {
             _service = service;
+            //_logger = logger;
         }
         public UserFilterResultForAdmin? Users { get; set; }
         public async Task OnGet(int pageId = 1, int take = 8,
@@ -64,6 +66,35 @@ namespace PlanningRazorPage.Pages.Admin.User
                 UserId = userId
             });
             return new JsonResult(new { success = true });
+        }
+
+        public async Task<IActionResult> OnPostDelete(string id)
+        {
+            try
+            {
+                var result = await _service.Delete(id);
+              
+                if (!result.IsSuccess)
+                {
+                    return new JsonResult(new
+                    {
+                        success = false,
+                        //message = string.Join(", ", result.Errors.Select(e => e.Description))
+                        message = string.Join(", ", result.MetaData.Message),
+                    });
+                }
+
+                return new JsonResult(new { success = true, message = "حذف با موفقیت انجام شد" });
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex, "خطا در حذف کاربر");
+                return new JsonResult(new
+                {
+                    success = false,
+                    message = "خطای داخلی سرور. لطفا مجددا تلاش کنید"
+                });
+            }
         }
     }
 

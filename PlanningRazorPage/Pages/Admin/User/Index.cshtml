@@ -9,6 +9,36 @@
 @section Header {
     
     <style>
+        .pagination {
+            --pagination-color: #FF6B6B;
+            --pagination-active-bg: var(--success-color);
+            --pagination-hover-color: #e55a5a;
+        }
+
+        .page-item.active .page-link {
+            background-color: var(--pagination-active-bg);
+            border-color: var(--pagination-active-bg);
+            color: white;
+        }
+
+        .page-link {
+            color: var(--pagination-color);
+            border: 2px solid rgba(255,107,107,0.3);
+            margin: 0 4px;
+            border-radius: 1rem !important;
+            transition: all 0.3s ease;
+        }
+
+            .page-link:hover {
+                color: var(--pagination-hover-color);
+                background-color: rgba(255,107,107,0.1);
+                border-color: var(--pagination-color);
+            }
+
+        .page-item:first-child .page-link,
+        .page-item:last-child .page-link {
+            border-radius: 1rem !important;
+        }
         :root {
             --primary-gradient: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
             --secondary-gradient: linear-gradient(135deg, #4ECDC4 0%, #45B7AF 100%);
@@ -475,8 +505,16 @@
                                    title="ویرایش">
                                     <span>ویرایش</span>
                                 </a>
+                            @*     <button class="btn-delete"
+                                        onclick="DeleteItem('@Url.Page("", "index", new {id = item.Id})', '@item.UserName')"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="حذف">
+                                    <span>حذف</span>
+                                </button> *@
                                 <button class="btn-delete"
-                                        onclick="DeleteItem('@Url.Page("", "Delete", new {id = item.Id})', '@item.UserName')"
+                                        data-user-id="@item.Id"
+                                        data-user-name="@item.UserName"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="top"
                                         title="حذف">
@@ -489,7 +527,55 @@
             </tbody>
         </table>
     </div>
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-4">
+            @if (Model.Users.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-route-pageId="@(Model.Users.CurrentPage - 1)"
+                       asp-route-userName="@Model.FilterParams.UserName"
+                       asp-route-name="@Model.FilterParams.Name"
+                       asp-route-family="@Model.FilterParams.Family"
+                       asp-route-email="@Model.FilterParams.Email"
+                       asp-route-phoneNumber="@Model.FilterParams.PhoneNumber"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
 
+            @for (int i = 1; i <= Model.Users.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.Users.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-route-pageId="@i"
+                       asp-route-userName="@Model.FilterParams.UserName"
+                       asp-route-name="@Model.FilterParams.Name"
+                       asp-route-family="@Model.FilterParams.Family"
+                       asp-route-email="@Model.FilterParams.Email"
+                       asp-route-phoneNumber="@Model.FilterParams.PhoneNumber">@i</a>
+                </li>
+            }
+
+            @if (Model.Users.CurrentPage < Model.Users.PageCount)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-route-pageId="@(Model.Users.CurrentPage + 1)"
+                       asp-route-userName="@Model.FilterParams.UserName"
+                       asp-route-name="@Model.FilterParams.Name"
+                       asp-route-family="@Model.FilterParams.Family"
+                       asp-route-email="@Model.FilterParams.Email"
+                       asp-route-phoneNumber="@Model.FilterParams.PhoneNumber"
+                       aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
     <a asp-page="Add" class="floating-action-btn">
         ➕
     </a>
@@ -499,22 +585,68 @@
     <script>
          // var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
 
-        function DeleteItem(url, userName) {
-            Swal.fire({
-                title: 'آیا مطمئن هستید؟',
-                html: `در حال حذف کاربر <b>${userName}</b> هستید`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#FF6B6B',
-                cancelButtonColor: '#4ECDC4',
-                confirmButtonText: 'تایید حذف',
-                cancelButtonText: 'انصراف'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // عملیات حذف
-                }
+             document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const userId = this.dataset.userId;
+                const userName = this.dataset.userName;
+
+                Swal.fire({
+                    title: 'آیا مطمئن هستید؟',
+                    html: `در حال حذف کاربر <b>${userName}</b> هستید`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#FF6B6B',
+                    cancelButtonColor: '#4ECDC4',
+                    confirmButtonText: 'تایید حذف',
+                    cancelButtonText: 'انصراف'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        try {
+                            const response = await fetch(`?handler=Delete&id=${userId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            if (response.ok) {
+                                // حذف ردیف از جدول با انیمیشن
+                                const row = this.closest('tr');
+                                row.style.transition = 'opacity 0.5s';
+                                row.style.opacity = '0';
+
+                                setTimeout(() => {
+                                    row.remove();
+                                    Swal.fire('حذف شد!', 'کاربر با موفقیت حذف شد', 'success');
+                                }, 500);
+                            } else {
+                                Swal.fire('خطا!', 'حذف کاربر انجام نشد', 'error');
+                            }
+                        } catch (error) {
+                            console.error('خطا در حذف کاربر:', error);
+                            Swal.fire('خطا!', 'ارتباط با سرور برقرار نشد', 'error');
+                        }
+                    }
+                });
             });
-        }
+        });
+        // function DeleteItem(url, userName) {
+        //     Swal.fire({
+        //         title: 'آیا مطمئن هستید؟',
+        //         html: `در حال حذف کاربر <b>${userName}</b> هستید`,
+        //         icon: 'warning',
+        //         showCancelButton: true,
+        //         confirmButtonColor: '#FF6B6B',
+        //         cancelButtonColor: '#4ECDC4',
+        //         confirmButtonText: 'تایید حذف',
+        //         cancelButtonText: 'انصراف'
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             // عملیات حذف
+        //         }
+        //     });
+        // }
                 async function ToggleStatus(fieldType, userId, element) {
             try {
                 const response = await fetch(`?handler=Toggle${fieldType}&userId=${userId}`, {

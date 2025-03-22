@@ -184,8 +184,45 @@
                 </tbody>
             </table>
         </div>
-
+        <!-- Pagination -->
         <nav class="d-flex justify-content-center mt-4">
+            <ul class="pagination pagination-custom">
+                @if (Model.FilterResult.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           asp-route-pageId="@(Model.FilterResult.CurrentPage - 1)"
+                           asp-route-take="@Model.FilterResult.Take"
+                           asp-route-Name="@Model.FilterParams.Name">
+                            ← قبلی
+                        </a>
+                    </li>
+                }
+
+                @for (var i = Model.FilterResult.StartPage; i <= Model.FilterResult.EndPage; i++)
+                {
+                    <li class="page-item @(i == Model.FilterResult.CurrentPage ? "active" : "")">
+                        <a class="page-link"
+                           asp-route-pageId="@i"
+                           asp-route-take="@Model.FilterResult.Take"
+                           asp-route-Name="@Model.FilterParams.Name">@i</a>
+                    </li>
+                }
+
+                @if (Model.FilterResult.CurrentPage < Model.FilterResult.PageCount)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           asp-route-pageId="@(Model.FilterResult.CurrentPage + 1)"
+                           asp-route-take="@Model.FilterResult.Take"
+                           asp-route-Name="@Model.FilterParams.Name">
+                            بعدی →
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+ @*        <nav class="d-flex justify-content-center mt-4">
             <ul class="pagination pagination-custom">
                 @if (Model.FilterResult.CurrentPage > 1)
                 {
@@ -212,6 +249,6 @@
                     </li>
                 }
             </ul>
-        </nav>
+        </nav> *@
     </div>
 </div>
