@@ -1,0 +1,232 @@
+﻿@page
+@using PlanningRazorPage.Infrastructure
+@using PlanningRazorPage.Infrastructure.Utils
+@model PlanningRazorPage.Pages.Admin.User.DetailModel
+@{
+    Layout = "Shared/_Layout";
+    ViewData["Title"] = "جزئیات کاربر";
+}
+
+@section Header {
+    <style>
+        .user-detail-card {
+            border-radius: 2rem;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin: 2rem;
+            padding: 2rem;
+            border: 2px solid #FF6B6B;
+        }
+
+        .user-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-avatar-lg {
+            width: 120px;
+            height: 120px;
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px rgba(255,107,107,0.3);
+            border-radius: 50%;
+        }
+
+        .user-meta {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            margin-bottom: 2rem;
+        }
+
+        .meta-item {
+            background: rgba(255,255,255,0.9);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            color: #FF6B6B;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .roles-list {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .role-badge {
+            background: linear-gradient(135deg, #4ECDC4 0%, #45B7AF 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 1rem;
+        }
+
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .friend-card {
+            background: rgba(255,255,255,0.9);
+            padding: 1rem;
+            border-radius: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+    </style>
+}
+
+<div class="user-detail-card">
+    @if (Model.user != null)
+    {
+        <!-- هدر پروفایل -->
+        <div class="user-profile-header">
+            <img src="@Directories.GetAvatar(Model.user.avatar.Avatar.ToString())"
+                 class="user-avatar-lg"
+                 alt="آواتار کاربر">
+            <div>
+                <h1 class="display-4">@Model.user.UserName</h1>
+                <div class="d-flex gap-2">
+                    <span class="badge @(Model.user.IsActive ? "bg-success" : "bg-danger")">
+                        @(Model.user.IsActive ? "فعال" : "غیرفعال")
+                    </span>
+                    <span class="badge @(Model.user.EmailConfirmed ? "bg-success" : "bg-danger")">
+                        ایمیل @(Model.user.EmailConfirmed ? "تایید شده" : "تایید نشده")
+                    </span>
+                    <span class="badge @(Model.user.PhoneNumberConfirmed ? "bg-success" : "bg-danger")">
+                        شماره @(Model.user.PhoneNumberConfirmed ? "تایید شده" : "تایید نشده")
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- اطلاعات پایه -->
+        <div class="user-meta">
+            <div class="meta-item">
+                <h3 class="section-title">📧 اطلاعات تماس</h3>
+                <p>ایمیل: @Model.user.Email</p>
+                <p>شماره تماس: @Model.user.PhoneNumber</p>
+            </div>
+
+            <div class="meta-item">
+                <h3 class="section-title">📅 اطلاعات حساب</h3>
+                <p>تاریخ ایجاد: @Model.user.CreationDate.ToPersianDate()</p>
+                @* <p>آخرین ورود: @(Model.user.LastLogin.HasValue ? Model.user.LastLogin.Value.ToPersianDate() : "نامشخص")</p> *@
+            </div>
+        </div>
+
+        <!-- بخش نقش‌ها -->
+        <div class="meta-item">
+            <h3 class="section-title">🛡️ نقش‌های کاربر</h3>
+            <div class="roles-list">
+                @if (Model.user.Roles.Any())
+                {
+                    foreach (var role in Model.user.Roles)
+                    {
+                        <span class="role-badge">@role.RoleName</span>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted">هنوز نقشی اختصاص داده نشده</p>
+                }
+            </div>
+        </div>
+
+        <!-- بخش دوستان -->
+     @*    <div class="meta-item mt-4">
+            <h3 class="section-title">🤝 دوستان (@Model.user.friends.Count)</h3>
+            <div class="friends-grid">
+                @if (Model.user.friends.Any())
+                {
+                    foreach (var friend in Model.user.friends)
+                    {
+                        <div class="friend-card">
+                            <img src="@Directories.GetAvatar(friend.avatar.Avatar.ToString())"
+                                 class="user-avatar"
+                                 alt="آواتار دوست">
+                            <h4>@friend.UserName</h4>
+                            <p class="text-muted">@friend.Email</p>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted">لیست دوستان خالی است</p>
+                }
+            </div>
+        </div> *@
+
+        <!-- دکمه‌های عملیاتی -->
+        <div class="d-flex gap-2 mt-4">
+            <a asp-page="Edit"
+               asp-route-id="@Model.user.Id"
+               class="btn btn-primary">
+                ✏️ ویرایش پروفایل
+            </a>
+
+            <a asp-page="/Admin/User/SetRoles"
+               asp-route-id="@Model.user.Id"
+               class="btn btn-secondary">
+                👥 مدیریت نقش‌ها
+            </a>
+
+            <button class="btn btn-danger"
+                    data-user-id="@Model.user.Id"
+                    data-user-name="@Model.user.UserName"
+                    onclick="deleteUser(this)">
+                🗑️ حذف کاربر
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger">کاربر یافت نشد</div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function deleteUser(element) {
+            const userId = element.dataset.userId;
+            const userName = element.dataset.userName;
+
+            Swal.fire({
+                title: 'حذف کاربر',
+                html: `آیا از حذف کاربر <b>${userName}</b> اطمینان دارید؟`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#FF6B6B',
+                cancelButtonColor: '#4ECDC4',
+                confirmButtonText: 'بله، حذف شود',
+                cancelButtonText: 'لغو'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const response = await fetch(`?handler=Delete&id=${userId}`, {
+                            method: 'POST',
+                            headers: {
+                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                            }
+                        });
+
+                        if (response.ok) {
+                            window.location.href = '/Admin/User';
+                        } else {
+                            Swal.fire('خطا!', 'عملیات حذف انجام نشد', 'error');
+                        }
+                    } catch (error) {
+                        console.error('خطا:', error);
+                        Swal.fire('خطا!', 'ارتباط با سرور برقرار نشد', 'error');
+                    }
+                }
+            });
+        }
+    </script>
+}

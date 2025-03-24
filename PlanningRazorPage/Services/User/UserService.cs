@@ -72,6 +72,11 @@ namespace PlanningRazorPage.Services.User
             var result = await _client.PutAsJsonAsync($"{ModuleName}", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
+        public async Task<ApiResult?> EditUserForAdmin(EditUserCommandForAdmin command)
+        {
+            var result = await _client.PutAsJsonAsync($"{ModuleName}/EditUserForAdmin", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
 
         public async Task<UserFilterResult?> SearchUser(UserFilterParam filterParams)
         {

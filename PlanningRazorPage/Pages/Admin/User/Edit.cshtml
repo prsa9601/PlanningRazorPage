@@ -1,0 +1,468 @@
+﻿@page
+@using PlanningRazorPage.Infrastructure
+@using PlanningRazorPage.Infrastructure.Utils
+@using PlanningRazorPage.Models.Friend
+@model PlanningRazorPage.Pages.Admin.User.EditModel
+@{
+    Layout = "Shared/_Layout";
+    ViewData["Title"] = "✏️ ویرایش کاربر";
+}
+
+@section Header {
+    <style>
+        .user-edit-card {
+            border-radius: 2rem;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin: 2rem;
+            padding: 2rem;
+            border: 2px solid #4ECDC4;
+        }
+
+        .user-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-avatar-lg {
+            width: 120px;
+            height: 120px;
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-meta {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            margin-bottom: 2rem;
+        }
+
+        .meta-item {
+            background: rgba(255,255,255,0.9);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            color: #4ECDC4;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .avatar-item {
+            position: relative;
+            cursor: pointer;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+            .avatar-item:hover {
+                transform: scale(1.05);
+                box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+            }
+
+            .avatar-item.selected {
+                border-color: #4ECDC4;
+            }
+
+        .avatar-image {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .form-control-custom {
+            border: 2px solid #4ECDC4;
+            border-radius: 1rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .form-control-custom:focus {
+                box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+                border-color: #45B7AF;
+            }
+
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.9);
+            border-radius: 1rem;
+        }
+    </style>
+}
+
+<div class="user-edit-card">
+    <form method="post" enctype="multipart/form-data">
+        @if (Model.user != null)
+        {
+            <!-- هدر پروفایل -->
+            <div class="user-profile-header">
+                <div>
+                    <img src="@Directories.GetAvatar(Model.user.avatar?.Avatar.ToString() ?? "Default.png")"
+                         class="user-avatar-lg"
+                         alt="آواتار کاربر">
+                    <h1 class="display-4 mt-3">@Model.user.UserName</h1>
+                </div>
+                <div class="d-flex gap-2">
+                    <span class="badge @(Model.user.IsActive ? "bg-success" : "bg-danger")">
+                        @(Model.user.IsActive ? "فعال" : "غیرفعال")
+                    </span>
+                </div>
+            </div>
+
+            <!-- اطلاعات پایه -->
+            <div class="user-meta"> 
+                <div class="meta-item">
+                    <h3 class="section-title">📝 اطلاعات شخصی</h3>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Name"
+                               class="form-control form-control-custom"
+                               value="@Model.user.Name"
+                               placeholder="نام">
+                        <label asp-for="Name">نام</label>
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Family"
+                               class="form-control form-control-custom"
+                               value="@Model.user.Family"
+                               placeholder="نام خانوادگی">
+                        <label asp-for="Family">نام خانوادگی</label>
+                        <span asp-validation-for="Family" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="UserName"
+                               class="form-control form-control-custom"
+                               value="@Model.user.UserName"
+                               placeholder="نام کاربری">
+                        <label asp-for="UserName">نام کاربری</label>
+                        <span asp-validation-for="UserName" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="meta-item">
+                    <h3 class="section-title">📧 اطلاعات تماس</h3>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Email"
+                               class="form-control form-control-custom"
+                               value="@Model.user.Email"
+                               placeholder="ایمیل">
+                        <label asp-for="Email">ایمیل</label>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="PhoneNumber"
+                               class="form-control form-control-custom"
+                               value="@Model.user.PhoneNumber"
+                               placeholder="شماره تماس">
+                        <label asp-for="PhoneNumber">شماره تماس</label>
+                        <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                    </div>
+
+                    <div class="switch-container">
+                        <label class="form-check-label">وضعیت فعال</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   asp-for="IsActive"
+                                   checked="@(Model.user.IsActive ? "checked" : null)"
+                                   style="width: 3.5rem; height: 1.8rem;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- انتخاب آواتار -->
+            <div class="meta-item">
+                <h3 class="section-title">🖼️ انتخاب آواتار</h3>
+                <div class="avatar-grid">
+                    @foreach (var avatar in Enum.GetValues(typeof(Avatar)))
+                    {
+                        <label class="avatar-item @(Model.user.avatar!.Avatar.ToString() == avatar.ToString() ? "selected" : "")">
+                            <input type="radio"
+                                   name="avatar"
+                                   value="@avatar"
+                                   class="d-none" />
+                            <img src="@Directories.GetAvatar(avatar.ToString())"
+                                 class="avatar-image"
+                                 alt="@avatar.ToString()" />
+                        </label>
+                    }
+                </div>
+                <span asp-validation-for="Avatar" class="text-danger small"></span>
+            </div>
+
+            <!-- دکمه‌های اقدام -->
+            <div class="d-flex gap-2 mt-4 justify-content-end">
+                <button type="submit" class="btn btn-primary">
+                    💾 ذخیره تغییرات
+                </button>
+                <a asp-page="Detail"
+                   asp-route-id="@Model.user.Id"
+                   class="btn btn-outline-danger">
+                    ❌ انصراف
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger">کاربر یافت نشد</div>
+        }
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.avatar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.avatar-item').forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+    </script>
+
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<!-- #region name -->
+@*   @page
+@using PlanningRazorPage.Infrastructure
+@using PlanningRazorPage.Infrastructure.Utils
+@model PlanningRazorPage.Pages.Admin.User.EditModel
+@{
+    Layout = "Shared/_Layout";
+    ViewData["Title"] = "✏️ ویرایش کاربر";
+}
+
+@section Header {
+    <style>
+        .user-edit-card {
+            border-radius: 2rem;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin: 2rem;
+            padding: 2rem;
+            border: 2px solid #4ECDC4;
+        }
+
+        .user-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-avatar-lg {
+            width: 150px;
+            height: 150px;
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-upload-input {
+            display: none;
+        }
+
+        .avatar-upload-label {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: #4ECDC4;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .form-item {
+            background: rgba(255,255,255,0.9);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .form-control-custom {
+            border: 2px solid #4ECDC4;
+            border-radius: 1rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .form-control-custom:focus {
+                box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+                border-color: #45B7AF;
+            }
+
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.9);
+            border-radius: 1rem;
+        }
+    </style>
+}
+
+<div class="user-edit-card">
+    <form method="post" enctype="multipart/form-data">
+        <!-- هدر پروفایل -->
+        <div class="user-profile-header">
+            <div class="position-relative">
+                <img src="@Directories.GetAvatar(Model.user!.avatar!.Avatar.ToString())"
+                     class="user-avatar-lg"
+                     alt="آواتار کاربر"
+                     id="avatarPreview">
+                <input asp-for="Avatar"
+                       type="file"
+                       class="avatar-upload-input"
+                       accept="image/*"
+                       onchange="previewImage(event)">
+                <label for="Avatar" class="avatar-upload-label">
+                    📷
+                </label>
+            </div>
+            <div>
+                <h1 class="display-4 text-primary">ویرایش پروفایل</h1>
+                <div class="d-flex gap-2">
+                    <span class="badge @(Model.user.IsActive ? "bg-success" : "bg-danger")">
+                        @(Model.user.IsActive ? "فعال" : "غیرفعال")
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- فرم ویرایش -->
+        <div class="form-grid">
+            <!-- ستون اول -->
+            <div class="form-item">
+                <h3 class="text-primary mb-3">📝 اطلاعات شخصی</h3>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Name"
+                           class="form-control form-control-custom"
+                           placeholder="نام">
+                    <label asp-for="Name">نام</label>
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Family"
+                           class="form-control form-control-custom"
+                           placeholder="نام خانوادگی">
+                    <label asp-for="Family">نام خانوادگی</label>
+                    <span asp-validation-for="Family" class="text-danger small"></span>
+                </div>
+
+                <div class="form-floating">
+                    <input asp-for="UserName"
+                           class="form-control form-control-custom"
+                           placeholder="نام کاربری">
+                    <label asp-for="UserName">نام کاربری</label>
+                    <span asp-validation-for="UserName" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <!-- ستون دوم -->
+            <div class="form-item">
+                <h3 class="text-primary mb-3">📧 اطلاعات تماس</h3>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Email"
+                           class="form-control form-control-custom"
+                           placeholder="ایمیل">
+                    <label asp-for="Email">ایمیل</label>
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="PhoneNumber"
+                           class="form-control form-control-custom"
+                           placeholder="شماره تماس">
+                    <label asp-for="PhoneNumber">شماره تماس</label>
+                    <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                </div>
+
+                <div class="switch-container">
+                    <label class="form-check-label">وضعیت فعال</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               asp-for="IsActive"
+                               style="width: 3.5rem; height: 1.8rem;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- دکمه‌های اقدام -->
+        <div class="d-flex gap-2 mt-4 justify-content-end">
+            <button type="submit" class="btn btn-primary">
+                💾 ذخیره تغییرات
+            </button>
+            <a asp-page="Detail"
+               asp-route-id="@Model.user.Id"
+               class="btn btn-outline-danger">
+                ❌ انصراف
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('avatarPreview');
+                output.src = reader.result;
+                output.classList.add('animate__animated', 'animate__rubberBand');
+                setTimeout(() => {
+                    output.classList.remove('animate__animated', 'animate__rubberBand');
+                }, 500);
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+
+    <partial name="_ValidationScriptsPartial" />
+}
+ *@
+
+<!-- #endregion -->

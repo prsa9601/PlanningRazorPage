@@ -9,6 +9,62 @@
 @section Header {
     
     <style>
+        /* به روزرسانی کلاس اصلی دکمه‌ها */
+        .btn-edit,
+        .btn-delete,
+        .btn-roles,
+        .btn-details { /* اضافه کردن btn-details به کلاس اصلی */
+            padding: 0.8rem 1.5rem;
+            border-radius: 1.5rem;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        /* استایل خاص دکمه جزئیات */
+        .btn-details {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-details:hover {
+                transform: translateY(-3px) scale(1.05);
+                box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
+            }
+
+            .btn-details span::after {
+                content: '📄'; /* آیکون جدید */
+                margin-right: 0.5rem;
+                transition: all 0.3s ease;
+                display: inline-block;
+                filter: drop-shadow(0 2px 4px rgba(46, 204, 113, 0.3));
+            }
+
+            .btn-details:hover span::after {
+                transform: rotate(15deg) scale(1.2) translateY(-2px);
+                filter: drop-shadow(0 3px 6px rgba(46, 204, 113, 0.4));
+            }
+
+            /* افکت نور یکسان با سایر دکمه‌ها */
+            .btn-details::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+                animation: shine 3s infinite;
+                opacity: 0.3;
+            }
         .pagination {
             --pagination-color: #FF6B6B;
             --pagination-active-bg: var(--success-color);
@@ -447,7 +503,7 @@
                         </td>
                         <td data-label="وضعیت">
                             <div class="status-toggle"
-                                 onclick="ToggleStatus('IsActive', '@item.Id', this)">
+                                 onclick="ToggleStatus('IsActive', '@item.Id','@item.IsActive', this)">
                                 <div class="status-badge @(item.IsActive ? "status-active" : "status-inactive")">
                                     @(item.IsActive ? "✓" : "✕")
                                 </div>
@@ -469,7 +525,7 @@
                         <!-- قسمت تأیید شماره تماس -->
                         <td data-label="تأیید شماره">
                             <div class="status-toggle"
-                                 onclick="ToggleStatus('PhoneNumberConfirmed', '@item.Id', this)">
+                                 onclick="ToggleStatus('PhoneNumberConfirmed', '@item.Id','@item.PhoneNumberConfirmed', this)">
                                 <div class="status-badge @(item.PhoneNumberConfirmed ? "status-active" : "status-inactive")">
                                     @(item.PhoneNumberConfirmed ? "✓" : "✕")
                                 </div>
@@ -480,7 +536,7 @@
                         <!-- قسمت تأیید ایمیل -->
                         <td data-label="تأیید ایمیل">
                             <div class="status-toggle"
-                                 onclick="ToggleStatus('EmailConfirmed', '@item.Id', this)">
+                                 onclick="ToggleStatus('EmailConfirmed', '@item.Id','@item.EmailConfirmed', this)">
                                 <div class="status-badge @(item.EmailConfirmed ? "status-active" : "status-inactive")">
                                     @(item.EmailConfirmed ? "✓" : "✕")
                                 </div>
@@ -489,6 +545,15 @@
                         </td>
                         <td data-label="عملیات">
                             <div class="action-buttons">
+                                <a asp-page="Detail"
+                                   asp-route-id="@item.Id"
+                                   class="btn-details"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="جزئیات کامل">
+                                    <span>جزئیات</span>
+                                </a>
+
                                 <a asp-page="/Admin/User/SetRoles"
                                    asp-route-id="@item.Id"
                                    class="btn-roles"
@@ -647,9 +712,9 @@
         //         }
         //     });
         // }
-                async function ToggleStatus(fieldType, userId, element) {
+                async function ToggleStatus(fieldType, userId, active, element) {
             try {
-                const response = await fetch(`?handler=Toggle${fieldType}&userId=${userId}`, {
+                const response = await fetch(`?handler=Toggle${fieldType}&userId=${userId}&IsActive=${active}`, {
                     method: 'POST',
                     headers: {
                         'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,

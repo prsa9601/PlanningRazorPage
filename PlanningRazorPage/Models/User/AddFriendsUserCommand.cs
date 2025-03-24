@@ -18,13 +18,16 @@
     public class ChangePhoneNumberConfirmedStatusCommand
     {
         public required string UserId { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
     }
     public class ChangeEmailConfirmedUserStatusCommand 
     {
         public required String UserId { get; set; }
+        public bool EmailConfirmed { get; set; }
     }
     public class ChangeActivityUserStatusCommand 
     {
         public required string UserId { get; set; }
+        public bool IsActive { get; set; }
     }
 }

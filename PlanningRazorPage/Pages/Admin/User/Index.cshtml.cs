@@ -41,29 +41,34 @@ namespace PlanningRazorPage.Pages.Admin.User
         public void OnPost()
         {
         }
-        public async Task<IActionResult> OnPostToggleIsActive(string userId)
+        public async Task<IActionResult> OnPostToggleIsActive(string userId, bool IsActive)
         {
+            bool isActive = !IsActive;
             var result = await _service.ChangeActivityStatusUserForAdmin(new ChangeActivityUserStatusCommand
             {
-                UserId = userId
+                UserId = userId,
+                IsActive = isActive
             });
             return new JsonResult(new { success = true });
         }
 
-        public async Task<IActionResult> OnPostTogglePhoneNumberConfirmed(string userId)
+        public async Task<IActionResult> OnPostTogglePhoneNumberConfirmed(string userId,
+            bool IsActive)
         {
             var result = await _service.ChangePhoneNumberConfirmedUserStatusForAdmin(new ChangePhoneNumberConfirmedStatusCommand
             {
-                UserId = userId
+                UserId = userId,
+                PhoneNumberConfirmed = !IsActive
             });
             return new JsonResult(new { success = true });
         }
 
-        public async Task<IActionResult> OnPostToggleEmailConfirmed(string userId)
+        public async Task<IActionResult> OnPostToggleEmailConfirmed(string userId, bool IsActive)
         {
             var result = await _service.ChangeEmailConfirmedUserStatusForAdmin(new ChangeEmailConfirmedUserStatusCommand
             {
-                UserId = userId
+                UserId = userId,
+                EmailConfirmed = !IsActive
             });
             return new JsonResult(new { success = true });
         }
@@ -73,7 +78,7 @@ namespace PlanningRazorPage.Pages.Admin.User
             try
             {
                 var result = await _service.Delete(id);
-              
+
                 if (!result.IsSuccess)
                 {
                     return new JsonResult(new

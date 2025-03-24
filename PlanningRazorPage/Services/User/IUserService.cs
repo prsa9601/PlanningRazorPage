@@ -11,6 +11,7 @@ namespace PlanningRazorPage.Services.User
         Task<ApiResult?> Delete(string Id);
         Task<ApiResult?> RemoveFriend(string FriendNumber);
         Task<ApiResult?> Edit(EditUserCommand command);
+        Task<ApiResult?> EditUserForAdmin(EditUserCommandForAdmin command);
         Task<ApiResult?> SetEvent(SetUserEventCommand command);
         Task<ApiResult> SetRole(SetUserRoleCommand command); 
         Task<ApiResult> ChangeActivityStatusUserForAdmin(ChangeActivityUserStatusCommand command);
