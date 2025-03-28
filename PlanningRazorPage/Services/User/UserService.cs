@@ -1,8 +1,10 @@
-﻿using PlanningRazorPage.Models;
+﻿using Newtonsoft.Json;
+using PlanningRazorPage.Models;
 using PlanningRazorPage.Models.Event;
 using PlanningRazorPage.Models.Friend;
 using PlanningRazorPage.Models.User;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace PlanningRazorPage.Services.User
 {
@@ -147,6 +149,25 @@ namespace PlanningRazorPage.Services.User
         {
             var result = await _client.GetFromJsonAsync<ApiResult<UserDto?>>($"{ModuleName}/GetById/{Id}");
             return result?.Data;
+        }
+
+        public async Task<ApiResult?> SetAvatar(SetAvatarCommand command)
+        {
+        //    var formData = new MultipartFormDataContent();
+        //    formData.Add(new StringContent(command.Title.ToString()), "Avatar");
+        //    formData.Add(new StringContent(command.Link.ToString()), "Link");
+        //    formData.Add(new StringContent(command.Price.ToString()), "Price");
+        //    formData.Add(new StringContent(command.AllowedEmailCount.ToString()), "AllowedEmailCount");
+        //    formData.Add(new StringContent(command.AllowedSmsCount.ToString()), "AllowedSmsCount");
+        //    formData.Add(new StringContent(command.ExpiryTime.ToString()), "ExpiryTime");
+        //    formData.Add(new StreamContent(command.Picture.OpenReadStream()), "Picture", command.Picture.FileName);
+
+        //    var specifications = JsonConvert.SerializeObject(command.Specifications);
+        //    formData.Add(new StringContent(specifications, Encoding.UTF8, "application/json"), "Specifications");
+
+
+            var result = await _client.PatchAsJsonAsync($"{ModuleName}/SetAvatar", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
     }
 }

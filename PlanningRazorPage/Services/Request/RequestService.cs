@@ -24,6 +24,12 @@ namespace PlanningRazorPage.Services.Request
             var result = await _client.DeleteAsync($"{ModuleName}?FriendUserName={FriendUserName}");
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
+        
+        public async Task<ApiResult> DeleteRequestForSender(string FriendUserName)
+        {
+            var result = await _client.DeleteAsync($"{ModuleName}/RemoveRequestForSender?FriendUserName={FriendUserName}");
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
 
         public async Task<List<RequestDto?>> GetListRequestByUserName()
         {

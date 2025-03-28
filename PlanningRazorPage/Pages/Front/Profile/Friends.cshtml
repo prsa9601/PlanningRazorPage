@@ -4,25 +4,139 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using PlanningRazorPage.Services.Friend
 @using System.Text
+@using Microsoft.CodeAnalysis.CSharp.Syntax
 @inject IFriendService _service;
 @model FriendsModel
 @{
     Layout = "Shared/_LayoutProfile";
 }
 
-@section Header
-{
-    <link rel="icon"
-          type="image/x-icon"
-          href="~/assets/img/favicon/favicon.ico" />
+@section Header {
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            --secondary-gradient: linear-gradient(135deg, #4ECDC4 0%, #45B7AF 100%);
+            --glass-effect: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            --neon-shadow: 0 0 20px rgba(255,107,107,0.3);
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+        }
 
-    <link rel="stylesheet"
-          href="~/assets/vendor/css/pages/page-user-view.css" />
+        .friend-action-btn.cancel {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
 
+            .friend-action-btn.cancel:hover {
+                box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+            }
+        .friends-management-card {
+            border-radius: 2rem;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin: 2rem;
+            overflow: hidden;
+            border: 2px solid #FF6B6B;
+        }
+
+        .table-header-custom {
+            background: var(--primary-gradient);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .friends-table {
+            --hover-scale: 1.02;
+            --hover-bg: rgba(255,235,235,0.9);
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .friends-table tr {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                background: rgba(255,255,255,0.9);
+            }
+
+                .friends-table tr:hover {
+                    transform: scale(var(--hover-scale));
+                    background: var(--hover-bg);
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                }
+
+        .friend-avatar {
+            width: 72px;
+            height: 72px;
+            border: 3px solid #fff;
+            box-shadow: var(--neon-shadow);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+            .friend-avatar:hover {
+                transform: rotate(15deg) scale(1.1);
+                filter: hue-rotate(45deg);
+            }
+
+        .friend-action-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 1.5rem;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+            .friend-action-btn.add {
+                background: var(--secondary-gradient);
+                color: white !important;
+                box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+            }
+
+            .friend-action-btn.remove {
+                background: var(--primary-gradient);
+                color: white !important;
+                box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            }
+
+        .search-box {
+            background: var(--glass-effect);
+            backdrop-filter: blur(10px);
+            border-radius: 2rem;
+            padding: 1rem 2rem;
+            margin: 1rem;
+        }
+
+        @@media (max-width: 768px) {
+            .friends-management-card {
+                margin: 1rem;
+                border-radius: 1.5rem;
+            }
+
+            .friends-table td::before  {
+                content: attr(data-label);
+                font-weight: bold;
+                color: #FF6B6B;
+            }
+
+
+            .action-buttons .d-flex {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .friend-action-btn {
+            width: 100%;
+            justify-content: center;
+        }
+        }
+       
+       
+    </style>
+   
 }
-
 <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
-    <!-- User Tabs -->
     <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
             <a class="nav-link" asp-page="Account">
@@ -60,631 +174,243 @@
             </a>
         </li>
     </ul>
-    <!--/ User Tabs -->
-    <!-- Project table -->
-    @*     <div class="card mb-4">
-        <h5 class="card-header">لیست پروژه‌های کاربر</h5>
-        <div class="table-responsive mb-3">
-            <table class="table datatable-project">
-                <thead class="table-light">
+    <div class="friends-management-card">
+        <div class="table-header-custom">
+            <h5 class="table-title mb-0">
+                👥 مدیریت دوستان
+            </h5>
+        </div>
+
+        <form method="get" class="search-box">
+            <div class="input-group input-group-merge rounded-pill">
+                <input id="q" type="text" asp-for="FilterParams.UserName"
+                       class="form-control"
+                       placeholder="جستجوی دوستان..."
+                       style="background: rgba(255,255,255,0.9)">
+                <button type="submit" class="btn btn-primary rounded-pill">
+                    <i class="mdi mdi-magnify"></i>
+                </button>
+            </div>
+        </form>
+
+        <div class="table-responsive-xxl p-4">
+            <table class="table friends-table align-middle">
+                <thead>
                     <tr>
-                        <th></th>
-                        <th>پروژه</th>
-                        <th class="text-nowrap">مجموع وظیفه</th>
-                        <th>پیشرفت</th>
-                        <th>ساعت</th>
+                        <th data-label="آواتار">🖼️ آواتار</th>
+                        <th data-label="نام کاربری">👤 نام کاربری</th>
+                        <th data-label="وضعیت">🔍 وضعیت</th>
+                        <th data-label="عملیات">✨ عملیات</th>
                     </tr>
                 </thead>
+                <tbody>
+                    @if (Model.Friends.EntityCount == 0)
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>کاربری یافت نشد</td>
+                            <td></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model.Friends!.Data!)
+                        {
+                            <tr>
+                                <td data-label="آواتار">
+                                    <img src="@Directories.GetAvatar(item.avatar)"
+                                         class="friend-avatar"
+                                         alt="آواتار دوست">
+                                </td>
+                                <td data-label="نام کاربری" class="fw-bold">@item.FriendUserName</td>
+                                <td data-label="وضعیت">
+                                    @if (item.IsFriend)
+                                    {
+                                        <span class="badge bg-success">✅ دوست شما</span>
+                                    }
+                                    else if (item.IsSendRequest)
+                                    {
+                                        <span class="badge bg-warning">⏳ در انتظار پاسخ</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info">🔍 یافت شده</span>
+                                    }
+                                </td>
+                                <td data-label="عملیات">
+                                    <div class="action-buttons">
+                                        @if (item.IsFriend)
+                                        {
+                                            <button class="friend-action-btn remove"
+                                                    onclick="RemoveFriend('@Url.Page("SetFriend", "RemoveFriend", new { FriendUserName = @item.FriendUserName })', '@item.FriendUserName')">
+                                                <i class="mdi mdi-account-minus"></i>
+                                                حذف دوست
+                                            </button>
+                                        }
+                                        else if (item.IsSendRequest)
+                                        {
+                                            <div class="d-flex gap-2">
+                                                <button class="friend-action-btn cancel"
+                                                        onclick="CancelRequest('@Url.Page("AddRequest", "RemoveRequestForSender", new{ FriendUserName = @item.FriendUserName})', '@item.FriendUserName')">
+                                                    <i class="mdi mdi-close-circle"></i>
+                                                    لغو درخواست
+                                                </button>
+                                                <button class="friend-action-btn" disabled>
+                                                    <i class="mdi mdi-clock-outline"></i>
+                                                    در انتظار تایید
+                                                </button>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <button class="friend-action-btn add"
+                                                    onclick="AddFriend('@Url.Page("AddRequest", "AddRequest", new { FriendUserName = @item.FriendUserName })', '@item.FriendUserName')">
+                                                <i class="mdi mdi-account-plus"></i>
+                                                افزودن دوست
+                                            </button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
             </table>
         </div>
-    </div>
-    <!-- /Project table -->
-    <!-- Activity Timeline -->
-    <div class="card mb-4">
-        <h5 class="card-header">خط زمانی فعالیت کاربر</h5>
-        <div class="card-body pb-0 pt-3">
-            <ul class="timeline mb-0">
-                <li class="timeline-item timeline-item-transparent">
-                    <span class="timeline-point timeline-point-danger"></span>
-                    <div class="timeline-event">
-                        <div class="timeline-header mb-1">
-                            <h6 class="mb-0">12 صورتحساب پرداخت شد</h6>
-                            <span class="text-muted">12 دقیقه قبل</span>
-                        </div>
-                        <p class="text-muted mb-2">
-                            صورتحساب ها به شرکت پرداخت شد
-                        </p>
-                        <div class="d-flex">
-                            <a href="javascript:void(0)" class="me-3">
-                                <img src="../../assets/img/icons/misc/pdf.png"
-                                     alt="PDF image"
-                                     width="15"
-                                     class="me-2" />
-                                <span class="fw-semibold text-heading">invoices.pdf</span>
-                            </a>
-                        </div>
-                    </div>
-                </li>
-                <li class="timeline-item timeline-item-transparent">
-                    <span class="timeline-point timeline-point-primary"></span>
-                    <div class="timeline-event">
-                        <div class="timeline-header mb-1">
-                            <h6 class="mb-0">ملاقات با مشتری</h6>
-                            <span class="text-muted">45 دقیقه قبل</span>
-                        </div>
-                        <p class="text-muted mb-2">
-                            ملاقات برای پروژه با استیو در 10:15 ق.ظ
-                        </p>
-                        <div class="d-flex flex-wrap">
-                            <div class="avatar me-3">
-                                <img src="../../assets/img/avatars/3.png"
-                                     alt="Avatar"
-                                     class="rounded-circle" />
-                            </div>
-                            <div>
-                                <h6 class="mb-0">بیل گیتس (مشتری)</h6>
-                                <span class="text-muted">بنیان‌گذار مایکروسافت</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="timeline-item timeline-item-transparent">
-                    <span class="timeline-point timeline-point-warning"></span>
-                    <div class="timeline-event">
-                        <div class="timeline-header mb-1">
-                            <h6 class="mb-0">
-                                ایجاد یک پروژه جدید برای مشتری
-                            </h6>
-                            <span class="text-muted">2 روز قبل</span>
-                        </div>
-                        <p class="text-muted mb-2">5 عضو تیم در یک پروژه</p>
-                        <div class="d-flex align-items-center avatar-group">
-                            <div class="avatar pull-up"
-                                 data-bs-toggle="tooltip"
-                                 data-popup="tooltip-custom"
-                                 data-bs-placement="top"
-                                 title="نینا نیازی">
-                                <img src="../../assets/img/avatars/5.png"
-                                     alt="Avatar"
-                                     class="rounded-circle" />
-                            </div>
-                            <div class="avatar pull-up"
-                                 data-bs-toggle="tooltip"
-                                 data-popup="tooltip-custom"
-                                 data-bs-placement="top"
-                                 title="Marrie Patty">
-                                <img src="../../assets/img/avatars/12.png"
-                                     alt="Avatar"
-                                     class="rounded-circle" />
-                            </div>
-                            <div class="avatar pull-up"
-                                 data-bs-toggle="tooltip"
-                                 data-popup="tooltip-custom"
-                                 data-bs-placement="top"
-                                 title="Jimmy Jackson">
-                                <img src="../../assets/img/avatars/9.png"
-                                     alt="Avatar"
-                                     class="rounded-circle" />
-                            </div>
-                            <div class="avatar pull-up"
-                                 data-bs-toggle="tooltip"
-                                 data-popup="tooltip-custom"
-                                 data-bs-placement="top"
-                                 title="Kristine Gill">
-                                <img src="../../assets/img/avatars/6.png"
-                                     alt="Avatar"
-                                     class="rounded-circle" />
-                            </div>
-                            <div class="avatar pull-up"
-                                 data-bs-toggle="tooltip"
-                                 data-popup="tooltip-custom"
-                                 data-bs-placement="top"
-                                 title="Nelson Wilson">
-                                <img src="../../assets/img/avatars/14.png"
-                                     alt="Avatar"
-                                     class="rounded-circle" />
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="timeline-item timeline-item-transparent border-0">
-                    <span class="timeline-point timeline-point-info"></span>
-                    <div class="timeline-event">
-                        <div class="timeline-header mb-1">
-                            <h6 class="mb-0">بررسی طراحی</h6>
-                            <span class="text-muted">5 روز قبل</span>
-                        </div>
-                        <p class="text-muted mb-0">
-                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
-                            صنعت چاپ
-                        </p>
-                    </div>
-                </li>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center mt-4">
+                @if (Model.Friends.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           asp-route-pageId="@(Model.Friends.CurrentPage - 1)"
+                           asp-route-userName="@Model.FilterParams.UserName">
+                            قبلی
+                        </a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= Model.Friends.PageCount; i++)
+                {
+                    <li class="page-item @(i == Model.Friends.CurrentPage ? "active" : "")">
+                        <a class="page-link"
+                           asp-route-pageId="@i"
+                           asp-route-userName="@Model.FilterParams.UserName">@i</a>
+                    </li>
+                }
+
+                @if (Model.Friends.CurrentPage < Model.Friends.PageCount)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           asp-route-pageId="@(Model.Friends.CurrentPage + 1)"
+                           asp-route-userName="@Model.FilterParams.UserName">
+                            بعدی
+                        </a>
+                    </li>
+                }
             </ul>
-        </div>
+        </nav>
     </div>
-    <!-- /Activity Timeline --> *@
-    <!-- Invoice table -->
-    <form method="get">
-        <div class="card mb-4">
-            <div class="table-responsive mb-3">
-                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-
-                    <div class="row mx-4">
-
-                        <div class="col-sm-6 col-12 d-flex align-items-center justify-content-center justify-content-sm-start mb-3 mb-md-0">
-                            <div class="col-6 flex-grow-1 input-group input-group-merge rounded-pill" len="282">
-                                <button type="submit" class="btn btn-outline-secondary waves-effect"><i class="mdi mdi-magnify lh-1" len="0"></i></button>
-
-                                <input id="q" style="margin-right:10px;" type="text" asp-for="FilterParams.UserName" id="search" class="form-control chat-search-input" placeholder="   جست و جو..." aria-label="  Search..." aria-describedby="basic-addon-search31" len="0">
-                            </div>
-                            <div style="float: left; margin-right: 160px; margin-top :5px;" class="col-6 dataTables_length" id="DataTables_Table_0_length">
-                                <label>
-                                    <select aria-controls="DataTables_Table_0" class="form-select form-select-sm" style="float: left;"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
-                                </label>
-
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-12 d-flex align-items-center justify-content-center justify-content-sm-end">
-                            <div class="dt-buttons btn-group flex-wrap">
-                                <div class="btn-group"><button class="btn btn-secondary buttons-collection dropdown-toggle btn-label-primary float-sm-end mb-3 mb-sm-0" tabindex="0" aria-controls="DataTables_Table_0" type="button" aria-haspopup="dialog" aria-expanded="false"><span><i class="mdi mdi-export-variant me-1"></i>برون بری</span><span class="dt-down-arrow"></span></button></div>
-                            </div>
-                        </div>
-                    </div><table class="table datatable-invoice dataTable no-footer dtr-column" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" style="width: 802px;">
-                        <thead class="table-light">
-
-                            <tr>
-                                <th class="control sorting dtr-hidden" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 0px; display: none;" aria-label=": activate to sort column ascending"></th>
-                                <th class="sorting sorting_desc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 105px;" aria-label="شناسه: activate to sort column ascending" aria-sort="descending">شناسه</th>
-                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 79px;" aria-label=": activate to sort column ascending"><i class="mdi mdi-trending-up"></i></th>
-                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 102px;" aria-label="مجموع: activate to sort column ascending"></th>
-                                <th style="width:140px;" class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 102px;" aria-label="مجموع: activate to sort column ascending"></th>
-                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 143px;" aria-label="تاریخ صدرو: activate to sort column ascending"></th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 173px;" aria-label="Actions">Actions</th>
-                            </tr>
-
-                        </thead>
-                        <tbody id="searchResult">
-
-                            @{
-                                // if (Model.Friends.EntityCount > 0)
-                                // {
-                                if (Model.Friends.EntityCount == 0)
-                                {
-                                    <tr class="odd">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            دوستی یافت نشد.
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-
-                                    </tr>
-                                }
-                                else
-                                {
-                                    @foreach (var item in @Model.Friends.Data)
-                                    {
-                                        <tr class="odd">
-                                            <td><img style="width:80px; height:75px;" src="@Directories.GetAvatar(item.avatar)" /></td>
-                                            <td id="userNameReceiver">@item.FriendUserName</td>
-                                            <td>
-                                            </td>
-                                            <td>
-                                            </td>
-                                            <td>
-                                            </td>
-                                            @if (item.IsFriend)
-                                            {
-                                                // <td>
-                                                //     <button type="button" class="btn rounded-pill btn-icon btn-outline-primary waves-effect">
-                                                //         <span class="tf-icons mdi mdi-checkbox-marked-circle-outline"></span>
-                                                //     </button>
-                                                // </td>
-
-                                                <td style="width:30px; height:30px;">
-                                                    <Remove-Friend url="@Url.Page("SetFriend", "RemoveFriend", new{ FriendUserName = @item.FriendUserName})" description="آیا از این عملیات مطمئن هستید؟">
-
-                                                        <button type="button" onclick="AddFriend()" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
-
-                                                            <span class="mdi mdi-account-multiple-minus-outline"></span>
-
-                                                        </button>
-                                                    </Remove-Friend>
-
-                                                </td>
-                                            }
-                                            else
-                                            {
-
-                                                <td>
-                                                    @if (item.IsSendRequest)
-                                                    {
-                                                    // <td>
-                                                    //     <button type="button" class="btn rounded-pill btn-icon btn-outline-primary waves-effect">
-                                                        //         <span class="tf-icons mdi mdi-checkbox-marked-circle-outline"></span>
-                                                        //     </button>
-                                                        // </td>
-
-                                                        @*<button type="button" class="btn rounded-pill btn-icon btn-primary waves-effect waves-light">*@
-                                                        <Remove-Friend url="@Url.Page("AddRequest", "RemoveRequest", new{ FriendUserName = @item.FriendUserName})" description="آیا از این عملیات مطمئن هستید؟">
-                                                            <button disabled="true" type="button" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
-
-                                                                <span class="mdi mdi-account-multiple-plus-outline"></span>
-
-                                                            </button>
-                                                        </Remove-Friend>
-
-                                                    }
-
-                                                    else
-                                                    {    @*<button type="button" class="btn rounded-pill btn-icon btn-primary waves-effect waves-light">*@
-                                                        <add-Request url="@Url.Page("AddRequest", "AddRequest", new{ FriendUserName = @item.FriendUserName})" description="آیا از این عملیات مطمئن هستید؟">
-                                                            <button type="button" class="btn rounded-pill btn-icon btn-secondary waves-effect waves-light">
-
-                                                                <span class="mdi mdi-account-multiple-plus-outline"></span>
-
-                                                            </button>
-                                                        </add-Request>
-
-
-
-                                                    }
-                                                </td>
-                                            }
-                                        </tr>
-                                    }
-
-                                }
-
-
-                            }
-
-                        </tbody>
-                    </table>
-                    <div class="row mx-4">
-
-                        <div class="col-md-12 col-lg-6 text-center text-lg-start pb-md-2 pb-lg-0">
-                            <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">نمایش 1 از 10 از 50 رکورد</div>
-                        </div>
-                        <div class="col-md-12 col-lg-6 d-flex justify-content-center justify-content-lg-end">
-                            <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
-                                <ul class="pagination">
-
-                                    @{
-                                        int i = 1;
-                                        @if (i <= @Model.FilterParams.PageId && @Model.Friends.EntityCount != 0)
-                                        {
-
-                                            @if (@Model.Friends.CurrentPage == @Model.Friends.StartPage)
-                                            {
-                                                int n = @Model.Friends.CurrentPage - 1;
-
-                                                <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous">
-                                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="previous" tabindex="0" class="page-link">قبلی</a>
-                                                </li>
-                                            }
-                                            else
-                                            {
-                                                int n = @Model.Friends.CurrentPage - 1;
-
-                                                <li class="paginate_button page-item previous " id="DataTables_Table_0_previous">
-                                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="previous" tabindex="0" class="page-link">قبلی</a>
-                                                </li>
-                                            }
-
-
-                                            @if (i - 1 > @Model.Friends.StartPage || i - 2 > @Model.Friends.StartPage)
-                                            {
-                                                int n = @Model.Friends.CurrentPage - 2;
-
-                                                <li class="paginate_button page-item">
-                                                    <a onclick="ChangePage(@n);" onclick="@i-=2;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link"> @n</a>
-                                                </li>
-                                            }
-                                            @if (@Model.Friends.CurrentPage > @Model.Friends.StartPage || i - 1 > @Model.Friends.StartPage)
-                                            {
-                                                int n = @Model.Friends.CurrentPage - 1;
-
-                                                <li class="paginate_button page-item">
-                                                    <a onclick="ChangePage(@n);" onclick="@i-=1;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
-                                                </li>
-                                            }
-
-                                            <li class="paginate_button page-item active">
-                                                <a onclick="ChangePage(@i);" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@i</a>
-                                            </li>
-                                            // @if (i + 1 < @Model.Friends.EndPage)
-                                            // {
-                                            //     int n = @Model.Friends.CurrentPage + 1;
-
-                                            //     <li class="paginate_button page-item">
-                                            //         <a href="#" onclick="@i+=1;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
-                                            //     </li>
-                                            // }
-                                            @if (@Model.Friends.CurrentPage + 1 <= @Model.Friends.EndPage)
-                                            {
-                                                int n = @Model.Friends.CurrentPage + 1;
-
-                                                <li class="paginate_button page-item">
-                                                    <a onclick="ChangePage(@n);" asp-for="@Model.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
-                                                </li>
-                                            }
-                                            @if (i + 2 <= @Model.Friends.EndPage)
-                                            {
-                                                int n = @Model.Friends.CurrentPage + 2;
-
-                                                <li class="paginate_button page-item">
-                                                    <a onclick="ChangePage(@n);" onclick="@i+=2;" asp-for="@Model.Friends.FilterParams.PageId" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@n</a>
-                                                </li>
-                                            }
-                                            // @if (@Model.Friends.EndPage != @Model.Friends.StartPage)
-                                            // {
-                                            //     int n = @Model.Friends.CurrentPage + 1;
-
-                                            //     <li class="paginate_button page-item">
-                                            //         <a href="&pageId=@n" onclick="@i+=1;" asp-for="@Model.Friends.EndPage" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" class="page-link">@Model.Friends.EndPage </a>
-                                            //     </li>
-                                            // }
-
-                                            if (@Model.Friends.CurrentPage == @Model.Friends.EndPage)
-                                            {
-                                                int n = @Model.Friends.CurrentPage + 1;
-
-                                                <li class="paginate_button page-item next disabled" id="DataTables_Table_0_next">
-                                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="next" tabindex="0" class="page-link">بعدی</a>
-                                                </li>
-                                            }
-                                            else
-                                            {
-                                                int n = @Model.Friends.CurrentPage + 1;
-
-                                                <li class="paginate_button page-item next" id="DataTables_Table_0_next">
-                                                    <a onclick="ChangePage(@n);" aria-controls="DataTables_Table_0" data-dt-idx="next" tabindex="0" class="page-link">بعدی</a>
-                                                </li>
-                                            }
-
-
-                                        }
-                                    }
-
-
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </form>
-
-    <!-- /Invoice table -->
 </div>
 
-@section Scripts {
-
+ @section Scripts {
     <script>
-        function ChangePage(pageId)
-        {
-            var q = $("#q").val();
-                 const url = new URL(window.location.href);
-        const params = new URLSearchParams(url.search);
-
-        params.set('FilterParams.PageId', pageId);
-
-        const newUrl = `${url.origin}${url.pathname}?${params.toString()}`;
-        location.href = newUrl;
-           // alert(newUrl);
-            //location.href($"?userName={q}PageId={pageId}");
-        }
-
-    </script>
-
-
-    <script>
-        //  function AddFriend(url, Description) {
-        //     Swal.fire({
-        //         title: "فعال کردن پکیج",
-        //         text: Description,
-        //         icon: "warning",
-        //         confirmButtonText: "بله ، مطمعا هستم",
-        //         cancelButtonText: "خیر",
-        //         showCancelButton: true,
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
-        //             $.ajax({
-        //                 url: url,
-        //                 method: "post",
-        //                 data: {
-        //                     // productId: productId
-        //                      __RequestVerificationToken: token
-        //                 },
-        //                 beforeSend: function () {
-
-        //                     $(".loading").show();
-        //                 },
-        //                 complete: function () {
-        //                     $(".loading").hide();
-        //                 },
-        //             }).done(function (data) {
-        //                 var res = JSON.parse(data);
-        //                 if (res.Status === 1) {
-        //                     Success("", res.Message, true);
-        //                 } else {
-        //                     ErrorAlert("", res.Message, res.isReloadPage);
-        //                 }
-        //             });
-        //         }
-        //     });
-        // }
-
-         function AddRequest(url, Description) {
-         Swal.fire({
-         title: "افزودن دوست",
-         text: Description,
-         icon: "warning",
-         confirmButtonText: "بله ، مطمعا هستم",
-         cancelButtonText: "خیر",
-         showCancelButton: true,
-         }).then((result) => {
-         if (result.isConfirmed) {
-        var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
-         $.ajax({
-         url: url,
-         method: "post",
-         data: {
-         //productId: productId
-        __RequestVerificationToken: token
-         },
-         beforeSend: function () {
-
-         $(".loading").show();
-         },
-         complete: function () {
-         $(".loading").hide();
-         },
-         }).done(function (data) {
-         var res = JSON.parse(data);
-         if (res.Status === 1) {
-         Success("", res.Message, true);
-         } else {
-         ErrorAlert("", res.Message, res.isReloadPage);
-         }
-         });
-         }
-         });
-         }
-
-        function RemoveFriend(url, Description) {
-         Swal.fire({
-         title: "حذف دوست",
-         text: Description,
-         icon: "warning",
-         confirmButtonText: "بله ، مطمعا هستم",
-         cancelButtonText: "خیر",
-         showCancelButton: true,
-         }).then((result) => {
-         if (result.isConfirmed) {
-        var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
-         $.ajax({
-         url: url,
-         method: "post",
-         data: {
-         //productId: productId
-        __RequestVerificationToken: token
-         },
-         beforeSend: function () {
-
-         $(".loading").show();
-         },
-         complete: function () {
-         $(".loading").hide();
-         },
-         }).done(function (data) {
-         var res = JSON.parse(data);
-         if (res.Status === 1) {
-         Success("", res.Message, true);
-         } else {
-         ErrorAlert("", res.Message, res.isReloadPage);
-         }
-         });
-         }
-         });
-         }
-
-
-    </script>
-    @*     <script>
-        function AddFriend() {
-
-            var query = document.getElementById("username").value;
-            var search = document.getElementById("q").value;
-
-            $.ajax({
-                url: 'http://localhost:5250/Front/Profile/Friends/AddFriend',
-                type: 'Post',
-                data: { userName: query , Search = search, pageId: 1, take: 8 },
-                success: function (data) {
-                    //@Model.Friends = data;
-                  // alert(data);
-                },
-                // error: function (error) {
-                //    alert("e");
-                // }
+        // تابع مدیریت افزودن دوست
+        async function AddFriend(url, userName) {
+            const { isConfirmed } = await Swal.fire({
+                title: 'افزودن دوست',
+                html: `آیا مایل به افزودن <b>${userName}</b> به لیست دوستان هستید؟`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#4ECDC4',
+                cancelButtonColor: '#FF6B6B',
+                confirmButtonText: 'تایید',
+                cancelButtonText: 'انصراف'
             });
-        }
-    </script> *@
-    @*     <script>
-        function search() {
 
-            var query = document.getElementById("search").value;
-            $.ajax({
-                url: 'http://localhost:5250/Front/Profile/Friends/Search',
-                type: 'GET',
-                data: { userName: query, pageId: 1, take: 8 },
-                success: function (data) {
-                    //@Model.Friends = data;
-                  // alert(data);
-                },
-                // error: function (error) {
-                //    alert("e");
-                // }
-            });
-        }
-    </script> *@
-    @*      <script>
-        function search() {
-            var query = document.getElementById("search").value;
-            $.ajax({
-                url: 'http://localhost:5250/Front/Profile/Friends/Search',
-                type: 'GET',
-                data: { userName: query, pageId: 1, take: 8 },
-                success: function (data) {
-                    for(var item in data){
-                        $("#searchResult").append(' <tr class="odd"> <td></td><td></td><td>'+data[item].FriendUserName+'</td><td></td><td></td></tr>');
+            if (isConfirmed) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    });
+
+                    if (response.ok) {
+                        location.reload();
                     }
-                },
-                // error: function (error) {
-                //    alert("e");
-                // }
-            });
+                } catch (error) {
+                    console.error('خطا در افزودن دوست:', error);
+                }
+            }
         }
-        </script> *@
 
-    <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="~/assets/vendor/libs/popper/popper.js"></script>
-    <script src="~/assets/vendor/js/bootstrap.js"></script>
-    <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="~/assets/vendor/libs/node-waves/node-waves.js"></script>
+        // تابع مدیریت حذف دوست
+        async function RemoveFriend(url, userName) {
+            const { isConfirmed } = await Swal.fire({
+                title: 'حذف دوست',
+                html: `آیا از حذف <b>${userName}</b> از لیست دوستان اطمینان دارید؟`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#FF6B6B',
+                cancelButtonColor: '#4ECDC4',
+                confirmButtonText: 'حذف',
+                cancelButtonText: 'انصراف'
+            });
 
-    <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
-    <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
-    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+            if (isConfirmed) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    });
 
-    <script src="~/assets/vendor/js/menu.js"></script>
-    <script src="~/global.js"></script>
-    <!-- endbuild -->
-    <!-- Vendors JS -->
-    <script src="~/assets/vendor/libs/moment/moment.js"></script>
-    @*    <script src="~/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+                    if (response.ok) {
+                        location.reload();
+                    }
+                } catch (error) {
+                    console.error('خطا در حذف دوست:', error);
+                }
+            }
+        }
+        // تابع مدیریت لغو درخواست
+async function CancelRequest(url, userName) {
+    const { isConfirmed } = await Swal.fire({
+        title: 'لغو درخواست',
+        html: `آیا از لغو درخواست برای <b>${userName}</b> اطمینان دارید؟`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e74c3c',
+        cancelButtonColor: '#4ECDC4',
+        confirmButtonText: 'لغو درخواست',
+        cancelButtonText: 'انصراف'
+    });
 
-    <script src="~/assets/vendor/libs/cleavejs/cleave.js"></script>
-    <script src="~/assets/vendor/libs/cleavejs/cleave-phone.js"></script>
-    <script src="~/assets/vendor/libs/select2/select2.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
- *@
-    <!-- Main JS -->
-    <script src="~/assets/js/main.js"></script>
+    if (isConfirmed) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            });
 
-    <!-- Page JS -->
-    <script src="~/assets/js/modal-edit-user.js"></script>
-    <script src="~/assets/js/app-user-view.js"></script>
-    @* Friends Codes*@
-    @* <script src="~/assets/js/app-user-view-account.js"></script>  *@
+            if (response.ok) {
+                location.reload();
+            }
+        } catch (error) {
+            console.error('خطا در لغو درخواست:', error);
+        }
+    }
+        }
+    </script>
+
 }

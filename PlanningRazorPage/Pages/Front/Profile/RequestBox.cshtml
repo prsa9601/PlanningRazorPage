@@ -1,32 +1,127 @@
 ﻿@page "{handler?}"
 @using PlanningRazorPage.Models.Request
-@using PlanningRazorPage.Pages.TagHelpers
-@using System.IdentityModel.Tokens.Jwt
-@using System.Security.Claims
-@using System.Text
-@using Microsoft.AspNetCore.Mvc.TagHelpers
-@using Microsoft.IdentityModel.Tokens
 @model PlanningRazorPage.Pages.Front.Profile.RequestBoxModel
-@{
-}
-
 @{
     Layout = "Shared/_LayoutProfile";
 }
-@section Header {
-    <link rel="icon"
-          type="image/x-icon"
-          href="~/assets/img/favicon/favicon.ico" />
 
-    <link rel="stylesheet"
-          href="~/assets/vendor/css/pages/page-user-view.css" />
-    <!-- Helpers -->
+@section Header {
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6B8DD6 0%, #FFE66D 100%);
+            --secondary-gradient: linear-gradient(135deg, #FF7E5F 0%, #FEB47B 100%);
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+        }
+
+        .requests-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin: 2rem;
+        }
+
+        .requests-header {
+            background: var(--primary-gradient);
+            padding: 2rem;
+            color: white;
+            border-radius: 1.5rem 1.5rem 0 0;
+        }
+
+        .requests-table {
+            --hover-scale: 1.02;
+            --hover-bg: rgba(245, 245, 245, 0.9);
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 1rem;
+        }
+
+            .requests-table th {
+                color: #6B8DD6;
+                padding: 1.5rem;
+                font-weight: 600;
+            }
+
+            .requests-table td {
+                padding: 1.5rem;
+                background: white;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .requests-table tr:hover td {
+                transform: scale(var(--hover-scale));
+                box-shadow: 0 4px 15px rgba(107, 141, 214, 0.2);
+            }
+
+        .request-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+            .request-actions .btn {
+                padding: 0.75rem 1.25rem;
+                border-radius: 2rem;
+                border: none;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .request-actions .btn-view {
+                background: rgba(107, 141, 214, 0.1);
+                color: #6B8DD6;
+            }
+
+            .request-actions .btn-accept {
+                background: var(--primary-gradient);
+                color: white !important;
+                box-shadow: 0 4px 15px rgba(107, 141, 214, 0.3);
+            }
+
+            .request-actions .btn-reject {
+                background: var(--secondary-gradient);
+                color: white !important;
+                box-shadow: 0 4px 15px rgba(255, 126, 95, 0.3);
+            }
+
+        @@media (max-width: 768px) {
+            .requests-card {
+                margin: 1rem;
+                border-radius: 1rem;
+            }
+
+            .requests-table td {
+                display: flex;
+                flex-direction: column;
+                align-items: start !important;
+            }
+
+                .requests-table td::before {
+                    content: attr(data-label);
+                    font-weight: 600;
+                    color: #6B8DD6;
+                    margin-bottom: 0.5rem;
+                }
+
+            .request-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+                .request-actions .btn {
+                    width: 100%;
+                    justify-content: center;
+                }
+        }
+    </style>
 }
+
 <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
-    <!-- User Tabs -->
     <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
-            <a class="nav-link" asp-page="Acount">
+            <a class="nav-link" asp-page="Account">
                 <i class="mdi mdi-account-outline mdi-20px me-1"></i>حساب
             </a>
         </li>
@@ -41,7 +136,8 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-page="Notification">
+            <a class="nav-link"
+               asp-page="Notification">
                 <i class="mdi mdi-bell-outline mdi-20px me-1"></i>اعلان‌ها
             </a>
         </li>
@@ -60,374 +156,155 @@
             </a>
         </li>
     </ul>
-    <!--/ User Tabs -->
-    <!-- Current Plan -->
-    <div class="card mb-4">
-        <!-- Notifications -->
-        <h5 class="card-header border-bottom">ریکوئست های ارسالی به شما</h5>
-        <div class="card-body py-3">
-            <span class="text-heading fw-semibold">در صورت تغییر تنظیمات اعلان، کاربر به‌روزرسانی خواهد شد</span>
+    <div class="requests-card">
+        <div class="requests-header">
+            <h3 class="mb-0">📨 درخواست های دریافت شده</h3>
         </div>
-        <div class="table-responsive">
-            <table class="table border-top">
-                <thead class="table-light">
-                    <tr>
-                        @if (Model.requestBox != null)
-                        {
-                            <th class="text-nowrap">ارسال درخواست از</th>
-                            <th class="text-nowrap text-center">به</th>
-                            <th class="text-nowrap text-center">🖥 مرورگر</th>
-                        }
-                        else
-                        {
-                            <th class="text-nowrap"></th>
-                            <th class="text-nowrap text-center"></th>
-                            <th class="text-nowrap text-center"></th>
-                            <th class="text-nowrap text-center"></th>
-                            <th class="text-nowrap text-center"></th>
-                        }
 
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        @if (Model.requestBox != null)
+        <div class="px-4 pt-4">
+            <div class="table-responsive">
+                <table class="requests-table">
+                    <thead>
+                        <tr>
+                            <th>ارسال کننده</th>
+                            <th>گیرنده</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.requestBox?.Data?.Any() == true)
                         {
-                            var requestBoxUserNames = new Dictionary<int, string>();
-
-                            foreach (var item in @Model.requestBox.Data)
+                            foreach (var item in Model.requestBox.Data)
                             {
-                                Random rnd = new Random();
-                                int id = rnd.Next();
-                                // List<string> Keys = new List<string>();
-                                // List<string> Values = new List<string>();
-                                //Values.Add(item.UserNameSender);
-                                //Keys.Add(item.Description);
-                                requestBoxUserNames.Add(id, item.UserNameSender);
-
-
                                 <tr>
-                                    <td class="text-nowrap">@item.UserNameSender</td>
-                                    <td hidden="true">
-                                        @item.Description
-                                    </td>
-                                    <td hidden="true">
-                                        @item.Title
-                                    </td>
-                                    <td>
-                                        <div class="form-check d-flex justify-content-center">
-                                            <p>@item.UserNameReceived</p>
+                                    <td data-label="ارسال کننده">@item.UserNameSender</td>
+                                    <td data-label="گیرنده">@item.UserNameReceived</td>
+                                    <td data-label="عملیات">
+                                        <div class="request-actions">
+                                            <button class="btn btn-view"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#requestModal"
+                                                    data-title="@item.Title"
+                                                    data-description="@item.Description"
+                                                    data-sender="@item.UserNameSender">
+                                                <i class="mdi mdi-eye-outline"></i>
+                                                مشاهده
+                                            </button>
+                                            <button class="btn btn-accept"
+                                                    onclick="handleRequest('AddFriend', '@item.UserNameSender')">
+                                                <i class="mdi mdi-check-circle-outline"></i>
+                                                قبول
+                                            </button>
+                                            <button class="btn btn-reject"
+                                                    onclick="handleRequest('RemoveRequest', '@item.UserNameSender')">
+                                                <i class="mdi mdi-close-circle-outline"></i>
+                                                رد
+                                            </button>
                                         </div>
                                     </td>
-
-                                    <td class="col-3" style="">
-                                        <div>
-                                            @{
-                                                var tokenHandler = new JwtSecurityTokenHandler();
-                                                var key = Encoding.ASCII.GetBytes("wpqqwsdjkjslkzxdjaisoiu8uil9pdjwadqa");
-                                                var tokenDescriptor = new SecurityTokenDescriptor
-                    {
-                        Subject = new ClaimsIdentity(new[] { new Claim("id", item.Id.ToString()) }),
-                        Expires = DateTime.UtcNow.AddHours(1),
-                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                    };
-                                                var token = tokenHandler.CreateToken(tokenDescriptor);
-                                                var tokenString = tokenHandler.WriteToken(token);
-
-                                            }
-                                            @*<a asp-page-handler="RequestModal" style="margin-right:40px; color:cornflowerblue; cursor:pointer;" data-bs-toggle="modal" data-bs-target="#modalCenter" class="col-1 OpenModal" @*asp-page="Detail" asp-route-id="@item.Id">*@
-
-                                            @*<a href="RequestBox/RequestModal?token=@tokenString" class="OpenModal col-1" style="color:cornflowerblue; cursor:pointer; margin-right:40px;" data-bs-toggle="modal" data-bs-target="#modalCenter" @*asp-page="Detail" asp-route-id="@item.Id">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                            </a>*@
-                                            <a class="OpenModal col-1" style="color:cornflowerblue; cursor:pointer; margin-right:40px;" data-bs-toggle="modal" data-bs-target="#modalCenter" @*asp-page="Detail" asp-route-id="@item.Id"*@>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                            </a>
-
-                                            @*<a class="col-1" asp-route-id="@item.Id" asp-page="Edit">
-                                            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                                <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z" />
-                                            </svg>
-                                        </a>*@
-
-
-                                            <delete-item style="color:cornflowerblue; cursor:pointer;" class="col-1" Url="@Url.Page("AddRequest" ,"RemoveRequest", new { friendUserName = item.UserNameSender  })" description="">
-
-                                                <svg xmlns="http:www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7zm4 12H8v-9h2zm6 0h-2v-9h2zm.618-15L15 2H9L7.382 4H3v2h18V4z" /></svg>
-                                            </delete-item>
-
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="mt-3">
-                                                    <!-- Button trigger modal -->
-                                                    <!-- Modal -->
-                                                    <div class="modal fade"
-                                                         id="modalCenter"
-                                                         tabindex="-1"
-                                                         aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered"
-                                                             role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="modalCenterTitle">
-                                                                        @item.Title
-                                                                    </h5>
-                                                                    <button type="button"
-                                                                            class="btn-close"
-                                                                            data-bs-dismiss="modal"
-                                                                            aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="row">
-                                                                        <div class="col mb-4 mt-2">
-                                                                            <div class="form-floating form-floating-outline">
-                                                                                <p disabled="true" class="DescriptionRequest" type="text">@item.Description</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <p hidden="true" class="FriendUserNameModal"></p>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    @*<remove-request url="@Url.Page("AddRequest", "RemoveRequest", new{ FriendUserName = @item.UserNameSender})" description="آیا از این عملیات مطمئن هستید؟">*@
-                                                                    <button id="RemoveRequest" type="button"
-                                                                            class="btn btn-label-secondary"
-                                                                            data-bs-dismiss="modal">
-                                                                        بستن پنجره     
-                                                                    </button>
-                                                                    @*<button type="button"
-                                                                            class="RemoveRequest btn btn-label-secondary"
-                                                                            data-bs-dismiss="modal">
-                                                                        لغو درخواست
-                                                                    </button>*@           
-                                                                    @*</remove-request>*@
-                                                                    @*<add-friend url="@Url.Page("SetFriend", "AddFriend", new{ FriendUserName = @item.UserNameSender})" description="آیا از این عملیات مطمئن هستید؟">*@
-                                                                    <button value="@requestBoxUserNames[id]" asp-route="SetFriend/AddFriend?FriendUserName=@requestBoxUserNames[id]" type="button" id="AddFriend" class="btn btn-primary AddFriend" data-bs-dismiss="modal">
-                                                                        افزودن دوست
-                                                                    </button>
-                                                                    @*</add-friend>*@
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    </td>
-
                                 </tr>
                             }
                         }
                         else
                         {
                             <tr>
-                                <td class="text-nowrap"></td>
-                                <td></td>
-                                <td>
+                                <td colspan="3" class="text-center py-4">
+                                    🎉 هیچ درخواست جدیدی وجود ندارد!
                                 </td>
-                                <td><b>NotFound</b></td>
-                                <td>
-                                </td>
-
                             </tr>
-
                         }
-
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="card-body">
-            <button type="submit" class="btn btn-primary me-2 waves-effect waves-light">ذخیره تغییرات</button>
-            <button type="reset" class="btn btn-outline-secondary waves-effect">انصراف</button>
-        </div>
-        <!-- /Notifications -->
     </div>
-    <!-- /Current Plan -->
 
 
-
-
-
+<!-- Request Detail Modal -->
+<div class="modal fade" id="requestModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label text-muted">توضیحات:</label>
+                    <p class="modal-description"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 
 @section Scripts {
     <script>
-        // var modal = document.getElementById('modalCenter');
+        // مدیریت نمایش مدال
+        document.querySelectorAll('.btn-view').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('modalTitle').textContent = btn.dataset.title;
+                document.querySelector('.modal-description').textContent = btn.dataset.description;
+            });
+        });
 
-        // // سپس یک تابع برای بستن مدال تعریف کنید
-        // function closeModal() {
-        //     var modalInstance = bootstrap.Modal.getInstance(modal);
-        //     modalInstance.hide();
-        // }
-        // document.querySelector('.btn-close').addEventListener('click', closeModal);
-        function AddFriend(url, Description) {
-
-                Swal.fire({
-                title: "افزودن دوست",
-                text: Description,
-                icon: "warning",
-                confirmButtonText: "بله ، مطمعا هستم",
-                cancelButtonText: "خیر",
+        // مدیریت عملیات درخواست
+        async function handleRequest(action, sender) {
+            const actionText = action === 'AddFriend' ? 'پذیرش' : 'رد';
+            const { isConfirmed } = await Swal.fire({
+                title: `${actionText} درخواست`,
+                html: `آیا از ${actionText} درخواست <b>${sender}</b> اطمینان دارید؟`,
+                icon: 'question',
                 showCancelButton: true,
-                }).then((result) => {
-                if (result.isConfirmed) {
-               var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
-                $.ajax({
-                url: url,
-                method: "post",
-                data: {
-                //productId: productId
-               __RequestVerificationToken: token
-                },
-                beforeSend: function () {
+                confirmButtonColor: '#6B8DD6',
+                cancelButtonColor: '#FF7E5F',
+                confirmButtonText: actionText,
+                cancelButtonText: 'انصراف'
+            });
 
-                $(".loading").show();
-                },
-                complete: function () {
-                $(".loading").hide();
-                },
-                }).done(function (data) {
-                var res = JSON.parse(data);
-                if (res.Status === 1) {
-                Success("", res.Message, true);
-                } else {
-                ErrorAlert("", res.Message, res.isReloadPage);
+            if (isConfirmed) {
+                try {
+                    const response = await fetch(`SetFriend?handler=${action}&FriendUserName=${sender}`, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        showToast('success', result.message);
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        showToast('error', result.message);
+                    }
+                } catch (error) {
+                    console.error('خطا در انجام عملیات:', error);
+                    showToast('error', 'خطا در ارتباط با سرور');
                 }
-                });
-                }
-                });
-                }
-        function RemoveRequest(url, Description) {
-         Swal.fire({
-         title: "افزودن دوست",
-         text: Description,
-         icon: "warning",
-         confirmButtonText: "بله ، مطمعا هستم",
-         cancelButtonText: "خیر",
-         showCancelButton: true,
-         }).then((result) => {
-         if (result.isConfirmed) {
-        var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
-         $.ajax({
-         url: url,
-         method: "post",
-         data: {
-         //productId: productId
-        __RequestVerificationToken: token
-         },
-         beforeSend: function () {
+            }
+        }
 
-         $(".loading").show();
-         },
-         complete: function () {
-         $(".loading").hide();
-         },
-         }).done(function (data) {
-         var res = JSON.parse(data);
-         if (res.Status === 1) {
-         Success("", res.Message, true);
-         } else {
-         ErrorAlert("", res.Message, res.isReloadPage);
-         }
-         });
-         }
-         });
-         }
+        // نمایش نوتیفیکیشن
+        // function showToast(type, message) {
+        //     const Toast = Swal.mixin({
+        //         toast: true,
+        //         position: 'top-start',
+        //         showConfirmButton: false,
+        //         timer: 3000,
+        //         timerProgressBar: true,
+        //     });
+
+        //     Toast.fire({
+        //         icon: type,
+        //         title: message
+        //     });
+        // }
     </script>
-    <script>
-              $(".OpenModal").click(function(){
-                  //var pr = $(this).closest("tr").find("td:eq(1)").text();
-                  // var pr = $(this).find("td:eq(0)").text();
-                   var Descriptin =  $(this).closest("tr").find("td:eq(1)").text();
-                   var Title =  $(this).closest("tr").find("td:eq(2)").text();
-                   var FriendUserName =  $(this).closest("tr").find("td:eq(0)").text();
-                  //var p = $(this).closest("tr").find("td:eq(2)").text();
-                  $("#modalCenterTitle").text(Title);
-                  $(".DescriptionRequest").text(Descriptin);
-                  $(".FriendUserNameModal").val(FriendUserName);
-
-              });
-
-        $(".AddFriend").click(function(){
-                          var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
-
-            var friendUserName = $(".FriendUserNameModal").val();
-                                          $.post("/Front/Profile/SetFriend?handler=AddFriend", { FriendUserName: friendUserName,   __RequestVerificationToken: token}).done(function(){
-                                              location.reload();
-                                          });
-              });
-
-
-        $(".RemoveRequest").click(function(){
-
-             var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
-
-            var friendUserName = $(".FriendUserNameModal").val();
-                                          $.post("/Front/Profile/AddRequest?handler=RemoveRequest", { FriendUserName: friendUserName,   __RequestVerificationToken: token}).done(function(){
-                                              location.reload();
-                                          });;
-              });
-
-    </script>
-    <script> 
-                       // var menuId = $( "ul.nav" ).first().attr( "id" );
-        //         var request = $.ajax({
-        //           url: "http://localhost5025/Front/Profile/RequestBox/RequestModal",
-        //           method: "GET",
-        //           data: { id : Id },
-        //           //dataType: "html"
-        //         });
-
-        //         request.done(function( msg ) {
-        //           $( "#log" ).html( msg );
-        //         });
-
-        //         request.fail(function( jqXHR, textStatus ) {
-        //           alert( "Request failed: " + textStatus );
-        //         });
-
-
-        // $.ajax({
-        //   url: "http://localhost5025/Front/Profile/RequestBox/RequestModal",
-        //   beforeSend: function( xhr ) {
-        //     xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-        //   }
-        //         })
-        //   .done(function( data ) {
-        //     if ( console && console.log ) {
-        //       console.log( "Sample of data:", data.slice( 0, 100 ) );
-        //     }
-        //   });
-    </script>
-    <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="~/assets/vendor/libs/popper/popper.js"></script>
-    <script src="~/assets/vendor/js/bootstrap.js"></script>
-    <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="~/assets/vendor/libs/node-waves/node-waves.js"></script>
-
-    <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
-    <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
-    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
-
-    <script src="~/assets/vendor/js/menu.js"></script>
-    <!-- endbuild -->
-    <!-- Vendors JS -->
-    <script src="~/assets/vendor/libs/moment/moment.js"></script>
-    <script src="~/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
-    <script src="~/assets/vendor/libs/cleavejs/cleave.js"></script>
-    <script src="~/assets/vendor/libs/cleavejs/cleave-phone.js"></script>
-    <script src="~/assets/vendor/libs/select2/select2.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
-
-    <!-- Main JS -->
-    <script src="~/assets/js/main.js"></script>
-
-    <!-- Page JS -->
-    <script src="~/assets/js/modal-edit-user.js"></script>
-    <script src="~/assets/js/app-user-view.js"></script>
-    <script src="~/assets/js/app-user-view-account.js"></script>
 }

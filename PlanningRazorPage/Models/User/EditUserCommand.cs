@@ -13,6 +13,11 @@
     {
         public string Id { get; set; }
     }
+    public class SetAvatarCommand 
+    {
+        public string UserName { get; set; }
+        public string Avatar { get; set; }
+    }
     public record class SetUserEventCommand
     {
         public List<long> eventsId { get; set; }

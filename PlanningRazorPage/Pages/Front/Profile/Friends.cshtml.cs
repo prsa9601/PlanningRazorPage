@@ -89,20 +89,35 @@ namespace PlanningRazorPage.Pages.Front.Profile
                 switch (item.avatar.Avatar)
                 {
                     case Avatar.Man:
-                        stringBuilder.Append("Man.png");
+                        stringBuilder.Append("Man");
                         break;
                     case Avatar.Woman:
-                        stringBuilder.Append("Woman.png");
+                        stringBuilder.Append("Woman");
                         break;
                     case Avatar.Boy:
-                        stringBuilder.Append("Boy.png");
+                        stringBuilder.Append("Boy");
                         break;
                     case Avatar.Girl:
-                        stringBuilder.Append("Girl.png");
+                        stringBuilder.Append("Girl");
                         break;
                     default:
-                        stringBuilder.Append("Default.png");
+                        stringBuilder.Append("Default");
                         break;
+                    //case Avatar.Man:
+                    //    stringBuilder.Append("Man.png");
+                    //    break;
+                    //case Avatar.Woman:
+                    //    stringBuilder.Append("Woman.png");
+                    //    break;
+                    //case Avatar.Boy:
+                    //    stringBuilder.Append("Boy.png");
+                    //    break;
+                    //case Avatar.Girl:
+                    //    stringBuilder.Append("Girl.png");
+                    //    break;
+                    //default:
+                    //    stringBuilder.Append("Default.png");
+                    //    break;
 
                 }
 

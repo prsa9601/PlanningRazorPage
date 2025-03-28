@@ -7,6 +7,7 @@ namespace PlanningRazorPage.Services.Request
     {
         Task<ApiResult> AddRequest(string ReceiverUserName);
         Task<ApiResult> DeleteRequest(string FriendUserName);
+        Task<ApiResult> DeleteRequestForSender(string FriendUserName);
         Task<RequestDto?> GetRequestById(long id);
         Task<RequestBoxFilterResult?> GetRequestByFilter(RequestBoxFilterParam param);
         Task<List<RequestDto?>> GetListRequestByUserName();

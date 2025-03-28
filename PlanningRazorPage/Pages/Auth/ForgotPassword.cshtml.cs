@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PlanningRazorPage.Services.Auth;
 
-namespace PlanningRazorPage.Pages.Front.Auth
+namespace PlanningRazorPage.Pages.Auth
 {
     public class ForgotPasswordModel : PageModel
     {

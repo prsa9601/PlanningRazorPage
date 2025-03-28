@@ -5,7 +5,7 @@ using PlanningRazorPage.Models.Auth;
 using PlanningRazorPage.Services.Auth;
 using System.ComponentModel.DataAnnotations;
 
-namespace PlanningRazorPage.Pages.Front.Auth
+namespace PlanningRazorPage.Pages.Auth
 {
     [BindProperties]
     public class RegisterModel : BaseRazorPage

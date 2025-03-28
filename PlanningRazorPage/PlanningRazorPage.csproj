@@ -34,7 +34,6 @@
     <_ContentIncludedByDefault Remove="Pages\Front\SocialMedia\Instagram\Post\Edit.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Shared\Partials\_Aside.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Shared\_LayoutFront.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Shared\_LayoutProfile.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,10 +41,6 @@
     <None Include="Pages\Front\SocialMedia\Instagram\Post\Edit.cshtml" />
     <None Include="Pages\Shared\Partials\_Aside.cshtml" />
     <None Include="Pages\Shared\_LayoutProfile.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Shared\_LayoutProfile.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

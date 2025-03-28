@@ -11,6 +11,7 @@ using PlanningRazorPage.Services.Package;
 using PlanningRazorPage.Services.Request;
 using PlanningRazorPage.Services.Role;
 using PlanningRazorPage.Services.User;
+using PlanningRazorPage.Services.User.UserPackage;
 
 namespace PlanningRazorPage.Infrastructure;
 
@@ -38,6 +39,11 @@ public static class RegisterDependencyServices
         //services.AddCookieManager();
 
         services.AddHttpClient<IAuthService, AuthService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(baseAddress);
+        }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+        
+        services.AddHttpClient<IUserPackageService, UserPackageService>(httpClient =>
         {
             httpClient.BaseAddress = new Uri(baseAddress);
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();

@@ -1,0 +1,251 @@
+﻿@page
+@using PlanningRazorPage.Infrastructure
+@model PlanningRazorPage.Pages.Admin.UserPackage.IndexModel
+@{
+    Layout = "Shared/_Layout";
+    ViewData["Title"] = "🎁 مدیریت پکیج‌های کاربران";
+}
+
+@section Header {
+    <style>
+        /* استایل‌های مشابه صفحه کاربران با تنظیمات خاص پکیج */
+        .expiry-date {
+            direction: ltr;
+            font-family: monospace;
+            background: rgba(255,255,255,0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+        }
+        
+        .package-id-badge {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 1rem;
+            display: inline-block;
+        }
+    </style>
+}
+
+<div class="user-management-card">
+    <div class="table-header-custom">
+        <h5 class="table-title mb-0">
+            📦 مدیریت پکیج‌های کاربران
+        </h5>
+    </div>
+
+    <!-- فیلترها -->
+    <div class="p-4 bg-light rounded-top">
+        <form class="row g-3" method="get">
+            <div class="col-md-3">
+                <input type="number" asp-for="FilterParams.packageId" class="form-control" placeholder="شناسه پکیج">
+            </div>
+            <div class="col-md-3">
+                <input type="text" asp-for="FilterParams.phoneNumber" class="form-control" placeholder="شماره همراه">
+            </div>
+            <div class="col-md-3">
+                <select asp-for="FilterParams.search" class="form-select">
+                    <option value="None">-- مرتب سازی --</option>
+                    <option value="Latest">آخرین پکیج‌ها</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">فیلتر کردن</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive-xxl p-4">
+        <table class="table user-table align-middle">
+            <thead>
+                <tr>
+                    <th data-label="کاربر">👤 کاربر</th>
+                    <th data-label="پکیج">📦 شناسه پکیج</th>
+                    <th data-label="ایمیل مجاز">📧 ایمیل مجاز</th>
+                    <th data-label="SMS مجاز">📱 SMS مجاز</th>
+                    <th data-label="انقضا">⏳ تاریخ انقضا</th>
+                    <th data-label="وضعیت">✅ وضعیت</th>
+                    <th data-label="عملیات" class="text-center">✨ عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users.Data)
+                {
+                    foreach (var package in user.userPackages)
+                    {
+                        <tr>
+                            <td data-label="کاربر">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="fw-bold">@user.UserName</div>
+                                    <div class="text-muted small">@user.PhoneNumber</div>
+                                </div>
+                            </td>
+                            <td data-label="پکیج">
+                                <span class="package-id-badge">#@package.PackageId</span>
+                            </td>
+                            <td data-label="ایمیل مجاز" class="fw-bold">@package.AllowedEmailCount</td>
+                            <td data-label="SMS مجاز" class="fw-bold">@package.AllowedSmsCount</td>
+                            <td data-label="انقضا">
+                                <div class="expiry-date">
+                                    @package.ExpiryDate.ToString(@"dd\.hh\:mm")
+                                </div>
+                            </td>
+                            <td data-label="وضعیت">
+                                <div class="status-toggle"
+                                     onclick="ToggleStatus('IsActive', '@package.Id','@package.IsActive', this)">
+                                    <div class="status-badge @(package.IsActive ? "status-active" : "status-inactive")">
+                                        @(package.IsActive ? "✓" : "✕")
+                                    </div>
+                                    <span>@(package.IsActive ? "فعال" : "غیرفعال")</span>
+                                </div>
+                            </td>
+                            <td data-label="عملیات">
+                                <div class="action-buttons">
+                                    <a asp-page="Edit"
+                                       asp-route-userId="@user.UserId"
+                                       asp-route-packageId="@package.PackageId"
+                                       class="btn-edit"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="ویرایش">
+                                        <span>ویرایش</span>
+                                    </a>
+                                    <button class="btn-delete"
+                                            data-package-id="@package.PackageId"
+                                            data-user-id="@user.UserId"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="حذف">
+                                        <span>حذف</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-4">
+            @if (Model.Users.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-route-pageId="@(Model.Users.CurrentPage - 1)"
+                       asp-route-packageId="@Model.FilterParams.packageId"
+                       asp-route-phoneNumber="@Model.FilterParams.phoneNumber"
+                       asp-route-search="@Model.FilterParams.search"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.Users.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.Users.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-route-pageId="@i"
+                       asp-route-packageId="@Model.FilterParams.packageId"
+                       asp-route-phoneNumber="@Model.FilterParams.phoneNumber"
+                       asp-route-search="@Model.FilterParams.search">@i</a>
+                </li>
+            }
+
+            @if (Model.Users.CurrentPage < Model.Users.PageCount)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-route-pageId="@(Model.Users.CurrentPage + 1)"
+                       asp-route-packageId="@Model.FilterParams.packageId"
+                       asp-route-phoneNumber="@Model.FilterParams.phoneNumber"
+                       asp-route-search="@Model.FilterParams.search"
+                       aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const packageId = this.dataset.packageId;
+                const userId = this.dataset.userId;
+
+                Swal.fire({
+                    title: 'آیا مطمئن هستید؟',
+                    html: `در حال حذف پکیج <b>#${packageId}</b> هستید`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#FF6B6B',
+                    cancelButtonColor: '#4ECDC4',
+                    confirmButtonText: 'تایید حذف',
+                    cancelButtonText: 'انصراف'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        try {
+                            const response = await fetch(`?handler=Delete&userId=${userId}&packageId=${packageId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            if (response.ok) {
+                                const row = this.closest('tr');
+                                row.style.transition = 'opacity 0.5s';
+                                row.style.opacity = '0';
+                                setTimeout(() => row.remove(), 500);
+                                Swal.fire('حذف شد!', 'پکیج با موفقیت حذف شد', 'success');
+                            } else {
+                                Swal.fire('خطا!', 'حذف پکیج انجام نشد', 'error');
+                            }
+                        } catch (error) {
+                            console.error('خطا در حذف پکیج:', error);
+                            Swal.fire('خطا!', 'ارتباط با سرور برقرار نشد', 'error');
+                        }
+                    }
+                });
+            });
+        });
+
+        async function ToggleStatus(fieldType, packageId, isActive, element) {
+            try {
+                const response = await fetch(`?handler=Toggle${fieldType}&packageId=${packageId}&isActive=${isActive}`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const container = element.closest('.status-toggle');
+                    const badge = container.querySelector('.status-badge');
+                    const label = container.querySelector('span');
+                    
+                    badge.classList.toggle('status-active');
+                    badge.classList.toggle('status-inactive');
+                    badge.innerHTML = badge.classList.contains('status-active') ? '✓' : '✕';
+                    label.textContent = badge.classList.contains('status-active') ? 'فعال' : 'غیرفعال';
+
+                    container.classList.add('animate__animated', 'animate__rubberBand');
+                    setTimeout(() => {
+                        container.classList.remove('animate__animated', 'animate__rubberBand');
+                    }, 500);
+                }
+            } catch (error) {
+                console.error('خطا در تغییر وضعیت:', error);
+                Swal.fire('خطا!', 'تغییر وضعیت انجام نشد', 'error');
+            }
+        }
+    </script>
+}

@@ -93,10 +93,20 @@ public class PackageService : IPackageService
         var result = await _client.GetFromJsonAsync<ApiResult<List<PackageDto>?>>($"{ModuleName}/GetList");
         return result?.Data!;
     }
+    public async Task<List<PackageDto>?> GetListActiveForCurrentUser()
+    { 
+        var result = await _client.GetFromJsonAsync<ApiResult<List<PackageDto>?>>($"{ModuleName}/GetListActiveForCurrentUser");
+        return result?.Data!;
+    }
 
     public async Task<PackageDto?> GetPackage(long id)
     {
         var result = await _client.GetFromJsonAsync<ApiResult<PackageDto?>>($"{ModuleName}/GetById?id={id}");
+        return result?.Data;
+    }
+    public async Task<List<PackageDto>?> GetPackagesByUserId(string UserId)
+    {
+        var result = await _client.GetFromJsonAsync<ApiResult<List<PackageDto>?>>($"{ModuleName}/GetPackagesByUserId/UserId={UserId}");
         return result?.Data;
     }
 }

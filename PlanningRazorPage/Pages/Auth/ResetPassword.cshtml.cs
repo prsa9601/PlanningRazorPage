@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace PlanningRazorPage.Pages.Front.Auth
+namespace PlanningRazorPage.Pages.Auth
 {
     [Authorize]
     public class NewPasswordModel : PageModel

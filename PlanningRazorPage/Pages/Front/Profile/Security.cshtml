@@ -3,65 +3,375 @@
 @{
     Layout = "Shared/_LayoutProfile";
 }
+
 @section Header {
-    <link rel="icon"
-          type="image/x-icon"
-          href="~/assets/img/favicon/favicon.ico" />
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6B8DD6 0%, #FFE66D 100%);
+            --secondary-gradient: linear-gradient(135deg, #FF7E5F 0%, #FEB47B 100%);
+            --glass-effect: rgba(255, 255, 255, 0.95);
+            --shadow-effect: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
 
-    @*   <!-- Icons -->
-    <link rel="stylesheet"
-          href="~/assets/vendor/fonts/materialdesignicons.css" /> *@
+        .security-container {
+            background: var(--glass-effect);
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-effect);
+            margin: 2rem;
+            overflow: hidden;
+        }
 
+        .security-header {
+            background: var(--primary-gradient);
+            padding: 2rem;
+            color: white;
+        }
 
-    <!-- Core CSS -->
-    @*    <link rel="stylesheet"
-          href="~/assets/vendor/css/rtl/core.css"
-          class="template-customizer-core-css" />
-    <link rel="stylesheet"
-          href="~/assets/vendor/css/rtl/theme-default.css"
-          class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="~/assets/css/demo.css" />
-    <link rel="stylesheet" href="~/assets/vendor/fonts/IRANSans.css" />
- *@
-    <!-- Vendors CSS -->
-    @* <link rel="stylesheet"
-          href="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet"
-          href="~/assets/vendor/libs/node-waves/node-waves.css" />
-    <link rel="stylesheet"
-          href="~/assets/vendor/libs/typeahead-js/typeahead.css" />
-    <link rel="stylesheet"
-          href="~/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
-    <link rel="stylesheet"
-          href="~/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
-    <link rel="stylesheet"
-          href="~/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
-    <link rel="stylesheet"
-          href="~/assets/vendor/libs/animate-css/animate.css" />
-    <link rel="stylesheet"
-          href="~/assets/vendor/libs/sweetalert2/sweetalert2.css" />
-    <link rel="stylesheet"
-          href="~/assets/vendor/libs/select2/select2.css" />
-    <link rel="stylesheet"
-          href="~/assets/vendor/libs/formvalidation/dist/css/formValidation.min.css" />
- *@
-    <!-- Page CSS -->
+        .security-card {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
 
-    <link rel="stylesheet"
-          href="~/assets/vendor/css/pages/page-user-view.css" />
-    <!-- Helpers -->
+        .password-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-password-toggle {
+            position: relative;
+        }
+
+            .form-password-toggle .input-group {
+                background: rgba(245, 245, 245, 0.9);
+                border-radius: 1rem;
+                overflow: hidden;
+            }
+
+            .form-password-toggle input {
+                border: none;
+                background: transparent !important;
+                padding: 1rem 1.5rem;
+            }
+
+            .form-password-toggle .input-group-text {
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+        .security-alert {
+            background: linear-gradient(135deg, rgba(255, 231, 143, 0.2), rgba(255, 193, 7, 0.1));
+            border: none;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .devices-table {
+            --hover-bg: rgba(245, 245, 245, 0.9);
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 1rem;
+        }
+
+            .devices-table th {
+                color: #6B8DD6;
+                font-weight: 600;
+                padding: 1rem 1.5rem;
+            }
+
+            .devices-table td {
+                padding: 1.5rem;
+                background: white;
+                transition: all 0.3s ease;
+                border-radius: 0.5rem;
+            }
+
+            .devices-table tr:hover td {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(107, 141, 214, 0.1);
+            }
+
+        .browser-icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 1rem;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 0.5rem;
+        }
+
+            .status-indicator.active {
+                background: var(--success-color);
+            }
+
+            .status-indicator.inactive {
+                background: var(--danger-color);
+            }
+
+    ut = "Shared/_LayoutProfile";
+
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6B8DD6 0%, #8E37D7 100%);
+            --secondary-gradient: linear-gradient(135deg, #FF7E5F 0%, #FEB47B 100%);
+            --glass-effect: rgba(255, 255, 255, 0.98);
+            --shadow-effect: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .security-container {
+            background: var(--glass-effect);
+            border-radius: 2rem;
+            box-shadow: var(--shadow-effect);
+            margin: 2rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .security-header {
+            background: var(--primary-gradient);
+            padding: 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .security-header::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
+                animation: shine 8s infinite;
+                opacity: 0.3;
+            }
+
+        .security-card {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .password-form {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .form-password-toggle {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+            .form-password-toggle .input-group {
+                background: rgba(245, 245, 245, 0.95);
+                border-radius: 1.2rem;
+                overflow: hidden;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                border: 1px solid rgba(0, 0, 0, 0.05);
+            }
+
+                .form-password-toggle .input-group:focus-within {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(107, 141, 214, 0.15);
+                }
+
+            .form-password-toggle input {
+                border: none;
+                background: transparent !important;
+                padding: 1.2rem 1.8rem;
+                font-size: 1rem;
+                letter-spacing: 0.5px;
+            }
+
+                .form-password-toggle input::placeholder {
+                    color: #999;
+                    opacity: 0.8;
+                }
+
+            .form-password-toggle .input-group-text {
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                padding: 0 1.5rem;
+            }
+
+                .form-password-toggle .input-group-text:hover {
+                    transform: scale(1.1);
+                }
+
+        .password-strength {
+            height: 4px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .password-strength::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                height: 100%;
+                width: var(--strength, 0%);
+                background: var(--primary-gradient);
+                transition: width 0.5s ease;
+            }
+
+        .security-alert {
+            background: linear-gradient(135deg, rgba(255, 231, 143, 0.15), rgba(255, 193, 7, 0.1));
+            border: none;
+            border-radius: 1.2rem;
+            backdrop-filter: blur(8px);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .two-factor-card {
+            background: rgba(245, 245, 245, 0.9);
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .two-factor-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 4px;
+                height: 100%;
+                background: var(--primary-gradient);
+            }
+
+        .devices-table {
+            --hover-bg: rgba(245, 245, 245, 0.9);
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.8rem;
+        }
+
+            .devices-table th {
+                color: #6B8DD6;
+                font-weight: 600;
+                padding: 1rem 1.8rem;
+                background: rgba(245, 245, 245, 0.9);
+                border-radius: 0.8rem;
+            }
+
+            .devices-table td {
+                padding: 1.2rem 1.8rem;
+                background: white;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                border-radius: 0.8rem;
+                cursor: pointer;
+                position: relative;
+            }
+
+                .devices-table td::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    width: 90%;
+                    height: 1px;
+                    background: rgba(0, 0, 0, 0.05);
+                    transform: translateX(-50%);
+                }
+
+                .devices-table td:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 8px 25px rgba(107, 141, 214, 0.1);
+                }
+
+        .browser-icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 1rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 0.8rem;
+            position: relative;
+        }
+
+            .status-indicator.active {
+                background: #2ecc71;
+                animation: pulse 1.5s infinite;
+            }
+
+            .status-indicator.inactive {
+                background: #e74c3c;
+            }
+
+        @@keyframes shine {
+            100% {
+                transform: translate(100%, 100%) rotate(45deg);
+            }
+        }
+
+        @@keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .security-container {
+                margin: 1rem;
+                border-radius: 1.2rem;
+            }
+
+            .devices-table td {
+                padding: 1rem;
+            }
+        }
+        @@media (max-width: 768px) {
+            .security-container {
+                margin: 1rem;
+                border-radius: 1rem;
+            }
+
+            .devices-table td {
+                display: flex;
+                flex-direction: column;
+                align-items: start !important;
+            }
+        }
+    </style>
 }
-<!-- User Card -->
 <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
-    <!-- User Tabs -->
     <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
-            <a class="nav-link" asp-page="Acount">
+            <a class="nav-link" asp-page="Account">
                 <i class="mdi mdi-account-outline mdi-20px me-1"></i>حساب
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="javascript:void(0);">
+            <a class="nav-link active" asp-page="Security">
                 <i class="mdi mdi-lock-open-outline mdi-20px me-1"></i>امنیت
             </a>
         </li>
@@ -71,7 +381,8 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-page="Notification">
+            <a class="nav-link"
+               asp-page="Notification">
                 <i class="mdi mdi-bell-outline mdi-20px me-1"></i>اعلان‌ها
             </a>
         </li>
@@ -90,157 +401,179 @@
             </a>
         </li>
     </ul>
-    <!--/ User Tabs -->
-    <!-- Change Password -->
-    <div class="card mb-4">
-        <h5 class="card-header">تغییر رمز عبور</h5>
-        <div class="card-body">
-            <form id="formChangePassword" method="POST" onsubmit="return false" class="fv-plugins-bootstrap5 fv-plugins-framework" novalidate="novalidate">
-                <div class="alert alert-warning" role="alert">
-                    <h6 class="alert-heading mb-1">از رعایت الزامات زیر اطمینان حاصل کنید</h6>
-                    <span>حداقل 8 کاراکتر، حروف بزرگ و نمادها</span>
-                </div>
-                <div class="row">
-                    <div class="mb-3 col-12 col-sm-6 form-password-toggle fv-plugins-icon-container">
-                        <div class="input-group input-group-merge">
-                            <div class="form-floating form-floating-outline">
-                                <input class="form-control" type="password" id="newPassword" name="newPassword" placeholder="············">
-                                <label for="newPassword">رمز عبور جدید</label>
-                            </div>
-                            <span class="input-group-text cursor-pointer"><i class="mdi mdi-eye-off-outline"></i></span>
-                        </div>
-                        <div class="fv-plugins-message-container invalid-feedback"></div>
-                    </div>
-
-                    <div class="mb-3 col-12 col-sm-6 form-password-toggle fv-plugins-icon-container">
-                        <div class="input-group input-group-merge">
-                            <div class="form-floating form-floating-outline">
-                                <input class="form-control" type="password" name="confirmPassword" id="confirmPassword" placeholder="············">
-                                <label for="confirmPassword">
-                                    تایید رمز عبور جدید
-                                </label>
-                            </div>
-                            <span class="input-group-text cursor-pointer"><i class="mdi mdi-eye-off-outline"></i></span>
-                        </div>
-                        <div class="fv-plugins-message-container invalid-feedback"></div>
-                    </div>
-                    <div>
-                        <button type="submit" class="btn btn-primary me-2 waves-effect waves-light">تغییر رمز عبور</button>
-                    </div>
-                </div>
-                <div></div><input type="hidden">
-            </form>
-        </div>
+<div class="security-container">
+    <div class="security-header">
+        <h3 class="mb-0">🔒 تنظیمات امنیتی</h3>
     </div>
-    <!--/ Change Password -->
-    <!-- Two-steps verification -->
-    <div class="card mb-4">
-        <div class="card-header">
-            <h5 class="mb-0">تایید دو مرحله‌ای</h5>
-            <span class="text-muted">حساب خود را با یک قدم بیشتر امن کنید.</span>
-        </div>
-        <div class="card-body">
-            <h6 class="mt-1">پیامک</h6>
-            <div class="d-flex justify-content-between border-bottom mb-4">
-                <span>+98(123) 456-4564</span>
-                <div class="action-icons">
-                    <a href="javascript:;" class="text-body me-1" data-bs-target="#enableOTP" data-bs-toggle="modal"><i class="mdi mdi-pencil-outline"></i></a>
-                    <a href="javascript:;" class="text-body"><i class="mdi mdi-delete-outline"></i></a>
+
+    <!-- Change Password Section -->
+    <div class="security-card">
+        <h5 class="mb-4">تغییر رمز عبور</h5>
+        <form class="password-form">
+            <div class="security-alert alert mb-4">
+                <h6 class="alert-heading">الزامات رمز عبور</h6>
+                <ul class="mb-0">
+                    <li>حداقل ۸ کاراکتر</li>
+                    <li>حروف بزرگ و کوچک انگلیسی</li>
+                    <li>حداقل یک عدد و نماد</li>
+                </ul>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-6">
+                    <div class="form-password-toggle">
+                        <div class="input-group">
+                            <input type="password"
+                                   class="form-control"
+                                   placeholder="رمز عبور جدید"
+                                   aria-label="رمز عبور جدید">
+                            <span class="input-group-text">
+                                <i class="mdi mdi-eye-off-outline"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="form-password-toggle">
+                        <div class="input-group">
+                            <input type="password"
+                                   class="form-control"
+                                   placeholder="تکرار رمز عبور"
+                                   aria-label="تکرار رمز عبور">
+                            <span class="input-group-text">
+                                <i class="mdi mdi-eye-off-outline"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button class="btn btn-primary w-100"
+                            style="background: var(--primary-gradient); border: none;">
+                        بروزرسانی رمز عبور
+                    </button>
                 </div>
             </div>
-            <p class="mb-0">
-                احراز هویت دو مرحله‌ای یک لایه امنیتی بیشتر با الزام به وارد کردن بیش از یک رمز عبور برای ورود به حساب شما اضافه میکند.
-                <a href="javascript:void(0);">آشنایی بیشتر.</a>
-            </p>
-        </div>
+        </form>
     </div>
-    <!--/ Two-steps verification -->
-    <!-- Recent Devices -->
-    <div class="card mb-4">
-        <h5 class="card-header">دستگاه‌های اخیر</h5>
-        <div class="table-responsive">
-            <table class="table">
-                <thead class="table-light">
-                    <tr>
-                        <th class="text-truncate">مرورگر</th>
-                        <th class="text-truncate">دستگاه</th>
-                        <th class="text-truncate">مکان</th>
-                        <th class="text-truncate">	فعالیت‌های اخیر</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-truncate"><img src="../../assets/img/icons/brands/chrome.png" alt="Chrome" class="me-3" width="22" height="22"><span class="text-heading">Chrome on Windows</span></td>
-                        <td class="text-truncate">HP Spectre 360</td>
-                        <td class="text-truncate">سوییس</td>
-                        <td class="text-truncate">10 فروردین 1402 - 20:07</td>
-                    </tr>
-                    <tr>
-                        <td class="text-truncate"><img src="../../assets/img/icons/brands/chrome.png" alt="Chrome" class="me-3" width="22" height="22"><span class="text-heading">Chrome on Windows</span></td>
-                        <td class="text-truncate">iPhone 12x</td>
-                        <td class="text-truncate">استرالیا</td>
-                        <td class="text-truncate">13 فروردین 1402 - 10:10</td>
-                    </tr>
-                    <tr>
-                        <td class="text-truncate"><img src="../../assets/img/icons/brands/chrome.png" alt="Chrome" class="me-3" width="22" height="22"><span class="text-heading">Chrome on Windows</span></td>
-                        <td class="text-truncate">Oneplus 9 طرفدار</td>
-                        <td class="text-truncate">دوبی</td>
-                        <td class="text-truncate">14 فروردین 1402 - 15:27</td>
-                    </tr>
-                    <tr>
-                        <td class="text-truncate"><img src="../../assets/img/icons/brands/chrome.png" alt="Chrome" class="me-3" width="22" height="22"><span class="text-heading">Chrome on Windows</span></td>
-                        <td class="text-truncate">Apple iMac</td>
-                        <td class="text-truncate">هندوستان</td>
-                        <td class="text-truncate">15 فروردین 1402 - 16:17</td>
-                    </tr>
-                    <tr>
-                        <td class="text-truncate"><img src="../../assets/img/icons/brands/chrome.png" alt="Chrome" class="me-3" width="22" height="22"><span class="text-heading">Chrome on Windows</span></td>
-                        <td class="text-truncate">HP Spectre 360</td>
-                        <td class="text-truncate">سوییس</td>
-                        <td class="text-truncate">20 فروردین 1402 - 21:01</td>
-                    </tr>
-                    <tr>
-                        <td class="text-truncate"><img src="../../assets/img/icons/brands/chrome.png" alt="Chrome" class="me-3" width="22" height="22"><span class="text-heading">Chrome on Windows</span></td>
-                        <td class="text-truncate border-bottom-0">Oneplus 9 طرفدار</td>
-                        <td class="text-truncate border-bottom-0">دوبی</td>
-                        <td class="text-truncate border-bottom-0">21 فروردین 1402 - 12:22</td>
-                    </tr>
-                </tbody>
+
+    <!-- Two-Factor Authentication -->
+        <div class="security-card">
+            <form class="password-form">
+                <!-- ... -->
+                <div class="form-password-toggle">
+                    <div class="input-group">
+                        <input type="password"
+                               class="form-control"
+                               placeholder="رمز عبور جدید"
+                               oninput="updateStrength(this.value)">
+                        <!-- ... -->
+                    </div>
+                    <div class="password-strength"></div>
+                </div>
+                <!-- ... -->
+            </form>
+        </div>
+
+    <!-- Active Sessions -->
+        <div class="security-card">
+            <div class="two-factor-card">
+                <div class="form-check form-switch">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           id="twoFactorSwitch"
+                           style="width: 3.5rem; height: 2rem;">
+                    <label class="form-check-label ms-3" for="twoFactorSwitch">
+                        فعالسازی احراز هویت دو مرحله‌ای
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- جدول دستگاه‌ها با انیمیشن -->
+        <div class="security-card">
+            <table class="devices-table">
+                <!-- ... -->
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="~/assets/img/icons/brands/chrome.png"
+                                 class="browser-icon">
+                            <div>
+                                <div class="fw-bold">Chrome - Windows</div>
+                                <small class="text-muted">HP Spectre 360</small>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- ... -->
+                </tr>
+                <!-- ... -->
             </table>
         </div>
     </div>
-    <!--/ Recent Devices -->
+</div>
 </div>
 
 @section Scripts {
-    <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="~/assets/vendor/libs/popper/popper.js"></script>
-    <script src="~/assets/vendor/js/bootstrap.js"></script>
-    <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="~/assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script>
+        // مدیریت قدرت رمز عبور
+        function updateStrength(password) {
+            let strength = 0;
+            if (password.length >= 8) strength += 25;
+            if (/[A-Z]/.test(password)) strength += 25;
+            if (/[0-9]/.test(password)) strength += 25;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 25;
 
-    <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
-    <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
-    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+            document.documentElement.style.setProperty('--strength', `${strength}%`);
+        }
 
-    <script src="~/assets/vendor/js/menu.js"></script>
-    <!-- endbuild -->
-    <!-- Vendors JS -->
-    <script src="~/assets/vendor/libs/moment/moment.js"></script>
-    <script src="~/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
-    <script src="~/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
-    <script src="~/assets/vendor/libs/cleavejs/cleave.js"></script>
-    <script src="~/assets/vendor/libs/cleavejs/cleave-phone.js"></script>
-    <script src="~/assets/vendor/libs/select2/select2.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
-    <script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
+        // انیمیشن سوئیچ
+        document.getElementById('twoFactorSwitch').addEventListener('change', function() {
+            if(this.checked) {
+                this.parentElement.classList.add('switch-active');
+            } else {
+                this.parentElement.classList.remove('switch-active');
+            }
+        });
 
-    <!-- Main JS -->
-    <script src="~/assets/js/main.js"></script>
+        // هاور روی ردیف‌های جدول
+        document.querySelectorAll('.devices-table tr').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.style.transform = 'translateY(-2px)';
+            });
 
-    <!-- Page JS -->
-    <script src="~/assets/js/modal-edit-user.js"></script>
-    <script src="~/assets/js/app-user-view.js"></script>
-    <script src="~/assets/js/app-user-view-account.js"></script>
+            row.addEventListener('mouseleave', () => {
+                row.style.transform = 'none';
+            });
+        });
+    </script>
+    <script>
+        // مدیریت نمایش/مخفی کردن رمز عبور
+        document.querySelectorAll('.form-password-toggle .input-group-text').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const isPassword = input.type === 'password';
+
+                input.type = isPassword ? 'text' : 'password';
+                this.querySelector('i').classList.toggle('mdi-eye-off-outline', isPassword);
+                this.querySelector('i').classList.toggle('mdi-eye-outline', !isPassword);
+            });
+        });
+
+        // مدیریت ارسال فرم
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // شبیه‌سازی ارسال درخواست
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            Swal.fire({
+                icon: 'success',
+                title: 'رمز عبور با موفقیت تغییر یافت!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        });
+    </script>
 }

@@ -33,8 +33,7 @@
         public required long Id { get; set; }
     }
 
- 
-   
+
     public class EditPackageCommand
     {
         public string Link { get; set; }

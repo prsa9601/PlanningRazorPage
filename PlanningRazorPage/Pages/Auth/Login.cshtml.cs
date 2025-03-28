@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using PlanningRazorPage.Infrastructure.RazorUtils;
 using PlanningRazorPage.Models;
 
-namespace PlanningRazorPage.Pages.Front.Auth
+namespace PlanningRazorPage.Pages.Auth
 {
     
     public class LoginModel : BaseRazorPage

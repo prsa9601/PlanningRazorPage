@@ -7,11 +7,43 @@
 @{
     Layout = "Shared/_Layout";
 }
+@section Header{
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            --secondary-gradient: linear-gradient(135deg, #4ECDC4 0%, #45B7AF 100%);
+            --glass-effect: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            --neon-shadow: 0 0 20px rgba(255,107,107,0.3);
+        } 
+        .floating-add-btn {
+            background: var(--secondary-gradient);
+            color: white !important;
+            padding: 1rem 2rem;
+            border-radius: 1.5rem;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+            .floating-add-btn:hover {
+                transform: translateY(-3px) rotate(2deg);
+                box-shadow: var(--neon-shadow);
+            }
+
+    </style>
+}
     @* <p id="result"></p> *@
 
     <div class="card container">
         <h5 class="card-header">جدول با سرتیتر تیره</h5>
-        <div class="table-responsive text-nowrap">
+        <div class="table-responsive text-nowrap">  
+            <div class="d-flex justify-content-end mb-4">
+                <a asp-page="Add" class="floating-add-btn">
+                    ➕ افزودن پکیج جدید
+                </a>
+            </div>
             <table class="table">
                 <thead class="table-dark">
                     <tr>

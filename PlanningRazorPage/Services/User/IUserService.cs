@@ -13,6 +13,7 @@ namespace PlanningRazorPage.Services.User
         Task<ApiResult?> Edit(EditUserCommand command);
         Task<ApiResult?> EditUserForAdmin(EditUserCommandForAdmin command);
         Task<ApiResult?> SetEvent(SetUserEventCommand command);
+        Task<ApiResult?> SetAvatar(SetAvatarCommand command);
         Task<ApiResult> SetRole(SetUserRoleCommand command); 
         Task<ApiResult> ChangeActivityStatusUserForAdmin(ChangeActivityUserStatusCommand command);
         Task<ApiResult> ChangeEmailConfirmedUserStatusForAdmin(ChangeEmailConfirmedUserStatusCommand command);

@@ -32,7 +32,7 @@ namespace PlanningRazorPage.Pages.Front.Profile
 
             }, true, true);
         }
-        public async Task<IActionResult> OnPostRemoveRequest(string FriendUserName)
+        public async Task<IActionResult> OnPostRemoveRequestForSender(string FriendUserName)
         {
             //var result = await _requestService.AddRequest(FriendUserName);
             //if (!result.IsSuccess)
@@ -40,12 +40,15 @@ namespace PlanningRazorPage.Pages.Front.Profile
             //    return RedirectAndShowAlert(result, Redirect("Friend"));
             //}
             //return RedirectAndShowAlert(result, Redirect("Friend"));
-            return await AjaxTryCatch(() =>
-            {
-                //return _service.AddFriend(FriendUserName);
-                return _requestService.DeleteRequest(FriendUserName);
+            //return await AjaxTryCatch(() =>
+            //{
+            //    //return _service.AddFriend(FriendUserName);
+            //    return _requestService.DeleteRequest(FriendUserName);
 
-            }, true, true);
+            //}, true, true);
+
+            var result = await _requestService.DeleteRequestForSender(FriendUserName);
+            return await AjaxTryCatch(result, true, true);
         }
     }
 }

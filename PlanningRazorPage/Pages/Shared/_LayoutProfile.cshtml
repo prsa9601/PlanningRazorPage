@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
+
 <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed " dir="rtl" data-theme="theme-semi-dark" data-assets-path="../../assets/" data-template="vertical-menu-template-semi-dark">
 
 <head>
@@ -48,6 +50,14 @@
 
 
 <body>
+    @using PlanningRazorPage.Services.User
+    @using PlanningRazorPage.Infrastructure.Utils
+    @using PlanningRazorPage.Infrastructure
+    @inject IUserService _userService;
+    @{
+        var user = await _userService.GetByCurrentUser();
+    }
+
     <div class="layout-wrapper layout-content-navbar  ">
         <div class="layout-container">
             <partial name="Shared/Partials/_Aside" />
@@ -76,14 +86,20 @@
                                         <div class="user-avatar-section">
                                             <div class="d-flex align-items-center flex-column">
                                                 <img class="img-fluid rounded mb-3 mt-4"
-                                                     src="../../assets/img/avatars/10.png"
+                                                     src="@Directories.GetAvatar(user.avatar.Avatar.ToString())"
                                                      height="120"
                                                      width="120"
                                                      alt="User avatar" />
+
                                                 <div class="user-info text-center">
-                                                    <h4>پریسا نیازی</h4>
-                                                    <span class="badge bg-label-danger">نویسنده</span>
+                                                    <h4>@user.UserName</h4>
+                                                    @foreach (var item in user.Roles)
+                                                    {
+                                                        <span class="badge bg-label-danger">@item.RoleName</span>
+                                                    }
                                                 </div>
+
+
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between flex-wrap my-2 py-3">
@@ -95,7 +111,7 @@
                                                 </div>
                                                 <div>
                                                     <h4 class="mb-0 fw-normal">1.23k</h4>
-                                                    <span>وظیفه انجام شده</span>
+                                                    <span>برنامه های ثبت شده</span>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center mt-3 gap-3">
@@ -115,35 +131,33 @@
                                             <ul class="list-unstyled mb-4">
                                                 <li class="mb-3">
                                                     <span class="fw-semibold text-heading me-2">نام کاربری:</span>
-                                                    <span>MahdiMH.uix</span>
+                                                    <span>@user.UserName</span>
                                                 </li>
                                                 <li class="mb-3">
                                                     <span class="fw-semibold text-heading me-2">ایمیل:</span>
-                                                    <span>MahdiMH.uix@gmail.com</span>
+                                                    <span>@user.Email</span>
                                                 </li>
                                                 <li class="mb-3">
                                                     <span class="fw-semibold text-heading me-2">وضعیت:</span>
-                                                    <span class="badge bg-label-success">فعال</span>
+                                                    @if (user.IsActive)
+                                                    {
+                                                        <span class="badge bg-label-success">فعال</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-label-danger">غیرفعال</span>
+                                                    }
                                                 </li>
                                                 <li class="mb-3">
                                                     <span class="fw-semibold text-heading me-2">نقش:</span>
-                                                    <span>نویسنده</span>
+                                                    @foreach(var item in user.Roles){
+
+                                                        <span class ="badge bg-label-primary">@item.RoleName</span>
+                                                    }
                                                 </li>
                                                 <li class="mb-3">
-                                                    <span class="fw-semibold text-heading me-2">شناسه مالیاتی:</span>
-                                                    <span>Tax-8965</span>
-                                                </li>
-                                                <li class="mb-3">
-                                                    <span class="fw-semibold text-heading me-2">تماس:</span>
-                                                    <span>(123) 456-7890</span>
-                                                </li>
-                                                <li class="mb-3">
-                                                    <span class="fw-semibold text-heading me-2">زبان‌ها:</span>
-                                                    <span>فرانسوی</span>
-                                                </li>
-                                                <li class="mb-3">
-                                                    <span class="fw-semibold text-heading me-2">کشور:</span>
-                                                    <span>انگلستان</span>
+                                                    <span class="fw-semibold text-heading me-2">شماره تماس:</span>
+                                                    <span>@user.PhoneNumber</span>
                                                 </li>
                                             </ul>
                                             <div class="d-flex justify-content-center">

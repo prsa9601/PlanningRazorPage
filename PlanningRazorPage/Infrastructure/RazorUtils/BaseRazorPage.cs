@@ -193,6 +193,87 @@ public class BaseRazorPage : PageModel
             return Content(jsonResult);
         }
     }
+    
+    public async Task<ContentResult> AjaxTryCatch(ApiResult func,
+           bool isSuccessReloadPage = true,
+           bool isErrorReloadPage = false,
+           bool checkModelState = true)
+    {
+        try
+        {
+            var isPost = PageContext.HttpContext.Request.Method == "POST";
+            if (isPost && !ModelState.IsValid && checkModelState)
+            {
+                var errors = JoinErrors();
+                var modelError = new AjaxResult()
+                {
+                    Status = AppStatusCode.ServerError,
+                    Title = "عملیات ناموفق",
+                    Message = errors,
+                    IsReloadPage = isErrorReloadPage,
+                };
+                var jsonResult = JsonConvert.SerializeObject(modelError);
+                return Content(jsonResult);
+            }
+
+            var res = func;
+            var model = new AjaxResult()
+            {
+                Status = res.MetaData.AppStatusCode,
+                Title = null,
+                Message = res.MetaData.Message
+            };
+            switch (res.MetaData.AppStatusCode)
+            {
+                case AppStatusCode.Success:
+                    {
+                        model.IsReloadPage = isSuccessReloadPage;
+                        var jsonResult = JsonConvert.SerializeObject(model);
+                        return Content(jsonResult);
+                    }
+                case AppStatusCode.ServerError:
+                    {
+                        model.IsReloadPage = isErrorReloadPage;
+
+                        var jsonResult = JsonConvert.SerializeObject(model);
+                        return Content(jsonResult);
+                    }
+                case AppStatusCode.NotFound:
+                    {
+                        model.IsReloadPage = isErrorReloadPage;
+                        model.Title ??= "نتیجه ای یافت نشد";
+                        var jsonResult = JsonConvert.SerializeObject(model);
+                        return Content(jsonResult);
+                    }
+                case AppStatusCode.BadRequest:
+                    {
+                        model.IsReloadPage = isErrorReloadPage;
+                        model.Title ??= "اطلاعات نامعتبر است";
+                        var jsonResult = JsonConvert.SerializeObject(model);
+                        return Content(jsonResult);
+                    }
+                default:
+                    {
+                        model.IsReloadPage = isSuccessReloadPage;
+                        var jsonResult = JsonConvert.SerializeObject(model);
+                        return Content(jsonResult);
+                    }
+            }
+        }
+        catch (Exception ex)
+        {
+            var res = ApiResult.Error(ex.Message);
+            var model = new AjaxResult()
+            {
+                Status = res.MetaData.AppStatusCode,
+                Title = null,
+                Message = res.MetaData.Message,
+                IsReloadPage = isErrorReloadPage
+            };
+            var jsonResult = JsonConvert.SerializeObject(model);
+            return Content(jsonResult);
+        }
+    }
 
     public async Task<ContentResult> AjaxTryCatch<T>(Func<Task<ApiResult<T>>> func,
         bool isSuccessReloadPage = false,

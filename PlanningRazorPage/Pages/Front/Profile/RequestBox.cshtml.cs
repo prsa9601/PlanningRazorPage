@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using PlanningRazorPage.Infrastructure.RazorUtils;
 using PlanningRazorPage.Infrastructure.Utils.Decryption;
 using PlanningRazorPage.Models.Request;
+using PlanningRazorPage.Services.Friend;
 using PlanningRazorPage.Services.Request;
 
 namespace PlanningRazorPage.Pages.Front.Profile
@@ -23,7 +24,6 @@ namespace PlanningRazorPage.Pages.Front.Profile
             requestBox = await _service.GetRequestByFilter(FilterParams);
             return Page();
         }
- 
-      
+  
     }
 }

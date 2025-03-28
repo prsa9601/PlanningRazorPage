@@ -77,6 +77,9 @@ namespace PlanningRazorPage.Pages.Admin.User
                 userName = UserName,
                 IsActive = IsActive,
             });
+            if (result.IsSuccess)
+                await _service.SetAvatar(new SetAvatarCommand { 
+                Avatar = avatar,UserName = UserName});
             return RedirectAndShowAlert(result, Redirect("Index"));
         }
     }

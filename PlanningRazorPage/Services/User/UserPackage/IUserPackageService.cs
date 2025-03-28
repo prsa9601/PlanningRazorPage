@@ -7,7 +7,7 @@ namespace PlanningRazorPage.Services.User.UserPackage
 {
     public interface IUserPackageService
     {
-        Task<ApiResult?> SetActivePackage(SetActivePackageCommand command);
+        Task<ApiResult?> SetActivePackage(SetUserPackageCommand command);
         Task<ApiResult?> EditUserPackage(EditUserPackageCommand command);
         Task<ApiResult?> DeActiveUserPackage(DeActiveUserPackageCommand command);
         Task<List<UserPackageDto>?> GetPackageCurrentUser();
@@ -82,7 +82,7 @@ namespace PlanningRazorPage.Services.User.UserPackage
             return result?.Data;
         }
 
-        public async Task<ApiResult?> SetActivePackage(SetActivePackageCommand command)
+        public async Task<ApiResult?> SetActivePackage(SetUserPackageCommand command)
         {
             var result = await _client.PostAsJsonAsync($"{ModuleName}/SetPackageForUser", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
