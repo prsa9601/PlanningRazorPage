@@ -1,8 +1,7 @@
 ﻿@page
-@using PlanningRazorPage.Infrastructure
 @using PlanningRazorPage.Infrastructure.Utils
 @using PlanningRazorPage.Models.User.UserPackage
-@model PlanningRazorPage.Pages.Admin.UserPackage.IndexModel
+@model PlanningRazorPage.Pages.Admin.UserPackage.UserPackagesDetailModel
 @{
     Layout = "Shared/_Layout";
     ViewData["Title"] = "🎁 مدیریت پکیج‌های کاربران";
@@ -147,19 +146,10 @@
     <div class="p-4 bg-light rounded-top">
         <form method="get" class="row g-3">
             <!-- فیلدهای موجود -->
-          @*   <div class="col-md-3">
+            @*   <div class="col-md-3">
                 <input type="number" asp-for="FilterParams.packageId" class="form-control" placeholder="شناسه پکیج">
             </div> *@
-            <div class="col-md-3">
-                <input type="text" asp-for="FilterParams.phoneNumber" class="form-control" placeholder="شماره همراه">
-            </div>
-            <div class="col-md-3">
-                <input type="text" asp-for="FilterParams.userName" class="form-control" placeholder="نام کاربری">
-            </div>
-
-            <!-- فیلترهای جدید -->
-         
-
+          
             <div class="col-md-3">
                 <input type="date"
                        asp-for="FilterParams.FilterStartTime"
@@ -212,8 +202,8 @@
                 {
                     @foreach (var user in Model.Users.Data)
                     {
-                      //   foreach (var package in user.userPackages)
-                        //{ 
+                        foreach (var package in user.userPackages)
+                        {
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center gap-3">
@@ -222,22 +212,22 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="package-id-badge">#@user.userPackages.PackageId</span>
+                                    <span class="package-id-badge">#@package.PackageId</span>
                                 </td>
-                            <td class="fw-bold">@user.userPackages.AllowedEmailCount</td>
-                            <td class="fw-bold">@user.userPackages.AllowedSmsCount</td>
+                                <td class="fw-bold">@package.AllowedEmailCount</td>
+                                <td class="fw-bold">@package.AllowedSmsCount</td>
                                 <td>
                                     <div class="expiry-date">
-                                    @user.userPackages.ExpiryDate.ConvertToPersianDateString()
+                                        @package.ExpiryDate.ConvertToPersianDateTime()
                                         @*(@"dd\.hh\:mm").ToString("yyyy/MM/dd HH:mm")*@
                                     </div>
                                 </td>
                                 <td>
-                                <div class="status-toggle" onclick="ToggleStatus('@user.userPackages.PackageId','@user.userPackages.IsActive',this)">
-                                    <div class="status-badge @(user.userPackages.IsActive ? "status-active" : "status-inactive")">
-                                        @(user.userPackages.IsActive ? "✓" : "✕")
+                                    <div class="status-toggle" onclick="ToggleStatus('@package.PackageId','@package.IsActive',this)">
+                                        <div class="status-badge @(package.IsActive ? "status-active" : "status-inactive")">
+                                            @(package.IsActive ? "✓" : "✕")
                                         </div>
-                                    <span>@(user.userPackages.IsActive ? "فعال" : "غیرفعال")</span>
+                                        <span>@(package.IsActive ? "فعال" : "غیرفعال")</span>
                                     </div>
                                 </td>
                                 <td>
@@ -254,13 +244,13 @@
                                         </a>
                                         <button class="btn-delete"
                                                 data-user-id="@user.UserId"
-                                            data-package-id="@user.userPackages.PackageId">
+                                                data-package-id="@package.PackageId">
                                             <span>حذف</span>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
-                        // } 
+                        }
                     }
                 }
                 else
@@ -284,11 +274,7 @@
                 <li class="page-item">
                     <a class="page-link"
                        asp-route-pageId="@(Model.Users.CurrentPage - 1)"
-                       asp-route-phoneNumber="@Model.FilterParams.phoneNumber"
-                       asp-route-userName="@Model.FilterParams.userName"
-                       asp-route-search="@Model.FilterParams.search"
-                       asp-route-filterStartTime="@Model.FilterParams.FilterStartTime"
-                       asp-route-filterEndTime="@Model.FilterParams.FilterEndTime">
+                       asp-all-route-data="@Model.FilterParams.ToRouteDictionary(Model.Users.CurrentPage-1)">
                         &laquo;
                     </a>
                 </li>
@@ -299,11 +285,7 @@
                 <li class="page-item @(i == Model.Users.CurrentPage ? "active" : "")">
                     <a class="page-link"
                        asp-route-pageId="@i"
-                       asp-route-phoneNumber="@Model.FilterParams.phoneNumber"
-                       asp-route-userName="@Model.FilterParams.userName"
-                       asp-route-search="@Model.FilterParams.search"
-                       asp-route-filterStartTime="@Model.FilterParams.FilterStartTime"
-                       asp-route-filterEndTime="@Model.FilterParams.FilterEndTime">
+                       asp-all-route-data="@Model.FilterParams.ToRouteDictionary(i)">
                         @i
                     </a>
                 </li>
@@ -314,11 +296,7 @@
                 <li class="page-item">
                     <a class="page-link"
                        asp-route-pageId="@(Model.Users.CurrentPage + 1)"
-                       asp-route-phoneNumber="@Model.FilterParams.phoneNumber"
-                       asp-route-userName="@Model.FilterParams.userName"
-                       asp-route-search="@Model.FilterParams.search"
-                       asp-route-filterStartTime="@Model.FilterParams.FilterStartTime"
-                       asp-route-filterEndTime="@Model.FilterParams.FilterEndTime">
+                       asp-all-route-data="@Model.FilterParams.ToRouteDictionary(Model.Users.CurrentPage+1)">
                         &raquo;
                     </a>
                 </li>

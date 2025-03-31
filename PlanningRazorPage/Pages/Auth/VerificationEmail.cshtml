@@ -1,0 +1,211 @@
+﻿@page
+@model PlanningRazorPage.Pages.Auth.VerificationEmailModel
+@{
+    Layout = "../Shared/_Layout";
+    ViewData["Title"] = "🌈 تایید ایمیل";
+}
+
+@section Header {
+    <style>
+        /* به روزرسانی متغیرهای رنگ */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            --secondary-gradient: linear-gradient(135deg, #4ECDC4 0%, #45B7AF 100%);
+            --glass-effect: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            --neon-shadow: 0 0 20px rgba(255,107,107,0.3);
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            background: var(--primary-gradient);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            border-radius: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 2px solid #FF6B6B;
+            padding: 2.5rem;
+            margin: 2rem;
+        }
+
+        .verification-header {
+            text-align: center;
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .verification-icon {
+            font-size: 5rem;
+            color: #FF6B6B;
+            animation: pulse 2s infinite;
+        }
+
+        .verification-steps {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .step-card {
+            background: rgba(255,255,255,0.9);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+            .step-card:hover {
+                transform: translateY(-5px);
+                box-shadow: var(--neon-shadow);
+                border-color: #FF6B6B;
+            }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: #FF6B6B;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .btn-glow {
+            background: var(--secondary-gradient);
+            color: white !important;
+            padding: 1rem 2rem;
+            border-radius: 1.5rem;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+            .btn-glow:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px rgba(78, 205, 196, 0.4);
+            }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 1.5rem;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .verified-badge {
+            color: var(--success-color);
+            border: 2px solid var(--success-color);
+        }
+
+        .unverified-badge {
+            color: var(--danger-color);
+            border: 2px solid var(--danger-color);
+        }
+    </style>
+}
+
+<div class="auth-container">
+    <div class="glass-card" data-aos="zoom-in">
+        <div class="verification-header">
+            <i class="fas fa-envelope-open-text verification-icon"></i>
+            <h1 class="display-5 fw-bold">تایید ایمیل شما</h1>
+        </div>
+
+        <div class="text-center mb-5">
+            <div class="status-badge @(Model.IsVerified ? "verified-badge" : "unverified-badge")">
+                <i class="fas @(Model.IsVerified ? "fa-check-circle" : "fa-times-circle")"></i>
+                <span>@(Model.IsVerified ? "ایمیل تایید شده" : "در انتظار تایید")</span>
+            </div>
+        </div>
+
+        <div class="verification-steps">
+            <div class="step-card" data-aos="fade-up">
+                <div class="step-number">1</div>
+                <h5>صندوق ورودی خود را بررسی کنید</h5>
+                <p class="text-muted">ایمیلی از طرف ما با موضوع «تایید حساب کاربری» دریافت خواهید کرد</p>
+            </div>
+
+            <div class="step-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="step-number">2</div>
+                <h5>روی لینک تایید کلیک کنید</h5>
+                <p class="text-muted">لینک تأیید را در ایمیل خود پیدا کرده و روی آن کلیک کنید</p>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button disabled="@Model.IsVerified" class="btn-glow" id="resendTrigger">
+                <i class="fas fa-paper-plane"></i>
+                ارسال مجدد ایمیل
+            </button>
+
+            <a href="/" class="btn-glow">
+                <i class="fas fa-home"></i>
+                بازگشت به خانه
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // یکسان‌سازی اسکریپت‌ها با صفحه مدیریت کاربران
+        document.getElementById('resendTrigger').addEventListener('click', function() {
+            const btn = this;
+            btn.innerHTML = `
+                <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                در حال ارسال...
+            `;
+            btn.disabled = true;
+
+            fetch('?handler=Resend', {
+                method: 'GET',
+                headers: {
+                    'RequestVerificationToken':
+                        document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+            .then(response => {
+                if(response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ارسال موفق!',
+                        text: 'ایمیل تایید جدید ارسال شد',
+                        confirmButtonColor: '#FF6B6B'
+                    });
+                }
+            })
+            .finally(() => {
+                btn.innerHTML = `
+                    <i class="fas fa-paper-plane"></i>
+                    ارسال مجدد ایمیل
+                `;
+                btn.disabled = false;
+            });
+        });
+    </script>
+}

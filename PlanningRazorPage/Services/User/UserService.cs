@@ -130,13 +130,13 @@ namespace PlanningRazorPage.Services.User
 
             if (filterParams.UserName != null)
                 url += $"&UserName={filterParams.UserName}";
-            if (filterParams.UserName != null)
+            if (filterParams.Name != null)
                 url += $"&Name={filterParams.Name}";
-            if (filterParams.UserName != null)
+            if (filterParams.Family != null)
                 url += $"&Family={filterParams.Family}";
-            if (filterParams.UserName != null)
+            if (filterParams.PhoneNumber != null)
                 url += $"&PhoneNumber={filterParams.PhoneNumber}";
-            if (filterParams.UserName != null)
+            if (filterParams.Email != null)
                 url += $"&Email={filterParams.Email}";
             if (filterParams.ActivePackage)
                 url += $"&ActivePackage={filterParams.ActivePackage}";

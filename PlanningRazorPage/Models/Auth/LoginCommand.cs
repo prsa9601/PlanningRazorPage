@@ -19,6 +19,11 @@
         public string PhoneNumber { get; set; }
         // public bool rememberMe { get; set; }
     }
+    public class VerificationEmailViewModel
+    {
+        public string token { get; set; }
+    }
+   
     //public class LoginResponse
     //{
     //    public string Token { get; set; }

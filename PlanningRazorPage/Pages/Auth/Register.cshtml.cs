@@ -47,6 +47,27 @@ namespace PlanningRazorPage.Pages.Auth
                 PhoneNumber = PhoneNumber,
                 UserName = UserName
             });
+            if (result.IsSuccess)
+            {
+                var loginResult = await _service.Login(new LoginCommand
+                {
+                    Password=Password,
+                    rememberMe = false,
+                    UserName = UserName
+                });
+                if (loginResult.IsSuccess)
+                {
+                    var token = loginResult.Data.Token;
+                    //var refreshToken = result.Data.RefreshToken;
+                    HttpContext.Response.Cookies.Append("token", token, new CookieOptions()
+                    {
+                        HttpOnly = true,
+                        Expires = DateTimeOffset.Now.AddDays(7)
+                    });
+                    return RedirectAndShowAlert(result, Redirect("~/Index"));
+                }
+
+            }
             return RedirectAndShowAlert(result, Redirect("~/Index"));
         }
     }

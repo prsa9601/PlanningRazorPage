@@ -8,6 +8,8 @@ namespace PlanningRazorPage.Services.Auth
         //Task<ApiResult<LoginResponse>?> Login(LoginCommand command);
         Task<ApiResult<LoginResultDto>?> Login(LoginCommand command);
         Task<ApiResult?> Register(RegisterCommand command);
+        Task<ApiResult?> SendTokenForVerificationEmail();
+        Task<ApiResult?> VerificationEmail(VerificationEmailViewModel command);
         Task<ApiResult?> Logout();
     }
 }

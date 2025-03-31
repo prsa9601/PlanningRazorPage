@@ -45,5 +45,17 @@ namespace PlanningRazorPage.Services.Auth
                 return ApiResult.Error();
             }
         }
+
+        public async Task<ApiResult?> SendTokenForVerificationEmail()
+        {
+            var result = await _client.GetAsync("Auth/SendVerificationEmailToken");
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
+
+        public async Task<ApiResult?> VerificationEmail(VerificationEmailViewModel command)
+        {
+            var result = await _client.PostAsJsonAsync("Auth/VerificationEmail", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
     }
 }

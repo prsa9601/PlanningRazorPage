@@ -21,21 +21,18 @@ namespace PlanningRazorPage.Pages.Admin.User
             //_logger = logger;
         }
         public UserFilterResultForAdmin? Users { get; set; }
-        public async Task OnGet(int pageId = 1, int take = 8,
-            string userName = null!, bool activePackage = true,
-            string name = "", string family = "",
-            string email = "", string phoneNumber = "")
+        public async Task OnGet(int pageId = 1, int take = 8)
         {
             Users = await _service.SearchUser(new UserFilterParamForAdmin()
             {
                 PageId = pageId,
-                ActivePackage = activePackage,
-                Email = email,
-                Family = family,
-                Name = name,
-                PhoneNumber = phoneNumber,
+                ActivePackage = FilterParams.ActivePackage,
+                Email = FilterParams.Email,
+                Family = FilterParams.Family,
+                Name = FilterParams.Name,
+                PhoneNumber = FilterParams.PhoneNumber,
                 Take = take,
-                UserName = userName
+                UserName = FilterParams.UserName
             });
         }
         public void OnPost()

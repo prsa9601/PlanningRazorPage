@@ -7,7 +7,8 @@
 }
 
 @section Header {
-    
+            #<!-- #region name -->
+
     <style>
         /* به روزرسانی کلاس اصلی دکمه‌ها */
         .btn-edit,
@@ -26,6 +27,38 @@
             appearance: none;
         }
 
+        .btn-set-package {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); /* رنگ جدید */
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            padding: 0.8rem 1.5rem; /* مشابه سایر دکمه‌ها */
+            border-radius: 1.5rem; /* مشابه سایر دکمه‌ها */
+            border: none; /* مشابه سایر دکمه‌ها */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* مشابه سایر دکمه‌ها */
+            display: flex; /* مشابه سایر دکمه‌ها */
+            flex-direction: column; /* قرار دادن متن و آیکون در دو خط */
+            align-items: center; /* مرکز قرار دادن محتوا */
+            gap: 0.2rem; /* فاصله بین متن و آیکون */
+            position: relative; /* برای استفاده از ::after */
+        }
+
+            .btn-set-package::after {
+                content: '💰'; /* آیکون جدید */
+                margin-left: 0; /* فاصله از متن */
+                transition: all 0.3s ease;
+                display: inline-block;
+                filter: drop-shadow(0 2px 4px rgba(46, 204, 113, 0.3));
+                font-size: 1.5rem; /* اندازه آیکون */
+            }
+
+            .btn-set-package:hover {
+                transform: translateY(-3px) scale(1.05);
+                box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+            }
+
+                .btn-set-package:hover::after {
+                    transform: translateY(3px); /* تکان خوردن آیکون به سمت پایین */
+                }
         /* استایل خاص دکمه جزئیات */
         .btn-details {
             background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
@@ -65,6 +98,7 @@
                 animation: shine 3s infinite;
                 opacity: 0.3;
             }
+
         .pagination {
             --pagination-color: #FF6B6B;
             --pagination-active-bg: var(--success-color);
@@ -95,6 +129,7 @@
         .page-item:last-child .page-link {
             border-radius: 1rem !important;
         }
+
         :root {
             --primary-gradient: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
             --secondary-gradient: linear-gradient(135deg, #4ECDC4 0%, #45B7AF 100%);
@@ -188,6 +223,17 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
+        .no-data-box {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.5rem;
+            color: #FF6B6B;
+            border: 2px dashed #FF6B6B;
+            border-radius: 1rem;
+            margin: 2rem;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
         .user-avatar {
             width: 72px;
             height: 72px;
@@ -455,6 +501,8 @@
             }
         }
     </style>
+
+    <!-- #endregion -->
 }
 
 <div class="user-management-card">
@@ -462,6 +510,34 @@
         <h5 class="table-title mb-0">
             🎪 مدیریت کاربران
         </h5>
+    </div>
+    <div class="filter-section p-4">
+        <form method="get" asp-page="Index" class="row g-3">
+            <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="نام کاربری" asp-for="FilterParams.UserName">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="نام" asp-for="FilterParams.Name">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="نام خانوادگی" asp-for="FilterParams.Family">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="ایمیل" asp-for="FilterParams.Email">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="شماره تلفن" asp-for="FilterParams.PhoneNumber">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" asp-for="FilterParams.ActivePackage">
+                    <option value="false">انتخاب نشده</option>
+                    <option value="true">پکیج فعال</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">فیلتر</button>
+            </div>
+        </form>
     </div>
 
     <div class="table-responsive-xxl p-4">
@@ -479,38 +555,40 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Users.Data)
+                @if (Model.Users?.EntityCount > 0)
                 {
-                    <tr>
-                        <td data-label="تصویر">
-                            <div class="avatar-wrapper">
-                                <img src="@Directories.GetAvatar(item.avatar.Avatar.ToString())"
-                                     class="user-avatar"
-                                     alt="آواتار کاربر"
-                                     loading="lazy">
-                            </div>
-                        </td>
-                        <td data-label="نام کاربری" class="fw-bold">@item.UserName</td>
-                        <td data-label="ایمیل">
-                            <div class="user-email">
-                                @item.Email
-                            </div>
-                        </td>
-                        <td data-label="شماره">
-                            <div class="user-phone">
-                                @item.PhoneNumber
-                            </div>
-                        </td>
-                        <td data-label="وضعیت">
-                            <div class="status-toggle"
-                                 onclick="ToggleStatus('IsActive', '@item.Id','@item.IsActive', this)">
-                                <div class="status-badge @(item.IsActive ? "status-active" : "status-inactive")">
-                                    @(item.IsActive ? "✓" : "✕")
+                    @foreach (var item in Model.Users!.Data)
+                    {
+                        <tr>
+                            <td data-label="تصویر">
+                                <div class="avatar-wrapper">
+                                    <img src="@Directories.GetAvatar(item.avatar.Avatar.ToString())"
+                                         class="user-avatar"
+                                         alt="آواتار کاربر"
+                                         loading="lazy">
                                 </div>
-                                <span>@(item.IsActive ? "فعال" : "غیرفعال")</span>
-                            </div>
-                        </td>
-                      @*   <td data-label="تأیید شماره">
+                            </td>
+                            <td data-label="نام کاربری" class="fw-bold">@item.UserName</td>
+                            <td data-label="ایمیل">
+                                <div class="user-email">
+                                    @item.Email
+                                </div>
+                            </td>
+                            <td data-label="شماره">
+                                <div class="user-phone">
+                                    @item.PhoneNumber
+                                </div>
+                            </td>
+                            <td data-label="وضعیت">
+                                <div class="status-toggle"
+                                     onclick="ToggleStatus('IsActive', '@item.Id','@item.IsActive', this)">
+                                    <div class="status-badge @(item.IsActive ? "status-active" : "status-inactive")">
+                                        @(item.IsActive ? "✓" : "✕")
+                                    </div>
+                                    <span>@(item.IsActive ? "فعال" : "غیرفعال")</span>
+                                </div>
+                            </td>
+                            @*   <td data-label="تأیید شماره">
                                 <div class="status-badge @(item.IsActive ? "status-active" : "status-inactive")">
                                     @(item.IsActive ? "✓" : "✕")
                                 </div>
@@ -522,69 +600,93 @@
                                 </div>
                             <span>@(item.IsActive ? "تاییدشده" : "تاییدنشده")</span>
                         </td> *@
-                        <!-- قسمت تأیید شماره تماس -->
-                        <td data-label="تأیید شماره">
-                            <div class="status-toggle"
-                                 onclick="ToggleStatus('PhoneNumberConfirmed', '@item.Id','@item.PhoneNumberConfirmed', this)">
-                                <div class="status-badge @(item.PhoneNumberConfirmed ? "status-active" : "status-inactive")">
-                                    @(item.PhoneNumberConfirmed ? "✓" : "✕")
+                            <!-- قسمت تأیید شماره تماس -->
+                            <td data-label="تأیید شماره">
+                                <div class="status-toggle"
+                                     onclick="ToggleStatus('PhoneNumberConfirmed', '@item.Id','@item.PhoneNumberConfirmed', this)">
+                                    <div class="status-badge @(item.PhoneNumberConfirmed ? "status-active" : "status-inactive")">
+                                        @(item.PhoneNumberConfirmed ? "✓" : "✕")
+                                    </div>
+                                    <span>@(item.PhoneNumberConfirmed ? "تایید شده" : "تایید نشده")</span>
                                 </div>
-                                <span>@(item.PhoneNumberConfirmed ? "تایید شده" : "تایید نشده")</span>
-                            </div>
-                        </td>
+                            </td>
 
-                        <!-- قسمت تأیید ایمیل -->
-                        <td data-label="تأیید ایمیل">
-                            <div class="status-toggle"
-                                 onclick="ToggleStatus('EmailConfirmed', '@item.Id','@item.EmailConfirmed', this)">
-                                <div class="status-badge @(item.EmailConfirmed ? "status-active" : "status-inactive")">
-                                    @(item.EmailConfirmed ? "✓" : "✕")
+                            <!-- قسمت تأیید ایمیل -->
+                            <td data-label="تأیید ایمیل">
+                                <div class="status-toggle"
+                                     onclick="ToggleStatus('EmailConfirmed', '@item.Id','@item.EmailConfirmed', this)">
+                                    <div class="status-badge @(item.EmailConfirmed ? "status-active" : "status-inactive")">
+                                        @(item.EmailConfirmed ? "✓" : "✕")
+                                    </div>
+                                    <span>@(item.EmailConfirmed ? "تایید شده" : "تایید نشده")</span>
                                 </div>
-                                <span>@(item.EmailConfirmed ? "تایید شده" : "تایید نشده")</span>
-                            </div>
-                        </td>
-                        <td data-label="عملیات">
-                            <div class="action-buttons">
-                                <a asp-page="Detail"
-                                   asp-route-id="@item.Id"
-                                   class="btn-details"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="top"
-                                   title="جزئیات کامل">
-                                    <span>جزئیات</span>
-                                </a>
+                            </td>
+                            <td data-label="عملیات">
+                                <div class="action-buttons">
+                                    <a asp-page="Detail"
+                                       asp-route-id="@item.Id"
+                                       class="btn-details"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="جزئیات کامل">
+                                        <span>جزئیات</span>
+                                    </a>
 
-                                <a asp-page="/Admin/User/SetRoles"
-                                   asp-route-id="@item.Id"
-                                   class="btn-roles"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="top"
-                                   title="تنظیم نقش‌ها">
-                                    <span>نقش‌ها</span>
-                                </a>
-                                <a asp-page="Edit"
-                                   asp-route-id="@item.Id"
-                                   class="btn-edit"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="top"
-                                   title="ویرایش">
-                                    <span>ویرایش</span>
-                                </a>
-                            @*     <button class="btn-delete"
+                                    <a asp-page="../UserPackage/SetPackages"
+                                       asp-route-id="@item.Id"
+                                       class="btn-set-package"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="ست کردن پکیج">
+                                        <span>پکیج</span>
+                                    </a>
+
+                                    <a asp-page="/Admin/User/SetRoles"
+                                       asp-route-id="@item.Id"
+                                       class="btn-roles"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="تنظیم نقش‌ها">
+                                        <span>نقش‌ها</span>
+                                    </a>
+                                    <a asp-page="Edit"
+                                       asp-route-id="@item.Id"
+                                       class="btn-edit"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="ویرایش">
+                                        <span>ویرایش</span>
+                                    </a>
+                                    @*     <button class="btn-delete"
                                         onclick="DeleteItem('@Url.Page("", "index", new {id = item.Id})', '@item.UserName')"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="top"
                                         title="حذف">
                                     <span>حذف</span>
                                 </button> *@
-                                <button class="btn-delete"
-                                        data-user-id="@item.Id"
-                                        data-user-name="@item.UserName"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="حذف">
-                                    <span>حذف</span>
-                                </button>
+                                    <button class="btn-delete"
+                                            data-user-id="@item.Id"
+                                            data-user-name="@item.UserName"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="حذف">
+                                        <span>حذف</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3">
+                            <div>
+                            </div>
+                        </td> 
+                        <td colspan="5">
+                            <div class="no-data-box">
+                                🚫 هیچ کاربری یافت نشد!
                             </div>
                         </td>
                     </tr>
@@ -595,7 +697,7 @@
     <!-- Pagination -->
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center mt-4">
-            @if (Model.Users.CurrentPage > 1)
+            @if (Model.Users!.CurrentPage > 1)
             {
                 <li class="page-item">
                     <a class="page-link"

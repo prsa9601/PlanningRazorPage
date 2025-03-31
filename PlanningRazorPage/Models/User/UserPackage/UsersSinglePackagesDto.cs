@@ -42,9 +42,12 @@
     }
     public class UsersPackagesFilterParam : BaseFilterParam
     {
-        public long? packageId { get; set; }
+        //public long? packageId { get; set; }
         public string? packageTitle { get; set; }
+        public bool ActivePackages { get; set; }
         public string? phoneNumber { get; set; }
+        public DateTime FilterStartTime { get; set; }
+        public DateTime FilterEndTime { get; set; }
         public SearchUserPackage search { get; set; } 
         public string? userName { get; set; }
     }
@@ -54,10 +57,31 @@
         Latest,
         //BestSeller
     }
+    public class UsersPackagesFilterDataDto : BaseDto
+    {
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+
+        public UserPackageDto userPackages { get; set; }
+
+    }
 
 
+    public class UsersPackagesFilterResult : BaseFilter<UsersPackagesFilterDataDto, UsersPackagesFilterParam>
+    {
 
-    public class UsersPackagesFilterResult : BaseFilter<UsersPackagesDto, UsersPackagesFilterParam>
+    }
+    public class UsersPackagesByUserIdFilterParam : BaseFilterParam
+    {
+        public string? UserId { get; set; }
+        public bool ActivePackages { get; set; }
+        public DateTime FilterStartTime { get; set; }
+        public DateTime FilterEndTime { get; set; }
+        public SearchUserPackage search { get; set; } = SearchUserPackage.None;
+    }
+    public class UsersPackagesByUserIdFilterResult : BaseFilter<UsersPackagesDto, UsersPackagesByUserIdFilterParam>
     {
 
     }
