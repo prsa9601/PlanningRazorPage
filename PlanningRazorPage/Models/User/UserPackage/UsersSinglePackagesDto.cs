@@ -40,14 +40,25 @@
         public TimeSpan ExpiryDate { get; set; }
         public bool IsActive { get; set; }
     }
+    public class UsersPackagesFilterParamViewModel : BaseFilterParam
+    {
+        //public long? packageId { get; set; }
+        public string? packageTitle { get; set; }
+        public bool ActivePackages { get; set; }
+        public string? phoneNumber { get; set; }
+        public string? FilterStartTime { get; set; } = null;
+        public string? FilterEndTime { get; set; } = null;
+        public SearchUserPackage search { get; set; } 
+        public string? userName { get; set; }
+    }
     public class UsersPackagesFilterParam : BaseFilterParam
     {
         //public long? packageId { get; set; }
         public string? packageTitle { get; set; }
         public bool ActivePackages { get; set; }
         public string? phoneNumber { get; set; }
-        public DateTime FilterStartTime { get; set; }
-        public DateTime FilterEndTime { get; set; }
+        public DateTime FilterStartTime { get; set; } = DateTime.MinValue;
+        public DateTime FilterEndTime { get; set; } = DateTime.MaxValue;
         public SearchUserPackage search { get; set; } 
         public string? userName { get; set; }
     }

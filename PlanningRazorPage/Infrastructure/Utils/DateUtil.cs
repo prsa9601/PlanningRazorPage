@@ -4,6 +4,23 @@ namespace PlanningRazorPage.Infrastructure.Utils;
 
 public static class DateUtil
 {
+    //public static DateTime ToGregorianDateTime(this string? persianDate)
+    //{
+    //    try
+    //    {
+    //        var parts = persianDate.Split('/');
+    //        int year = int.Parse(parts[0]);
+    //        int month = int.Parse(parts[1]);
+    //        int day = int.Parse(parts[2]);
+
+    //        var persianCalendar = new PersianCalendar();
+    //        return new DateTime(year, month, day, persianCalendar);
+    //    }
+    //    catch
+    //    {
+    //        return DateTime.MinValue;
+    //    }
+    //}
     public static DateTime ToMiladi(this string persianDate)
     {
         try
@@ -42,7 +59,7 @@ public static class DateUtil
         }
         catch
         {
-            return DateTime.Now;
+            return DateTime.MinValue;
         }
     }
     
@@ -181,10 +198,10 @@ public static class DateUtil
         return string.Empty;
     }
 
-    public static DateTime? ToGregorianDateTime(this string persianDate)
+    public static DateTime ToGregorianDateTime(this string persianDate)
     {
         if (string.IsNullOrEmpty(persianDate))
-            return null;
+            return DateTime.MinValue;
         try
         {
             var pc = new PersianCalendar();
@@ -210,7 +227,7 @@ public static class DateUtil
         }
         catch
         {
-            return null;
+            return DateTime.MinValue;
         }
     }
 

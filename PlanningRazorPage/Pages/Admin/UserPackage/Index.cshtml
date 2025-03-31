@@ -9,7 +9,64 @@
 }
 
 @section Header {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
     <style>
+        /* استایل پیشرفته برای فیلدهای تاریخ */
+        .date-picker-wrapper {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .persian-date-input {
+            direction: rtl;
+            text-align: right;
+            background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%236c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>') no-repeat left 12px center/20px;
+            padding: 12px 20px 12px 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+            .persian-date-input:focus {
+                border-color: #4ECDC4;
+                box-shadow: 0 4px 12px rgba(78, 205, 196, 0.25);
+                outline: none;
+            }
+
+        /* ریسپانسیو سازی */
+        @@media (max-width: 768px) {
+            .filter-row .col-md-3 {
+                margin-bottom: 1rem;
+            }
+
+            .persian-date-input {
+                width: 100%;
+                font-size: 14px;
+                padding: 10px 15px 10px 45px;
+                background-position: left 10px center;
+            }
+        }
+
+        /* استایل تقویم */
+        .pwt-datepicker {
+            z-index: 9999 !important;
+            border-radius: 15px !important;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15) !important;
+            font-family: 'Vazir', sans-serif !important;
+        }
+
+        .pwt-btn-today {
+            background-color: #4ECDC4 !important;
+            color: white !important;
+            border-radius: 8px !important;
+        }
+    </style>
+    <style>
+
+
+
         /* استایل‌های کامل */
         :root {
             --edit-gradient: linear-gradient(135deg, #4ECDC4 0%, #45B7AF 100%);
@@ -147,7 +204,7 @@
     <div class="p-4 bg-light rounded-top">
         <form method="get" class="row g-3">
             <!-- فیلدهای موجود -->
-          @*   <div class="col-md-3">
+            @*   <div class="col-md-3">
                 <input type="number" asp-for="FilterParams.packageId" class="form-control" placeholder="شناسه پکیج">
             </div> *@
             <div class="col-md-3">
@@ -158,20 +215,23 @@
             </div>
 
             <!-- فیلترهای جدید -->
-         
 
             <div class="col-md-3">
-                <input type="date"
+                <input type="text"
+                       id="FilterStartTime"
                        asp-for="FilterParams.FilterStartTime"
-                       class="form-control"
-                       placeholder="از تاریخ">
+                       class="form-control persian-date-input"
+                       placeholder="از تاریخ (۱۴۰۳/۰۵/۰۱)"
+                       autocomplete="off">
             </div>
 
             <div class="col-md-3">
-                <input type="date"
+                <input type="text"
+                       id="FilterEndTime"
                        asp-for="FilterParams.FilterEndTime"
-                       class="form-control"
-                       placeholder="تا تاریخ">
+                       class="form-control persian-date-input"
+                       placeholder="تا تاریخ (۱۴۰۳/۰۵/۳۱)"
+                       autocomplete="off">
             </div>
 
             <div class="col-md-3">
@@ -212,55 +272,55 @@
                 {
                     @foreach (var user in Model.Users.Data)
                     {
-                      //   foreach (var package in user.userPackages)
-                        //{ 
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="fw-bold">@user.UserName</div>
-                                        <div class="text-muted small">@user.PhoneNumber</div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="package-id-badge">#@user.userPackages.PackageId</span>
-                                </td>
+                        //   foreach (var package in user.userPackages)
+                        //{
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="fw-bold">@user.UserName</div>
+                                    <div class="text-muted small">@user.PhoneNumber</div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="package-id-badge">#@user.userPackages.PackageId</span>
+                            </td>
                             <td class="fw-bold">@user.userPackages.AllowedEmailCount</td>
                             <td class="fw-bold">@user.userPackages.AllowedSmsCount</td>
-                                <td>
-                                    <div class="expiry-date">
+                            <td>
+                                <div class="expiry-date">
                                     @user.userPackages.ExpiryDate.ConvertToPersianDateString()
-                                        @*(@"dd\.hh\:mm").ToString("yyyy/MM/dd HH:mm")*@
-                                    </div>
-                                </td>
-                                <td>
+                                    @*(@"dd\.hh\:mm").ToString("yyyy/MM/dd HH:mm")*@
+                                </div>
+                            </td>
+                            <td>
                                 <div class="status-toggle" onclick="ToggleStatus('@user.userPackages.PackageId','@user.userPackages.IsActive',this)">
                                     <div class="status-badge @(user.userPackages.IsActive ? "status-active" : "status-inactive")">
                                         @(user.userPackages.IsActive ? "✓" : "✕")
-                                        </div>
+                                    </div>
                                     <span>@(user.userPackages.IsActive ? "فعال" : "غیرفعال")</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="action-buttons d-flex gap-2 justify-content-center">
-                                        <a asp-page="UserPackagesDetail"
-                                           asp-route-userId="@user.UserId"
-                                           class="btn-edit">
-                                            <span>جزئیات پکیج های کاربر</span>
-                                        </a>
-                                        <a asp-page="SetPackages"
-                                           asp-route-userId="@user.UserId"
-                                           class="btn-edit">
-                                            <span>ست کردن پکیج برای کاربر</span>
-                                        </a>
-                                        <button class="btn-delete"
-                                                data-user-id="@user.UserId"
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons d-flex gap-2 justify-content-center">
+                                    <a asp-page="UserPackagesDetail"
+                                       asp-route-userId="@user.UserId"
+                                       class="btn-edit">
+                                        <span>جزئیات پکیج های کاربر</span>
+                                    </a>
+                                    <a asp-page="SetPackages"
+                                       asp-route-userId="@user.UserId"
+                                       class="btn-edit">
+                                        <span>ست کردن پکیج برای کاربر</span>
+                                    </a>
+                                    <button class="btn-delete"
+                                            data-user-id="@user.UserId"
                                             data-package-id="@user.userPackages.PackageId">
-                                            <span>حذف</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        // } 
+                                        <span>حذف</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        // }
                     }
                 }
                 else
@@ -405,5 +465,71 @@
                 Swal.fire('خطا!', 'تغییر وضعیت انجام نشد', 'error');
             }
         }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+
+
+
+    <script>
+        // تابع عمومی برای ایجاد تقویم
+        function initDatePicker(selector) {
+            $(selector).pDatepicker({
+                format: 'YYYY/MM/DD',
+                initialValue: false,
+                calendarType: 'persian',
+                autoClose: true,
+                toolbox: {
+                    enabled: true,
+                    todayButton: {
+                        enabled: true,
+                        text: 'امروز'
+                    }
+                },
+                onSelect: function(unixDate) {
+                    const pd = new persianDate(unixDate);
+                    this.$element.val(pd.format('YYYY/MM/DD')).trigger('change');
+                    this.hide();
+                }
+            });
+        }
+
+        // مقداردهی اولیه برای هر دو فیلد
+        initDatePicker('#FilterStartTime');
+        initDatePicker('#FilterEndTime');
+
+        // مدیریت کلیک خارج از تقویم
+        $(document).on('click', function(e) {
+            const isDateInput = $(e.target).is('.persian-date-input') ||
+                               $(e.target).closest('.persian-date-input').length;
+
+            const isDatePicker = $(e.target).closest('.pwt-datepicker').length;
+
+            if (!isDateInput && !isDatePicker) {
+                $('.pwt-datepicker').hide();
+            }
+        });
+
+        // جلوگیری از بسته شدن هنگام کلیک روی تقویم
+        $('.pwt-datepicker').on('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // اعتبارسنجی تاریخ
+        $('#FilterEndTime').on('change', function() {
+            const start = $('#FilterStartTime').val();
+            const end = $(this).val();
+
+            if (start && end) {
+                const startDate = new persianDate(start, 'YYYY/MM/DD');
+                const endDate = new persianDate(end, 'YYYY/MM/DD');
+
+                if (endDate < startDate) {
+                    Swal.fire('خطا!', 'تاریخ پایان نمیتواند قبل از تاریخ شروع باشد', 'error');
+                    $(this).val('');
+                }
+            }
+        });
     </script>
 }
