@@ -10,7 +10,7 @@ using PlanningRazorPage.Models;
 
 namespace PlanningRazorPage.Pages.Auth
 {
-    
+
     public class LoginModel : BaseRazorPage
     {
         private readonly IAuthService _authService;
@@ -31,6 +31,10 @@ namespace PlanningRazorPage.Pages.Auth
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [BindProperty]
+        [Display(Name = "مرا به خاطر بسپار")]
+        public bool RememberMe { get; set; }
+
         public string? RedirectTo { get; set; }
         public IActionResult OnGet(string redirectTo)
         {
@@ -47,7 +51,7 @@ namespace PlanningRazorPage.Pages.Auth
             {
                 Password = Password,
                 UserName = UserName,
-                rememberMe = true
+                rememberMe = RememberMe
             });
             if (result.MetaData.AppStatusCode == AppStatusCode.NotFound)
             {
@@ -78,7 +82,17 @@ namespace PlanningRazorPage.Pages.Auth
             {
                 return LocalRedirect(RedirectTo);
             }
-            return Redirect("~/Index");
+            ApiResult apiResult = new ApiResult
+            {
+                IsReload = true,
+                IsSuccess = true,
+                MetaData = new MetaData
+                {
+                    AppStatusCode = AppStatusCode.Success,
+                    Message = "ورود با موفقیت انجام شد"
+                }
+            };
+            return RedirectAndShowAlert(apiResult, Redirect("/Index"));
             //return RedirectAndShowAlert(result, Redirect("~/Index"));
             //return RedirectToPage("detail", new { slug = post.Slug });
         }

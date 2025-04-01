@@ -14,7 +14,7 @@ namespace PlanningRazorPage.Services.Package
         Task<ApiResult> RemoveActivePackage(RemoveActivePackageCommand command);
 
         Task<List<PackageDto?>> GetListPackages();
-        Task<List<PackageDto>?> GetListActiveForCurrentUser();
+        Task<List<PackageDtoForUserProfile?>> GetListActiveForCurrentUser();
         Task<List<PackageDto>?> GetPackagesByUserId(string UserId);
         Task<PackageDto?> GetPackage(long id);
 

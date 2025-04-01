@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PlanningRazorPage.Infrastructure.RazorUtils;
 using PlanningRazorPage.Models.Package;
 using PlanningRazorPage.Services.Package;
+using System.Linq.Expressions;
 
 namespace PlanningRazorPage.Pages.Front.Profile
 {
@@ -16,13 +17,20 @@ namespace PlanningRazorPage.Pages.Front.Profile
         }
 
         public long id { get; set; }
-        public PackageDto? package { get; set; }
-        public async void OnGet()
+        public List<PackageDtoForUserProfile?> packages { get; set; }
+        public async Task<IActionResult> OnGet()
         {
-            var user = await _service.GetListActiveForCurrentUser();
+            packages = await _service.GetListActiveForCurrentUser();
+            return Page();
+        }
+        public async Task<IActionResult> OnGetDetails(long id)
+        {
+            var package = await _service.GetPackage(id);
+            return new JsonResult(package);
         }
         public void OnPost()
         {
         }
+        
     }
 }
