@@ -30,7 +30,7 @@ public class SearchFriendDto : BaseDto
 
 public class SearchFriendForEventFilterParamModel : BaseFilterParam
 {
-    public string UserName { get; set; } = string.Empty;
+    public string? UserName { get; set; } = string.Empty;
 }
 public class SearchFriendForEventFilterResult : BaseFilter<SearchFriendForEventData, SearchFriendForEventFilterParamModel>
 {

@@ -29,7 +29,7 @@ namespace PlanningRazorPage.Services.Friend
         {
             var url = $"{ModuleName}/SearchFriendForEvent?PageId={param.PageId}&Take={param.Take}";
 
-            if (param.UserName != null)
+            if (!string.IsNullOrEmpty(param.UserName))
                 url += $"&userName={param.UserName}";
 
             var result = await _client.GetFromJsonAsync<ApiResult<SearchFriendForEventFilterResult?>>(url);

@@ -52,7 +52,7 @@ namespace PlanningRazorPage.Pages
                 {
                     Take = 1999,
                     PageId = 1,
-                    UserName = "p"
+                    UserName = ""
                 });
 
             FriendResult = MapFriend(friends, cancel);
