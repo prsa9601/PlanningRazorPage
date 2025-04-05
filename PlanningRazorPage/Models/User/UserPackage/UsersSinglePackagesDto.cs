@@ -11,6 +11,8 @@
     }
     public class UserPackageDto : BaseDto
     {
+        public int Price { get; set; }
+        public string Title { get; set; }
         public long PackageId { get; set; }
         public string UserId { get; set; }
         public int AllowedEmailCount { get; set; } = 10;

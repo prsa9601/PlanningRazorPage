@@ -271,8 +271,8 @@
                                 <td data-label="تعداد پیامک">@package.AllowedSmsCount</td>
                                 <td data-label="قیمت">@package.Price.ToString("C")</td>
                                 <td data-label="تاریخ خرید">@package.CreationDate.ConvertToPersianDateString()</td>
-                                <td data-label="تاریخ انقضا">@package.ExpiryTime.ToString().Replace("_", " ")</td>
-                                <td data-label="مدت زمان">@package.ExpiryDate.ConvertToPersianDateString()</td>
+                                <td data-label="تاریخ انقضا">@package.ExpiryDate.ConvertToPersianDateString()</td>
+                                <td data-label="مدت زمان">@package.ExpiryTime.ToString().Replace("_", " ")</td>
                                 <td data-label="وضعیت">
                                     @if (package!.Active)
                                     {
@@ -291,7 +291,7 @@
                                 </td>
                                 <td data-label="عملیات">
                                     <button class="action-btn view"
-                                            onclick="ViewDetails('@Url.Page("UserPackages", "Details", new { id = package.Id })')">
+                                            onclick="ViewDetails('@Url.Page("UserPackages", "Details", new { id = package.UserPacakgeId })')">
                                         <i class="mdi mdi-information-outline"></i>
                                         جزئیات
                                     </button>

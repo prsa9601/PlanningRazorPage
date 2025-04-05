@@ -1,5 +1,6 @@
 ﻿@page
-@model NotificationModel
+@using PlanningRazorPage.Infrastructure.Utils
+@model PlanningRazorPage.Pages.Front.Profile.NotificationModel
 @{
     Layout = "Shared/_LayoutProfile";
 }
@@ -9,144 +10,134 @@
         :root {
             --primary-gradient: linear-gradient(135deg, #6B8DD6 0%, #FFE66D 100%);
             --secondary-gradient: linear-gradient(135deg, #FF7E5F 0%, #FEB47B 100%);
-            --glass-effect: rgba(255, 255, 255, 0.98);
-            --shadow-effect: 0 12px 40px rgba(0, 0, 0, 0.08);
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
         }
 
-        .notifications-container {
-            background: var(--glass-effect);
-            border-radius: 2rem;
-            box-shadow: var(--shadow-effect);
+        .notifications-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             margin: 2rem;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .notifications-header {
             background: var(--primary-gradient);
             padding: 2rem;
             color: white;
-            position: relative;
-            overflow: hidden;
+            border-radius: 1.5rem 1.5rem 0 0;
         }
 
-            .notifications-header::after {
-                content: '';
-                position: absolute;
-                top: -50%;
-                left: -50%;
-                width: 200%;
-                height: 200%;
-                background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
-                animation: shine 8s infinite;
-                opacity: 0.3;
-            }
-
         .notifications-table {
+            --hover-scale: 1.02;
             --hover-bg: rgba(245, 245, 245, 0.9);
             width: 100%;
             border-collapse: separate;
             border-spacing: 0 1rem;
-            padding: 2rem;
         }
 
             .notifications-table th {
                 color: #6B8DD6;
-                font-weight: 600;
                 padding: 1.5rem;
-                background: rgba(245, 245, 245, 0.9);
-                border-radius: 1rem;
+                font-weight: 600;
             }
 
             .notifications-table td {
                 padding: 1.5rem;
                 background: white;
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                border-radius: 0.8rem;
             }
 
-                .notifications-table td:hover {
-                    transform: translateY(-3px);
-                    box-shadow: 0 8px 25px rgba(107, 141, 214, 0.1);
-                }
+            .notifications-table tr:hover td {
+                transform: scale(var(--hover-scale));
+                box-shadow: 0 4px 15px rgba(107, 141, 214, 0.2);
+            }
 
-        .notification-type {
+        .notification-actions {
             display: flex;
-            align-items: center;
-            gap: 1rem;
+            gap: 0.5rem;
+            justify-content: flex-end;
         }
 
-            .notification-type i {
-                font-size: 1.5rem;
+            .notification-actions .btn {
+                padding: 0.75rem 1.25rem;
+                border-radius: 2rem;
+                border: none;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .notification-actions .btn-view {
+                background: rgba(107, 141, 214, 0.1);
                 color: #6B8DD6;
             }
 
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 48px;
-            height: 24px;
+            .notification-actions .btn-mark {
+                background: var(--secondary-gradient);
+                color: white !important;
+                box-shadow: 0 4px 15px rgba(255, 126, 95, 0.3);
+            }
+
+            .notification-actions .btn-delete {
+                background: var(--primary-gradient);
+                color: white !important;
+                box-shadow: 0 4px 15px rgba(107, 141, 214, 0.3);
+            }
+
+        .notification-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
         }
 
-            .toggle-switch input {
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
+        .status-unread {
+            background: rgba(255, 126, 95, 0.15);
+            color: #FF7E5F;
+        }
 
-            .toggle-switch .slider {
-                position: absolute;
-                cursor: pointer;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: #ccc;
-                transition: .4s;
-                border-radius: 24px;
-            }
-
-                .toggle-switch .slider:before {
-                    position: absolute;
-                    content: "";
-                    height: 20px;
-                    width: 20px;
-                    left: 2px;
-                    bottom: 2px;
-                    background-color: white;
-                    transition: .4s;
-                    border-radius: 50%;
-                }
-
-            .toggle-switch input:checked + .slider {
-                background: var(--primary-gradient);
-            }
-
-                .toggle-switch input:checked + .slider:before {
-                    transform: translateX(24px);
-                }
-
-        @@keyframes shine {
-            100% {
-                transform: translate(100%, 100%) rotate(45deg);
-            }
+        .status-read {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
         }
 
         @@media (max-width: 768px) {
-            .notifications-container {
+            .notifications-card {
                 margin: 1rem;
-                border-radius: 1.2rem;
+                border-radius: 1rem;
             }
 
             .notifications-table td {
-                padding: 1rem;
+                display: flex;
+                flex-direction: column;
+                align-items: start !important;
             }
+
+                .notifications-table td::before {
+                    content: attr(data-label);
+                    font-weight: 600;
+                    color: #6B8DD6;
+                    margin-bottom: 0.5rem;
+                }
+
+            .notification-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+                .notification-actions .btn {
+                    width: 100%;
+                    justify-content: center;
+                }
         }
     </style>
 }
+
 <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
-    <!-- User Tabs -->
     <ul class="nav nav-tabs mb-3">
+        <!-- سایر تب‌ها -->
+       
         <li class="nav-item">
             <a class="nav-link" asp-page="Acount">
                 <i class="mdi mdi-account-outline mdi-20px me-1"></i>حساب
@@ -162,7 +153,7 @@
                 <i class="mdi mdi-bookmark-outline mdi-20px me-1"></i>پکیج های فعال
             </a>
         </li>
-        <li class="nav-item">
+     <li class="nav-item">
             <a class="nav-link active" asp-page="Notification">
                 <i class="mdi mdi-bell-outline mdi-20px me-1"></i>اعلان‌ها
             </a>
@@ -181,98 +172,194 @@
                 <i class="mdi mdi-account-supervisor-outline mdi-20px me-1"></i>‌دوستان
             </a>
         </li>
+        <!-- سایر تب‌ها -->
     </ul>
-    <!--/ User Tabs -->
-    <!-- Current Plan -->
-    <div class="card mb-4">
-<div class="notifications-container">
-    <div class="notifications-header">
-        <h3 class="mb-0">🔔 تنظیمات اعلان‌ها</h3>
+    
+    <div class="notifications-card">
+        <div class="notifications-header">
+            <h3 class="mb-0">🔔 اعلان‌های اخیر</h3>
+        </div>
+
+        <div class="px-4 pt-4">
+            <div class="table-responsive">
+                <table class="notifications-table">
+                    <thead>
+                        <tr>
+                            <th>عنوان</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Notifications?.Data?.Any() == true)
+                        {
+                            foreach (var item in Model.Notifications.Data)
+                            {
+                                <tr>
+                                    <td data-label="عنوان">@item.eventDto!.Title</td>
+                                    <td data-label="وضعیت">
+                                        <span class="notification-status @(item.IsSeen ? "status-read" : "status-unread")">
+                                            @(item.IsSeen ? "خوانده شده" : "جدید")
+                                        </span>
+                                    </td>
+                                    <td data-label="تاریخ">@item.CreationDate.ToPersianDate()</td>
+                                    <td data-label="عملیات">
+                                        <div class="notification-actions">
+                                            <button class="btn btn-view"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#notificationModal"
+                                                    data-title="@item.eventDto.Title"
+                                                    @* data-description="@item.Description" *@
+                                                    data-date="@item.CreationDate.ToPersianDateTime()">
+                                                <i class="mdi mdi-eye-outline"></i>
+                                                مشاهده
+                                            </button>
+                                            @if (!item.IsSeen)
+                                            {
+                                                <button class="btn btn-mark"
+                                                        onclick="markAsRead('@item.Id')">
+                                                    <i class="mdi mdi-check-all"></i>
+                                                    علامت‌گذاری
+                                                </button>
+                                            }
+                                            <button class="btn btn-delete"
+                                                    onclick="deleteNotification('@item.Id')">
+                                                <i class="mdi mdi-delete-outline"></i>
+                                                حذف
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-4">
+                                    🎉 هیچ اعلان جدیدی وجود ندارد!
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div class="notifications-table">
-        <table class="w-100">
-            <thead>
-                <tr>
-                    <th>نوع اعلان</th>
-                    <th class="text-center">📧 ایمیل</th>
-                    <th class="text-center">🖥 مرورگر</th>
-                    <th class="text-center">📱 برنامه</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="notification-type">
-                            <i class="mdi mdi-bell-alert-outline"></i>
-                            <span>اطلاعیه جدید</span>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td class="text-center">
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td class="text-center">
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                </tr>
-                <!-- Repeat for other rows -->
-            </tbody>
-        </table>
+    <!-- Notification Detail Modal -->
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalNotificationTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-muted">توضیحات:</label>
+                        <p class="modal-notification-description"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">تاریخ ارسال:</label>
+                        <p class="modal-notification-date"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="text-end p-4">
-        <button class="btn btn-primary"
-                style="background: var(--primary-gradient); border: none; padding: 0.8rem 2rem;">
-            ذخیره تغییرات
-        </button>
-        <button class="btn btn-outline-secondary">
-            بازنشانی
-        </button>
-    </div>
-</div>
-</div>
 </div>
 
 @section Scripts {
     <script>
-        // مدیریت تغییر وضعیت سوییچ‌ها
-        document.querySelectorAll('.toggle-switch input').forEach(switchInput => {
-            switchInput.addEventListener('change', function() {
-                const parentRow = this.closest('tr');
-                if (this.checked) {
-                    parentRow.style.background = 'rgba(107, 141, 214, 0.05)';
-                } else {
-                    parentRow.style.background = 'white';
+        // مدیریت نمایش مدال
+        document.querySelectorAll('.btn-view').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('modalNotificationTitle').textContent = btn.dataset.title;
+                document.querySelector('.modal-notification-description').textContent = btn.dataset.description;
+                document.querySelector('.modal-notification-date').textContent = btn.dataset.date;
+            });
+        });
+
+        // علامت‌گذاری به عنوان خوانده شده
+        async function markAsRead(notificationId) {
+            const { isConfirmed } = await Swal.fire({
+                title: 'تغییر وضعیت اعلان',
+                html: `آیا از علامت‌گذاری این اعلان به عنوان خوانده شده اطمینان دارید؟`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#6B8DD6',
+                cancelButtonColor: '#FF7E5F',
+                confirmButtonText: 'تایید',
+                cancelButtonText: 'انصراف'
+            });
+
+            if (isConfirmed) {
+                try {
+                    const response = await fetch(`Notification?handler=MarkAsRead&id=${notificationId}`, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        showToast('success', result.message);
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        showToast('error', result.message);
+                    }
+                } catch (error) {
+                    console.error('خطا در انجام عملیات:', error);
+                    showToast('error', 'خطا در ارتباط با سرور');
                 }
-            });
-        });
+            }
+        }
 
-        // مدیریت ارسال فرم
-        document.querySelector('button[type="submit"]').addEventListener('click', async () => {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-start',
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
+        // حذف اعلان
+        async function deleteNotification(notificationId) {
+            const { isConfirmed } = await Swal.fire({
+                title: 'حذف اعلان',
+                html: `آیا از حذف این اعلان اطمینان دارید؟`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#FF7E5F',
+                cancelButtonColor: '#6B8DD6',
+                confirmButtonText: 'حذف',
+                cancelButtonText: 'انصراف'
             });
 
-            Toast.fire({
-                icon: 'success',
-                title: 'تغییرات با موفقیت ذخیره شد!'
-            });
-        });
+            if (isConfirmed) {
+                try {
+                    const response = await fetch(`Notification?handler=Delete&id=${notificationId}`, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        showToast('success', result.message);
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        showToast('error', result.message);
+                    }
+                } catch (error) {
+                    console.error('خطا در انجام عملیات:', error);
+                    showToast('error', 'خطا در ارتباط با سرور');
+                }
+            }
+        }
+
+        // تابع نمایش نوتیفیکیشن (مشابه کد قبلی)
     </script>
 }

@@ -33,6 +33,13 @@ public class BaseRazorPage : PageModel
             return Page();
         return redirectPath;
     }
+    protected IActionResult RedirectAndShowAlertWithError(ApiResult result, IActionResult redirectPath)
+    {
+        result.IsReload = true;
+        var model = JsonConvert.SerializeObject(result);
+        HttpContext.Response.Cookies.Append("SystemAlert", model);
+        return redirectPath;
+    }
     protected async Task<ContentResult> RedirectAndShowAlertContent(ApiResult result, IActionResult redirectPath)
     {
         result.IsReload = true;

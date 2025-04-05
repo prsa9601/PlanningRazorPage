@@ -2,6 +2,7 @@
 using PlanningRazorPage.Models.Package;
 using PlanningRazorPage.Models.Request;
 using PlanningRazorPage.Models.User.UserPackage;
+using System.IO;
 using System.Text;
 
 namespace PlanningRazorPage.Services.User.UserPackage
@@ -12,6 +13,7 @@ namespace PlanningRazorPage.Services.User.UserPackage
         Task<ApiResult?> EditUserPackage(EditUserPackageCommand command);
         Task<ApiResult?> DeActiveUserPackage(DeActiveUserPackageCommand command);
         Task<List<UserPackageDto>?> GetPackageCurrentUser();
+        Task<UserPackageDto?> GetUserPackageByUserPackageId(long UserPackageId);
         Task<UsersSinglePackagesDto?> GetPackageByUserId(string userId, long packageId);
         Task<UsersPackagesFilterResult?> GetFilterUserPackages(UsersPackagesFilterParam param);
         Task<UsersPackagesByUserIdFilterResult?> GetFilterUserPackagesByUserId(UsersPackagesByUserIdFilterParam param);
@@ -128,6 +130,13 @@ namespace PlanningRazorPage.Services.User.UserPackage
 
             var result = await _client.GetFromJsonAsync
                 <ApiResult<UsersPackagesByUserIdFilterResult>>(path);
+            return result?.Data;
+        }
+
+        public async Task<UserPackageDto?> GetUserPackageByUserPackageId(long UserPackageId)
+        {
+            var result = await _client.GetFromJsonAsync
+          <ApiResult<UserPackageDto?>>($"{ModuleName}/GetUserPackageByUserPackageId?Id={UserPackageId}");
             return result?.Data;
         }
     }

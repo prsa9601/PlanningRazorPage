@@ -3,6 +3,7 @@
     public class PackageDtoForUserProfile : BaseDto
     {
         public string Title { get; set; }
+        public long UserPacakgeId { get; set; }
         public string ImageName { get; set; }
         public string Link { get; set; }
         public int Price { get; set; }

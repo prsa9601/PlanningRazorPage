@@ -1,5 +1,6 @@
 ﻿using PlanningRazorPage.Models;
 using PlanningRazorPage.Models.Notification;
+using PlanningRazorPage.Models.Role;
 
 namespace PlanningRazorPage.Services.Notification
 {
@@ -10,6 +11,8 @@ namespace PlanningRazorPage.Services.Notification
         Task<ApiResult?> Edit(EditNotificationViewModel command);
         Task<ApiResult?> ChangeDate(ChangeDateNotificationCommand command);
         Task<ApiResult?> Remove(RemoveNotificationCommand command);
+        Task<NotificationDto?> GetByIdNotificationsCurrentUser(long NotificationId);
+        Task<NotificationFilterResult?> GetFilterNotificationsCurrentUser(NotificationFilterParamViewModel param);
     }
     public class NotificationService : INotificationService
     {
@@ -50,6 +53,21 @@ namespace PlanningRazorPage.Services.Notification
         {
             var result = await _client.PatchAsJsonAsync($"{ModuleName}/ChangeDateNotification", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
+
+        public async Task<NotificationDto?> GetByIdNotificationsCurrentUser(long NotificationId)
+        {
+            var result = await _client.GetFromJsonAsync<ApiResult<NotificationDto?>>($"{ModuleName}/GetByIdNotificationsCurrentUser&NotificationId={NotificationId}");
+            return result?.Data;
+        }
+
+        public async Task<NotificationFilterResult?> GetFilterNotificationsCurrentUser(NotificationFilterParamViewModel param)
+        {
+            //var url = $"{ModuleName}/filter?PageId={param.PageId}&Take={param.Take}";
+            var url = $"{ModuleName}/GetFilterNotificationsCurrentUser?PageId={param.PageId}&Take={param.Take}";
+
+            var result = await _client.GetFromJsonAsync<ApiResult<NotificationFilterResult?>>(url);
+            return result?.Data;
         }
     }
 }

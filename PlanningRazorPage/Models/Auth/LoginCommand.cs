@@ -23,10 +23,19 @@
     {
         public string token { get; set; }
     }
-   
+
     //public class LoginResponse
     //{
     //    public string Token { get; set; }
     //    public string RefreshToken { get; set; }
     //}
+    public class VerifiedEmailForgotPasswordCommand
+    {
+        public required string Email { get; set; }
+        public required string VerificationEmailToken { get; set; }
+    }
+    public class SendEmailForForgotPasswordCommand
+    {
+        public required string Email { get; set; }
+    }
 }

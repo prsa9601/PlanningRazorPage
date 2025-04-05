@@ -10,6 +10,9 @@ namespace PlanningRazorPage.Services.Auth
         Task<ApiResult?> Register(RegisterCommand command);
         Task<ApiResult?> SendTokenForVerificationEmail();
         Task<ApiResult?> VerificationEmail(VerificationEmailViewModel command);
+        Task<ApiResult?> SendTokenForForgotPassword(SendEmailForForgotPasswordCommand command);
+        Task<ApiResult?> VerificationForgotPassword(VerifiedEmailForgotPasswordCommand command);
+
         Task<ApiResult?> Logout();
     }
 }

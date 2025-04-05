@@ -21,7 +21,7 @@ namespace PlanningRazorPage.Pages.Auth
                 token = token.ToString(),
             });
 
-            if (result.IsSuccess)
+            if (result!.IsSuccess)
             {
                 //IsVerified = true;
                 return RedirectAndShowAlert(result, Redirect("../index"));

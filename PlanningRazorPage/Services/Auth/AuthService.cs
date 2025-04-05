@@ -57,5 +57,16 @@ namespace PlanningRazorPage.Services.Auth
             var result = await _client.PostAsJsonAsync("Auth/VerificationEmail", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
+        public async Task<ApiResult?> SendTokenForForgotPassword(SendEmailForForgotPasswordCommand command)
+        {
+            var result = await _client.PostAsJsonAsync("Auth/SendEmailForForgotPassword", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
+
+        public async Task<ApiResult?> VerificationForgotPassword(VerifiedEmailForgotPasswordCommand command)
+        {
+            var result = await _client.PostAsJsonAsync("Auth/VerifiedEmailForgotPassword", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
     }
 }
