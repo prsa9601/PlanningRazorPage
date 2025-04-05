@@ -39,10 +39,14 @@ namespace PlanningRazorPage.Pages
         public List<SearchFriendDto>? FriendResult { get; set; }
         public List<EventDtoViewModel>? EventDto { get; set; }
 
-
+        public NotificationFilterResult? Notifications { get; set; }
         public async Task OnGet(CancellationToken cancel)
         {
-
+            Notifications = await _notificationService.GetFilterNotificationsCurrentUser(new NotificationFilterParamViewModel
+            {
+                PageId = 1,
+                Take = 8
+            });
             var friends = await _friendService.SearchFriendForEvent(
                 new SearchFriendForEventFilterParamModel()
                 {
@@ -58,6 +62,24 @@ namespace PlanningRazorPage.Pages
             //{
             //    item.Link = FormatDateTime(item.EndTime);
             //}
+        }
+        public async Task<JsonResult> OnPostMarkNotificationAsRead([FromForm] long notificationId)
+        {
+            //foreach (var item in notificationId)
+            //{
+
+                var notification = await _notificationService.MarkAsRead(new MarkAsReadNotificationViewModel
+                {
+                    NotificationId = notificationId
+                });
+            //}
+
+            if (notification.IsSuccess)
+            {
+                return new JsonResult(new { success = true });
+            }
+
+            return new JsonResult(new { success = false });
         }
         public async Task<IActionResult> OnGetEvents(CancellationToken cancel)
         {
@@ -140,18 +162,18 @@ namespace PlanningRazorPage.Pages
                 }
             }
             var notificationType = NotificationType.None;
-            foreach (var item in notification) 
+            foreach (var item in notification)
             {
-                if (item=="Sms") 
+                if (item == "Sms")
                 {
                     notificationType |= NotificationType.Sms;
                 }
-                if (item=="Email") 
+                if (item == "Email")
                 {
                     notificationType |= NotificationType.Email;
                 }
             }
-          
+
             var tagEnum = Tagged.Business;
             switch (tag)
             {
@@ -205,7 +227,7 @@ namespace PlanningRazorPage.Pages
             //OnGetEvents(cancel);
             return new JsonResult(AddNotificationResult.MetaData.Message);
         }
-      
+
         #region Edit Event
         public async Task<IActionResult> OnPostEditEvent(string title,
                   DateTime startTime, DateTime endTime, string link, string eventAddress,
@@ -264,7 +286,7 @@ namespace PlanningRazorPage.Pages
                     tagEnum = Tagged.ETC;
                     break;
             }
-          
+
             var result = await _service.Edit(new EditEventCommand()
             {
                 accessNotification = accessNotification,

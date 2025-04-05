@@ -1,4 +1,5 @@
 ﻿@page "{handler?}"
+@using PlanningRazorPage.Services.Notification
 @model PlanningRazorPage.Pages.IndexModel
 @{
     Layout = null;
@@ -51,10 +52,40 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="~/assets/js/config.js"></script>
 
+    <style>
+        /* انیمیشن برای حذف نشانگر */
+        .unread {
+            transition: all 0.3s ease;
+        }
+
+        .badge-dot {
+            transition: opacity 0.3s ease;
+        }
+
+        /* حالت hover برای نوتیفیکیشن‌های خوانده نشده */
+        .dropdown-notifications-item.unread:hover {
+            background-color: rgba(255, 0, 0, 0.08);
+            transform: translateX(3px);
+        }
+
+        .dropdown-notifications-item.unread {
+            background-color: rgba(255, 0, 0, 0.05);
+            border-left: 3px solid #ff4444;
+        }
+    </style>
+
 </head>
 
 <body>
-
+    @*   @inject INotificationService _service;
+    @{
+        var Notifications = await _service.GetFilterNotificationsCurrentUser(
+        new Models.Notification.NotificationFilterParamViewModel
+            {
+                PageId = 1,
+                Take = 8
+            });
+    } *@
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar  ">
         <div class="layout-container">
@@ -1203,18 +1234,27 @@
                                    data-bs-auto-close="outside"
                                    aria-expanded="false">
                                     <i class="mdi mdi-bell-outline mdi-24px"></i>
-                                    <span class="position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border"></span>
+                                    @if (Model.Notifications!.Data.Any(i => i.IsSeen == false))
+                                    {
+                                        <span id="notificationBadge"
+                                              class="position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border"></span>
+                                    }
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end py-0">
                                     <li class="dropdown-menu-header border-bottom">
                                         <div class="dropdown-header d-flex align-items-center py-3">
                                             <h6 class="mb-0 me-auto">اعلان ها</h6>
-                                            <span class="badge rounded-pill bg-label-primary">8 جدید</span>
+                                            @if (Model.Notifications!.Data.Where(i=>i.IsSeen==false).Count() > 0)
+                                            {
+                                                <span class="badge rounded-pill bg-label-primary notification-count">
+                                                    @Model.Notifications.Data.Where(i=>i.IsSeen==false).Count()
+                                                </span>
+                                            }
                                         </div>
                                     </li>
                                     <li class="dropdown-notifications-list scrollable-container ps">
                                         <ul class="list-group list-group-flush">
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light">
+                                            @*      <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light">
                                                 <div class="d-flex gap-2">
                                                     <div class="flex-shrink-0">
                                                         <div class="avatar me-1">
@@ -1233,167 +1273,92 @@
                                                         <small class="text-muted">1ساعت قبل</small>
                                                     </div>
                                                 </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <span class="avatar-initial rounded-circle bg-label-danger">MG</span>
+                                            </li> *@
+                                            @if (Model.Notifications!.Data.Count() == 0)
+                                            {
+                                                <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                                                    @* data-notification-id="@notification.Id" >*@
+                                                    @*   @if (!notification.IsSeen)
+                                                    {
+                                                        <span class="badge badge-dot bg-danger position-absolute start-0 top-0"></span>
+                                                    } *@
+                                                    <div class="d-flex gap-2">
+                                                        <div class="flex-shrink-0">
+                                                            <div class="avatar me-1">
+                                                                <img src="~/assets/img/avatars/1.png"
+                                                                     alt=""
+                                                                     class="w-px-40 h-auto rounded-circle" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
+                                                            <h6 class="mb-1 text-truncate">
+                                                                لورم ایپسوم متن ساختگی با
+                                                            </h6>
+                                                            <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
+                                                        </div>
+                                                        <div class="flex-shrink-0 dropdown-notifications-actions">
+                                                            <small class="text-muted">1ساعت قبل</small>
                                                         </div>
                                                     </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">12ساعت قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <img src="~/assets/img/avatars/2.png"
-                                                                 alt=""
-                                                                 class="w-px-40 h-auto rounded-circle" />
+                                                    <!-- بقیه محتوا -->
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                @foreach (var notification in @Model.Notifications!.Data)
+                                                {
+                                                    <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light
+                                                             @(!notification.IsSeen ? "unread" : "")"
+                                                        data-notification-id="@notification.Id"
+                                                        data-is-read="@notification.IsSeen.ToString().ToLower()">
+                                                        @if (!notification.IsSeen)
+                                                        {
+                                                            <span class="badge badge-dot bg-danger position-absolute start-0 top-0 mt-1 ms-1"></span>
+                                                        }
+                                                        <div class="d-flex gap-2">
+                                                            <div class="flex-shrink-0">
+                                                                <div class="avatar me-1">
+                                                                    <img src="~/assets/img/avatars/1.png"
+                                                                         alt=""
+                                                                         class="w-px-40 h-auto rounded-circle" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
+                                                                <h6 class="mb-1 text-truncate">
+                                                                    لورم ایپسوم متن ساختگی با
+                                                                </h6>
+                                                                <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
+                                                            </div>
+                                                            <div class="flex-shrink-0 dropdown-notifications-actions">
+                                                                <small class="text-muted">1ساعت قبل</small>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">1ساعت قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <span class="avatar-initial rounded-circle bg-label-success">
-                                                                <i class="mdi mdi-cart-outline"></i>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">1 روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <img src="~/assets/img/avatars/9.png"
-                                                                 alt=""
-                                                                 class="w-px-40 h-auto rounded-circle" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">2 روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <span class="avatar-initial rounded-circle bg-label-success">
-                                                                <i class="mdi mdi-chart-pie-outline"></i>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">3 روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <img src="~/assets/img/avatars/5.png"
-                                                                 alt=""
-                                                                 class="w-px-40 h-auto rounded-circle" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">4 روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <img src="~/assets/img/avatars/6.png"
-                                                                 alt=""
-                                                                 class="w-px-40 h-auto rounded-circle" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">5روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read waves-effect waves-light">
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <span class="avatar-initial rounded-circle bg-label-warning">
-                                                                <i class="mdi mdi-alert-circle-outline"></i>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">
-                                                            لورم ایپسوم متن ساختگی با
-                                                        </h6>
-                                                        <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">5 روز قبل</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
+                                                        <!-- بقیه محتوا -->
+                                                    </li>
+                                                }
+                                            }
 
+                                        </ul>
+                                        @*   <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light"
+                                                    data-notification-id="@notification.Id">
+                                                    <div class="d-flex gap-2">
+                                                        <div class="flex-shrink-0">
+                                                            <div class="avatar me-1">
+                                                                <img src="~/assets/img/avatars/1.png"
+                                                                     alt=""
+                                                                     class="w-px-40 h-auto rounded-circle" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
+                                                            <h6 class="mb-1 text-truncate">
+                                                                لورم ایپسوم متن ساختگی با
+                                                            </h6>
+                                                            <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
+                                                        </div>
+                                                        <div class="flex-shrink-0 dropdown-notifications-actions">
+                                                            <small class="text-muted">1ساعت قبل</small>
+                                                        </div>
+                                                </li> *@
                                     </li>
                                     <li class="dropdown-menu-footer border-top p-2">
                                         <a href="javascript:void(0);"
@@ -1675,7 +1640,7 @@
                                                 <div class="row row-bordered g-0">
                                                     <div class="col-md p-4">
                                                         <small class="text-light fw-semibold d-block">نوع اطلاع رسانی</small>
-                                                   @*      <div class="form-check form-check-inline mt-3">
+                                                        @*      <div class="form-check form-check-inline mt-3">
                                                             <input class="form-check-input"
                                                                    type="checkbox"
                                                                    id="inlineCheckbox1"
@@ -1693,11 +1658,11 @@
                                                             <input class="form-check-input"
                                                                    type="checkbox"
                                                                    id="inlineCheckbox3"
-                                                                   value="Sms"/>
+                                                                   value="Sms" />
                                                             <label class="form-check-label" for="inlineCheckbox3">پیامک</label>
                                                         </div>
                                                     </div>
-                                                   
+
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label" for="eventURL">آدرس URL رویداد</label>
@@ -2924,6 +2889,155 @@
           })();
         });
 
+    </script>
+    <script>
+
+        // async function markAsRead(notificationId, element) {
+        //     try {
+        //         const response = await fetch('/Index?handler=MarkNotificationAsRead', {
+        //             method: 'POST',
+        //             headers: {
+        //                                  'Content-Type':  'application/x-www-form-urlencoded',
+        //                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+
+        //                 },
+        //                 body:  new URLSearchParams({ 'notificationId':notificationId })
+        //         });
+
+        //         if (response.ok) {
+        //             const result = await response.json();
+
+        //             // حذنشانگر از آیتم
+        //             element.classList.remove('unread');
+        //             const badge = element.querySelector('.badge-dot');
+        //             if (badge) badge.remove();
+
+        //             // به روزرسانی شمارنده
+        //             const notificationCount = document.querySelector('.notification-count');
+        //             if (notificationCount) {
+        //                 notificationCount.textContent = result.unreadCount;
+
+        //                 // حذف نشانگر اصلی اگر تعداد صفر شد
+        //                 if (result.unreadCount <= 0) {
+        //                     const mainBadge = document.getElementById('notification-badge');
+        //                     if (mainBadge) mainBadge.remove();
+        //                 }
+        //             }
+        //         }
+        //     } catch (error) {
+        //         console.error('خطا در بروزرسانی نوتیفیکیشن:', error);
+        //     }
+        // }
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = document.querySelector('#ajax-token input[name="__RequestVerificationToken"]').value;
+            const notificationList = document.querySelector('.dropdown-notifications-list');
+
+            // تابع علامت گذاری به عنوان خوانده شده
+            async function markAsRead(notificationId, element) {
+                try {
+                    // alert(notificationId);
+                          if (!element.classList.contains('unread')) {
+            return; // اگر خوانده شده بود ادامه نده
+        }
+
+                    const response = await fetch('/Index?handler=MarkNotificationAsRead', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type':  'application/x-www-form-urlencoded',
+                           'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+
+                        },
+                        body:  new URLSearchParams({ 'notificationId':notificationId })
+                    });
+
+                    if (response.ok) {
+                        // حذف نشانگر و به روزرسانی وضعیت
+                           element.classList.remove('unread');
+                const badge = element.querySelector('.badge-dot');
+                if (badge) badge.remove();
+
+                const badge2 = document.getElementById("notificationBadge");
+
+        // بررسی وجود المان و حذف کلاس
+        if (badge2) {
+            // روش صحیح حذف کلاس در جاوااسکریپت خالص
+            badge2.classList.remove("badge");
+
+            // اگر قصد حذف کامل المان را دارید:
+            // badge2.remove();
+        }
+
+                // const badge-span = element.querySelector('#notification-badge');
+                // if (badge-span) badge-span.remove();
+
+                // به روزرسانی شمارنده
+                updateNotificationCount(0);
+            }
+        } catch (error) {
+            console.error('خطا در بروزرسانی نوتیفیکیشن:', error);
+        }
+            }
+                    function updateNotificationCount(count) {
+            const notificationCount = document.querySelector('.notification-count');
+            const mainBadge = document.getElementById('notification-badge');
+
+            if (notificationCount) {
+                notificationCount.textContent = count;
+
+                if (count <= 0 && mainBadge) {
+                    mainBadge.remove();
+                } else if (count > 0 && !mainBadge) {
+                    // ایجاد نشانگر اگر وجود نداشت
+                    const newBadge = document.createElement('span');
+                    newBadge.id = 'notification-badge';
+                    newBadge.className = 'position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border';
+                    document.querySelector('.nav-link').appendChild(newBadge);
+                }
+            }
+        }
+            // Intersection Observer برای تشخیص مشاهده
+           const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const element = entry.target;
+                    const isRead = element.dataset.isRead === 'true';
+
+                    // فقط برای نوتیفیکیشن‌های خوانده نشده
+                    if (!isRead) {
+                        const notificationId = element.dataset.notificationId;
+                        markAsRead(notificationId, element);
+                        observer.unobserve(element);
+                    }
+                }
+            });
+        }, {
+            threshold: 0.5
+        });
+
+            // Mutation Observer برای تغییرات داینامیک لیست
+            const mutationObserver = new MutationObserver((mutations) => {
+                mutations.forEach(mutation => {
+                    mutation.addedNodes.forEach(node => {
+                        if (node.nodeType === 1 && node.matches('.dropdown-notifications-item')) {
+                            observer.observe(node);
+                        }
+                    });
+                });
+            });
+
+            // شروع مشاهده تغییرات
+            if (notificationList) {
+                mutationObserver.observe(notificationList, {
+                    childList: true,
+                    subtree: true
+                });
+
+                // مشاهده آیتم‌های موجود
+                document.querySelectorAll('.dropdown-notifications-item').forEach(item => {
+                    observer.observe(item);
+                });
+            }
+        });
     </script>
     <div id="ajax-token">
         @Html.AntiForgeryToken()

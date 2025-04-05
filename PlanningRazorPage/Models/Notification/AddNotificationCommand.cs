@@ -64,6 +64,10 @@ namespace PlanningRazorPage.Models.Notification
         public List<string>? userNames { get; set; }
         public DateTime startTime { get; set; }
     }
+    public class MarkAsReadNotificationViewModel 
+    {
+        public long NotificationId { get; set; }
+    }
     public class EditNotificationViewModel
     {
         //public long NotificationId { get; set; }

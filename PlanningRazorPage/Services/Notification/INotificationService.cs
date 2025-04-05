@@ -9,6 +9,7 @@ namespace PlanningRazorPage.Services.Notification
         Task<ApiResult?> SendEmail(SendNotificationByEmailCommand command);
         Task<ApiResult<long>?> Add(AddNotificationViewModel command);
         Task<ApiResult?> Edit(EditNotificationViewModel command);
+        Task<ApiResult?> MarkAsRead(MarkAsReadNotificationViewModel command);
         Task<ApiResult?> ChangeDate(ChangeDateNotificationCommand command);
         Task<ApiResult?> Remove(RemoveNotificationCommand command);
         Task<NotificationDto?> GetByIdNotificationsCurrentUser(long NotificationId);
@@ -68,6 +69,12 @@ namespace PlanningRazorPage.Services.Notification
 
             var result = await _client.GetFromJsonAsync<ApiResult<NotificationFilterResult?>>(url);
             return result?.Data;
+        }
+
+        public async Task<ApiResult?> MarkAsRead(MarkAsReadNotificationViewModel command)
+        {
+            var result = await _client.PatchAsJsonAsync($"{ModuleName}/MarkNotificationAsRead", command);
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
     }
 }
