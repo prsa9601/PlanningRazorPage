@@ -137,12 +137,17 @@ namespace PlanningRazorPage.Pages
         }
         public async Task<IActionResult> OnPostDeleteEvent(long id)
         {
-            await _service.Delete(id);
-            var result = await _notificationService.Remove(new Models.Notification.RemoveNotificationCommand
+            var deleteEventResult = await _service.Delete(id);
+            if (deleteEventResult!.Data > 0)
             {
-                EventId = id
-            });
-            return new JsonResult(result.MetaData.Message);
+                var result = await _notificationService.Remove(new Models.Notification.RemoveNotificationCommand
+                {
+                   EventId = id
+                });
+                return new JsonResult(result.MetaData.Message);
+            }
+
+            return new JsonResult(deleteEventResult.MetaData.Message);
         }
         public async Task<IActionResult> OnPostAdd(string title,
             DateTime startTime, DateTime endTime, string link, string eventAddress,

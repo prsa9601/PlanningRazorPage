@@ -49,10 +49,10 @@ namespace PlanningRazorPage.Services.Event
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 
-        public async Task<ApiResult?> Delete(long id)
+        public async Task<ApiResult<long>?> Delete(long id)
         {
             var result = await _client.DeleteAsync($"{ModuleName}/{id}");
-            return await result.Content.ReadFromJsonAsync<ApiResult>();
+            return await result.Content.ReadFromJsonAsync<ApiResult<long>>();
         }
 
         //public async Task<ApiResult?> Delete(DeleteEventCommand command)

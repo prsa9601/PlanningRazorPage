@@ -4,6 +4,9 @@ using PlanningRazorPage.Infrastructure.FileUtil.Interfaces;
 using PlanningRazorPage.Infrastructure.FileUtil.Services;
 using PlanningRazorPage.Infrastructure.RazorUtils;
 using PlanningRazorPage.Services.Auth;
+using PlanningRazorPage.Services.Blog;
+using PlanningRazorPage.Services.Category;
+using PlanningRazorPage.Services.Comment;
 using PlanningRazorPage.Services.Event;
 using PlanningRazorPage.Services.Friend;
 using PlanningRazorPage.Services.Notification;
@@ -49,6 +52,21 @@ public static class RegisterDependencyServices
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
         services.AddHttpClient<ITelegramService, TelegramService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(baseAddress);
+        }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+        
+        services.AddHttpClient<ICommentService, CommentService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(baseAddress);
+        }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+        
+        services.AddHttpClient<ICategoryService, CategoryService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(baseAddress);
+        }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
+        services.AddHttpClient<IBlogServce, BlogServce>(httpClient =>
         {
             httpClient.BaseAddress = new Uri(baseAddress);
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
