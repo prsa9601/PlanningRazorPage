@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace PlanningRazorPage.Pages.Errors
+namespace PlanningRazorPage.Pages.Instagram
 {
-    public class NotFoundModel : PageModel
+    public class ListModel : PageModel
     {
         public void OnGet()
         {

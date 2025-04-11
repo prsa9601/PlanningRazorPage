@@ -66,7 +66,7 @@ public static class RegisterDependencyServices
             httpClient.BaseAddress = new Uri(baseAddress);
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
-        services.AddHttpClient<IBlogServce, BlogServce>(httpClient =>
+        services.AddHttpClient<IBlogService, BlogService>(httpClient =>
         {
             httpClient.BaseAddress = new Uri(baseAddress);
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();

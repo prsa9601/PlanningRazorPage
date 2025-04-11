@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace PlanningRazorPage.Pages.Errors
+namespace PlanningRazorPage.Pages.Telegram.Post
 {
-    public class NotFoundModel : PageModel
+    public class EditModel : PageModel
     {
         public void OnGet()
         {

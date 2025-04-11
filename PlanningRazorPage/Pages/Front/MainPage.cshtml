@@ -1,0 +1,427 @@
+﻿@page
+@model PlanningRazorPage.Pages.Front.MainPageModel
+@{
+}
+@* page
+@model PlanningRazorPage.Pages.IndexModel
+@{
+    Layout = "Shared/_LayoutMain";
+} *@
+
+@section Header {
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6B8DD6 0%, #FFE66D 100%);
+            --telegram-color: #2AABEE;
+            --instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --blog-color: #2ecc71;
+            --calendar-color: #FF7E5F;
+        }
+
+        .main-header {
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+
+        .hero-section {
+            background: var(--primary-gradient);
+            padding: 8rem 2rem;
+            border-radius: 2rem;
+            color: white;
+            text-align: center;
+            margin: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .hero-section::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15));
+                transform: rotate(45deg);
+                animation: shine 8s infinite;
+            }
+
+        @@keyframes shine {
+            0% { transform: rotate(45deg) translate(-50%, -50%); }
+            100% { transform: rotate(45deg) translate(50%, 50%); }
+        }
+
+        .social-sharing {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            margin: 2rem;
+        }
+
+        .share-card {
+            border-radius: 2rem;
+            padding: 2.5rem;
+            color: white;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .telegram-share {
+            background: linear-gradient(-45deg, #2AABEE, #229ED9, #1A8CD8, #2AABEE);
+            box-shadow: 0 8px 20px rgba(42, 171, 238, 0.2);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        .instagram-share {
+            background: linear-gradient(-45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888, #f09433);
+            box-shadow: 0 8px 20px rgba(220, 39, 67, 0.2);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @@keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .share-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+        }
+
+        .share-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.15), rgba(255,255,255,0));
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .share-card:hover::before {
+            opacity: 0.8;
+        }
+
+        .share-card i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .share-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .share-card p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .share-button {
+            background: rgba(255,255,255,0.95) !important;
+            color: #333 !important;
+            border-radius: 1.5rem !important;
+            padding: 0.75rem 2rem !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+            border: none !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+            min-width: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 2;
+            font-size: 1.1rem;
+        }
+
+        .share-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2) !important;
+            background: white !important;
+        }
+
+        .share-button i {
+            font-size: 1.2rem !important;
+            vertical-align: middle !important;
+        }
+
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            margin: 2rem;
+        }
+
+        .access-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+            .access-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 30px rgba(107, 141, 214, 0.15);
+                border-color: #6B8DD6;
+            }
+
+            .access-card i {
+                font-size: 2.5rem;
+                background: var(--primary-gradient);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+        .blog-card {
+            border-color: var(--blog-color);
+        }
+
+        .calendar-card {
+            border-color: var(--calendar-color);
+        }
+
+        .package-section {
+            padding: 4rem 2rem;
+            background: rgba(245, 245, 245, 0.9);
+        }
+
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .package-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+            .package-card:hover {
+                transform: scale(1.02);
+                box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+            }
+
+        .package-badge {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: #FFE66D;
+            color: #2c3e50;
+            padding: 0.5rem 2rem;
+            transform: rotate(45deg);
+            font-weight: bold;
+        }
+
+        @@media (max-width: 768px) {
+            .hero-section {
+                padding: 4rem 1rem;
+                margin: 1rem;
+            }
+
+            .social-sharing, .quick-access {
+                grid-template-columns: 1fr;
+                margin: 1rem;
+            }
+        }
+    </style>
+}
+
+<header class="main-header">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" asp-page="/Index">
+                <i class="mdi mdi-rocket-launch text-primary"></i>
+                <span class="fw-bold">پلنیفای</span>
+            </a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="mdi mdi-account-circle"></i>
+                            پروفایل
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" asp-page="/Profile/Account">حساب کاربری</a></li>
+                            <li><a class="dropdown-item" asp-page="/Profile/Notification">اعلان‌ها</a></li>
+                            <li><a class="dropdown-item" asp-page="/Profile/Friends">دوستان</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Support">
+                            <i class="mdi mdi-headset"></i>
+                            پشتیبانی
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="hero-section">
+    <h1 class="display-4 mb-4">🚀 به دنیای برنامه‌ریزی هوشمند خوش آمدید</h1>
+    <p class="lead">مدیریت پروژه، همکاری تیمی و برنامه‌ریزی حرفه‌ای</p>
+</div>
+
+<div class="social-sharing">
+    <!-- اشتراک گذاری در تلگرام -->
+    <div class="share-card telegram-share">
+        <i class="mdi mdi-send"></i>
+        <h3>اشتراک‌گذاری در تلگرام</h3>
+        <p>تجربه خود را با دوستانتان در تلگرام به اشتراک بگذارید</p>
+        <button onclick="shareToTelegram()" class="btn share-button">
+            @* <i class="mdi mdi-send"></i> *@
+            اشتراک‌گذاری
+        </button>
+    </div>
+
+    <!-- اشتراک گذاری در اینستاگرام -->
+    <div class="share-card instagram-share">
+        <i class="mdi mdi-instagram"></i>
+        <h3>اشتراک‌گذاری در اینستاگرام</h3>
+        <p>تجربه خود را با دوستانتان در اینستاگرام به اشتراک بگذارید</p>
+        <button onclick="shareToInstagram()" class="btn share-button">
+            @* <i class="mdi mdi-instagram"></i> *@
+            اشتراک‌گذاری
+        </button>
+    </div>
+</div>
+
+<div class="quick-access">
+    <!-- دسترسی به بلاگ -->
+    <a asp-page="/Blog" class="access-card blog-card">
+        <i class="mdi mdi-post"></i>
+        <h3>وبلاگ آموزشی</h3>
+        <p>آخرین مقالات و آموزش‌های برنامه‌ریزی</p>
+        <div class="text-end mt-3 text-success">
+            <span>مشاهده مقالات</span>
+            <i class="mdi mdi-arrow-left"></i>
+        </div>
+    </a>
+
+    <!-- دسترسی به تقویم -->
+    <a asp-page="/Calendar" class="access-card calendar-card">
+        <i class="mdi mdi-calendar-check"></i>
+        <h3>تقویم برنامه‌ها</h3>
+        <p>مدیریت زمان و برنامه‌های روزانه</p>
+        <div class="text-end mt-3 text-danger">
+            <span>مشاهده تقویم</span>
+            <i class="mdi mdi-arrow-left"></i>
+        </div>
+    </a>
+</div>
+
+<div class="package-section">
+    <h2 class="text-center mb-5 display-5">💎 پکیج‌های ویژه</h2>
+    <div class="package-grid">
+        <!-- پکیج پایه -->
+        <div class="package-card">
+            <div class="package-badge">اقتصادی</div>
+            <h3 class="text-center">پلن مبتدی</h3>
+            <div class="text-center my-4">
+                <span class="h1">رایگان</span>
+            </div>
+            <ul class="list-unstyled">
+                <li class="mb-3"><i class="mdi mdi-check"></i> 3 پروژه همزمان</li>
+                <li class="mb-3"><i class="mdi mdi-check"></i> 1GB فضای ابری</li>
+                <li class="mb-3"><i class="mdi mdi-check"></i> پشتیبانی پایه</li>
+            </ul>
+            <button class="btn btn-primary w-100">شروع رایگان</button>
+        </div>
+
+        <!-- پکیج حرفه‌ای -->
+        <div class="package-card">
+            <div class="package-badge">پرفروش</div>
+            <h3 class="text-center">پلن حرفه‌ای</h3>
+            <div class="text-center my-4">
+                <span class="h1">۱۹۹,۰۰۰</span>
+                <span class="text-muted">تومان/ماه</span>
+            </div>
+            <ul class="list-unstyled">
+                <li class="mb-3"><i class="mdi mdi-check"></i> پروژه نامحدود</li>
+                <li class="mb-3"><i class="mdi mdi-check"></i> ۱۰GB فضای ابری</li>
+                <li class="mb-3"><i class="mdi mdi-check"></i> پشتیبانی VIP</li>
+            </ul>
+            <button class="btn btn-primary w-100">خرید پکیج</button>
+        </div>
+
+        <!-- پکیج سازمانی -->
+        <div class="package-card">
+            <div class="package-badge">ویژه</div>
+            <h3 class="text-center">پلن سازمانی</h3>
+            <div class="text-center my-4">
+                <span class="h1">۳۹۹,۰۰۰</span>
+                <span class="text-muted">تومان/ماه</span>
+            </div>
+            <ul class="list-unstyled">
+                <li class="mb-3"><i class="mdi mdi-check"></i> تمام امکانات حرفه‌ای</li>
+                <li class="mb-3"><i class="mdi mdi-check"></i> فضای ابری نامحدود</li>
+                <li class="mb-3"><i class="mdi mdi-check"></i> پشتیبانی اختصاصی</li>
+            </ul>
+            <button class="btn btn-primary w-100">درخواست دمو</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function shareToTelegram() {
+            const text = encodeURIComponent("من از پلنیفای استفاده می‌کنم! 🚀\nبرای مدیریت بهتر زمان و برنامه‌ریزی هوشمند به ما بپیوندید.");
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
+        }
+
+        function shareToInstagram() {
+            alert("برای اشتراک‌گذاری در استوری اینستاگرام، لطفاً از اسکرین‌شات استفاده کنید و آن را در استوری خود منتشر کنید.");
+        }
+    </script>
+}
+

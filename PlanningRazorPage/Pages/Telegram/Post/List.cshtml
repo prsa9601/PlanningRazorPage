@@ -1,0 +1,141 @@
+﻿@page
+@model PlanningRazorPage.Pages.Telegram.ListModel
+@{
+}
+@section Header {
+
+}
+
+<div class="card container">
+    <h5 class="card-header">جدول پست های تلگرام</h5>
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>پروژه</th>
+                    <th>مشتری</th>
+                    <th>کاربران</th>
+                    <th> وضعیت</th>
+                    <th>عملیات ها</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                <tr>
+                    <td><i class="mdi mdi-wallet-travel mdi-20px text-danger me-3"></i> <strong>آلبرت کوک</strong></td>
+                    <td>آلبرت کوک</td>
+                    <td>
+                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهدی صادقی" data-bs-original-title="مهدی صادقی">
+                                <img src="~/assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهراد هیدن" data-bs-original-title="مهراد هیدن">
+                                <img src="~/assets/img/avatars/6.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="محمد رضا رضایی" data-bs-original-title="محمد رضا رضایی">
+                                <img src="~/assets/img/avatars/7.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                        </ul>
+                    </td>
+                    <td><span class="badge bg-label-primary me-1">فعال</span></td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item waves-effect" href="javascript:void(0);"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
+                                <a class="dropdown-item waves-effect" href="javascript:void(0);"><i class="mdi mdi-trash-can-outline me-1"></i>حذف</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><i class="mdi mdi-basketball mdi-20px text-info me-3"></i> <strong>پروژه ورزشی</strong></td>
+                    <td>بری هانتر</td>
+                    <td>
+                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهدی صادقی" data-bs-original-title="مهدی صادقی">
+                                <img src="~/assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهراد هیدن" data-bs-original-title="مهراد هیدن">
+                                <img src="~/assets/img/avatars/6.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="محمد رضا رضایی" data-bs-original-title="محمد رضا رضایی">
+                                <img src="~/assets/img/avatars/7.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                        </ul>
+                    </td>
+                    <td><span class="badge bg-label-success me-1">تکمیل شد</span></td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
+                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-trash-can-outline me-1"></i>حذف</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><i class="mdi mdi-greenhouse mdi-20px text-success me-3"></i> <strong>پروژه گلخانه</strong></td>
+                    <td>ترور بیکر</td>
+                    <td>
+                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهدی صادقی" data-bs-original-title="مهدی صادقی">
+                                <img src="~/assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهراد هیدن" data-bs-original-title="مهراد هیدن">
+                                <img src="~/assets/img/avatars/6.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="محمد رضا رضایی" data-bs-original-title="محمد رضا رضایی">
+                                <img src="~/assets/img/avatars/7.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                        </ul>
+                    </td>
+                    <td><span class="badge bg-label-info me-1">برنامه ریزی شده است</span></td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
+                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-trash-can-outline me-1"></i>حذف</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><i class="mdi mdi-bank mdi-20px text-primary me-3"></i> <strong>پروژه بانک</strong></td>
+                    <td>جری میلتون</td>
+                    <td>
+                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهدی صادقی" data-bs-original-title="مهدی صادقی">
+                                <img src="~/assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهراد هیدن" data-bs-original-title="مهراد هیدن">
+                                <img src="~/assets/img/avatars/6.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="محمد رضا رضایی" data-bs-original-title="محمد رضا رضایی">
+                                <img src="~/assets/img/avatars/7.png" alt="Avatar" class="rounded-circle">
+                            </li>
+                        </ul>
+                    </td>
+                    <td><span class="badge bg-label-warning me-1">انتظار</span></td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
+                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-trash-can-outline me-1"></i>حذف</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+
+
+
+
+}

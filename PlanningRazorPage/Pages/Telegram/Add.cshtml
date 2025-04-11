@@ -1,0 +1,81 @@
+﻿@page
+@model PlanningRazorPage.Pages.Telegram.AddModel
+@{
+    Layout = "Shared/_Layout";
+}
+@section Header
+{
+
+
+    <link rel="stylesheet" href="~/assets/vendor/libs/flatpickr/flatpickr.css" />
+    <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css" />
+    <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css" />
+    <link rel="stylesheet" href="~/assets/vendor/libs/jquery-timepicker/jquery-timepicker.css" />
+    <link rel="stylesheet" href="~/assets/vendor/libs/pickr/pickr-themes.css" />
+
+    <script src="~/assets/vendor/js/template-customizer.js"></script>
+
+}
+<div class="col-12 container-fluid">
+    <div class="card">
+        <h5 class="card-header">تکرار کننده فرم</h5>
+        <form class="form-repeater">
+
+            <div class="card-body">
+
+                <div class="form-floating form-floating-outline mb-5">
+                    <input class="form-control"
+                           type="text"
+                           placeholder="متــریالایز"
+                           id="html5-text-input" />
+                    <label for="html5-text-input">Bio</label>
+                </div>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">عکس تلگرام</label>
+                    <input class="form-control" type="file" id="formFile" />
+                </div>
+
+            <div class="card-body">
+                <div class="row">
+
+
+                    <div class="col-md-6 col-12 mb-4">
+                        <label for="flatpickr-date" class="form-label">تاریخ اعمال تغییرات</label>
+                        <input type="hidden" class="form-control flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date" value="1403-07-10">
+                        @* <input class="form-control input" placeholder="YYYY/MM/DD" tabindex="0" type="text" readonly="readonly"> *@
+                    </div>
+
+                </div>
+            </div>
+            </div>
+                <br />
+            <br />
+            <button type="button" class="btn btn-success waves-effect waves-light">ثبت پست</button>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @* <script src="~/assets/js/forms-extras.js"></script>
+
+    <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+
+    <script src="~/assets/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
+ *@
+
+    <!-- Vendors JS -->
+    <script src="~/assets/vendor/libs/moment/moment.js"></script>
+    <script src="~/assets/vendor/libs/jdate/jdate.js"></script>
+    <script src="~/assets/vendor/libs/flatpickr/flatpickr-jdate.js"></script>
+    <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script>
+    <script src="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js"></script>
+    <script src="~/assets/vendor/libs/jquery-timepicker/jquery-timepicker.js"></script>
+    <script src="~/assets/vendor/libs/pickr/pickr.js"></script>
+    <script src="~/assets/js/forms-pickers.js"></script>
+
+}

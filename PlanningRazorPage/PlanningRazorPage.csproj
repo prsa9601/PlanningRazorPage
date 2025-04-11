@@ -8,10 +8,10 @@
 
   <ItemGroup>
     <Content Remove="Pages\Front\Profile\Security.cshtml" />
-    <Content Remove="Pages\Front\SocialMedia\Instagram\Post\Edit.cshtml" />
     <Content Remove="Pages\Shared\Partials\_Aside.cshtml" />
     <Content Remove="Pages\Shared\_LayoutFront.cshtml" />
     <Content Remove="Pages\Shared\_LayoutProfile.cshtml" />
+    <Content Remove="Pages\Instagram\Post\Edit.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,14 +31,13 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Front\Profile\Security.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Front\SocialMedia\Instagram\Post\Edit.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Shared\Partials\_Aside.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Shared\_LayoutFront.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Pages\Front\Profile\Security.cshtml" />
-    <None Include="Pages\Front\SocialMedia\Instagram\Post\Edit.cshtml" />
+    <None Include="Pages\Instagram\Post\Edit.cshtml" />
     <None Include="Pages\Shared\Partials\_Aside.cshtml" />
     <None Include="Pages\Shared\_LayoutProfile.cshtml" />
   </ItemGroup>
@@ -49,10 +48,6 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Shared\_LayoutFront.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Front\SocialMedia\Instagram\Post\Edit.cshtml" />
   </ItemGroup>
 
 </Project>
