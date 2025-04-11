@@ -1,84 +1,239 @@
 ﻿@page
 @model PlanningRazorPage.Pages.Instagram.Post.AddModel
 @{
+    Layout = "Shared/_Layout";
 }
-@section Header
-{
+
+@section Header {
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6B8DD6 0%, #FFE66D 100%);
+            --input-focus-border: #6B8DD6;
+            --input-focus-shadow: rgba(107, 141, 214, 0.25);
+        }
+
+        .post-creator-card {
+            border: none;
+            border-radius: 1.5rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+            .post-creator-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .card-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1.5rem 1.5rem 0 0 !important;
+            position: relative;
+        }
+
+            .card-header::after {
+                content: "";
+                position: absolute;
+                bottom: -20px;
+                left: 0;
+                width: 100%;
+                height: 40px;
+                background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+            }
+
+        .form-input {
+            border: 2px solid #eee;
+            border-radius: 1rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .form-input:focus {
+                border-color: var(--input-focus-border);
+                box-shadow: 0 0 0 4px var(--input-focus-shadow);
+            }
+
+        .file-upload-box {
+            border: 2px dashed #6B8DD6;
+            border-radius: 1rem;
+            background: rgba(107, 141, 214, 0.05);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .file-upload-box:hover {
+                background: rgba(107, 141, 214, 0.1);
+                transform: translateY(-2px);
+            }
+
+        .upload-preview {
+            max-width: 200px;
+            border-radius: 1rem;
+            margin: 1rem auto;
+            display: none;
+        }
+
+        .submit-btn {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 1rem;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+            .submit-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(107, 141, 214, 0.3);
+            }
+    </style>
+
+    <!-- Required CSS -->
     <link rel="stylesheet" href="~/assets/vendor/libs/flatpickr/flatpickr.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/jquery-timepicker/jquery-timepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/pickr/pickr-themes.css" />
-
-    <script src="~/assets/vendor/js/template-customizer.js"></script>
 }
-<div class="col-12 container-fluid">
-    <div class="card">
-        <h5 class="card-header">ساخت پست</h5>
-        <form class="form-repeater">
 
+<div class="col-12 container-fluid">
+    <div class="post-creator-card">
+        <h5 class="card-header">📸 ساخت پست اینستاگرام</h5>
+        <form class="p-4">
             <div class="card-body">
 
-                <div class="form-floating form-floating-outline mb-5">
-                    <input class="form-control"
-                           type="text"
-                           placeholder="متــریالایز"
-                           id="html5-text-input" />
-                    <label for="html5-text-input">Bio</label>
-                </div>
-                <div class="form-floating form-floating-outline mb-5">
-                    <input class="form-control"
-                           type="text"
-                           placeholder="متــریالایز"
-                           id="description-text-input" />
-                    <label for="description-text-input">توضیحات پست</label>
-                </div>
-                <div class="form-floating form-floating-outline mb-5">
-                    <input class="form-control"
-                           type="text"
-                           placeholder="متــریالایز"
-                           id="link-text-input" />
-                    <label for="link-text-input">لینک پست</label>
-                </div>
-                <div class="mb-3">
-                    <label for="formFile" class="form-label">عکس اینستاگرام</label>
-                    <input class="form-control" type="file" id="formFile" />
-                </div>
-                <div class="mb-3">
-                    <label for="formFile" class="form-label">ویدیو اینستاگرام</label>
-                    <input class="form-control" type="file" id="formFile" />
+                <!-- Bio Input -->
+                <div class="mb-4">
+                    <label class="form-label mb-3">بیوگرافی</label>
+                    <input type="text"
+                           class="form-input form-control"
+                           placeholder="متن بیوگرافی..."
+                           id="bio-input" />
                 </div>
 
-                <div class="card-body">
-                    <div class="row">
+                <!-- Post Description -->
+                <div class="mb-4">
+                    <label class="form-label mb-3">توضیحات پست</label>
+                    <textarea class="form-input form-control"
+                              rows="3"
+                              placeholder="توضیحات پست..."
+                              id="description-input"></textarea>
+                </div>
 
-                        <div class="col-md-6 col-12 mb-4">
-                            <label for="flatpickr-date" class="form-label">تاریخ اعمال تغییرات در پیج</label>
-                            <input type="hidden" class="form-control flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date" value="1403-07-10">
-                            @* <input class="form-control input" placeholder="YYYY/MM/DD" tabindex="0" type="text" readonly="readonly"> *@
+                <!-- Post Link -->
+                <div class="mb-4">
+                    <label class="form-label mb-3">لینک پست</label>
+                    <input type="url"
+                           class="form-input form-control"
+                           placeholder="https://example.com"
+                           id="link-input" />
+                </div>
+
+                <!-- Media Upload Section -->
+                <div class="mb-4">
+                    <label class="form-label mb-3">محتوای چندرسانه‌ای</label>
+
+                    <!-- Image Upload -->
+                    <div class="file-upload-box mb-3" onclick="document.getElementById('image-input').click()">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="mdi mdi-image-outline mdi-36px text-primary mb-3"></i>
+                            <h5 class="mb-2">آپلود عکس</h5>
+                            <p class="text-muted">حداکثر سایز: 5MB (فرمت‌های مجاز: JPG, PNG)</p>
+                            <input type="file"
+                                   class="d-none"
+                                   id="image-input"
+                                   accept="image/*" />
                         </div>
-
                     </div>
+                    <img id="image-preview" class="upload-preview" alt="Image Preview">
+
+                    <!-- Video Upload -->
+                    <div class="file-upload-box" onclick="document.getElementById('video-input').click()">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="mdi mdi-video-outline mdi-36px text-primary mb-3"></i>
+                            <h5 class="mb-2">آپلود ویدیو</h5>
+                            <p class="text-muted">حداکثر سایز: 20MB (فرمت‌های مجاز: MP4, MOV)</p>
+                            <input type="file"
+                                   class="d-none"
+                                   id="video-input"
+                                   accept="video/*" />
+                        </div>
+                    </div>
+                    <video id="video-preview" class="upload-preview" controls style="display: none;"></video>
+                </div>
+
+                <!-- Schedule Date -->
+                <div class="mb-4">
+                    <label class="form-label mb-3">⏰ زمان انتشار</label>
+                    <input type="text"
+                           class="form-input flatpickr-input"
+                           id="schedule-date"
+                           placeholder="انتخاب تاریخ و زمان"
+                           data-enable-time />
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn submit-btn">
+                        <i class="mdi mdi-send-check-outline me-2"></i>
+                        انتشار پست
+                    </button>
                 </div>
             </div>
-            <br/>
-            <br/>
         </form>
     </div>
 </div>
 
-
-
 @section Scripts {
-
-    <script src="~/assets/vendor/libs/moment/moment.js"></script>
-    <script src="~/assets/vendor/libs/jdate/jdate.js"></script>
     <script src="~/assets/vendor/libs/flatpickr/flatpickr-jdate.js"></script>
     <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script>
-    <script src="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-    <script src="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js"></script>
-    <script src="~/assets/vendor/libs/jquery-timepicker/jquery-timepicker.js"></script>
-    <script src="~/assets/vendor/libs/pickr/pickr.js"></script>
-    <script src="~/assets/js/forms-pickers.js"></script>
+    <script>
+        // Initialize Date Picker
+        flatpickr("#schedule-date", {
+            locale: "fa",
+            enableTime: true,
+            dateFormat: "Y/m/d H:i",
+            time_24hr: true
+        });
 
+        // Image Preview
+        document.getElementById('image-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('image-preview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Video Preview
+        document.getElementById('video-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('video-preview');
+
+            if (file) {
+                const url = URL.createObjectURL(file);
+                preview.src = url;
+                preview.style.display = 'block';
+            }
+        });
+
+        // Form Validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Add your validation logic here
+            Swal.fire({
+                icon: 'success',
+                title: 'پست با موفقیت ایجاد شد!',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        });
+    </script>
 }

@@ -1,79 +1,183 @@
 ﻿@page
-@model PlanningRazorPage.Pages.Telegram.AddModel
+@model PlanningRazorPage.Pages.Telegram.Post.AddModel
 @{
+    Layout = "Shared/_Layout";
 }
-@section Header
-{
 
+@section Header {
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6B8DD6 0%, #FFE66D 100%);
+            --input-focus-border: #6B8DD6;
+            --input-focus-shadow: rgba(107, 141, 214, 0.25);
+        }
 
+        .form-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+            .form-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 40px rgba(107, 141, 214, 0.2);
+            }
+
+        .card-header {
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            border: none;
+        }
+
+        .form-floating-outline .form-control {
+            border: 2px solid #eee;
+            border-radius: 1rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .form-floating-outline .form-control:focus {
+                border-color: var(--input-focus-border);
+                box-shadow: 0 0 0 4px var(--input-focus-shadow);
+            }
+
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            border: 2px dashed #6B8DD6;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            background: rgba(107, 141, 214, 0.05);
+        }
+
+            .file-upload input[type="file"] {
+                position: absolute;
+                left: 0;
+                top: 0;
+                opacity: 0;
+                cursor: pointer;
+                width: 100%;
+                height: 100%;
+            }
+
+            .file-upload:hover {
+                background: rgba(107, 141, 214, 0.1);
+            }
+
+        .flatpickr-input {
+            border: 2px solid #eee !important;
+            border-radius: 1rem !important;
+            padding: 1rem !important;
+        }
+
+            .flatpickr-input:focus {
+                border-color: var(--input-focus-border) !important;
+                box-shadow: 0 0 0 4px var(--input-focus-shadow) !important;
+            }
+
+        .btn-success {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+            .btn-success:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(107, 141, 214, 0.3);
+            }
+    </style>
+
+    <!-- لینک فایل‌های ضروری -->
     <link rel="stylesheet" href="~/assets/vendor/libs/flatpickr/flatpickr.css" />
     <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/jquery-timepicker/jquery-timepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/pickr/pickr-themes.css" />
-
-    <script src="~/assets/vendor/js/template-customizer.js"></script>
-
 }
+
 <div class="col-12 container-fluid">
-    <div class="card">
-        <h5 class="card-header">تکرار کننده فرم</h5>
-        <form class="form-repeater" method="post" enctype="multipart/form-data">
+    <div class="form-card">
+        <h5 class="card-header">📬 ایجاد پست تلگرامی</h5>
+        <form class="form-repeater p-4">
 
-            <div class="card-body">
-
-                <div class="form-floating form-floating-outline mb-5">
+            <div class="mb-4">
+                <div class="form-floating form-floating-outline">
                     <input class="form-control"
                            type="text"
                            placeholder="متــریالایز"
-                           id="html5-text-input" />
-                    <label for="html5-text-input">Bio</label>
+                           id="bio-input" />
+                    <label for="bio-input">متن بیوگرافی</label>
                 </div>
-                <div class="mb-3">
-                    <label for="formFileMultiple" class="form-label">عکس های پست تلگرامتون رو انتخاب کنید</label>
-                    <input class="form-control" type="file" id="formFileMultiple" multiple="">
-                </div>
+            </div>
 
-                <div class="card-body">
-                    <div class="row">
-
-
-                        <div class="col-md-6 col-12 mb-4">
-                            <label for="flatpickr-date" class="form-label">تاریخ اعمال تغییرات در پیج</label>
-                            <input type="hidden" class="form-control flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date" value="1403-07-10">
-                            @* <input class="form-control input" placeholder="YYYY/MM/DD" tabindex="0" type="text" readonly="readonly"> *@
-                        </div>
-
+            <div class="mb-4">
+                <div class="file-upload">
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="mdi mdi-cloud-upload-outline mdi-36px text-primary mb-3"></i>
+                        <h5 class="mb-2">آپلود عکس تلگرام</h5>
+                        <p class="text-muted">فایل را اینجا رها کنید یا کلیک کنید</p>
+                        <input class="form-control" type="file" id="formFile" />
                     </div>
                 </div>
             </div>
-            <button style="margin-top:-4em; margin-right:72em;width:9em; height:3em;" type="submit" class="btn btn-success waves-effect waves-light">ثبت پست</button>
 
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="flatpickr-date" class="form-label mb-3">📅 تاریخ اعمال تغییرات</label>
+                    <input type="text"
+                           class="form-control flatpickr-input"
+                           placeholder="انتخاب تاریخ"
+                           id="flatpickr-date"
+                           data-jdp-container="#datepicker-container" />
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <button type="button" class="btn btn-success">
+                    <i class="mdi mdi-send-check-outline me-2"></i>
+                    ثبت پست
+                </button>
+            </div>
         </form>
     </div>
 </div>
 
-
-
 @section Scripts {
-    @* <script src="~/assets/js/forms-extras.js"></script>
-
-    <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
-    <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
-    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
-
-    <script src="~/assets/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
- *@
-
-    <!-- Vendors JS -->
     <script src="~/assets/vendor/libs/moment/moment.js"></script>
     <script src="~/assets/vendor/libs/jdate/jdate.js"></script>
     <script src="~/assets/vendor/libs/flatpickr/flatpickr-jdate.js"></script>
     <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script>
-    <script src="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-    <script src="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js"></script>
-    <script src="~/assets/vendor/libs/jquery-timepicker/jquery-timepicker.js"></script>
-    <script src="~/assets/vendor/libs/pickr/pickr.js"></script>
     <script src="~/assets/js/forms-pickers.js"></script>
 
+    <script>
+        // تنظیمات تاریخ‌پیکر
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#flatpickr-date", {
+                locale: "fa",
+                enableTime: false,
+                dateFormat: "Y/m/d",
+                static: true
+            });
+        });
+
+        // مدیریت آپلود فایل
+        document.getElementById('formFile').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'فایل آپلود شد!',
+                    text: fileName,
+                    confirmButtonText: 'متوجه شدم'
+                });
+            }
+        });
+    </script>
 }

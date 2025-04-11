@@ -26,6 +26,9 @@ public class PackageService : IPackageService
         formData.Add(new StringContent(command.Price.ToString()), "Price");
         formData.Add(new StringContent(command.AllowedEmailCount.ToString()), "AllowedEmailCount");
         formData.Add(new StringContent(command.AllowedSmsCount.ToString()), "AllowedSmsCount");
+        formData.Add(new StringContent(command.AllowedPostInstagram.ToString()), "AllowedPostInstagram");
+        formData.Add(new StringContent(command.AllowedPostTelegram.ToString()), "AllowedPostTelegram");
+        formData.Add(new StringContent(command.AllowedStoryInstagram.ToString()), "AllowedStoryInstagram");
         formData.Add(new StringContent(command.ExpiryTime.ToString()), "ExpiryTime");
         formData.Add(new StreamContent(command.Picture.OpenReadStream()), "Picture", command.Picture.FileName);
         
@@ -45,6 +48,9 @@ public class PackageService : IPackageService
         formData.Add(new StringContent(command.Link.ToString()), "Link");
         formData.Add(new StringContent(command.AllowedEmailCount.ToString()), "AllowedEmailCount");
         formData.Add(new StringContent(command.AllowedSmsCount.ToString()), "AllowedSmsCount");
+        formData.Add(new StringContent(command.AllowedStoryInstagram.ToString()), "AllowedStoryInstagram");
+        formData.Add(new StringContent(command.AllowedPostTelegram.ToString()), "AllowedPostTelegram");
+        formData.Add(new StringContent(command.AllowedPostInstagram.ToString()), "AllowedPostInstagram");
         formData.Add(new StringContent(command.ExpiryTime.ToString()), "ExpiryTime");
         formData.Add(new StringContent(command.Price.ToString()), "Price");
         formData.Add(new StreamContent(command.Picture.OpenReadStream()), "Picture", command.Picture.FileName);

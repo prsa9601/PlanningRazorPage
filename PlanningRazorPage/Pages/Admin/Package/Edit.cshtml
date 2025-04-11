@@ -49,6 +49,21 @@
                     <input asp-for="AllowedSmsCount" type="number" class="form-control invoice-item-price mb-3" />
                 </div>
                 <span asp-validation-for="@Model.AllowedSmsCount"></span>
+                <div class="mb-3 col-6">
+                    <label for="formFile" asp-for="AllowedPostInstagram" class="form-label">تعداد پست های اینستاگرام مجاز</label>
+                    <input asp-for="AllowedPostInstagram" type="number" class="form-control invoice-item-price mb-3" />
+                </div>
+                <span asp-validation-for="@Model.AllowedPostInstagram"></span>
+                <div class="mb-3 col-6">
+                    <label for="formFile" asp-for="AllowedStoryInstagram" class="form-label">تعداد استوری های اینستاگرام مجاز</label>
+                    <input asp-for="AllowedStoryInstagram" type="number" class="form-control invoice-item-price mb-3" />
+                </div>
+                <span asp-validation-for="@Model.AllowedStoryInstagram"></span>
+                <div class="mb-3 col-6">
+                    <label for="formFile" asp-for="AllowedPostTelegram" class="form-label">تعداد پست های تلگرام مجاز</label>
+                    <input asp-for="AllowedPostTelegram" type="number" class="form-control invoice-item-price mb-3" />
+                </div>
+                <span asp-validation-for="@Model.AllowedPostTelegram"></span>
                 <div class="col-6 mb-3">
                     <div class="form-floating form-floating-outline">
                         <select id="selectpickerBasic" asp-for="expiryTime" class="selectpicker w-100" data-style="btn-default">

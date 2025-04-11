@@ -24,6 +24,12 @@ namespace PlanningRazorPage.Pages.Admin.Package
         [BindProperty]
         public int AllowedSmsCount { get; set; }
         [BindProperty]
+        public int AllowedPostTelegram { get; set; }
+        [BindProperty]
+        public int AllowedPostInstagram { get; set; }
+        [BindProperty]
+        public int AllowedStoryInstagram { get; set; }
+        [BindProperty]
         public string Link { get; set; }
         [BindProperty]
         public int Price { get; set; }
@@ -48,6 +54,9 @@ namespace PlanningRazorPage.Pages.Admin.Package
                 Price = Price,
                 AllowedSmsCount = AllowedSmsCount,
                 AllowedEmailCount = AllowedEmailCount,
+                AllowedPostInstagram = AllowedPostInstagram,
+                AllowedPostTelegram = AllowedPostTelegram,
+                AllowedStoryInstagram = AllowedStoryInstagram,
                 ExpiryTime = expiryTime,
                 Specifications = ConvertSpecifications(),
                 Title = Title

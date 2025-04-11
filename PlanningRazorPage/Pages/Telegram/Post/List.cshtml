@@ -1,129 +1,299 @@
 ﻿@page
-@model PlanningRazorPage.Pages.Telegram.ListModel
+@model PlanningRazorPage.Pages.Telegram.Post.Pages_Telegram_Post_List
 @{
+    Layout = "Shared/_Layout";
 }
+
 @section Header {
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6B8DD6 0%, #FFE66D 100%);
+            --table-header-bg: linear-gradient(135deg, #6B8DD6 0%, #2c3e50 100%);
+            --table-hover-bg: rgba(107, 141, 214, 0.05);
+            --badge-success: #28a745;
+            --badge-info: #17a2b8;
+            --badge-warning: #ffc107;
+            --badge-primary: #6B8DD6;
+        }
 
+        .data-card {
+            border: none;
+            border-radius: 1.5rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .data-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: var(--table-header-bg);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1.5rem 1.5rem 0 0 !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .card-header::after {
+                content: "";
+                position: absolute;
+                bottom: -20px;
+                left: 0;
+                width: 100%;
+                height: 40px;
+                background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+            }
+
+        .table {
+            --bs-table-bg: transparent;
+            --bs-table-border-color: #f1f1f1;
+            margin-bottom: 0;
+        }
+
+            .table thead th {
+                background: rgba(255,255,255,0.95);
+                color: #2c3e50;
+                font-weight: 600;
+                padding: 1.25rem;
+                border-bottom: 2px solid rgba(107, 141, 214, 0.2);
+                backdrop-filter: blur(5px);
+            }
+
+            .table tbody tr {
+                transition: all 0.3s ease;
+                position: relative;
+            }
+
+                .table tbody tr:hover {
+                    background: var(--table-hover-bg);
+                    box-shadow: 0 8px 24px rgba(107, 141, 214, 0.1);
+                }
+
+                .table tbody tr:not(:last-child)::after {
+                    content: "";
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 95%;
+                    height: 1px;
+                    background: rgba(107, 141, 214, 0.1);
+                }
+
+            .table td {
+                padding: 1.25rem;
+                vertical-align: middle;
+            }
+
+        .project-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(107, 141, 214, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+            .project-icon:hover {
+                transform: rotate(15deg);
+            }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border: 2px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+            .avatar:hover {
+                transform: translateY(-3px);
+                z-index: 2;
+            }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid transparent;
+        }
+
+            .status-badge i {
+                margin-left: 0.5rem;
+                font-size: 1.1em;
+            }
+
+        .action-menu {
+            border: none;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+            border-radius: 1rem;
+            padding: 0.75rem;
+            min-width: 180px;
+        }
+
+        .action-item {
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+            .action-item:hover {
+                background: rgba(107, 141, 214, 0.08);
+            }
+
+        .floating-action {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary-gradient);
+            width: 56px;
+            height: 56px;
+            border-radius: 1.5rem;
+            box-shadow: 0 12px 24px rgba(107, 141, 214, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+            .floating-action:hover {
+                transform: scale(1.1) rotate(90deg);
+            }
+    </style>
 }
 
-<div class="card container">
-    <h5 class="card-header">جدول پست های تلگرام</h5>
-    <div class="table-responsive text-nowrap">
-        <table class="table">
-            <thead class="table-dark">
+<div class="data-card container">
+    <div class="card-header">
+        <div class="d-flex align-items-center">
+            <i class="mdi mdi-rocket-launch mdi-24px me-3"></i>
+            <h3 class="mb-0">مدیریت پروژه‌های تلگرامی</h3>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
                 <tr>
-                    <th>پروژه</th>
-                    <th>مشتری</th>
-                    <th>کاربران</th>
-                    <th> وضعیت</th>
-                    <th>عملیات ها</th>
+                    <th style="width: 30%">پروژه</th>
+                    <th style="width: 20%">مشتری</th>
+                    <th style="width: 25%">اعضا</th>
+                    <th style="width: 15%">وضعیت</th>
+                    <th style="width: 10%">عملیات</th>
                 </tr>
             </thead>
-            <tbody class="table-border-bottom-0">
+            <tbody>
+                <!-- ردیف 1 -->
                 <tr>
-                    <td><i class="mdi mdi-wallet-travel mdi-20px text-danger me-3"></i> <strong>آلبرت کوک</strong></td>
-                    <td>آلبرت کوک</td>
                     <td>
-                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهدی صادقی" data-bs-original-title="مهدی صادقی">
-                                <img src="~/assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهراد هیدن" data-bs-original-title="مهراد هیدن">
-                                <img src="~/assets/img/avatars/6.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="محمد رضا رضایی" data-bs-original-title="محمد رضا رضایی">
-                                <img src="~/assets/img/avatars/7.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                        </ul>
+                        <div class="d-flex align-items-center">
+                            <div class="project-icon me-3">
+                                <i class="mdi mdi-wallet-travel mdi-24px text-primary"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-semibold">پروژه آلبرت کوک</h6>
+                                <small class="text-muted">#TG-4587</small>
+                            </div>
+                        </div>
                     </td>
-                    <td><span class="badge bg-label-primary me-1">فعال</span></td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="~/assets/img/avatars/5.png" class="avatar me-2">
+                            <span>آلبرت کوک</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="avatar-group">
+                            <img src="~/assets/img/avatars/5.png" class="avatar" data-bs-toggle="tooltip" title="مهدی صادقی">
+                            <img src="~/assets/img/avatars/6.png" class="avatar" data-bs-toggle="tooltip" title="مهراد هیدن">
+                            <img src="~/assets/img/avatars/7.png" class="avatar" data-bs-toggle="tooltip" title="محمد رضا رضایی">
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge bg-soft-primary text-primary">
+                            <i class="mdi mdi-progress-clock"></i>
+                            در حال انجام
+                        </span>
+                    </td>
                     <td>
                         <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item waves-effect" href="javascript:void(0);"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
-                                <a class="dropdown-item waves-effect" href="javascript:void(0);"><i class="mdi mdi-trash-can-outline me-1"></i>حذف</a>
+                            <button class="btn btn-icon btn-sm btn-link text-muted" 
+                                    type="button" 
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                <i class="mdi mdi-dots-vertical mdi-24px"></i>
+                            </button>
+                            <div class="dropdown-menu action-menu dropdown-menu-end">
+                                <a class="dropdown-item action-item" href="#">
+                                    <i class="mdi mdi-pencil-outline me-2"></i>
+                                    ویرایش پروژه
+                                </a>
+                                <a class="dropdown-item action-item" href="#">
+                                    <i class="mdi mdi-chart-bar me-2"></i>
+                                    آمار پروژه
+                                </a>
+                                <div class="dropdown-divider my-2"></div>
+                                <a class="dropdown-item action-item text-danger" href="#">
+                                    <i class="mdi mdi-trash-can-outline me-2"></i>
+                                    حذف پروژه
+                                </a>
                             </div>
                         </div>
                     </td>
                 </tr>
+
+                <!-- ردیف 2 -->
                 <tr>
-                    <td><i class="mdi mdi-basketball mdi-20px text-info me-3"></i> <strong>پروژه ورزشی</strong></td>
-                    <td>بری هانتر</td>
                     <td>
-                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهدی صادقی" data-bs-original-title="مهدی صادقی">
-                                <img src="~/assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهراد هیدن" data-bs-original-title="مهراد هیدن">
-                                <img src="~/assets/img/avatars/6.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="محمد رضا رضایی" data-bs-original-title="محمد رضا رضایی">
-                                <img src="~/assets/img/avatars/7.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                        </ul>
-                    </td>
-                    <td><span class="badge bg-label-success me-1">تکمیل شد</span></td>
-                    <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-trash-can-outline me-1"></i>حذف</a>
+                        <div class="d-flex align-items-center">
+                            <div class="project-icon me-3 bg-soft-success">
+                                <i class="mdi mdi-basketball mdi-24px text-success"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-semibold">پروژه ورزشی</h6>
+                                <small class="text-muted">#TG-3265</small>
                             </div>
                         </div>
                     </td>
-                </tr>
-                <tr>
-                    <td><i class="mdi mdi-greenhouse mdi-20px text-success me-3"></i> <strong>پروژه گلخانه</strong></td>
-                    <td>ترور بیکر</td>
                     <td>
-                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهدی صادقی" data-bs-original-title="مهدی صادقی">
-                                <img src="~/assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهراد هیدن" data-bs-original-title="مهراد هیدن">
-                                <img src="~/assets/img/avatars/6.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="محمد رضا رضایی" data-bs-original-title="محمد رضا رضایی">
-                                <img src="~/assets/img/avatars/7.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                        </ul>
-                    </td>
-                    <td><span class="badge bg-label-info me-1">برنامه ریزی شده است</span></td>
-                    <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-trash-can-outline me-1"></i>حذف</a>
-                            </div>
+                        <div class="d-flex align-items-center">
+                            <img src="~/assets/img/avatars/6.png" class="avatar me-2">
+                            <span>بری هانتر</span>
                         </div>
                     </td>
-                </tr>
-                <tr>
-                    <td><i class="mdi mdi-bank mdi-20px text-primary me-3"></i> <strong>پروژه بانک</strong></td>
-                    <td>جری میلتون</td>
                     <td>
-                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهدی صادقی" data-bs-original-title="مهدی صادقی">
-                                <img src="~/assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="مهراد هیدن" data-bs-original-title="مهراد هیدن">
-                                <img src="~/assets/img/avatars/6.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="محمد رضا رضایی" data-bs-original-title="محمد رضا رضایی">
-                                <img src="~/assets/img/avatars/7.png" alt="Avatar" class="rounded-circle">
-                            </li>
-                        </ul>
+                        <div class="avatar-group">
+                            <img src="~/assets/img/avatars/5.png" class="avatar" data-bs-toggle="tooltip" title="مهدی صادقی">
+                            <img src="~/assets/img/avatars/6.png" class="avatar" data-bs-toggle="tooltip" title="مهراد هیدن">
+                        </div>
                     </td>
-                    <td><span class="badge bg-label-warning me-1">انتظار</span></td>
+                    <td>
+                        <span class="status-badge bg-soft-success text-success">
+                            <i class="mdi mdi-check-circle"></i>
+                            تکمیل شده
+                        </span>
+                    </td>
                     <td>
                         <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-pencil-outline me-1"></i> ویرایش</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="mdi mdi-trash-can-outline me-1"></i>حذف</a>
+                            <button class="btn btn-icon btn-sm btn-link text-muted" 
+                                    type="button" 
+                                    data-bs-toggle="dropdown">
+                                <i class="mdi mdi-dots-vertical mdi-24px"></i>
+                            </button>
+                            <div class="dropdown-menu action-menu dropdown-menu-end">
+                                <a class="dropdown-item action-item" href="#">
+                                    <i class="mdi mdi-eye-outline me-2"></i>
+                                    مشاهده جزئیات
+                                </a>
+                                <a class="dropdown-item action-item" href="#">
+                                    <i class="mdi mdi-file-export me-2"></i>
+                                    خروجی گزارش
+                                </a>
                             </div>
                         </div>
                     </td>
@@ -131,11 +301,52 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Floating Action Button -->
+    @* <button class="floating-action btn btn-primary d-flex align-items-center justify-content-center">
+        <i class="mdi mdi-plus mdi-24px text-white"></i>
+    </button> *@
 </div>
 
+
 @section Scripts {
+    <script>
+        // فعال سازی Tooltip
+        document.addEventListener('DOMContentLoaded', function () {
+            // Tooltip
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
+            // Floating Action Button Animation
+            const fab = document.querySelector('.floating-action')
+            fab.addEventListener('mouseenter', () => {
+                fab.style.transform = 'scale(1.1) rotate(90deg)'
+            })
+            fab.addEventListener('mouseleave', () => {
+                fab.style.transform = 'scale(1) rotate(0deg)'
+            })
+        })
 
-
-
+        // مدیریت کلیک روی آیتم‌های منو
+        document.querySelectorAll('.action-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault()
+                const actionText = this.innerText.trim()
+                Toastify({
+                    text: `عملیات "${actionText}" انجام شد`,
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: "bottom",
+                    position: "left",
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(135deg, #6B8DD6 0%, #FFE66D 100%)",
+                        borderRadius: "1rem",
+                        boxShadow: "0 8px 24px rgba(107, 141, 214, 0.3)"
+                    }
+                }).showToast();
+            })
+        })
+    </script>
 }

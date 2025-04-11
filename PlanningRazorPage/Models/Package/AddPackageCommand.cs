@@ -8,6 +8,9 @@
         public ExpiryTime ExpiryTime { get; set; }
         public int AllowedEmailCount { get; set; }
         public int AllowedSmsCount { get; set; }
+        public int AllowedPostTelegram { get; set; }
+        public int AllowedPostInstagram { get; set; }
+        public int AllowedStoryInstagram { get; set; }
         public IFormFile Picture { get; set; }
         public Dictionary<string, string> Specifications { get; set; }
 
@@ -42,6 +45,9 @@
         public ExpiryTime ExpiryTime { get; set; }
         public int AllowedEmailCount { get; set; }
         public int AllowedSmsCount { get; set; }
+        public int AllowedPostTelegram { get; set; }
+        public int AllowedPostInstagram { get; set; }
+        public int AllowedStoryInstagram { get; set; }
         public long Id { get; set; }
         public IFormFile? Picture { get; set; }
         public Dictionary<string, string> Specifications { get; set; }
