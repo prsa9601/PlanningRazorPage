@@ -1,0 +1,566 @@
+﻿@page "{handler?}"
+@model PlanningRazorPage.Pages.Telegram.IndexModel
+@{
+    Layout = "Shared/_Layout";
+}
+
+
+@section Header {
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6B8DD6 0%, #FFE66D 100%);
+            --secondary-bg: rgba(107, 141, 214, 0.05);
+        }
+
+        .guide-card {
+            background: var(--secondary-bg);
+            border-radius: 1.5rem;
+            border: 2px dashed #6B8DD6;
+        }
+
+        .step-number {
+            width: 35px;
+            height: 35px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .account-card {
+            border: none;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+            .account-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .api-key-badge {
+            background: rgba(107, 141, 214, 0.1);
+            border: 1px solid #6B8DD6;
+            border-radius: 1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .add-account-form .form-control {
+            border: 2px solid #eee;
+            border-radius: 1rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .add-account-form .form-control:focus {
+                border-color: #6B8DD6;
+                box-shadow: 0 0 0 4px rgba(107, 141, 214, 0.25);
+            }
+        /* اضافه شدن استایل‌های جدید به بخش Header */
+        .guide-card .btn-outline-primary {
+            border: 2px solid #6B8DD6;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+            .guide-card .btn-outline-primary:hover {
+                background: rgba(107, 141, 214, 0.1);
+                transform: translateY(-2px);
+            }
+
+        .guide-card .mdi-book-open-page-variant {
+            font-size: 1.2em;
+            vertical-align: middle;
+        }
+
+        .ig-upload-wrapper {
+            position: relative;
+            border: 2px dashed var(--ig-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .ig-upload-wrapper:hover {
+                border-color: #E1306C;
+                background: rgba(225, 48, 108, 0.05);
+            }
+
+        .ig-upload-input {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            border: 2px dashed var(--ig-border);
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .ig-preview-container {
+            position: relative;
+            max-width: 200px;
+            margin: 1rem auto;
+        }
+
+        .ig-remove-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #E1306C;
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .ig-upload-border {
+            border: 3px dashed var(--ig-border) !important;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+            .ig-upload-border:hover {
+                border-color: #E1306C !important;
+                border-style: dashed !important;
+                box-shadow: 0 0 0 4px rgba(225, 48, 108, 0.15);
+            }
+
+            .ig-upload-border.dragover {
+                border-color: #833AB4 !important;
+                background: rgba(131, 58, 180, 0.05);
+                transform: scale(1.02);
+            }
+
+            .ig-upload-border.error {
+                border-color: #ff4757 !important;
+                animation: border-pulse 0.8s ease-in-out;
+            }
+
+    </style>
+}
+<div class="container-fluid">
+    <!-- بخش راهنمای پیشرفته -->
+    <div class="card guide-card mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-3">📖 راهنمای حرفه‌ای ساخت ربات تلگرام</h5>
+                    <p class="text-muted mb-0">
+                        برای یادگیری کامل فرآیند ساخت ربات تلگرام، دریافت API Key و یکپارچه‌سازی پیشرفته با سیستم ما، راهنمای جامع وبلاگ را مطالعه کنید.
+                    </p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="https://your-blog.com/telegram-bot-guide"
+                       target="_blank"
+                       class="btn btn-outline-primary px-4">
+                        <i class="mdi mdi-book-open-page-variant me-2"></i>
+                        مطالعه راهنمای کامل
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <!-- بخش راهنما -->
+    <div class="card guide-card mb-4">
+        <div class="card-body">
+            <h5 class="mb-4">📚 راهنمای اتصال اکانت تلگرام</h5>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h6 class="mb-1">ساخت اپلیکیشن</h6>
+                            <p class="text-muted mb-0">از سایت my.telegram.org اپلیکیشن بسازید</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h6 class="mb-1">دریافت API Key</h6>
+                            <p class="text-muted mb-0">API Hash و API ID را دریافت کنید</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h6 class="mb-1">اتصال به سیستم</h6>
+                            <p class="text-muted mb-0">اطلاعات را در فرم زیر وارد کنید</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- بخش افزودن اکانت جدید -->
+    <div class="card account-card mb-4">
+        <div class="card-header bg-transparent">
+            <h5>➕ افزودن اکانت جدید</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" class="add-account-form">
+                <div class="row g-4">
+                    @*       <div class="col-md-6">
+                        <label class="form-label">نام کاربری ربات</label>
+                        <input asp-for="UserName"
+                               class="form-control"
+                               placeholder="my_telegram_bot"
+                               required />
+                    </div> *@
+
+                    <div class="col-md-6">
+                        <label class="form-label">شناسه چت</label>
+                        <input asp-for="Chat_Id"
+                               class="form-control"
+                               placeholder="987654321"
+                               required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">توکن ربات</label>
+                        <input asp-for="Token"
+                               id="tokenInput"
+                               class="form-control"
+                               placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+                               required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-check mt-4">
+                            <input asp-for="UsedDefaultToken"
+                                   id="defaultTokenCheckbox"
+                                   class="form-check-input"
+                                   type="checkbox" />
+                            <label class="form-check-label">
+                                استفاده از توکن پیشفرض
+                            </label>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-primary px-5">
+                            <i class="mdi mdi-telegram me-2"></i>
+                            ذخیره اطلاعات
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- جدول اکانت‌ها با تغییرات -->
+    <div class="card account-card">
+        <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+            <h5>📃 لیست اکانت‌های متصل</h5>
+            <span class="badge bg-primary">@Model.TelegramDTOs?.Count اکانت فعال</span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>نام کاربری</th>
+                            <th>توکن</th>
+                            <th>شناسه چت</th>
+                            <th>وضعیت توکن</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.TelegramDTOs != null)
+                        {
+                            foreach (var account in Model.TelegramDTOs)
+                            {
+                                <tr>
+                                    <td>@account.UserName</td>
+                                    <td>
+                                        <span class="api-key-badge">@account.Token</span>
+                                    </td>
+                                    <td>@account.Chat_Id</td>
+                                    <td>
+                                        @* @if (account.UsedDefaultToken) *@
+                                        @if (true)
+                                        {
+                                            <span class="badge bg-soft-success text-success">
+                                                پیشفرض
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-soft-warning text-warning">
+                                                سفارشی
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @* asp-page-handler="Delete" *@
+                                        <form method="post" class="delete-form">
+                                            <input type="hidden" name="accountId" value="@account.Id" />
+                                            <button type="button" onclick="Delete(@account.Id)" class="btn btn-danger btn-sm">
+                                                <i class="mdi mdi-trash-can-outline"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+              // document.querySelectorAll('form[asp-page-handler="Delete"]').forEach(form => {
+              //     form.addEventListener('click', function(e) {
+
+              //     });
+              // });
+              function Delete(accountId){
+                     // e.preventDefault();
+
+                      Swal.fire({
+                          title: 'آیا مطمئن هستید؟',
+                          text: "این عمل قابل بازگشت نیست!",
+                          icon: 'warning',
+                          showCancelButton: true,
+                          confirmButtonColor: '#d33',
+                          cancelButtonColor: '#3085d6',
+                          confirmButtonText: 'بله، حذف شود!',
+                          cancelButtonText: 'لغو'
+                      }).then((result) => {
+                          if (result.isConfirmed) {
+                              // افزودن توکن اعتبارسنجی
+                              
+                              // this.submit();
+                              var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
+                              $.ajax({
+                                  url: "?handler=Delete",
+                                  method: "POST",
+                                  data: {
+                                      __RequestVerificationToken: token,
+                                      accountId:accountId
+                                  },
+                                  beforeSend: function (xhr) {
+                                      $(".loading").show();
+                                  },
+                                  complete: function () {
+                                      $(".loading").hide();
+                                  },
+                              }).done(function (data) {
+                                  var res = JSON.parse(data);
+                                  console.log(res);
+                                  if (res.IsSuccess === true) {
+                                      // Success("", res.Message, true);
+                                       Swal.fire(
+                                           'حذف شد!',
+                                           'اکانت با موفقیت حذف شد.',
+                                           'success'
+                                       ).then(() => {
+                                           if(res.IsReload === true){
+
+                                              window.location.reload();
+                                           }
+                                       });
+                                  } else {
+                                      ErrorAlert("", res.Message, res.isReloadPage);
+                                  }
+                              });
+                          }
+                      });
+              }
+
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tokenInput = document.getElementById('tokenInput');
+            const defaultTokenCheckbox = document.getElementById('defaultTokenCheckbox');
+
+            // تابع برای به روزرسانی وضعیت فیلد توکن
+            function updateTokenFieldState() {
+                if (defaultTokenCheckbox.checked) {
+                    tokenInput.disabled = true;
+                    tokenInput.removeAttribute('required');
+                    tokenInput.value = ''; // یا مقدار پیشفرض را قرار دهید
+                } else {
+                    tokenInput.disabled = false;
+                    tokenInput.setAttribute('required', '');
+                }
+            }
+
+            // رویداد تغییر برای چک باکس
+            defaultTokenCheckbox.addEventListener('change', updateTokenFieldState);
+
+            // مقداردهی اولیه هنگام لود صفحه
+            updateTokenFieldState();
+        });
+    </script>
+@*     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function Delete(id) {
+            Swal.fire({
+                title: 'آیا مطمئن هستید؟',
+                text: "این عمل قابل بازگشت نیست!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'بله، حذف شود!',
+                cancelButtonText: 'لغو'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append('accountId', id);
+
+                    // افزودن توکن اعتبارسنجی
+                    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                    formData.append('__RequestVerificationToken', token);
+
+                    try {
+                        const response = await fetch('?handler=Delete', {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'RequestVerificationToken': token
+                            }
+                        });
+
+                        if (response.ok) {
+                            Swal.fire(
+                                'حذف شد!',
+                                'اکانت با موفقیت حذف شد.',
+                                'success'
+                            ).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'خطا!',
+                                'مشکلی در حذف رخ داد.',
+                                'error'
+                            );
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        Swal.fire(
+                            'خطا!',
+                            'ارتباط با سرور برقرار نشد.',
+                            'error'
+                        );
+                    }
+                }
+            });
+        }
+    </script> *@
+    @* 
+    <script>
+        // مدیریت فرم
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = {
+                UserName: this.querySelector('[name="UserName"]').value,
+                Token: this.querySelector('[name="Token"]').value,
+                ChatId: this.querySelector('[name="ChatId"]').value,
+                UsedDefaultToken: this.querySelector('[name="UsedDefaultToken"]').checked
+            };
+            console.log(formData);
+            // ارسال درخواست
+            fetch('Telegram', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if(response.ok) {
+                    window.location.reload();
+                }
+            });
+        });
+    </script> *@
+    @* <script>
+        // مدیریت پیشنمایش تصویر
+        const profileImage = document.getElementById('profileImage');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+
+        profileImage.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewContainer.style.display = 'block';
+                    imagePreview.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function removeImage() {
+            profileImage.value = '';
+            previewContainer.style.display = 'none';
+            imagePreview.src = '';
+        }
+
+        // اصلاح اعتبارسنجی فرم
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // اعتبارسنجی جدید برای تصویر
+            const profileImage = document.getElementById('profileImage').files[0];
+            if (!profileImage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطا!',
+                    text: 'لطفا تصویر پروفایل را انتخاب کنید',
+                    confirmButtonColor: '#E1306C'
+                });
+                return;
+            }
+
+            // بقیه منطق ارسال فرم...
+        });
+    </script> *@
+    @* <script> 
+        // مدیریت فرم افزودن اکانت
+        // document.querySelector('.add-account-form').addEventListener('submit', function(e) {
+        //     e.preventDefault();
+
+        //     // اعتبارسنجی فرم
+        //     const phone = this.querySelector('input[type="tel"]').value;
+        //     const apiId = this.querySelector('input[placeholder="123456"]').value;
+        //     const apiHash = this.querySelector('input[placeholder="a1b2c3d4e5f6g7h8i9j0"]').value;
+
+        //     if (!phone || !apiId || !apiHash) {
+        //         Swal.fire('خطا!', 'لطفا تمام فیلدها را پر کنید', 'error');
+        //         return;
+        //     }
+
+        //     // ارسال درخواست
+        //     Swal.fire('موفق!', 'اکانت با موفقیت اضافه شد', 'success');
+        //     this.reset();
+        // });
+     </script> *@
+}

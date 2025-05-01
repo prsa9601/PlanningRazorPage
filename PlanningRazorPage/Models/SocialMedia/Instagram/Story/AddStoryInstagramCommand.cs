@@ -13,15 +13,16 @@
     public class EditStoryCommand
     {
         public long InstagramId { get; set; }
-        public long StoryId { get; set; }
+        public long StoryId { get; set; } //TableId
         public DateTime DateOfPosting { get; set; }
         public string Link { get; set; }
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
+        public IFormFile? Video { get; set; }
     }
-    public class DeleteStoryCommand 
+    public class DeleteStoryCommand
     {
-        public long id { get; set; }
-        public long InstagramId { get; set; }
+        public long StoryId { get; set; } //TableId
+        public long InstagramId { get; set; }//TableId
     }
     public class AddStoryCommand
     {

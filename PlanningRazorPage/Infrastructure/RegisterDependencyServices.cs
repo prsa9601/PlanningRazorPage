@@ -1,5 +1,4 @@
-﻿using PlanningRazorPage.Gateway.Telegram;
-using PlanningRazorPage.Infrastructure.CookieUtils;
+﻿using PlanningRazorPage.Infrastructure.CookieUtils;
 using PlanningRazorPage.Infrastructure.FileUtil.Interfaces;
 using PlanningRazorPage.Infrastructure.FileUtil.Services;
 using PlanningRazorPage.Infrastructure.RazorUtils;
@@ -13,6 +12,8 @@ using PlanningRazorPage.Services.Notification;
 using PlanningRazorPage.Services.Package;
 using PlanningRazorPage.Services.Request;
 using PlanningRazorPage.Services.Role;
+using PlanningRazorPage.Services.SocialMedia.Instagram;
+using PlanningRazorPage.Services.SocialMedia.Telegram;
 using PlanningRazorPage.Services.User;
 using PlanningRazorPage.Services.User.UserPackage;
 
@@ -32,7 +33,7 @@ public static class RegisterDependencyServices
 
 
         // اضافه کردن TelegramService به DI
-        services.AddScoped<ITelegramService, TelegramService>();
+        //services.AddScoped<ITelegramService, TelegramService>();
 
         // services.AddAutoMapper(typeof(RegisterDependencyServices).Assembly);
         //services.AddScoped<IMainPageService, MainPageService>();
@@ -52,6 +53,16 @@ public static class RegisterDependencyServices
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
         services.AddHttpClient<ITelegramService, TelegramService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(baseAddress);
+        }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+        
+        services.AddHttpClient<IInstagramService, InstagramService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(baseAddress);
+        }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+           
+        services.AddHttpClient<INotificationService, NotificationService>(httpClient =>
         {
             httpClient.BaseAddress = new Uri(baseAddress);
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
@@ -81,11 +92,7 @@ public static class RegisterDependencyServices
             httpClient.BaseAddress = new Uri(baseAddress);
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
         
-        services.AddHttpClient<INotificationService, NotificationService>(httpClient =>
-        {
-            httpClient.BaseAddress = new Uri(baseAddress);
-        }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
-
+    
         services.AddHttpClient<IUserService, UserService >(httpClient =>
         {
             httpClient.BaseAddress = new Uri(baseAddress);

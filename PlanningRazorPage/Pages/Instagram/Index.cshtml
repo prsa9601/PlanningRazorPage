@@ -1,0 +1,916 @@
+﻿@page
+@model PlanningRazorPage.Pages.Instagram.IndexModel
+@{
+    Layout = "Shared/_Layout";
+}
+
+@section Header {
+    <style>
+        :root {
+            --ig-gradient: linear-gradient(45deg, #833AB4, #E1306C, #FCAF45);
+            --ig-glass: rgba(255, 255, 255, 0.9);
+            --ig-border: rgba(225, 48, 108, 0.2);
+        }
+
+        .expert-guide {
+            background: var(--ig-glass);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--ig-border);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .ig-step-card {
+            background: var(--ig-glass);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+            .ig-step-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 40px rgba(225, 48, 108, 0.15);
+            }
+
+        .ig-step-number {
+            width: 45px;
+            height: 45px;
+            background: var(--ig-gradient);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.25rem;
+        }
+
+        .ig-form-input {
+            background: var(--ig-glass);
+            border: 2px solid var(--ig-border);
+            border-radius: 1rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .ig-form-input:focus {
+                border-color: #E1306C;
+                box-shadow: 0 0 0 4px rgba(225, 48, 108, 0.25);
+            }
+
+        .ig-account-card {
+            background: var(--ig-glass);
+            border-radius: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--ig-border);
+        }
+
+        .ig-progress {
+            height: 8px;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .ig-progress-bar {
+            background: var(--ig-gradient);
+            transition: width 0.5s ease;
+        }
+
+        .ig-badge {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            padding: 0.5rem 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .ig-btn {
+            background: var(--ig-gradient);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 1rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+            .ig-btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 24px rgba(225, 48, 108, 0.3);
+            }
+
+        .ig-step-number {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            line-height: 45px !important; /* ارتفاع برابر با ارتفاع دایره */
+        }
+
+        /* استایل‌های جدید برای تصاویر */
+        .ig-avatar-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .ig-upload-preview {
+            border-radius: 1rem;
+            max-width: 200px;
+            height: auto;
+        }
+
+        .ig-upload-wrapper {
+            position: relative;
+            border: 2px dashed var(--ig-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .ig-upload-wrapper:hover {
+                border-color: #E1306C;
+                background: rgba(225, 48, 108, 0.05);
+            }
+
+        .ig-upload-input {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .ig-preview-container {
+            position: relative;
+            max-width: 200px;
+            margin: 1rem auto;
+        }
+
+        .ig-remove-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #E1306C;
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    </style>
+}
+
+<div class="container-fluid py-4">
+    <!-- بخش راهنمای حرفه‌ای -->
+    <div class="expert-guide p-4 mb-4">
+        <div class="row align-items-center g-4">
+            <div class="col-md-8">
+                <h4 class="mb-3">🎓 تبدیل به متخصص اینستاگرام شوید!</h4>
+                <p class="text-muted mb-0">
+                    راهنمای جامع ساخت ربات حرفه‌ای، تحلیل داده‌ها و اتوماسیون پیشرفته را در بلاگ ما مطالعه کنید.
+                    <i class="mdi mdi-arrow-right text-danger"></i>
+                </p>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="https://your-blog.com/instagram-api-guide"
+                   target="_blank"
+                   class="ig-btn btn text-white">
+                    <i class="mdi mdi-book-open-variant me-2"></i>
+                    آموزش پیشرفته
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- مراحل اتصال -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="ig-step-card">
+                <div class="ig-step-number d-inline-flex mb-3">1</div>
+                <h5 class="mb-3">ایجاد اپلیکیشن</h5>
+                <p class="text-muted">در Facebook Developers اپلیکیشن جدید بسازید</p>
+                <button class="ig-btn btn btn-sm">
+                    <i class="mdi mdi-facebook me-2"></i>
+                    شروع کنید
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="ig-step-card">
+                <div class="ig-step-number d-inline-flex mb-3">2</div>
+                <h5 class="mb-3">دریافت مجوزها</h5>
+                <p class="text-muted">مجوزهای لازم را دریافت و تنظیم کنید</p>
+                <div class="ig-badge">
+                    <i class="mdi mdi-shield-lock-outline me-2"></i>
+                    امنیت پیشرفته
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="ig-step-card">
+                <div class="ig-step-number d-inline-flex mb-3">3</div>
+                <h5 class="mb-3">اتصال نهایی</h5>
+                <p class="text-muted">اطلاعات را وارد و اتصال را کامل کنید</p>
+                <div class="ig-badge text-success">
+                    <i class="mdi mdi-check-circle me-2"></i>
+                    آماده اتصال
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- فرم اتصال -->
+    <div class="ig-account-card p-4 mb-4">
+        <h4 class="mb-4">🔗 اتصال حساب جدید</h4>
+        <form class="row g-4" method="post" enctype="multipart/form-data">
+            <div class="col-md-6">
+                <label class="form-label">نام کاربری اینستاگرام</label>
+                <input asp-for="UserName" type="text"
+                       class="ig-form-input form-control"
+                       placeholder="مثال: my_business"
+                       required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Access Token</label>
+                <div class="position-relative">
+                    <input asp-for="AccessToken" type="password"
+                           class="ig-form-input form-control"
+                           placeholder="••••••••••"
+                           required>
+                    <i class="mdi mdi-key-variant position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
+                </div>
+            </div>
+            <div class="col-12">
+                <label class="form-label d-block">تصویر پروفایل</label>
+                <div class="ig-upload-wrapper">
+                    <input asp-for="ProfileImage" type="file"
+                           class="ig-upload-input"
+                           accept="image/*"
+                           id="profileImage"
+                           name="ProfileImage">
+                    <div class="ig-upload-content">
+                        <i class="mdi mdi-cloud-upload-outline display-4 text-muted"></i>
+                        <p class="mb-0">برای آپلود کلیک کنید یا تصویر را بکشید</p>
+                        <small class="text-muted">(حداکثر سایز: 5MB)</small>
+                    </div>
+                </div>
+                <div class="ig-preview-container" id="previewContainer" style="display: none;">
+                    <button class="ig-remove-btn" onclick="removeImage()">
+                        <i class="mdi mdi-close"></i>
+                    </button>
+                    <img id="imagePreview" class="ig-upload-preview">
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="terms">
+                    <label class="form-check-label" for="terms">
+                        با <a href="#" class="text-danger">سیاست‌های حریم خصوصی</a> موافقم
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-12 text-end">
+                <button type="submit" class="ig-btn btn text-white px-5">
+                    <i class="mdi mdi-instagram me-2"></i>
+                    اتصال حساب
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- لیست حساب‌ها -->
+    <div class="ig-account-card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4>📊 حساب‌های متصل شده</h4>
+            <span class="ig-badge">
+  
+                @if (Model.InstagramDtos == null)
+                {
+                    <div>
+
+
+                        <p><i class="mdi mdi-account-multiple-check me-2"></i>حساب فعالی وجود ندارد</p>
+                    </div>
+
+                }
+                else
+                {
+                    <div>
+
+                 
+                    <p>
+                            <i class="mdi mdi-account-multiple-check me-2"></i>  
+                            @Model.InstagramDtos!.Count()
+                            حساب فعال
+                    </p>
+                  
+                    </div>
+                    }
+            </span>
+        </div>
+
+        <div class="row g-4">
+            <!-- حساب ۱ -->
+            <!-- حساب ۱ -->
+            @{
+                if (Model.InstagramDtos == null)
+                {
+                    <b>حسابی یافت نشد!</b>
+                }
+                else
+                {
+                    foreach (var item in Model.InstagramDtos!)
+                    {
+                        <div class="col-md-6">
+                            <div class="ig-account-card p-3">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <img src="https://picsum.photos/seed/account1/60/60"
+                                         class="ig-avatar-img"
+                                         alt="حساب ۱">
+                                    <div>
+                                        <h5 class="mb-0">digital_mindset</h5>
+                                        <small class="text-muted">۱۲٫۸K فالوور</small>
+                                    </div>
+                                </div>
+
+                                <div class="ig-progress mb-2">
+                                    <div class="ig-progress-bar" style="width: 85%"></div>
+                                </div>
+                                <small class="text-muted d-block mb-3">اعتبار توکن: ۸۵% باقی مانده</small>
+
+                                <!-- ... محتوای قبلی ... -->
+                                <div class="d-flex gap-2">
+                                    <button class="ig-btn btn btn-sm text-white">
+                                        <i class="mdi mdi-chart-bar me-2"></i>
+                                        آمار
+                                    </button>
+                                    <button class="ig-btn btn btn-sm text-white bg-danger" onclick="handleDelete(@item.Id)">
+                                        <i class="mdi mdi-trash-can me-2"></i>
+                                        حذف
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            }
+
+            @*  <div class="col-md-6">
+                <div class="ig-account-card p-3">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <img src="https://picsum.photos/seed/account1/60/60"
+                             class="ig-avatar-img"
+                             alt="حساب ۱">
+                        <div>
+                            <h5 class="mb-0">digital_mindset</h5>
+                            <small class="text-muted">۱۲٫۸K فالوور</small>
+                        </div>
+                    </div>
+
+                    <div class="ig-progress mb-2">
+                        <div class="ig-progress-bar" style="width: 85%"></div>
+                    </div>
+                    <small class="text-muted d-block mb-3">اعتبار توکن: ۸۵% باقی مانده</small>
+
+                    <div class="d-flex gap-2">
+                        <button class="ig-btn btn btn-sm text-white">
+                            <i class="mdi mdi-chart-bar me-2"></i>
+                            آمار
+                        </button>
+                        <button class="ig-btn btn btn-sm text-white">
+                            <i class="mdi mdi-post me-2"></i>
+                            پست جدید
+                        </button>
+                    </div>
+                </div>
+            </div> *@
+
+            <!-- حساب ۲ -->
+            @*<div class="col-md-6">
+                <div class="ig-account-card p-3">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <img src="https://picsum.photos/seed/instagram1/60/60"
+                             class="ig-avatar-img"
+                             alt="آواتار نمونه ۱">
+                           <img src="https:picsum.photos/seed/instagram2/200/200"
+                             class="ig-upload-preview mt-3"
+                             alt="پیش‌نمایش محتوا"> 
+                    </div>
+
+
+                    <div class="ig-progress mb-2">
+                        <div class="ig-progress-bar" style="width: 15%"></div>
+                    </div>
+                    <small class="text-muted d-block mb-3">اعتبار توکن: ۱۵% باقی مانده</small>
+
+                    <div class="d-flex gap-2">
+                        <button class="ig-btn btn btn-sm text-white">
+                            <i class="mdi mdi-autorenew me-2"></i>
+                            تمدید
+                        </button>
+                        <button class="ig-btn btn btn-sm text-white bg-danger">
+                            <i class="mdi mdi-trash-can me-2"></i>
+                            حذف
+                        </button>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        function handleDelete(accountId) {
+            Swal.fire({
+                title: 'آیا مطمئن هستید؟',
+                text: "این عمل قابل بازگشت نیست!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#E1306C',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'بله، حذف کن!',
+                cancelButtonText: 'لغو'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // ارسال درخواست حذف به سرور
+                    fetch(`?handler=DeleteAccount&accountId=${accountId}`, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    })
+                    .then(response => {
+                        // var res = JSON.parse(response);
+                        if (response.ok) {
+                            Swal.fire({
+                                title: 'حذف شد!',
+                                text: 'حساب با موفقیت حذف شد.',
+                                icon: 'success',
+                                confirmButtonColor: '#E1306C'
+                            }).then(() => window.location.reload());
+                        } else {
+                            throw new Error('حذف انجام نشد');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'خطا!',
+                            text: error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#E1306C'
+                        });
+                    });
+                }
+            });
+        }
+    </script>
+
+    <script>
+        // مدیریت پیشنمایش تصویر
+        const profileImage = document.getElementById('profileImage');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+
+        profileImage.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewContainer.style.display = 'block';
+                    imagePreview.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function removeImage() {
+            profileImage.value = '';
+            previewContainer.style.display = 'none';
+            imagePreview.src = '';
+        }
+
+        // مدیریت ارسال فرم با Fetch API
+        document.querySelector('form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // اعتبارسنجی فیلدها
+            const username = this.UserName.value.trim();
+            const token = this.AccessToken.value.trim();
+            const terms = this.terms.checked;
+            const imageFile = this.ProfileImage.files[0];
+
+            if (!username || !token || !terms || !imageFile) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطا!',
+                    text: 'لطفا تمام فیلدهای ضروری را پر کنید',
+                    confirmButtonColor: '#E1306C'
+                });
+                return;
+            }
+            if (!terms) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطا!',
+                    text: 'لطفا قوانین رو مطالعه کرده و تیک تایید قوانین رو بزنید!',
+                    confirmButtonColor: '#E1306C'
+                });
+                return;
+            }
+
+            // ایجاد FormData برای آپلود فایل
+            const formData = new FormData();
+            formData.append('UserName', username);
+            formData.append('AccessToken', token);
+            formData.append('ProfileImage', imageFile);
+
+            try {
+                // ارسال درخواست
+                const response = await fetch('', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(await response.text());
+                }
+
+                // نمایش موفقیت و ریست فرم
+                Swal.fire({
+                    icon: 'success',
+                    title: 'اتصال موفق!',
+                    text: 'حساب با موفقیت اضافه شد',
+                    confirmButtonColor: '#E1306C',
+                    timer: 2000
+                }).then(() => {
+                    window.location.reload(); // رفرش صفحه برای نمایش داده‌های جدید
+                });
+
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطا!',
+                    text: error.message || 'مشکلی در ارتباط با سرور پیش آمد',
+                    confirmButtonColor: '#E1306C'
+                });
+            }
+        });
+    </script>
+    @* 
+        // document.querySelector('form').addEventListener('submit', function(e) {
+        //     e.preventDefault();
+
+        //     const username = this.querySelector('input[type="text"]').value;
+        //     const token = this.querySelector('input[type="password"]').value;
+        //     const terms = this.querySelector('#terms').checked;
+
+        //     if (!username || !token || !terms) {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'خطا!',
+        //             text: 'لطفا تمامی فیلدها را پر کنید',
+        //             confirmButtonColor: '#E1306C'
+        //         });
+        //         return;
+        //     }
+
+        //     Swal.fire({
+        //         icon: 'success',
+        //         title: 'اتصال موفق!',
+        //         text: 'حساب با موفقیت اضافه شد',
+        //         confirmButtonColor: '#E1306C',
+        //         timer: 2000
+        //     });
+        //     this.reset();
+
+        // });
+        //      fetch('/your-endpoint-url', { // آدرس بک‌اند خود را اینجا قرار دهید
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({
+        //             username: username,
+        //             token: token,
+        //             terms: terms
+        //         })
+        //     })
+        //     .then(response => {
+        //         if (!response.ok) {
+        //             throw new Error('Network response was not ok');
+        //         }
+        //         return response.json();
+        //     })
+        //     .then(data => {
+        //         Swal.fire({
+        //             icon: 'success',
+        //             title: 'اتصال موفق!',
+        //             text: 'حساب با موفقیت اضافه شد',
+        //             confirmButtonColor: '#E1306C',
+        //             timer: 2000
+        //         });
+        //         this.reset();
+        //     })
+        //     .catch(error => {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'خطا!',
+        //             text: 'مشکلی در ارسال اطلاعات پیش آمد',
+        //             confirmButtonColor: '#E1306C'
+        //         });
+        //     });
+        // }); *@
+
+}
+@* @page
+@model PlanningRazorPage.Pages.Instagram.IndexModel
+@{
+    Layout = "Shared/_Layout";
+}
+
+@section Header {
+    <style>
+        :root {
+            --ig-gradient: linear-gradient(45deg, #833AB4, #E1306C, #FCAF45);
+            --secondary-bg: rgba(131, 58, 180, 0.05);
+        }
+
+        .guide-card {
+            background: var(--secondary-bg);
+            border-radius: 1.5rem;
+            border: 2px dashed #E1306C;
+        }
+
+        .step-number {
+            width: 35px;
+            height: 35px;
+            background: var(--ig-gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .account-card {
+            border: none;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .account-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .access-token-badge {
+            background: rgba(225, 48, 108, 0.1);
+            border: 1px solid #E1306C;
+            border-radius: 1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .add-account-form .form-control {
+            border: 2px solid #eee;
+            border-radius: 1rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-account-form .form-control:focus {
+            border-color: #E1306C;
+            box-shadow: 0 0 0 4px rgba(225, 48, 108, 0.25);
+        }
+    </style>
+}
+
+<div class="container-fluid">
+    <!-- بخش راهنما -->
+    <div class="card guide-card mb-4">
+        <div class="card-body">
+            <h5 class="mb-4">📸 راهنمای اتصال اکانت اینستاگرام</h5>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h6 class="mb-1">ساخت اپلیکیشن</h6>
+                            <p class="text-muted mb-0">از Facebook for Developers اپ بسازید</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h6 class="mb-1">دریافت دسترسی</h6>
+                            <p class="text-muted mb-0">مجوزهای لازم را دریافت کنید</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h6 class="mb-1">اتصال حساب</h6>
+                            <p class="text-muted mb-0">اطلاعات را در فرم وارد کنید</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- بخش افزودن اکانت جدید -->
+    <div class="card account-card mb-4">
+        <div class="card-header bg-transparent">
+            <h5>📌 افزودن اکانت جدید</h5>
+        </div>
+        <div class="card-body">
+            <form class="add-account-form">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label">نام کاربری</label>
+                        <input type="text" 
+                               class="form-control" 
+                               placeholder="username"
+                               required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Access Token</label>
+                        <input type="password" 
+                               class="form-control" 
+                               placeholder="••••••••••"
+                               required />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="termsCheck">
+                            <label class="form-check-label" for="termsCheck">
+                                با <a href="#" class="text-danger">قوانین API</a> اینستاگرام موافقم
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-danger px-5">
+                            <i class="mdi mdi-instagram me-2"></i>
+                            اتصال اکانت
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- لیست اکانت‌های متصل -->
+    <div class="card account-card">
+        <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+            <h5>📷 اکانت‌های متصل</h5>
+            <span class="badge bg-danger">3 اکانت فعال</span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>اکانت</th>
+                            <th>وضعیت</th>
+                            <th>دسترسی</th>
+                            <th>فعالیت اخیر</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- اکانت 1 -->
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="avatar avatar-sm">
+                                        <img src="~/assets/img/avatars/ig-1.jpg" class="rounded-circle">
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">digikala</h6>
+                                        <small class="text-muted">12.5K فالوور</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-soft-success text-success">
+                                    <i class="mdi mdi-check-circle-outline"></i>
+                                    فعال
+                                </span>
+                            </td>
+                            <td>
+                                <span class="access-token-badge">basic, pages_show_list</span>
+                            </td>
+                            <td>2 ساعت پیش</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-icon btn-sm" 
+                                            data-bs-toggle="dropdown">
+                                        <i class="mdi mdi-dots-vertical"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">
+                                            <i class="mdi mdi-camera-outline me-2"></i>
+                                            ارسال پست
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="mdi mdi-chart-bar me-2"></i>
+                                            آمار
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#">
+                                            <i class="mdi mdi-trash-can-outline me-2"></i>
+                                            قطع اتصال
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- اکانت 2 -->
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="avatar avatar-sm">
+                                        <img src="~/assets/img/avatars/ig-2.jpg" class="rounded-circle">
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">apple</h6>
+                                        <small class="text-muted">8.2K فالوور</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-soft-warning text-warning">
+                                    <i class="mdi mdi-sync-alert"></i>
+                                    نیاز به تمدید
+                                </span>
+                            </td>
+                            <td>
+                                <span class="access-token-badge">basic</span>
+                            </td>
+                            <td>2 روز پیش</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-icon btn-sm" 
+                                            data-bs-toggle="dropdown">
+                                        <i class="mdi mdi-dots-vertical"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">
+                                            <i class="mdi mdi-key-chain me-2"></i>
+                                            تمدید دسترسی
+                                        </a>
+                                        <a class="dropdown-item text-danger" href="#">
+                                            <i class="mdi mdi-trash-can-outline me-2"></i>
+                                            حذف
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // مدیریت فرم اتصال
+        document.querySelector('.add-account-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = this.querySelector('input[type="text"]').value;
+            const accessToken = this.querySelector('input[type="password"]').value;
+            const terms = this.querySelector('#termsCheck').checked;
+
+            if (!username || !accessToken || !terms) {
+                Swal.fire('خطا!', 'لطفا تمام فیلدها را تکمیل کنید', 'error');
+                return;
+            }
+
+            Swal.fire('موفق!', 'اکانت با موفقیت متصل شد', 'success');
+            this.reset();
+        });
+    </script>
+} *@

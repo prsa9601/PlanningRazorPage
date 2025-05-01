@@ -1234,6 +1234,12 @@
                                    data-bs-auto-close="outside"
                                    aria-expanded="false">
                                     <i class="mdi mdi-bell-outline mdi-24px"></i>
+                                    @if (Model.Notifications!.Data.Count() == 0)
+                                    {
+                                        <b>
+                                            <p>نوتیفیکیشنی یافت نشد!</p>
+                                        </b>
+                                    }
                                     @if (Model.Notifications!.Data.Any(i => i.IsSeen == false))
                                     {
                                         <span id="notificationBadge"
@@ -1244,10 +1250,10 @@
                                     <li class="dropdown-menu-header border-bottom">
                                         <div class="dropdown-header d-flex align-items-center py-3">
                                             <h6 class="mb-0 me-auto">اعلان ها</h6>
-                                            @if (Model.Notifications!.Data.Where(i=>i.IsSeen==false).Count() > 0)
+                                            @if (Model.Notifications!.Data.Where(i => i.IsSeen == false).Count() > 0)
                                             {
                                                 <span class="badge rounded-pill bg-label-primary notification-count">
-                                                    @Model.Notifications.Data.Where(i=>i.IsSeen==false).Count()
+                                                    @Model.Notifications.Data.Where(i => i.IsSeen == false).Count()
                                                 </span>
                                             }
                                         </div>
