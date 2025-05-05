@@ -12,6 +12,34 @@
             --secondary-bg: rgba(107, 141, 214, 0.05);
         }
 
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+            .btn-icon:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+            }
+
+        .btn-success {
+            background: #22c55e;
+            border-color: #22c55e;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .rounded-circle {
+            border-radius: 50% !important;
+        }
+
         .guide-card {
             background: var(--secondary-bg);
             border-radius: 1.5rem;
@@ -309,14 +337,33 @@
                                             </span>
                                         }
                                     </td>
-                                    <td>
-                                        @* asp-page-handler="Delete" *@
+                                 @*    <td>
                                         <form method="post" class="delete-form">
                                             <input type="hidden" name="accountId" value="@account.Id" />
                                             <button type="button" onclick="Delete(@account.Id)" class="btn btn-danger btn-sm">
                                                 <i class="mdi mdi-trash-can-outline"></i>
                                             </button>
                                         </form>
+                                    </td> *@
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <!-- دکمه افزودن پست -->
+                                            <a asp-page ="Post/Add" asp-route-chatId="@account.Id"
+                                               class="btn btn-icon btn-success btn-sm rounded-circle"
+                                               data-bs-toggle="tooltip"
+                                               title="افزودن پست">
+                                                <i class="mdi mdi-plus mdi-18px"></i>
+                                            </a>
+
+                                            <!-- دکمه حذف -->
+                                            <button type="button"
+                                                    onclick="Delete(@account.Id)"
+                                                    class="btn btn-icon btn-danger btn-sm rounded-circle"
+                                                    data-bs-toggle="tooltip"
+                                                    title="حذف اکانت">
+                                                <i class="mdi mdi-trash-can-outline mdi-18px"></i>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             }

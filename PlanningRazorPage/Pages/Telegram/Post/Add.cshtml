@@ -1,4 +1,5 @@
 ﻿@page
+@* "{chatId:long}" *@
 @model PlanningRazorPage.Pages.Telegram.Post.AddModel
 @{
     Layout = "Shared/_Layout";
@@ -11,6 +12,44 @@
             --input-focus-border: #6B8DD6;
             --input-focus-shadow: rgba(107, 141, 214, 0.25);
         }
+
+        .media-preview {
+            position: relative;
+            max-width: 100%;
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .media-preview img,
+            .media-preview video {
+                width: 100%;
+                max-height: 400px;
+                object-fit: contain;
+                border-radius: 1rem;
+            }
+
+        .remove-media-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+            .remove-media-btn:hover {
+                background: white;
+                transform: rotate(90deg);
+            }
 
         .form-card {
             background: rgba(255,255,255,0.95);
@@ -95,6 +134,67 @@
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(107, 141, 214, 0.3);
             }
+
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .media-item {
+            position: relative;
+            border-radius: 0.8rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+            .media-item:hover {
+                transform: translateY(-3px);
+            }
+
+            .media-item img,
+            .media-item video {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+                border-radius: 0.8rem;
+            }
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .remove-btn:hover {
+                background: white;
+                transform: rotate(90deg);
+            }
+
+        .form-switch .form-check-input:not(:checked) {
+            background-color: #6B8DD6;
+            border-color: #6B8DD6;
+        }
+
+        .form-switch .form-check-input:checked {
+            background-color: #dee2e6;
+            border-color: #dee2e6;
+        }
+
+        .form-switch .form-check-input {
+            transition: all 0.3s ease;
+        }
     </style>
 
     <!-- لینک فایل‌های ضروری -->
@@ -105,19 +205,41 @@
 <div class="col-12 container-fluid">
     <div class="form-card">
         <h5 class="card-header">📬 ایجاد پست تلگرامی</h5>
-        <form class="form-repeater p-4">
+        <form method="post" class="form-repeater p-4" id="mainForm">
 
-            <div class="mb-4">
-                <div class="form-floating form-floating-outline">
-                    <input class="form-control"
-                           type="text"
-                           placeholder="متــریالایز"
-                           id="bio-input" />
-                    <label for="bio-input">متن بیوگرافی</label>
-                </div>
+         
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">📝 توضیحات</label>
+                <textarea asp-for="Description"
+                          class="form-control"
+                          rows="4"
+                          required></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <div class="mb-4">
+            <!-- لینک -->
+            <div class="mb-3">
+                <label asp-for="Link" class="form-label">🔗 لینک (اختیاری)</label>
+                <input asp-for="Link"
+                       id="Input_Link"
+                       class="form-control"
+                       type="url"
+                       placeholder="https://example.com" />
+                <span asp-validation-for="Link" class="text-danger"></span>
+            </div>
+
+            <!-- Slug -->
+            <div class="mb-3">
+                <label asp-for="Slug" class="form-label">🏷️ Slug</label>
+                <input asp-for="Slug"
+                       id="Input_Slug"
+                       class="form-control"
+                       placeholder="my-post-slug"
+                       required />
+                <span asp-validation-for="Slug" class="text-danger"></span>
+            </div>
+
+          @*   <div class="mb-4">
                 <div class="file-upload">
                     <div class="d-flex flex-column align-items-center">
                         <i class="mdi mdi-cloud-upload-outline mdi-36px text-primary mb-3"></i>
@@ -126,21 +248,90 @@
                         <input class="form-control" type="file" id="formFile" />
                     </div>
                 </div>
+            </div> *@
+            @*   <div class="mb-4">
+              <div class="file-upload">
+                    <div class="d-flex flex-column align-items-center position-relative">
+                        <i class="mdi mdi-cloud-upload-outline mdi-36px text-primary mb-3"></i>
+                        <h5 class="mb-2">آپلود چندرسانه‌ای</h5>
+                        <p class="text-muted">(حداکثر 10 فایل - عکس/ویدیو)</p>
+                        <input asp-for="MediaFiles"
+                               class="form-control"
+                               type="file"
+                               id="formFile"
+                               accept="image/*, video/*"
+                               multiple />
+                        <div id="mediaPreview" class="media-grid"></div>
+                    </div>
+                </div>
+            </div> *@
+            <div class="mb-4">
+                <!-- بخش آپلود عکس -->
+                <div class="file-upload mb-4">
+                    <div class="d-flex flex-column align-items-center position-relative">
+                        <i class="mdi mdi-image-multiple mdi-36px text-success mb-3"></i>
+                        <h5 class="mb-2">آپلود عکس‌ها</h5>
+                        <p class="text-muted">(حداکثر 5 عکس - فرمت‌های مجاز: JPG, PNG)</p>
+                        <input asp-for="ImageFiles"
+                               class="form-control"
+                               type="file"
+                               id="imageUpload"
+                               accept="image/*"
+                               multiple />
+                        <div id="imagePreview" class="media-grid"></div>
+                    </div>
+                    <span asp-validation-for="ImageFiles" class="text-danger mt-2 d-block"></span>
+                </div>
+
+                <!-- بخش آپلود ویدیو -->
+                <div class="file-upload">
+                    <div class="d-flex flex-column align-items-center position-relative">
+                        <i class="mdi mdi-video mdi-36px text-danger mb-3"></i>
+                        <h5 class="mb-2">آپلود ویدیوها</h5>
+                        <p class="text-muted">(حداکثر 3 ویدیو - فرمت‌های مجاز: MP4, MOV, AVI)</p>
+                        <input asp-for="VideoFiles"
+                               class="form-control"
+                               type="file"
+                               id="videoUpload"
+                               accept="video/*"
+                               multiple />
+                        <div id="videoPreview" class="media-grid"></div>
+                    </div>
+                    <span asp-validation-for="VideoFiles" class="text-danger mt-2 d-block"></span>
+                </div>
             </div>
 
-            <div class="row mb-4">
+          @*   <div class="row mb-4">
                 <div class="col-md-6">
                     <label for="flatpickr-date" class="form-label mb-3">📅 تاریخ اعمال تغییرات</label>
-                    <input type="text"
+                    <input asp-for="MediaFiles" type="text"
                            class="form-control flatpickr-input"
                            placeholder="انتخاب تاریخ"
                            id="flatpickr-date"
                            data-jdp-container="#datepicker-container" />
                 </div>
+            </div> *@
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" checked="false" type="checkbox" id="scheduleSwitch">
+                            <label class="form-check-label" for="scheduleSwitch">⏰ زمان‌بندی ارسال</label>
+                        </div>
+                        <div class="flex-grow-1">
+                            <label for="flatpickr-datetime" class="form-label mb-3">📅 تاریخ و زمان ارسال</label>
+                            <input asp-for="ScheduleDate"
+                                   type="text"
+                                   class="form-control flatpickr-input"
+                                   placeholder="انتخاب تاریخ و زمان"
+                                   id="flatpickr-datetime"
+                                   data-jdp-container="#datetimepicker-container" />
+                        </div>
+                    </div>
+                </div>
             </div>
-
             <div class="text-center mt-5">
-                <button type="button" class="btn btn-success">
+                <button type="submit" class="btn btn-success" id="submitBtn">
                     <i class="mdi mdi-send-check-outline me-2"></i>
                     ثبت پست
                 </button>
@@ -155,29 +346,509 @@
     <script src="~/assets/vendor/libs/flatpickr/flatpickr-jdate.js"></script>
     <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script>
     <script src="~/assets/js/forms-pickers.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jalali-moment@3.3.10/dist/jalali-moment.browser.js"></script>
     <script>
-        // تنظیمات تاریخ‌پیکر
         document.addEventListener('DOMContentLoaded', function() {
-            flatpickr("#flatpickr-date", {
+            const persianDateConfig = {
                 locale: "fa",
-                enableTime: false,
-                dateFormat: "Y/m/d",
+                enableTime: true,
+                dateFormat: "Y/m/d H:i",
+                time_24hr: true,
                 static: true
-            });
-        });
+            };
 
-        // مدیریت آپلود فایل
-        document.getElementById('formFile').addEventListener('change', function(e) {
-            const fileName = e.target.files[0]?.name;
-            if (fileName) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'فایل آپلود شد!',
-                    text: fileName,
-                    confirmButtonText: 'متوجه شدم'
+            // تابع مقداردهی اولیه تقویم
+            const initDateTimePicker = () => {
+                const now = moment().locale('fa');
+                const formattedDate = now.format('jYYYY/jMM/jDD HH:mm');
+                const dateInput = document.getElementById('flatpickr-datetime');
+                const scheduleSwitch = document.getElementById('scheduleSwitch');
+
+                // حالت اولیه: چک باکس خاموش و تقویم فعال
+                scheduleSwitch.checked = false;
+                dateInput.disabled = false;
+                flatpickr(dateInput, {...persianDateConfig, defaultDate: formattedDate});
+
+                // مدیریت تغییر وضعیت چک باکس
+                scheduleSwitch.addEventListener('change', () => {
+                    if (scheduleSwitch.checked) {
+                        // اگر چک باکس روشن شد: تقویم غیرفعال و مقدارش پاک شود
+                        dateInput.disabled = false;
+                        dateInput.value = '';
+                    } else {
+                        // اگر چک باکس خاموش شد: تقویم فعال و تاریخ فعلی تنظیم شود
+                        dateInput.disabled = true;
+                        dateInput.value = formattedDate;
+                        flatpickr(dateInput, {...persianDateConfig, defaultDate: formattedDate});
+                    }
                 });
-            }
+            };
+
+            // تابع مدیریت ارسال فرم
+            const handleSubmitClick = async (e) => {
+                e.preventDefault();
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> در حال ارسال...';
+
+                try {
+                    const formData = new FormData();
+                    // ... سایر فیلدها ...
+
+                    // مدیریت فیلد تاریخ فقط وقتی چک باکس خاموش است
+                    if (!document.getElementById('scheduleSwitch').checked) {
+                        const persianDate = document.getElementById('flatpickr-datetime').value;
+                        if (!persianDate) throw new Error('تاریخ ارسال الزامی است');
+
+                        const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD HH:mm', 'fa')
+                            .locale('en')
+                            .toDate()
+                            .toISOString();
+                        formData.append('ScheduleDate', gregorianDate);
+                    }
+
+                    // ... بقیه عملیات ارسال ...
+                } catch (error) {
+                    // ... مدیریت خطاها ...
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="mdi mdi-send-check-outline me-2"></i> ثبت پست';
+                }
+            };
+
+            // مقداردهی اولیه
+            initDateTimePicker();
+            // ... بقیه تنظیمات ...
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تنظیمات اولیه
+            const persianDateConfig = {
+                locale: "fa",
+                enableTime: true,
+                dateFormat: "Y/m/d H:i",
+                time_24hr: true,
+                static: true
+            };
+
+            // مقداردهی اولیه تاریخ
+            const initDateTimePicker = () => {
+                const now = moment().locale('fa');
+                const formattedDate = now.format('jYYYY/jMM/jDD HH:mm');
+                const dateInput = document.getElementById('flatpickr-datetime');
+
+                dateInput.value = formattedDate;
+                flatpickr(dateInput, {...persianDateConfig, defaultDate: formattedDate});
+            };
+
+            // مدیریت آپلود مدیا
+            const setupMediaUpload = (inputId, previewId, maxSize, type) => {
+                const input = document.getElementById(inputId);
+                const preview = document.getElementById(previewId);
+
+                input.addEventListener('change', (e) => {
+                    preview.innerHTML = '';
+                    Array.from(e.target.files).forEach(file => {
+                        if(file.size > maxSize) {
+                            alert(`حجم ${type === 'image' ? 'عکس' : 'ویدیو'} باید کمتر از ${maxSize/1024/1024} مگابایت باشد!`);
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const mediaItem = createMediaElement(e.target.result, file.type);
+                            const removeBtn = createRemoveButton(file, input);
+                            preview.appendChild(createMediaWrapper(mediaItem, removeBtn));
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                });
+            };
+
+            // توابع کمکی
+            const createMediaElement = (src, type) => {
+                const element = type.startsWith('image/') ?
+                    document.createElement('img') :
+                    document.createElement('video');
+
+                element.src = src;
+                if(element.tagName === 'VIDEO') element.controls = true;
+                return element;
+            };
+
+            const createRemoveButton = (file, input) => {
+                const btn = document.createElement('div');
+                btn.className = 'remove-btn';
+                btn.innerHTML = '<i class="mdi mdi-close text-danger"></i>';
+                btn.onclick = () => removeMedia(file, input);
+                return btn;
+            };
+
+            const createMediaWrapper = (...elements) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'media-item';
+                elements.forEach(el => wrapper.appendChild(el));
+                return wrapper;
+            };
+
+            const removeMedia = (file, input) => {
+                const files = Array.from(input.files);
+                const newFiles = files.filter(f => f !== file);
+
+                const dataTransfer = new DataTransfer();
+                newFiles.forEach(f => dataTransfer.items.add(f));
+                input.files = dataTransfer.files;
+                input.dispatchEvent(new Event('change'));
+            };
+
+            // مدیریت کلیک روی دکمه ارسال
+            const handleSubmitClick = async (e) => {
+                e.preventDefault();
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> در حال ارسال...';
+
+                try {
+                    // جمع‌آوری تمام اطلاعات فرم
+                    const formData = new FormData();
+
+                    // افزودن عنوان
+                    const title = document.getElementById('Description').value;
+                    if (!title || title.trim().length < 3) {
+                        throw new Error('عنوان باید حداقل ۳ کاراکتر داشته باشد');
+                    }
+                    formData.append('Description', title.trim());
+                    formData.append('ChatId', @Model.ChatId);
+                    formData.append('Link', document.getElementById('Input_Link').value);
+                    formData.append('Slug', document.getElementById('Input_Slug').value);
+
+                    // افزودن عکس‌ها
+                    const imageFiles = document.getElementById('imageUpload').files;
+                    // if (imageFiles.length === 0) {
+                    //     throw new Error('حداقل یک عکس باید انتخاب شود');
+                    // }
+                    Array.from(imageFiles).forEach(file => {
+                        formData.append('ImageFiles', file);
+                    });
+
+                    // افزودن ویدیوها
+                    const videoFiles = document.getElementById('videoUpload').files;
+                    Array.from(videoFiles).forEach(file => {
+                        formData.append('VideoFiles', file);
+                    });
+
+                    // تبدیل و افزودن تاریخ
+                    const persianDate = document.getElementById('flatpickr-datetime').value;
+                    const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD HH:mm', 'fa')
+                        .locale('en')
+                        .toDate()
+                        .toISOString();
+                    formData.append('ScheduleDate', gregorianDate);
+
+                    // ارسال درخواست
+                    const response = await fetch('@Url.Page("Add")', {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('[name="__RequestVerificationToken"]').value
+                        },
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok || !result.success) {
+                        throw new Error(result.message || 'خطا در ارسال اطلاعات');
+                    }
+
+                    // نمایش نتیجه موفق
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ارسال موفق',
+                        html: `
+                            <div class="text-start">
+                                <p><strong>عنوان:</strong> ${result.data.title}</p>
+                                <p><strong>تعداد عکس:</strong> ${result.data.imageCount}</p>
+                                <p><strong>تعداد ویدیو:</strong> ${result.data.videoCount}</p>
+                                <p><strong>زمان ارسال:</strong> ${new Date(result.data.scheduleDate).toLocaleString('fa-IR')}</p>
+                            </div>
+                        `,
+                        confirmButtonText: 'متوجه شدم'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+
+                } catch (error) {
+                    // نمایش خطا
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطا!',
+                        text: error.message,
+                        confirmButtonText: 'متوجه شدم'
+                    });
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="mdi mdi-send-check-outline me-2"></i> ثبت پست';
+                }
+            };
+
+            // مقداردهی اولیه
+            initDateTimePicker();
+            setupMediaUpload('imageUpload', 'imagePreview', 5 * 1024 * 1024, 'image');
+            setupMediaUpload('videoUpload', 'videoPreview', 50 * 1024 * 1024, 'video');
+            document.getElementById('submitBtn').addEventListener('click', handleSubmitClick);
+        });
+    </script>
+    @*  <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تنظیمات اولیه
+            const persianDateConfig = {
+                locale: "fa",
+                enableTime: true,
+                dateFormat: "Y/m/d H:i",
+                time_24hr: true,
+                static: true
+            };
+
+            // مقداردهی اولیه تاریخ
+            const initDateTimePicker = () => {
+                const now = moment().locale('fa');
+                const formattedDate = now.format('jYYYY/jMM/jDD HH:mm');
+                const dateInput = document.getElementById('flatpickr-datetime');
+
+                dateInput.value = formattedDate;
+                flatpickr(dateInput, {...persianDateConfig, defaultDate: formattedDate});
+            };
+
+            // مدیریت آپلود مدیا
+            const setupMediaUpload = (inputId, previewId, maxSize, type) => {
+                const input = document.getElementById(inputId);
+                const preview = document.getElementById(previewId);
+
+                input.addEventListener('change', (e) => {
+                    preview.innerHTML = '';
+                    Array.from(e.target.files).forEach(file => {
+                        if(file.size > maxSize) {
+                            alert(`حجم ${type === 'image' ? 'عکس' : 'ویدیو'} باید کمتر از ${maxSize/1024/1024} مگابایت باشد!`);
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const mediaItem = createMediaElement(e.target.result, file.type);
+                            const removeBtn = createRemoveButton(file, input);
+                            preview.appendChild(createMediaWrapper(mediaItem, removeBtn));
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                });
+            };
+
+            // توابع کمکی
+            const createMediaElement = (src, type) => {
+                const element = type.startsWith('image/') ?
+                    document.createElement('img') :
+                    document.createElement('video');
+
+                element.src = src;
+                if(element.tagName === 'VIDEO') element.controls = true;
+                return element;
+            };
+
+            const createRemoveButton = (file, input) => {
+                const btn = document.createElement('div');
+                btn.className = 'remove-btn';
+                btn.innerHTML = '<i class="mdi mdi-close text-danger"></i>';
+                btn.onclick = () => removeMedia(file, input);
+                return btn;
+            };
+
+            const createMediaWrapper = (...elements) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'media-item';
+                elements.forEach(el => wrapper.appendChild(el));
+                return wrapper;
+            };
+
+            const removeMedia = (file, input) => {
+                const files = Array.from(input.files);
+                const newFiles = files.filter(f => f !== file);
+
+                const dataTransfer = new DataTransfer();
+                newFiles.forEach(f => dataTransfer.items.add(f));
+                input.files = dataTransfer.files;
+                input.dispatchEvent(new Event('change'));
+            };
+
+            // مدیریت ارسال فرم
+        const handleFormSubmit = async (e) => {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+
+            try {
+                const formData = new FormData();
+
+                // اضافه کردن فیلدهای اصلی
+                formData.append('Title', document.getElementById('bio-input').value);
+
+                // اضافه کردن عکس‌ها
+                const imageInput = document.getElementById('imageUpload');
+                Array.from(imageInput.files).forEach((file, index) => {
+                    formData.append(`ImageFiles`, file);
+                });
+
+                // اضافه کردن ویدیوها
+                const videoInput = document.getElementById('videoUpload');
+                Array.from(videoInput.files).forEach((file, index) => {
+                    formData.append(`VideoFiles`, file);
+                });
+
+                // تبدیل و اضافه کردن تاریخ
+                const persianDate = document.getElementById('flatpickr-datetime').value;
+                const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD HH:mm', 'fa')
+                    .locale('en')
+                    .toDate()
+                    .toISOString();
+                formData.append('ScheduleDate', gregorianDate);
+
+                // ارسال داده
+                const response = await fetch('@Url.Page("Add")', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('[name="__RequestVerificationToken"]').value
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if(result.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ارسال موفق!',
+                        html: `
+                            <div class="text-start">
+                                <p>عنوان: ${result.data.title}</p>
+                                <p>تعداد عکس: ${result.data.imageCount}</p>
+                                <p>تعداد ویدیو: ${result.data.videoCount}</p>
+                                <p>تاریخ ارسال: ${new Date(result.data.scheduleDate).toLocaleString('fa-IR')}</p>
+                            </div>
+                        `
+                    });
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                Swal.fire('خطا!', error.message, 'error');
+                console.error('Submission error:', error);
+            } finally {
+                submitBtn.disabled = false;
+            }
+        };
+
+            // مقداردهی اولیه
+            initDateTimePicker();
+            setupMediaUpload('imageUpload', 'imagePreview', 5 * 1024 * 1024, 'image');
+            setupMediaUpload('videoUpload', 'videoPreview', 50 * 1024 * 1024, 'video');
+            document.getElementById('mainForm').addEventListener('submit', handleFormSubmit);
+        });
+    </script> *@
+       @* // // تنظیمات تاریخ‌پیکر
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     flatpickr("#flatpickr-date", {
+        //         locale: "fa",
+        //         enableTime: false,
+        //         dateFormat: "Y/m/d",
+        //         static: true
+        //     });
+        // });
+
+        // مدیریت آپلود فایل
+        // document.getElementById('formFile').addEventListener('change', function(e) {
+        //     const fileName = e.target.files[0]?.name;
+        //     if (fileName) {
+        //         Swal.fire({
+        //             icon: 'success',
+        //             title: 'فایل آپلود شد!',
+        //             text: fileName,
+        //             confirmButtonText: 'متوجه شدم'
+        //         });
+        //     }
+        // });
+        //     document.getElementById('formFile').addEventListener('change', function(e) {
+        //     const files = e.target.files;
+        //     const previewContainer = document.getElementById('mediaPreview');
+        //     previewContainer.innerHTML = '';
+
+        //     Array.from(files).forEach(file => {
+        //         const reader = new FileReader();
+        //         reader.onload = function(e) {
+        //             const mediaItem = document.createElement('div');
+        //             mediaItem.className = 'media-item';
+
+        //             let mediaElement;
+        //             if (file.type.startsWith('image/')) {
+        //                 mediaElement = document.createElement('img');
+        //             } else if (file.type.startsWith('video/')) {
+        //                 mediaElement = document.createElement('video');
+        //                 mediaElement.controls = true;
+        //             } else {
+        //                 return;
+        //             }
+
+        //             mediaElement.src = e.target.result;
+
+        //             const removeBtn = document.createElement('div');
+        //             removeBtn.className = 'remove-btn';
+        //             removeBtn.innerHTML = '<i class="mdi mdi-close text-danger"></i>';
+        //             removeBtn.onclick = () => {
+        //                 mediaItem.remove();
+        //                 updateFileList(file);
+        //             };
+
+        //             mediaItem.appendChild(mediaElement);
+        //             mediaItem.appendChild(removeBtn);
+        //             previewContainer.appendChild(mediaItem);
+        //         };
+        //         reader.readAsDataURL(file);
+        //     });
+        // });
+
+        // function updateFileList(removedFile) {
+        //     const input = document.getElementById('formFile');
+        //     const files = Array.from(input.files);
+        //     const newFiles = files.filter(f => f !== removedFile);
+
+        //     const dataTransfer = new DataTransfer();
+        //     newFiles.forEach(f => dataTransfer.items.add(f));
+        //     input.files = dataTransfer.files;
+        // }
+
+        // // Drag & Drop
+        // const uploadWrapper = document.querySelector('.file-upload');
+
+        // ['dragenter', 'dragover'].forEach(event => {
+        //     uploadWrapper.addEventListener(event, (e) => {
+        //         e.preventDefault();
+        //         uploadWrapper.style.borderColor = '#6B8DD6';
+        //         uploadWrapper.style.transform = 'scale(1.02)';
+        //     });
+        // });
+
+        // ['dragleave', 'drop'].forEach(event => {
+        //     uploadWrapper.addEventListener(event, (e) => {
+        //         e.preventDefault();
+        //         uploadWrapper.style.borderColor = '#6B8DD6';
+        //         uploadWrapper.style.transform = 'none';
+        //     });
+        // });
+
+        // uploadWrapper.addEventListener('drop', (e) => {
+        //     e.preventDefault();
+        //     const files = e.dataTransfer.files;
+        //     document.getElementById('formFile').files = files;
+        //     document.getElementById('formFile').dispatchEvent(new Event('change'));
+        // });
+    </script>*@
 }

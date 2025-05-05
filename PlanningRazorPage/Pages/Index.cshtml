@@ -1227,18 +1227,14 @@
                             </li>
                             <!-- Quick links -->
                             <!-- Notification -->
-                            <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-2 me-xl-1">
-                                <a class="nav-link btn btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow waves-effect waves-light"
-                                   href="javascript:void(0);"
-                                   data-bs-toggle="dropdown"
-                                   data-bs-auto-close="outside"
-                                   aria-expanded="false">
+                            <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
+                                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                     <i class="mdi mdi-bell-outline mdi-24px"></i>
                                     @if (Model.Notifications!.Data.Count() == 0)
                                     {
-                                        <b>
-                                            <p>نوتیفیکیشنی یافت نشد!</p>
-                                        </b>
+                                        @*    <span id="notificationBadge"
+                                              class="position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border"></span>
+ *@
                                     }
                                     @if (Model.Notifications!.Data.Any(i => i.IsSeen == false))
                                     {
@@ -1250,6 +1246,7 @@
                                     <li class="dropdown-menu-header border-bottom">
                                         <div class="dropdown-header d-flex align-items-center py-3">
                                             <h6 class="mb-0 me-auto">اعلان ها</h6>
+                                      
                                             @if (Model.Notifications!.Data.Where(i => i.IsSeen == false).Count() > 0)
                                             {
                                                 <span class="badge rounded-pill bg-label-primary notification-count">
@@ -1283,31 +1280,18 @@
                                             @if (Model.Notifications!.Data.Count() == 0)
                                             {
                                                 <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                                                    @* data-notification-id="@notification.Id" >*@
-                                                    @*   @if (!notification.IsSeen)
-                                                    {
-                                                        <span class="badge badge-dot bg-danger position-absolute start-0 top-0"></span>
-                                                    } *@
-                                                    <div class="d-flex gap-2">
-                                                        <div class="flex-shrink-0">
-                                                            <div class="avatar me-1">
-                                                                <img src="~/assets/img/avatars/1.png"
-                                                                     alt=""
-                                                                     class="w-px-40 h-auto rounded-circle" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
+                                                    <div class="d-flex gap-2 justify-content-center">
+                                                        <!-- وسط‌چین شدن محتوا -->
+                                                        <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200 text-center">
+                                                            <!-- وسط‌چین متن -->
                                                             <h6 class="mb-1 text-truncate">
-                                                                لورم ایپسوم متن ساختگی با
+                                                                نوتیفیکیشنی یافت نشد!
                                                             </h6>
-                                                            <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
                                                         </div>
-                                                        <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                            <small class="text-muted">1ساعت قبل</small>
-                                                        </div>
+                                                        <div class="flex-shrink-0 dropdown-notifications-actions"></div>
                                                     </div>
-                                                    <!-- بقیه محتوا -->
                                                 </li>
+
                                             }
                                             else
                                             {

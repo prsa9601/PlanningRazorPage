@@ -1,11 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using PlanningRazorPage.Infrastructure.RazorUtils;
+using PlanningRazorPage.Services.SocialMedia.Instagram;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlanningRazorPage.Pages.Instagram
 {
-    public class AddModel : PageModel
+    public class AddModel : BaseRazorPage
     {
+        private readonly IInstagramService _service;
+
+        public AddModel(IInstagramService service)
+        {
+            _service = service;
+        }
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "نام کاربری الزامی است")]
@@ -30,5 +39,10 @@ namespace PlanningRazorPage.Pages.Instagram
         public void OnGet()
         {
         }
+        //public async Task<IActionResult> OnPost()
+        //{
+          
+        //    await _service.AddPost(new Models.SocialMedia.Instagram.Post.AddPostInstagramCommand);
+        //}
     }
 }

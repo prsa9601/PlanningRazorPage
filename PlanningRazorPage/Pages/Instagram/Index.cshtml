@@ -1,4 +1,5 @@
 ﻿@page
+@using PlanningRazorPage.Infrastructure
 @model PlanningRazorPage.Pages.Instagram.IndexModel
 @{
     Layout = "Shared/_Layout";
@@ -11,7 +12,24 @@
             --ig-glass: rgba(255, 255, 255, 0.9);
             --ig-border: rgba(225, 48, 108, 0.2);
         }
+        /* رنگ جدید برای دکمه استوری */
+        .bg-purple {
+            background: #833AB4 !important;
+        }
 
+        /* افکت هاوور برای دکمه‌ها */
+        .ig-btn.bg-success:hover {
+            background: #28a745 !important;
+        }
+
+        .ig-btn.bg-purple:hover {
+            background: #6f42c1 !important;
+        }
+
+        /* فاصله بین دکمه‌ها */
+        .ig-btn {
+            margin: 2px;
+        }
         .expert-guide {
             background: var(--ig-glass);
             backdrop-filter: blur(10px);
@@ -334,7 +352,7 @@
                         <div class="col-md-6">
                             <div class="ig-account-card p-3">
                                 <div class="d-flex align-items-center gap-3 mb-3">
-                                    <img src="https://picsum.photos/seed/account1/60/60"
+                                    <img src="@Directories.GetInstagramAccountProfile(item.Profile)"
                                          class="ig-avatar-img"
                                          alt="حساب ۱">
                                     <div>
@@ -354,6 +372,20 @@
                                         <i class="mdi mdi-chart-bar me-2"></i>
                                         آمار
                                     </button>
+
+                                    <!-- دکمه جدید افزودن پست -->
+                                    <a class="ig-btn btn btn-sm text-white bg-success" 
+                                        asp-page="Post/Add" asp-route-accountId="@item.Id">
+                                        <i class="mdi mdi-plus-box-outline me-2"></i>
+                                        پست جدید
+                                    </a>
+
+                                    <!-- دکمه جدید افزودن استوری -->
+                                    <a href="/Instagram/Story/Add/@item.Id"
+                                       class="ig-btn btn btn-sm text-white bg-purple">
+                                        <i class="mdi mdi-camera-outline me-2"></i>
+                                        استوری جدید
+                                    </a>
                                     <button class="ig-btn btn btn-sm text-white bg-danger" onclick="handleDelete(@item.Id)">
                                         <i class="mdi mdi-trash-can me-2"></i>
                                         حذف
