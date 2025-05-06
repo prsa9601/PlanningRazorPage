@@ -73,10 +73,13 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Account
     {
         public string? UserName { get; set; }
         //public string PhoneNumbeer { get; set; }
-        public PostInstagramSearchOrderBy? SearchOrderBy { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public string? InstagramUserName { get; set; }
+        public PostInstagramAccountSearchOrderBy? SearchOrderBy { get; set; }
         //public string? Title { get; set; }
     }
-    public enum PostInstagramSearchOrderBy
+    public enum PostInstagramAccountSearchOrderBy
     {
         //visit,
         latest

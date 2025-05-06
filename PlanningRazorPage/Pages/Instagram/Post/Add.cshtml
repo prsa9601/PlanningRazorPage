@@ -6,23 +6,41 @@
 }
 
 @section Header {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="~/css/flatpickr/monthSelect.css">
+    <link rel="stylesheet" href="https://cdn.fontcdn.ir/Font/Persian/IRANSans/IRANSans.css">
 
-    <!-- فونت فارسی برای تقویم -->
+
     <style>
+        /* بهبود استایل راستچین تقویم */
         .flatpickr-calendar {
-            font-family: 'IRANSans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'IRANSans', sans-serif !important;
+            direction: rtl !important;
+            text-align: right !important;
+        }
+
+        .flatpickr-months .flatpickr-month,
+        .flatpickr-weekdays,
+        .flatpickr-weekday {
+            direction: rtl !important;
+        }
+
+        .flatpickr-weekday {
+            text-align: center !important;
+        }
+
+        .flatpickr-day {
+            font-family: 'IRANSans', sans-serif !important;
+        }
+
+        .numInputWrapper span.arrowUp:after {
+            right: 0 !important;
+            left: auto !important;
         }
     </style>
+
     <style>
         :root {
             --ig-gradient: linear-gradient(45deg, #405DE6, #833AB4, #C13584, #E1306C, #FD1D1D);
             --ig-primary: #E1306C;
-        }
-
-        .flatpickr-calendar {
-            font-family: 'IRANSans', sans-serif;
         }
 
         .ig-card {
@@ -113,8 +131,6 @@
         }
     </style>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="~/assets/vendor/libs/flatpickr/monthSelect.css">
 }
 
 <div class="container py-5">
@@ -128,21 +144,36 @@
                 <input type="hidden" asp-for="InstagramAccountId" />
 
                 <!-- زمان‌بندی -->
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center gap-3">
+                <!-- بخش زمان‌بندی -->
+                <!-- بخش زمان‌بندی -->
+                <div class="row mb-9">
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center gap-4">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" checked="false" type="checkbox" id="scheduleSwitch">
-                                <label class="form-check-label" for="scheduleSwitch">⏰ زمان‌بندی ارسال</label>
+                                <!-- اصلاح تگ input با بستن صحیح -->
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="scheduleSwitch"
+                                       checked="checked" /> <!-- اضافه شدن اسلش بسته‌کننده -->
+                                <label class="form-check-label"
+                                       for="scheduleSwitch">
+                                    ⏰ زمان‌بندی ارسال
+                                </label>
                             </div>
-                            <div class="flex-grow-1">
-                                <label for="flatpickr-datetime" class="form-label mb-3">📅 تاریخ و زمان ارسال</label>
+
+                            <div class="flex-grow-3">
+                                <label for="flatpickr-datetime"
+                                       class="form-label mb-6 d-block">
+                                    📅 تاریخ و زمان ارسال
+                                </label>
+                                <!-- اصلاح تگ input با بستن صحیح -->
                                 <input asp-for="DateOfPosting"
                                        type="text"
-                                       class="form-control flatpickr-input"
+                                       class="form-control text-end persian-date"
                                        placeholder="انتخاب تاریخ و زمان"
                                        id="flatpickr-datetime"
-                                       data-jdp-container="#datetimepicker-container" />
+                                       dir="ltr"
+                                       readonly="readonly" /> <!-- اضافه شدن اسلش بسته‌کننده -->
                             </div>
                         </div>
                     </div>
@@ -215,7 +246,124 @@
     <script src="https://cdn.jsdelivr.net/npm/jalali-moment@3.3.10/dist/jalali-moment.browser.js"></script>
     <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jalali-moment@3.3.10/dist/jalali-moment.browser.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script>
+    <script src="~/assets/vendor/libs/flatpickr/monthSelect.js"></script>
+
     <script>
+         document.querySelector('form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const form = e.target;
+                const formData = new FormData(form);
+                const submitBtn = form.querySelector('button[type="submit"]');
+
+                try {
+                    // تبدیل تاریخ شمسی به میلادی
+                    const persianDate = formData.get('DateOfPosting');
+                    const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD HH:mm', 'fa')
+                        .locale('en')
+                        .toDate()
+                        .toISOString();
+
+                    formData.set('DateOfPosting', gregorianDate);
+
+                    // اعتبارسنجی فایل‌ها
+                    const images = formData.getAll('Images');
+                    const videos = formData.getAll('Videos');
+
+                    if(images.length + videos.length === 0) {
+                        throw new Error('حداقل یک فایل باید انتخاب شود');
+                    }
+
+                    // ارسال درخواست
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>در حال ارسال...';
+
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('[name="__RequestVerificationToken"]').value
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.message || 'خطا در ارسال اطلاعات');
+                    }
+
+                    // نمایش پیام موفقیت
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'پست با موفقیت ثبت شد!',
+                        confirmButtonText: 'باشه'
+                    }).then(() => window.location.href = '@Url.Page("./Index")');
+
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطا!',
+                        text: error.message,
+                        confirmButtonText: 'متوجه شدم'
+                    });
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-cloud-upload-alt me-2"></i>ذخیره و برنامه‌ریزی';
+                }
+            });
+        document.addEventListener('DOMContentLoaded', function () {
+            // تنظیمات فارسی‌سازی Flatpickr
+
+            flatpickr.localize(flatpickr.l10ns.fa);
+
+            const persianConfig = {
+                locale: "fa",
+                enableTime: true,
+                dateFormat: "Y/m/d H:i",
+                time_24hr: true,
+                static: true,
+                monthSelectorType: "static",
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y/m",
+                        altFormat: "Y/m"
+                    })
+                ],
+                nextArrow: '<i class="fas fa-chevron-right"></i>',
+                prevArrow: '<i class="fas fa-chevron-left"></i>'
+            };
+
+            const datePicker = flatpickr("#flatpickr-datetime", persianConfig);
+            const scheduleSwitch = document.getElementById("scheduleSwitch");
+
+            // مقداردهی اولیه بر اساس وضعیت چک‌باکس
+            const updatePickerState = () => {
+                if (scheduleSwitch.checked) {
+                    datePicker.setDate(moment().format("jYYYY/jMM/jDD HH:mm"));
+                    datePicker.close();
+                    datePicker.disable();
+                } else {
+                    datePicker.enable();
+                }
+            };
+
+            // رویداد تغییر وضعیت چک‌باکس
+            scheduleSwitch.addEventListener("change", updatePickerState);
+            updatePickerState(); // مقداردهی اولیه
+        });
+
+        // تابع پیش‌نمایش مدیا بدون تغییر
+        function previewMedia(input, previewId) {
+            // ... کد موجود بدون تغییر ...
+        }
+    </script>
+    <script>
+
         document.addEventListener('DOMContentLoaded', function() {
             const persianDateConfig = {
                 locale: "fa",
@@ -234,7 +382,7 @@
 
                 // حالت اولیه: چک باکس خاموش و تقویم فعال
                 scheduleSwitch.checked = false;
-                dateInput.disabled = false;
+                dateInput.disabled = true;
                 flatpickr(dateInput, {...persianDateConfig, defaultDate: formattedDate});
 
                 // مدیریت تغییر وضعیت چک باکس
@@ -349,174 +497,3 @@
         });
     </script>
 }
-@* @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jalali-moment@3.3.10/dist/jalali-moment.browser.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-                            // مدیریت رویدادها پس از لود کامل صفحه
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // مقداردهی اولیه تقویم
-                        let calendarInstance = null;
-
-                        const initCalendar = () => {
-                            calendarInstance = flatpickr('.flatpickr-datetime', {
-                                // ... سایر تنظیمات
-                            });
-                        };
-
-                        // تابع toggleCalendar اصلاح شده
-                        window.toggleCalendar = function(checkbox) {
-                            if(checkbox.checked) {
-                                calendarInstance.enable();
-                                calendarInstance.open();
-                            } else {
-                                calendarInstance.clear();
-                                calendarInstance.close();
-                                calendarInstance.disable();
-                            }
-                        };
-
-                        // مقداردهی اولیه
-                        initCalendar();
-                    });
-                    // تابع اصلاح شده toggleCalendar
-            function toggleCalendar(checkbox) {
-                const calendarInput = document.querySelector('.flatpickr-datetime');
-                calendarInput.disabled = !checkbox.checked;
-
-                if (checkbox.checked) {
-                    calendarInput._flatpickr.open();
-                } else {
-                    calendarInput._flatpickr.clear();
-                }
-                    }
-                            <!-- در بخش اسکریپت‌ها -->
-                    <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // مقداردهی اولیه تقویم
-                        const calendar = flatpickr('.flatpickr-datetime', {
-                            locale: 'fa',
-                            jalali: true,
-                            enableTime: true,
-                            dateFormat: 'Y/m/d H:i',
-                            time_24hr: true,
-                            static: true,
-                            monthSelectorType: 'static',
-                            plugins: [
-                                new monthSelectPlugin({
-                                    shorthand: true,
-                                    dateFormat: 'Y/m',
-                                    altFormat: 'Y/m'
-                                })
-                            ]
-                        });
-
-                        // فعال سازی اولیه
-                        document.querySelector('.flatpickr-datetime').disabled = false;
-                    });
-
-                // تنظیمات تقویم
-                const calendar = flatpickr('.flatpickr-datetime', {
-                    locale: 'fa',
-                    enableTime: true,
-                    dateFormat: 'Y/m/d H:i',
-                    time_24hr: true,
-                    static: true,
-                    monthSelectorType: 'static',
-                    plugins: [
-                        new monthSelectPlugin({
-                            shorthand: true,
-                            dateFormat: 'Y/m',
-                            altFormat: 'Y/m'
-                        })
-                    ]
-                });
-
-                // مدیریت فعال/غیرفعال کردن تقویم
-                function toggleCalendar(checkbox) {
-                    const calendarInput = document.querySelector('.flatpickr-datetime');
-                    calendarInput.disabled = !checkbox.checked;
-
-                    if (!checkbox.checked) {
-                        calendar.clear();
-                    }
-                }
-
-                // پیش‌نمایش مدیا
-                function previewMedia(input, previewId) {
-                    const preview = document.getElementById(previewId);
-                    preview.innerHTML = '';
-
-                    if (input.files) {
-                        Array.from(input.files).forEach(file => {
-                            const reader = new FileReader();
-                            reader.onload = (e) => {
-                                const mediaItem = document.createElement('div');
-                                mediaItem.className = 'preview-item';
-
-                                const mediaElement = file.type.startsWith('image/')
-                                    ? `
-        <img src="${e.target.result}">`
-                                    : `
-        <video src="${e.target.result}" controls></video>`;
-
-                                const removeBtn = `<div class="remove-btn" onclick="this.parentElement.remove()">
-            <i class="fas fa-times text-danger"></i>
-        </div>`;
-
-                                mediaItem.innerHTML = mediaElement + removeBtn;
-                                preview.appendChild(mediaItem);
-                            }
-                            reader.readAsDataURL(file);
-                        });
-                    }
-                }
-
-                // مدیریت ارسال فرم
-                document.querySelector('form').addEventListener('submit', async (e) => {
-                    e.preventDefault();
-
-                    // تبدیل تاریخ شمسی به میلادی
-                    const persianDate = document.querySelector('.flatpickr-datetime').value;
-                    const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD HH:mm', 'fa')
-                        .locale('en')
-                        .toDate()
-                        .toISOString();
-
-                    const formData = new FormData(e.target);
-                    formData.set('DateOfPosting', gregorianDate);
-
-                    try {
-                        const response = await fetch('', {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'RequestVerificationToken': document.querySelector('[name="__RequestVerificationToken"]').value
-                            }
-                        });
-
-                        if (!response.ok) throw new Error('خطا در ارسال اطلاعات');
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'پست برنامه‌ریزی شد!',
-                            html: `
-        <div class="text-start">
-            <p>تاریخ انتشار: ${persianDate}</p>
-            <p>تعداد عکس: ${formData.getAll('Images').length}</p>
-            ${formData.get('Videos') ? '<p>ویدیو: ✅</p>' : ''}
-        </div>
-                            `,
-                            confirmButtonText: 'متوجه شدم'
-                        }).then(() => window.location.reload());
-
-                    } catch (error) {
-                        Swal.fire('خطا!', error.message, 'error');
-                    }
-                });
-    </script>
- *@}

@@ -241,6 +241,15 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
 
             if (param.SearchOrderBy != null)
                 url += $"&SearchOrderBy={param.SearchOrderBy}";
+            
+            if (param.EndTime != DateTime.MaxValue || param.EndTime != null)
+                url += $"&EndTime={param.EndTime}";
+            
+            if (param.StartTime != DateTime.MinValue || param.StartTime != null)
+                url += $"&StartTime={param.StartTime}";
+            
+            if (param.InstagramUserName != null)
+                url += $"&InstagramUserName={param.InstagramUserName}";
 
             var result = await _client.GetFromJsonAsync<ApiResult<InstagramAccountFilterResult>>(url);
             return result?.Data!;
