@@ -7,7 +7,7 @@ using PlanningRazorPage.Services.SocialMedia.Instagram;
 
 namespace PlanningRazorPage.Pages.Instagram
 {
-    public class ListModel : BaseRazorFilter<InstagramAccountFilterParam>
+    public class ListModel : BaseRazorFilter<InstagramAccountFilterParamViewModel>
     {
         private readonly IInstagramService _accountService;
 
@@ -18,8 +18,8 @@ namespace PlanningRazorPage.Pages.Instagram
 
         public InstagramAccountFilterResult FilterResult { get; set; }
 
-        [BindProperty(SupportsGet = true)]
-        public InstagramAccountFilterParam FilterParams { get; set; } = new();
+        //[BindProperty(SupportsGet = true)]
+        //public InstagramAccountFilterParam FilterParams { get; set; } = new();
 
         public async Task OnGet()
         {

@@ -69,9 +69,8 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Account
         public int Sequence { get; set; }
         public string? Link { get; set; }
     }
-    public class InstagramAccountFilterParam : BaseFilterParam
+    public class InstagramAccountFilterParamViewModel : BaseFilterParam
     {
-        public string? UserName { get; set; }
         //public string PhoneNumbeer { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
@@ -84,7 +83,7 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Account
         //visit,
         latest
     }
-    public class InstagramAccountFilterResult : BaseFilter<InstagramAccountDto, InstagramAccountFilterParam>
+    public class InstagramAccountFilterResult : BaseFilter<InstagramAccountDto, InstagramAccountFilterParamViewModel>
     {
     }
 }

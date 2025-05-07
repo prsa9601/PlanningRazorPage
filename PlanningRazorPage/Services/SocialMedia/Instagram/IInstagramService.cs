@@ -2,6 +2,7 @@
 using PlanningRazorPage.Models.SocialMedia.Instagram.Account;
 using PlanningRazorPage.Models.SocialMedia.Instagram.Post;
 using PlanningRazorPage.Models.SocialMedia.Instagram.Story;
+using static PlanningRazorPage.Models.SocialMedia.Instagram.Post.PostFilterData;
 using static System.Net.Mime.MediaTypeNames;
 using SendToInstagramCommand = PlanningRazorPage.Models.SocialMedia.Instagram.Post.SendToInstagramCommand;
 
@@ -31,8 +32,20 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
         Task<ApiResult> SetProfile(SetProfileInstagramAccountCommand command);
 
         Task<InstagramAccountDto?> GetById(long Id);
-        Task<InstagramAccountFilterResult> GetFilter(InstagramAccountFilterParam param);
+        Task<InstagramAccountFilterResult> GetFilter(InstagramAccountFilterParamViewModel param);
         Task<List<InstagramAccountDto>?> GetList();
+
+        #endregion
+
+        #region Post
+        Task<InstagramPostFilterResult> GetPostByFilter
+            (InstagramPostFilterParam param);
+
+        #endregion
+
+        #region Story
+        Task<StoryFilterResult> GetStoryByFilter
+            (StoryFilterParam param);
 
         #endregion
     }

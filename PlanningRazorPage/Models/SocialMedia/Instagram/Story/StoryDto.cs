@@ -51,7 +51,7 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Story
     }
     public class StoryFilterParam : BaseFilterParam
     {
-        public long Id { get; set; }
+        public required string InstagramId { get; set; }
         public string? Search { get; set; } = "";
         public StorySearchOrderBy? SearchOrderBy { get; set; }
 

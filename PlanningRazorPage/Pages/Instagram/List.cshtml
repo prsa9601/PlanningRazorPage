@@ -1,4 +1,5 @@
 ﻿@page
+@using PlanningRazorPage.Infrastructure
 @using PlanningRazorPage.Models.SocialMedia.Instagram.Account
 @model PlanningRazorPage.Pages.Instagram.ListModel
 @{
@@ -8,19 +9,19 @@
 
 
 @section Header {
-   <style>
-       :root {
-        --ig-primary: #405de6;
-        --ig-secondary: #833ab4;
-        --ig-accent: #fd1d1d;
-        --ig-gradient: linear-gradient(135deg, var(--ig-primary) 0%, var(--ig-secondary) 50%, var(--ig-accent) 100%);
-        --table-hover: rgba(64, 93, 230, 0.05);
-        --text-primary: #2d3436;
-        --text-secondary: #636e72;
-        --success: #00b894;
-        --warning: #fdcb6e;
-        --danger: #d63031;
-    }
+    <style>
+        :root {
+            --ig-primary: #405de6;
+            --ig-secondary: #833ab4;
+            --ig-accent: #fd1d1d;
+            --ig-gradient: linear-gradient(135deg, var(--ig-primary) 0%, var(--ig-secondary) 50%, var(--ig-accent) 100%);
+            --table-hover: rgba(64, 93, 230, 0.05);
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
         /* بخش فیلترها */
         .filter-grid {
             display: grid;
@@ -90,13 +91,13 @@
             }
 
         /* رفع بهم ریختگی در موبایل */
-       /*  media (max-width: 768px) {
-            .filter-group */
+        /*  media (max-width: 768px) {
+                    .filter-group */
 
-   /*      {
-            width: 100%;
-        }
- */
+        /*      {
+                    width: 100%;
+                }
+         */
         .filter-actions {
             flex-direction: column;
             width: 100%;
@@ -133,239 +134,237 @@
             background-size: 1em;
             padding-right: 2.5rem !important;
         }
-    .dashboard-container {
-        border-radius: 24px;
-        box-shadow: 0 24px 60px -12px rgba(0,0,0,0.15);
-        overflow: hidden;
-        background: #fff;
-        transform: translateY(0);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
 
-    .dashboard-container:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 32px 72px -12px rgba(0,0,0,0.2);
-    }
+        .dashboard-container {
+            border-radius: 24px;
+            box-shadow: 0 24px 60px -12px rgba(0,0,0,0.15);
+            overflow: hidden;
+            background: #fff;
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    .dashboard-header {
-        background: var(--ig-gradient);
-        color: white;
-        padding: 2rem;
-        position: relative;
-        overflow: hidden;
-    }
+            .dashboard-container:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 32px 72px -12px rgba(0,0,0,0.2);
+            }
 
-    .dashboard-header::after {
-        content: "";
-        position: absolute;
-        bottom: -40px;
-        left: -20px;
-        width: 120px;
-        height: 120px;
-        background: rgba(255,255,255,0.1);
-        border-radius: 50%;
-        pointer-events: none;
-    }
+        .dashboard-header {
+            background: var(--ig-gradient);
+            color: white;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .dashboard-header::before {
-        content: "";
-        position: absolute;
-        top: -60px;
-        right: -30px;
-        width: 160px;
-        height: 160px;
-        background: rgba(255,255,255,0.05);
-        border-radius: 50%;
-    }
+            .dashboard-header::after {
+                content: "";
+                position: absolute;
+                bottom: -40px;
+                left: -20px;
+                width: 120px;
+                height: 120px;
+                background: rgba(255,255,255,0.1);
+                border-radius: 50%;
+                pointer-events: none;
+            }
 
-    .smart-table {
-        --table-accent: rgba(64, 93, 230, 0.03);
-        border-collapse: separate;
-        border-spacing: 0 1rem;
-    }
+            .dashboard-header::before {
+                content: "";
+                position: absolute;
+                top: -60px;
+                right: -30px;
+                width: 160px;
+                height: 160px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 50%;
+            }
 
-    .smart-table th {
-        background: linear-gradient(to bottom, #f8f9fa 0%, #f1f3f5 100%);
-        color: var(--text-secondary);
-        font-weight: 700;
-        padding: 1.5rem;
-        border: none;
-        position: relative;
-        font-size: 0.9rem;
-        letter-spacing: -0.3px;
-    }
+        .smart-table {
+            --table-accent: rgba(64, 93, 230, 0.03);
+            border-collapse: separate;
+            border-spacing: 0 1rem;
+        }
 
-    .smart-table th::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: var(--ig-gradient);
-        opacity: 0.3;
-    }
+            .smart-table th {
+                background: linear-gradient(to bottom, #f8f9fa 0%, #f1f3f5 100%);
+                color: var(--text-secondary);
+                font-weight: 700;
+                padding: 1.5rem;
+                border: none;
+                position: relative;
+                font-size: 0.9rem;
+                letter-spacing: -0.3px;
+            }
 
-    .smart-table td {
-        background: #fff;
-        padding: 1.5rem;
-        vertical-align: middle;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        border: 1px solid transparent;
-        border-bottom: 1px solid rgba(0,0,0,0.03);
-    }
+                .smart-table th::after {
+                    content: "";
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 2px;
+                    background: var(--ig-gradient);
+                    opacity: 0.3;
+                }
 
-    .smart-table tr {
-        transition: all 0.3s ease;
-    }
+            .smart-table td {
+                background: #fff;
+                padding: 1.5rem;
+                vertical-align: middle;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                border: 1px solid transparent;
+                border-bottom: 1px solid rgba(0,0,0,0.03);
+            }
 
-    .smart-table tr:hover td {
-        transform: translateX(12px);
-        box-shadow: 0 12px 32px rgba(0,0,0,0.08);
-        border-color: rgba(64, 93, 230, 0.1);
-    }
+            .smart-table tr {
+                transition: all 0.3s ease;
+            }
 
-    .smart-table tr:hover td:first-child {
-        border-left: 3px solid var(--ig-primary);
-    }
+                .smart-table tr:hover td {
+                    transform: translateX(12px);
+                    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+                    border-color: rgba(64, 93, 230, 0.1);
+                }
 
-    .status-indicator {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.5rem 1rem;
-        border-radius: 24px;
-        background: rgba(64, 93, 230, 0.1);
-        color: var(--ig-primary);
-        gap: 0.6rem;
-        font-size: 0.85rem;
-        transition: all 0.3s ease;
-    }
+                    .smart-table tr:hover td:first-child {
+                        border-left: 3px solid var(--ig-primary);
+                    }
 
-    .status-indicator.active {
-        background: rgba(0, 184, 148, 0.1);
-        color: var(--success);
-    }
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 24px;
+            background: rgba(64, 93, 230, 0.1);
+            color: var(--ig-primary);
+            gap: 0.6rem;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
 
-    .status-indicator.inactive {
-        background: rgba(253, 203, 110, 0.1);
-        color: var(--warning);
-    }
+            .status-indicator.active {
+                background: rgba(0, 184, 148, 0.1);
+                color: var(--success);
+            }
 
-    .filter-card {
-        background: #fff;
-        border-radius: 20px;
-        box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-        padding: 2rem;
-        margin: -2rem 2rem 2rem;
-        position: relative;
-        z-index: 2;
-    }
+            .status-indicator.inactive {
+                background: rgba(253, 203, 110, 0.1);
+                color: var(--warning);
+            }
 
-    .filter-input {
-        padding: 0.875rem 1.25rem;
-        border: 2px solid #e9ecef;
-        border-radius: 12px;
-        transition: all 0.3s ease;
-        font-size: 0.95rem;
-        background: #fff;
-    }
+        .filter-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+            padding: 2rem;
+            margin: -2rem 2rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
 
-    .filter-input:focus {
-        border-color: var(--ig-primary);
-        box-shadow: 0 0 0 4px rgba(64, 93, 230, 0.15);
-    }
+        .filter-input {
+            padding: 0.875rem 1.25rem;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            background: #fff;
+        }
 
-    .filter-btn {
-        background: var(--ig-gradient);
-        color: white;
-        padding: 0.875rem 2.25rem;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        font-weight: 600;
-    }
+            .filter-input:focus {
+                border-color: var(--ig-primary);
+                box-shadow: 0 0 0 4px rgba(64, 93, 230, 0.15);
+            }
 
-    .filter-btn::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(120deg,
-            rgba(255,255,255,0) 20%,
-            rgba(255,255,255,0.2) 50%,
-            rgba(255,255,255,0) 80%);
-        transition: left 0.6s;
-    }
+        .filter-btn {
+            background: var(--ig-gradient);
+            color: white;
+            padding: 0.875rem 2.25rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+        }
 
-    .filter-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(64, 93, 230, 0.3);
-    }
+            .filter-btn::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(120deg, rgba(255,255,255,0) 20%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 80%);
+                transition: left 0.6s;
+            }
 
-    .filter-btn:hover::after {
-        left: 100%;
-    }
+            .filter-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(64, 93, 230, 0.3);
+            }
 
-    .user-avatar {
-        width: 40px;
-        height: 40px;
-        border: 2px solid #fff;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-    }
+                .filter-btn:hover::after {
+                    left: 100%;
+                }
 
-    .user-avatar:hover {
-        transform: translateY(-5px) scale(1.1);
-        z-index: 2;
-    }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
 
-    .action-menu {
-        border-radius: 16px;
-        padding: 0.75rem;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
+            .user-avatar:hover {
+                transform: translateY(-5px) scale(1.1);
+                z-index: 2;
+            }
 
-    .action-item {
-        padding: 0.75rem 1.25rem;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
+        .action-menu {
+            border-radius: 16px;
+            padding: 0.75rem;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
 
-    .action-item:hover {
-        background: linear-gradient(to right, rgba(64, 93, 230, 0.05), transparent);
-        transform: translateX(8px);
-        color: var(--ig-primary);
-    }
+        .action-item {
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
 
-    .pagination-modern .page-link {
-        border: 2px solid transparent;
-        min-width: 42px;
-        border-radius: 12px;
-        font-weight: 600;
-        color: var(--text-secondary);
-        transition: all 0.3s ease;
-    }
+            .action-item:hover {
+                background: linear-gradient(to right, rgba(64, 93, 230, 0.05), transparent);
+                transform: translateX(8px);
+                color: var(--ig-primary);
+            }
 
-    .pagination-modern .page-link:hover {
-        border-color: rgba(64, 93, 230, 0.2);
-        color: var(--ig-primary);
-    }
+        .pagination-modern .page-link {
+            border: 2px solid transparent;
+            min-width: 42px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
 
-    .pagination-modern .page-item.active .page-link {
-        background: var(--ig-gradient);
-        border-color: transparent;
-        color: white !important;
-    }
+            .pagination-modern .page-link:hover {
+                border-color: rgba(64, 93, 230, 0.2);
+                color: var(--ig-primary);
+            }
+
+        .pagination-modern .page-item.active .page-link {
+            background: var(--ig-gradient);
+            border-color: transparent;
+            color: white !important;
+        }
         /* اصلاحات ظاهری تقویم */
         .pwt-datepicker {
             font-family: 'Vazir', Tahoma !important;
@@ -407,79 +406,220 @@
             cursor: pointer !important;
             background-color: white !important;
         }
-      /*  media (max-width: 768px) {
-            .filter-grid
+        /* بهبود چیدمان فیلترها */
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        /* تنظیمات جدید برای گروه فیلترها */
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        /* چیدمان دکمه‌ها */
+        .filter-actions {
+            display: flex;
+            justify-content: center; /* مرکز چین کردن دکمه‌ها */
+            gap: 1.5rem;
+            margin-top: 2rem;
+            width: 100%;
+        }
+
+        /* استایل دکمه‌ها */
+        .filter-btn {
+            min-width: 160px;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .filter-reset {
+            background: #fff !important;
+            color: var(--ig-primary) !important;
+            border: 2px solid rgba(64, 93, 230, 0.3) !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* بهبود چیدمان بازه زمانی */
+        .date-range-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* ریسپانسیو برای موبایل */
+
+        .filter-actions {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .filter-btn {
+            width: 100%;
+            min-width: auto;
+        }
+
+        .filter-grid {
+            grid-template-columns: 1fr;
+        }
+        /* بهبود چیدمان فیلترها */
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        /* تنظیمات جدید برای گروه فیلترها */
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        /* چیدمان دکمه‌ها */
+        .filter-actions {
+            display: flex;
+            justify-content: center; /* مرکز چین کردن دکمه‌ها */
+            gap: 1.5rem;
+            margin-top: 2rem;
+            width: 100%;
+        }
+
+        /* استایل دکمه‌ها */
+        .filter-btn {
+            min-width: 160px;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .filter-reset {
+            background: #fff !important;
+            color: var(--ig-primary) !important;
+            border: 2px solid rgba(64, 93, 230, 0.3) !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* بهبود چیدمان بازه زمانی */
+        .date-range-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid transparent;
+        }
+
+        .story-btn {
+            background: rgba(131, 58, 180, 0.1);
+            color: var(--ig-secondary);
+        }
+
+            .story-btn:hover {
+                background: var(--ig-secondary);
+                color: white !important;
+                transform: translateY(-2px);
+            }
+
+        .post-btn {
+            background: rgba(64, 93, 230, 0.1);
+            color: var(--ig-primary);
+        }
+
+            .post-btn:hover {
+                background: var(--ig-primary);
+                color: white !important;
+                transform: translateY(-2px);
+            }
+
+        .delete-btn {
+            background: rgba(253, 29, 29, 0.1);
+            color: var(--ig-accent);
+        }
+
+            .delete-btn:hover {
+                background: var(--ig-accent);
+                color: white !important;
+                transform: translateY(-2px);
+            }
+
+        /* ریسپانسیو برای موبایل */
+      
+            .d-flex.gap-2
 
         {
+            flex-direction: column;
+            gap: 0.5rem !important;
+        }
+
+        .action-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        
+        /* ریسپانسیو برای موبایل */
+       /*  media (max-width: 768px) {
+            .filter-actions
+
+        {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .filter-btn {
+            width: 100%;
+            min-width: auto;
+        }
+
+        .filter-grid {
             grid-template-columns: 1fr;
         }
 
-        .date-range-group {
-            grid-template-columns: 1fr;
         }
+        */
 
-        .dashboard-header {
-            padding: 1.5rem;
-        }
 
-        .filter-card {
-            margin: -1.5rem 1rem 1.5rem;
-            padding: 1.5rem;
-        }
-
-        } */
     </style>
 }
 
 <div class="dashboard-container">
     <div class="dashboard-header">
         <h4 class="mb-0">
-            <i class="fab fa-instagram me-2" > </i>
-            <b style ="color:hotpink;">     مدیریت پیشرفته حسابها</b>
+            <i class="fab fa-instagram me-2"> </i>
+            <b style="color:hotpink;">     مدیریت پیشرفته حسابها</b>
         </h4>
     </div>
 
     <div class="filter-card">
         <form method="get" class="filter-grid">
-            <!-- فیلتر نام کاربری -->
-            <div class="filter-group">
-                <label class="filter-label">نام کاربری</label>
-                <input type="text"
-                       class="filter-input"
-                       placeholder="نام کاربری را وارد کنید"
-                       asp-for="FilterParams.UserName">
-            </div>
-
-            <!-- فیلتر نام کاربری اینستاگرام -->
+            <!-- ردیف اول -->
             <div class="filter-group">
                 <label class="filter-label">نام کاربری اینستاگرام</label>
                 <input type="text"
                        class="filter-input"
-                       placeholder="Instagram username"
+                       placeholder="مثال: example_username"
                        asp-for="FilterParams.InstagramUserName">
             </div>
 
-            <!-- فیلتر بازه زمانی -->
-            <div class="filter-group">
-                <label class="filter-label">بازه زمانی</label>
-                <div class="date-range-group">
-                    <input type="text"
-                           class="filter-input datepicker"
-                           placeholder="تاریخ شروع"
-                           id="start-date"
-                           readonly
-                           autocomplete="off">
-
-                    <input type="text"
-                           class="filter-input datepicker"
-                           placeholder="تاریخ پایان"
-                           id="end-date"
-                           readonly
-                           autocomplete="off">
-                </div>
-            </div>
-
-            <!-- فیلتر مرتب سازی -->
+            <!-- ردیف دوم -->
             <div class="filter-group">
                 <label class="filter-label">مرتب سازی بر اساس</label>
                 <select class="filter-input"
@@ -489,13 +629,33 @@
                 </select>
             </div>
 
-            <!-- دکمه های اقدام -->
+            <!-- ردیف سوم -->
+            <div class="filter-group">
+                <label class="filter-label">بازه زمانی</label>
+                <div class="date-range-group">
+                    <input type="text"
+                           class="filter-input datepicker"
+                           placeholder="تاریخ شروع (شمسی)"
+                           id="start-date"
+                           readonly
+                           autocomplete="off">
+
+                    <input type="text"
+                           class="filter-input datepicker"
+                           placeholder="تاریخ پایان (شمسی)"
+                           id="end-date"
+                           readonly
+                           autocomplete="off">
+                </div>
+            </div>
+
+            <!-- دکمه‌های اقدام -->
             <div class="filter-actions">
                 <button type="submit" class="filter-btn">
                     <i class="fas fa-filter me-2"></i>اعمال فیلتر
                 </button>
                 <a href="@Url.Page("./List")" class="filter-btn filter-reset">
-                    <i class="fas fa-times me-2"></i>حذف فیلترها
+                    <i class="fas fa-undo me-2"></i>حذف فیلترها
                 </a>
             </div>
         </form>
@@ -505,80 +665,79 @@
             <thead>
                 <tr>
                     <th>حساب کاربری</th>
-                    <th>اطلاعات پایه</th>
+                    <th>نام کاربری اکانت اینستاگرام</th>
                     <th>وضعیت</th>
                     <th>آخرین فعالیت</th>
                     <th>مدیریت</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <div class="avatar me-3">
-                                <img src="~/assets/img/avatars/ig-1.jpg"
-                                     class="rounded-circle"
-                                     width="40"
-                                     alt="حساب کاربری">
+                @foreach (var item in Model.FilterResult.Data)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar me-3">
+                                    <img src="@Directories.GetInstagramAccountProfile(item.Profile)"
+                                         class="rounded-circle"
+                                         width="70"
+                                         alt="@item.UserName"
+                                         onerror="this.onerror=null;this.src='/assets/img/default-profile.jpg';">
+                                </div>
+                                <div>
+                                    <div class="fw-bold">@item.UserName</div>
+                                    <small class="text-muted">item.FollowersCount.ToString("N0") دنبال‌کننده</small>
+                                </div>
                             </div>
-                            <div>
-                                <div class="fw-bold">@* @creative.design *@</div>
-                                <small class="text-muted">۱۵.۲K دنبال‌کننده</small>
+                        </td>
+                        <td>
+                            <div class="text-muted small">
+                                <div> @item.UserName</div>
+                                @* <div>صفحه: @item.PageId</div> *@
                             </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="text-muted small">
-                            <div>ایمیل: info@example.com</div>
-                            <div>تلفن: +۹۸ ۹۱۲ ۳۴۵ ۶۷۸۹</div>
-                        </div>
-                    </td>
-                    <td>
-                        <span class="status-indicator">
-                            <i class="fas fa-check-circle"></i>
-                            فعال
-                        </span>
-                    </td>
-                    <td>
-                        <div class="text-muted small">
-                            <div>۲ ساعت پیش</div>
-                            <div>پست جدید منتشر شد</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-icon"
-                                    data-bs-toggle="dropdown">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end action-menu">
-                                <li>
-                                    <a class="dropdown-item action-item" href="#">
-                                        <i class="fas fa-chart-line text-info me-2"></i>
-                                        تحلیل آماری
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item action-item" href="#">
-                                        <i class="fas fa-edit text-success me-2"></i>
-                                        ویرایش اطلاعات
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item action-item text-danger" href="#">
-                                        <i class="fas fa-trash-alt me-2"></i>
-                                        حذف حساب
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                        <td>
+                            <span class="status-indicator @(@* item.IsActive *@ true ? "active" : "inactive")">
+                                <i class="fas fa-circle"></i>
+                                @(@* item.IsActive *@true ? "فعال" : "غیرفعال")
+                            </span>
+                        </td>
+                        <td>
+                            <div class="text-muted small">
+                                <div>item.LastActivity.ToPersianDateTime()</div>
+                                <div>item.LastAction</div>
+                            </div>
+                        </td>
+        
+                        <td>
+                            <div class="d-flex gap-2">
+                                <!-- دکمه نمایش استوری‌ها -->
+                                <a class="btn btn-sm action-btn story-btn"
+                                   href="@Url.Page("Story/List", new {accountId = item.Id})">
+                                    <i class="fas fa-camera me-1"></i>
+                                    استوری‌ها
+                                </a>
+
+                                <!-- دکمه نمایش پست‌ها -->
+                                <a class="btn btn-sm action-btn post-btn"
+                                   href="@Url.Page("Post/List", new {accountId = item.InstagramId})">
+                                    <i class="fas fa-image me-1"></i>
+                                    پست‌ها
+                                </a>
+
+                                <!-- دکمه حذف -->
+                                <button class="btn btn-sm action-btn delete-btn"
+                                        @@click="deleteAccount(@item.Id)">
+                                    <i class="fas fa-trash-alt me-1"></i>
+                                    حذف
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
-
     <nav class="p-3">
         <ul class="pagination pagination-modern justify-content-center">
             <li class="page-item">
@@ -599,108 +758,25 @@
 </div>
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@2.2.1/dist/js/persian-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@2.2.1/dist/css/persian-datepicker.min.css">
+
+    <script src="~/assets/vendor/libs/jdate/jdate.js"></script>
+    <script src="~/assets/vendor/libs/flatpickr/flatpickr-jdate.js"></script>
+    <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script>
+    <script src="~/assets/js/forms-pickers.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jalali-moment@3.3.10/dist/jalali-moment.browser.js"></script>
 
     <script>
-                $(document).ready(function () {
-            // تنظیمات پیش‌فرض
-            $.fn.pDatepicker.defaults.autoClose = true;
-
-            // مقداردهی برای فیلدهای تاریخ
-            $('#start-date').pDatepicker({
-                altField: '#start-date-miladi',
-                altFormat: 'YYYY-MM-DD HH:mm',
-                initialValue: false
-            });
-
-            $('#end-date').pDatepicker({
-                altField: '#end-date-miladi',
-                altFormat: 'YYYY-MM-DD HH:mm',
-                initialValue: false
-            });
-        });
-        $(document).ready(function () {
-            // تنظیمات فارسی سازی کامل
-            $.fn.pDatepicker.defaults = {
-                persianDigit: true,
-                format: 'YYYY/MM/DD HH:mm',
-                calendarType: 'persian',
-                timePicker: {
-                    enabled: true,
-                    meridiem: {
-                        enabled: false
-                    }
-                },
-                toolbox: {
-                    calendarSwitch: {
-                        enabled: false
-                    }
-                },
-                initialValue: false,
-                navigator: {
-                    scroll: {
-                        enabled: true
-                    }
-                },
-                checkDate: function (unix) {
-                    return unix;
-                },
-                autoClose: true,
-                observer: true,
-                locale: {
-                    language: 'persian',
-                    today: 'امروز',
-                    clear: 'پاک کردن',
-                    confirm: 'تایید',
-                    hour: 'ساعت',
-                    minute: 'دقیقه',
-                    year: 'سال',
-                    month: 'ماه',
-                    day: 'روز',
-                    header: {
-                        year: 'انتخاب سال',
-                        month: 'انتخاب ماه',
-                        day: 'انتخاب روز'
-                    }
-                }
-            };
-
-            $('.datepicker').pDatepicker({
-                onSelect: function (unix) {
-                    const $input = $(this);
-                    const altField = $input.data('alt-field');
-                    const altFormat = $input.data('alt-format');
-                    
-                    if(altField) {
-                        const pd = new persianDate(unix).toCalendar('gregorian');
-                        $(altField).val(pd.format(altFormat));
-                    }
-                }
-            });
-        });
-
-        // تابع تبدیل تاریخ به میلادی برای ارسال
-        function convertDates() {
-            const shamsiToMiladi = (shamsiDate) => {
-                return new persianDate(shamsiDate, 'YYYY/MM/DD HH:mm').toCalendar('gregorian').format('YYYY-MM-DD HH:mm');
-            };
-
-            $('#start-date-miladi').val(shamsiToMiladi($('#start-date').val()));
-            $('#end-date-miladi').val(shamsiToMiladi($('#end-date').val()));
-        }
-
-        // فراخوانی قبل از سابمیت فرم
-        $('form').on('submit', function(e) {
-            convertDates();
-            return true;
-        });
-    </script>
-
-     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/fa.js"></script>
-    <script>
+           // document.addEventListener('DOMContentLoaded', function() {
+           //  // تنظیمات اولیه
+           //  const persianDateConfig = {
+           //      locale: "fa",
+           //      enableTime: true,
+           //      dateFormat: "Y/m/d H:i",
+           //      time_24hr: true,
+           //      static: true
+           //  };
+           // });
         // تنظیمات فارسی برای تقویم
         flatpickr.localize(flatpickr.l10ns.fa);
 
@@ -710,49 +786,8 @@
             dateFormat: "Y/m/d H:i",
             time_24hr: true,
             locale: "fa",
-            monthSelectorType: "static"
+            // monthSelectorType: "static"
         });
-    </script>
-@*
-    <!-- اضافه کردن کتابخانه تاریخ شمسی -->
-    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@2.2.1/dist/js/persian-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@2.2.1/dist/css/persian-datepicker.min.css">
-
-    <script>
-        // تنظیمات تاریخ شمسی
-        $(document).ready(function () {
-            $('.datepicker').pDatepicker({
-                observer: true,
-                format: 'YYYY/MM/DD HH:mm',
-                calendarType: 'persian',
-                timePicker: {
-                    enabled: true,
-                    meridiem: {
-                        enabled: true
-                    }
-                },
-                toolbox: {
-                    calendarSwitch: {
-                        enabled: false
-                    }
-                },
-                initialValue: false,
-                navigator: {
-                    scroll: {
-                        enabled: true
-                    }
-                },
-                altField: '.datepicker-alt',
-                altFormat: 'X'
-            });
-        });
-
-        // تبدیل تاریخ به میلادی برای ارسال به سرور
-        function convertToGregorian() {
-            const persianDate = new persianDate($('#datepicker').val()).toCalendar('gregorian');
-            return persianDate.format('YYYY-MM-DD HH:mm:ss');
-        }
-    </script> *@
+    </script> 
 
 }

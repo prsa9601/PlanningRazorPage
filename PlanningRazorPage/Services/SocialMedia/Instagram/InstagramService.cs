@@ -4,6 +4,7 @@ using PlanningRazorPage.Models.SocialMedia.Instagram.Account;
 using PlanningRazorPage.Models.SocialMedia.Instagram.Post;
 using PlanningRazorPage.Models.SocialMedia.Instagram.Story;
 using PlanningRazorPage.Models.SocialMedia.Telegram;
+using static PlanningRazorPage.Models.SocialMedia.Instagram.Post.PostFilterData;
 using SendToInstagramCommand = PlanningRazorPage.Models.SocialMedia.Instagram.Post.SendToInstagramCommand;
 
 namespace PlanningRazorPage.Services.SocialMedia.Instagram
@@ -169,7 +170,7 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
         public async Task<ApiResult> AddAccount(AddInstagramAccountCommandViewModel command)
         {
             var formData = new MultipartFormDataContent();
- 
+
             formData.Add(new StreamContent(command.Profile.OpenReadStream()), "Profile", command.Profile.FileName);
 
             formData.Add(new StringContent(command.InstagramUserName.ToString()), "InstagramUserName");
@@ -232,22 +233,22 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
             return result?.Data!;
         }
 
-        public async Task<InstagramAccountFilterResult> GetFilter(InstagramAccountFilterParam param)
+        public async Task<InstagramAccountFilterResult> GetFilter(InstagramAccountFilterParamViewModel param)
         {
             var url = $"{ModuleName}/GetInstagramByFilter?PageId={param.PageId}&Take={param.Take}";
 
-            if (param.UserName != null)
-                url += $"&UserName={param.UserName}";
+            //if (param.UserName != null)
+            //    url += $"&UserName={param.UserName}";
 
             if (param.SearchOrderBy != null)
                 url += $"&SearchOrderBy={param.SearchOrderBy}";
-            
+
             if (param.EndTime != DateTime.MaxValue || param.EndTime != null)
                 url += $"&EndTime={param.EndTime}";
-            
+
             if (param.StartTime != DateTime.MinValue || param.StartTime != null)
                 url += $"&StartTime={param.StartTime}";
-            
+
             if (param.InstagramUserName != null)
                 url += $"&InstagramUserName={param.InstagramUserName}";
 
@@ -261,7 +262,50 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
             return result?.Data!;
         }
         #endregion
+    
+
+    #region Post
+        public async Task<InstagramPostFilterResult> GetPostByFilter(InstagramPostFilterParam param)
+        {
+            var url = $"{ModuleName}/GetInstagramPostByFilter?PageId={param.PageId}&Take={param.Take}";
+
+            //if (param.UserName != null)
+            //    url += $"&UserName={param.UserName}";
+
+            if (param.SearchOrderBy != null)
+                url += $"&SearchOrderBy={param.SearchOrderBy}";
+
+            if (param.InstagramId != null)
+                url += $"&EndTime={param.InstagramId}";
+
+            if (param.Search != null)
+                url += $"&StartTime={param.Search}";
+
+            var result = await _client.GetFromJsonAsync<ApiResult<InstagramPostFilterResult>>(url);
+            return result?.Data!;
+        }
+        #endregion
+
+        #region Story
+        public async Task<StoryFilterResult> GetStoryByFilter(StoryFilterParam param)
+        {
+            var url = $"{ModuleName}/GetInstagramStoryByFilter?PageId={param.PageId}&Take={param.Take}";
+
+            //if (param.UserName != null)
+            //    url += $"&UserName={param.UserName}";
+
+            if (param.SearchOrderBy != null)
+                url += $"&SearchOrderBy={param.SearchOrderBy}";
+
+            if (param.InstagramId != null)
+                url += $"&EndTime={param.InstagramId}";
+
+            if (param.Search != null)
+                url += $"&StartTime={param.Search}";
+
+            var result = await _client.GetFromJsonAsync<ApiResult<StoryFilterResult>>(url);
+            return result?.Data!;
+        }
+        #endregion
     }
-
-
 }
