@@ -51,6 +51,17 @@ builder.Services.AddAuthentication(option =>
 //builder.Services.AddAuthentication();
 builder.Services.AddDataProtection();
 builder.Services.AddScoped<DecryptionService>();
+
+// Program.cs
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = 52428800; // 50MB
+});
+
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.MaxRequestBodySize = 52428800; // 50MB
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

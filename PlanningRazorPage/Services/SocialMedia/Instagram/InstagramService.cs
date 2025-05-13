@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices.JavaScript;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices.JavaScript;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PlanningRazorPage.Models;
 using PlanningRazorPage.Models.SocialMedia.Instagram.Account;
 using PlanningRazorPage.Models.SocialMedia.Instagram.Post;
@@ -36,9 +38,46 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
         }
         public async Task<ApiResult> AddStory(AddStoryCommand command)
         {
-            var result = await _client.PostAsJsonAsync(
-                  $"{ModuleName}", command);
-            return await result.Content.ReadFromJsonAsync<ApiResult>();
+            try
+            {
+                string dateOfPostingString = command.DateOfPosting.ToString("yyyy-MM-dd HH:mm:ss");
+                // ایجاد فرم دیتا
+                var formData = new MultipartFormDataContent();
+                // افزودن فیلدهای متنی
+                formData.Add(new StringContent(command.InstagramId.ToString()), "InstagramId");
+                formData.Add(new StringContent(dateOfPostingString), "DateOfPosting");
+                formData.Add(new StringContent(command.Link), "Link");
+
+                // افزودن تصاویر (حلقه برای فایل‌های چندگانه)
+                if (command.Image != null && command.Image.Length <= 52428800)
+                {
+
+                    formData.Add(
+                        new StreamContent(command.Image.OpenReadStream()),
+                        "Image", // نام فیلد باید دقیقا منطبق با سرور باشد
+                        command.Image.FileName
+                    );
+
+                }
+                var result = await _client.PostAsync($"{ModuleName}/AddStory", formData);
+
+                return await result.Content.ReadFromJsonAsync<ApiResult>();
+            }
+            catch (Exception ex)
+            {
+                //throw new Exception(ex);
+                return new ApiResult
+                {
+                    IsSuccess = false,
+                    IsReload = false,
+                    MetaData = new MetaData
+                    {
+                        AppStatusCode = AppStatusCode.ServerError,
+                        Message = ex.Message
+                    }
+                };
+
+            }
         }
 
         public async Task<ApiResult> EditStory(EditStoryCommand command)
@@ -229,7 +268,7 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
 
         public async Task<InstagramAccountDto?> GetById(long Id)
         {
-            var result = await _client.GetFromJsonAsync<ApiResult<InstagramAccountDto?>>($"{ModuleName}/GetInstagramAccountById");
+            var result = await _client.GetFromJsonAsync<ApiResult<InstagramAccountDto?>>($"{ModuleName}/GetInstagramAccountById?Id={Id}");
             return result?.Data!;
         }
 
@@ -262,9 +301,9 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
             return result?.Data!;
         }
         #endregion
-    
 
-    #region Post
+
+        #region Post
         public async Task<InstagramPostFilterResult> GetPostByFilter(InstagramPostFilterParam param)
         {
             var url = $"{ModuleName}/GetInstagramPostByFilter?PageId={param.PageId}&Take={param.Take}";
@@ -276,10 +315,10 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
                 url += $"&SearchOrderBy={param.SearchOrderBy}";
 
             if (param.InstagramId != null)
-                url += $"&EndTime={param.InstagramId}";
+                url += $"&InstagramId={param.InstagramId}";
 
             if (param.Search != null)
-                url += $"&StartTime={param.Search}";
+                url += $"&Search={param.Search}";
 
             var result = await _client.GetFromJsonAsync<ApiResult<InstagramPostFilterResult>>(url);
             return result?.Data!;
@@ -298,10 +337,10 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
                 url += $"&SearchOrderBy={param.SearchOrderBy}";
 
             if (param.InstagramId != null)
-                url += $"&EndTime={param.InstagramId}";
+                url += $"&InstagramId={param.InstagramId}";
 
             if (param.Search != null)
-                url += $"&StartTime={param.Search}";
+                url += $"&Search={param.Search}";
 
             var result = await _client.GetFromJsonAsync<ApiResult<StoryFilterResult>>(url);
             return result?.Data!;

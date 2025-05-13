@@ -25,15 +25,50 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Post
         {
         }
 
+        public class InstagramPostFilterParam : BaseFilterParam
+        {
+            public required long InstagramId { get; set; }
+            public string? Search { get; set; } = "";
+            public PostSearchOrderBy? SearchOrderBy { get; set; }
+
+        }
+        //public class PostDto : BaseDto
+        //{
+        //    public DateTime DateOfPosting { get; set; }
+        //    //public string Picture { get; private set; }
+        //    public string Description { get; set; }
+        //    public string ImageName { get; set; }
+        //    public string InstagramUserName { get; set; } // UserName or PageName
+        //    public string Link { get; set; }
+        //    //public string Slug { get; set; }
+        //    public bool IsSend { get; set; }
+        //    public string postId { get; set; } //InstagramPostId OR TelegramPostId
+        //    public List<PostVideoDto> Videos { get; set; }
+        //    public List<PostImageDto> Images { get; set; }
+        //}
+        //public class InstagramPostFilterParam : BaseFilterParam
+        //{
+        //    public required string InstagramId { get; set; }
+        //    public string? Search { get; set; } = "";
+        //    public PostSearchOrderBy? SearchOrderBy { get; set; }
+
+        //}
+        //public class InstagramPostFilterResult : BaseFilter<PostDto, InstagramPostFilterParam>
+        //{
+        //}
+
+        public class InstagramPostFilterResult : BaseFilter<InstagramPostFilterData, InstagramPostFilterParam>
+        {
+        }
         public class InstagramPostFilterData : BaseDto
         {
             public DateTime DateOfPosting { get; set; }
-
             //public string Picture { get; private set; }
             public string Description { get; set; }
             public string ImageName { get; set; }
             public string Link { get; set; }
             public string InstagramUserName { get; set; } // UserName or PageName
+            public string? InstagramPostId { get; set; } // UserName or PageName
 
             //public string Slug { get; set; }
             public bool IsSend { get; set; }
@@ -41,19 +76,6 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Post
             public List<PostVideoDto> Videos { get; set; }
             public List<PostImageDto> Images { get; set; }
         }
-
-        public class InstagramPostFilterParam : BaseFilterParam
-        {
-            public required string InstagramId { get; set; }
-            public string? Search { get; set; } = "";
-            public PostSearchOrderBy? SearchOrderBy { get; set; }
-
-        }
-
-        public class InstagramPostFilterResult : BaseFilter<PostDto, InstagramPostFilterParam>
-        {
-        }
-
         public enum PostSearchOrderBy
         {
             //visit,

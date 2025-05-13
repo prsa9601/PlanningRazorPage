@@ -9,6 +9,7 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Account
         public string PageId { get; set; } //PageId
         public string accessToken { get; set; } //AccessToken Instagram
         public string UserName { get; set; } //AccessToken Instagram
+        public string InstagramUserName { get; set; } //AccessToken Instagram
         public List<InstagramAccountStoryDto>? Stories { get; set; } //token Telegram
         public List<InstagramAccountPostDto>? Posts { get; set; } //token Telegram
         public string Profile { get; set; } //image name

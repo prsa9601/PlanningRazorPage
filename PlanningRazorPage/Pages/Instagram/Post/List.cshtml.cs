@@ -1,12 +1,38 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using PlanningRazorPage.Infrastructure.RazorUtils;
+using PlanningRazorPage.Services.SocialMedia.Instagram;
+using static PlanningRazorPage.Models.SocialMedia.Instagram.Post.PostFilterData;
 
 namespace PlanningRazorPage.Pages.Instagram.Post
 {
-    public class ListModel : PageModel
+    public class ListModel : BaseRazorFilter<InstagramPostFilterParam>
     {
-        public void OnGet()
+        private readonly IInstagramService _service;
+
+        public ListModel(IInstagramService service)
         {
+            _service = service;
+        }
+        [BindProperty(SupportsGet = true)]
+        public InstagramPostFilterResult PostResult { get; set; }
+        [BindProperty]
+        public  long InstagramId { get; set; }
+        //[BindProperty(SupportsGet = true)]
+        //public PostDto? Result { get; set; }
+        public async Task<IActionResult> OnGet(long instagramId)
+        {
+            InstagramId = instagramId;
+            PostResult = await _service.GetPostByFilter(new InstagramPostFilterParam
+            {
+                InstagramId = instagramId,
+                PageId = FilterParams.PageId,
+                Take = 8,
+                Search = FilterParams.Search,
+                SearchOrderBy = FilterParams.SearchOrderBy
+            });
+
+            //Result = PostResult.Data.FirstOrDefault(i => i.InstagramUserName.Equals(InstagramId));
+            return Page();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace PlanningRazorPage.Pages.Admin.UserPackage
         {
             public string id { get; set; } = String.Empty;
         }
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public InputClass Input { get; set; } = new InputClass();
         public List<PackageDto>? Packages { get; set; }
         public async Task<IActionResult> OnGet(string id)

@@ -15,7 +15,8 @@
         public const string InstagramPostVideos = "/images/Instagram/Post/Videos";
         public const string TelegramImages = "/images/Telegram/image";
         public const string TelegramVideo = "/images/Telegram/Videos";
-        public const string InstagramStoryImages = "/images/Instagram/Story/image";
+        public const string InstagramStoryFiles = "/images/Instagram/Story/Images";
+        //public const string InstagramStoryImages = "/images/Instagram/Story/image";
         public const string InstagramStoryVideos = "/images/Instagram/Story/Videos";
         public const string BlogImage = "/images/Blog/Images";
         public const string UserAvatars = "/images/users/avatar";
@@ -34,10 +35,14 @@
         {
             return $"{SiteSettings.ServerPath}{InstagramPostVideos}/{imageName}";
         }
-        public static string GetInstagramStoryImage(string imageName)
+        public static string GetInstagramStoryImages(string imageName)
         {
-            return $"{SiteSettings.ServerPath}{InstagramStoryImages}/{imageName}";
+            return $"{SiteSettings.ServerPath}{InstagramStoryFiles}/{imageName}";
         }
+        //public static string GetInstagramStoryImage(string imageName)
+        //{
+        //    return $"{SiteSettings.ServerPath}{InstagramStoryImages}/{imageName}";
+        //}
         public static string GetInstagramStoryVideo(string imageName)
         {
             return $"{SiteSettings.ServerPath}{InstagramStoryVideos}/{imageName}";

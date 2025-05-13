@@ -5,34 +5,39 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Story
 {
     public class StoryDto : BaseDto
     {
-        public string storyId { get; set; } //InstagramPostId OR TelegramPostId
+        public long InstagramId { get; set; } //InstagramPostId OR TelegramPostId
+        public string InstagramStoryId { get; set; } //InstagramPostId OR TelegramPostId
 
         public DateTime DateOfPosting { get; set; }
         public string Link { get; set; }
         public bool IsSend { get; set; }
-        public string ImageName { get; set; }
+        //public string ImageName { get;  set; }
         public string InstagramUserName { get; set; }
-        public string VideoName { get; set; }
-        public StoryImageDto Images { get; set; }
-        public StoryVideoDto Videos { get; set; }
-        public SendMethodInstagram SendMethod { get; set; }
+        //public string InstagramId { get; set; }
+        //public string VideoName { get; set; }
+        public StoryImageDto? Images { get; set; }
+        public StoryVideoDto? Videos { get; set; }
+        public SendMethodInstagramForPost SendMethod { get; set; }
     }
-
+    public enum SendMethodInstagramForPost
+    {
+        Post,
+        Story
+    }
     public class StoryImageDto : BaseDto
     {
         // public DateTime DateOfPosting { get; private set; }
         public string PictureName { get; set; }
         // public long StoryId { get; set; }
-        public string Link { get; set; }
+        public string? Link { get; set; }
     }
 
     public class StoryVideoDto : BaseDto
     {
         public string VideoPath { get; set; }
-        public string Link { get; set; }
+        public string? Link { get; set; }
         //public long StoryId { get; set; }
     }
-
     internal class StoryFilterData : BaseDto
     {
     }
@@ -51,11 +56,12 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Story
     }
     public class StoryFilterParam : BaseFilterParam
     {
-        public required string InstagramId { get; set; }
+        public required long InstagramId { get; set; }
         public string? Search { get; set; } = "";
         public StorySearchOrderBy? SearchOrderBy { get; set; }
 
     }
+
     public class StoryFilterResult : BaseFilter<StoryDto, StoryFilterParam>
     {
     }
