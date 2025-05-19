@@ -16,21 +16,21 @@ namespace PlanningRazorPage.Pages.Instagram.Post
         [BindProperty(SupportsGet = true)]
         public InstagramPostFilterResult PostResult { get; set; }
         [BindProperty]
-        public  long InstagramId { get; set; }
+        public long InstagramId { get; set; }
         //[BindProperty(SupportsGet = true)]
         //public PostDto? Result { get; set; }
-        public async Task<IActionResult> OnGet(long instagramId)
+        public async Task<IActionResult> OnGet(long accountId)
         {
-            InstagramId = instagramId;
+         
             PostResult = await _service.GetPostByFilter(new InstagramPostFilterParam
             {
-                InstagramId = instagramId,
+                InstagramId = accountId,
                 PageId = FilterParams.PageId,
                 Take = 8,
                 Search = FilterParams.Search,
                 SearchOrderBy = FilterParams.SearchOrderBy
             });
-
+            InstagramId = accountId;
             //Result = PostResult.Data.FirstOrDefault(i => i.InstagramUserName.Equals(InstagramId));
             return Page();
         }

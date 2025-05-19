@@ -82,9 +82,47 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
 
         public async Task<ApiResult> EditStory(EditStoryCommand command)
         {
-            var result = await _client.PatchAsJsonAsync(
-                 $"{ModuleName}", command);
-            return await result.Content.ReadFromJsonAsync<ApiResult>();
+            try
+            {
+                string dateOfPostingString = command.DateOfPosting.ToString("yyyy-MM-dd HH:mm:ss");
+                // ایجاد فرم دیتا
+                var formData = new MultipartFormDataContent();
+                // افزودن فیلدهای متنی
+                formData.Add(new StringContent(command.StoryId.ToString()), "StoryId");
+                formData.Add(new StringContent(command.InstagramId.ToString()), "InstagramId");
+                formData.Add(new StringContent(dateOfPostingString), "DateOfPosting");
+                formData.Add(new StringContent(command.Link), "Link");
+
+                // افزودن تصاویر (حلقه برای فایل‌های چندگانه)
+                if (command.Image != null && command.Image.Length <= 52428800)
+                {
+
+                    formData.Add(
+                        new StreamContent(command.Image.OpenReadStream()),
+                        "Image", // نام فیلد باید دقیقا منطبق با سرور باشد
+                        command.Image.FileName
+                    );
+
+                }
+                var result = await _client.PatchAsync($"{ModuleName}/EditStory", formData);
+
+                return await result.Content.ReadFromJsonAsync<ApiResult>();
+            }
+            catch (Exception ex)
+            {
+                //throw new Exception(ex);
+                return new ApiResult
+                {
+                    IsSuccess = false,
+                    IsReload = false,
+                    MetaData = new MetaData
+                    {
+                        AppStatusCode = AppStatusCode.ServerError,
+                        Message = ex.Message
+                    }
+                };
+
+            }
         }
 
         public async Task<ApiResult> DeletePost(DeletePostInstagramCommand command)
@@ -130,27 +168,37 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
             formData.Add(new StringContent(command.Link), "Link");
 
             // افزودن تصاویر (حلقه برای فایل‌های چندگانه)
-            if (command.Images != null && command.Images.Any())
-            {
-                foreach (var image in command.Images)
-                {
-                    formData.Add(
-                        new StreamContent(image.OpenReadStream()),
-                        "Images", // نام فیلد باید دقیقا منطبق با سرور باشد
-                        image.FileName
-                    );
-                }
-            }
+            //if (command.Images != null && command.Images.Any())
+            //{
+            //    foreach (var image in command.Images)
+            //    {
+            //        formData.Add(
+            //            new StreamContent(image.OpenReadStream()),
+            //            "Images", // نام فیلد باید دقیقا منطبق با سرور باشد
+            //            image.FileName
+            //        );
+            //    }
+            //}
             // افزودن ویدیوها (حلقه برای فایل‌های چندگانه)
+            //if (command.Videos != null && command.Videos.Any())
+            //{
+            //    foreach (var video in command.Videos)
+            //    {
+            //        formData.Add(
+            //            new StreamContent(video.OpenReadStream()),
+            //            "Videos", // نام فیلد باید دقیقا منطبق با سرور باشد
+            //            video.FileName
+            //        );
+            //    }
+            //}
             if (command.Videos != null && command.Videos.Any())
             {
                 foreach (var video in command.Videos)
                 {
-                    formData.Add(
-                        new StreamContent(video.OpenReadStream()),
-                        "Videos", // نام فیلد باید دقیقا منطبق با سرور باشد
-                        video.FileName
-                    );
+                    // بدون using
+                    var stream = video.OpenReadStream();
+                    var streamContent = new StreamContent(stream);
+                    formData.Add(streamContent, "Videos", video.FileName);
                 }
             }
             // ارسال درخواست به آدرس صحیح
@@ -169,17 +217,17 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
             formData.Add(new StringContent(command.Description), "Description");
             formData.Add(new StringContent(command.Link), "Link");
             // افزودن تصاویر جدید (حلقه برای فایلهای چندگانه)
-            if (command.Images != null && command.Images.Any())
-            {
-                foreach (var image in command.Images)
-                {
-                    formData.Add(
-                        new StreamContent(image.OpenReadStream()),
-                        "Images", // نام فیلد منطبق با سرور
-                        image.FileName
-                    );
-                }
-            }
+            //if (command.Images != null && command.Images.Any())
+            //{
+            //    foreach (var image in command.Images)
+            //    {
+            //        formData.Add(
+            //            new StreamContent(image.OpenReadStream()),
+            //            "Images", // نام فیلد منطبق با سرور
+            //            image.FileName
+            //        );
+            //    }
+            //}
             // افزودن ویدیوهای جدید (حلقه برای فایلهای چندگانه)
             if (command.Videos != null && command.Videos.Any())
             {

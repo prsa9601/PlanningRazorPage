@@ -6,7 +6,8 @@
 }
 
 @section Header {
-    <link rel="stylesheet" href="~/assets/vendor/libs/flatpickr/flatpickr.css" />
+    <!-- اضافه کردن کتابخانه‌های تاریخ شمسی -->
+    <link rel="stylesheet" href="https://npmcdn.com/persian-datepicker/dist/css/persian-datepicker.min.css">
     <style>
         .media-upload-box {
             border: 2px dashed #d9dee3;
@@ -56,7 +57,7 @@
             <h5 class="mb-0">
                 <i class="fas fa-plus-circle me-2"></i>مشخصات استوری
             </h5>
-            <small class="text-muted">فیلدهای ستاره دار обязаاری هستند</small>
+            <small class="text-muted">فیلدهای ستاره دار اجباری هستند</small>
         </div>
 
         <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
@@ -92,14 +93,16 @@
                             <div class="invalid-feedback">لطفا لینک معتبر وارد کنید</div>
                         </div>
 
-                        <!-- تاریخ انتشار -->
+                        <!-- تاریخ انتشار شمسی -->
                         <div class="form-floating form-floating-outline mb-4">
-                            <input class="form-control flatpickr-input"
-                                   type="datetime-local"
-                                   asp-for="dateOfPosting"
+                            <input class="form-control"
+                                   type="text"
+                                   id="persianDatePicker"
+                                   placeholder="تاریخ انتشار را انتخاب کنید"
                                    required>
+                            <input type="hidden" asp-for="dateOfPosting" id="gregorianDate" />
                             <label class="text-primary">
-                                <i class="fas fa-calendar-alt me-2"></i>زمان انتشار
+                                <i class="fas fa-calendar-alt me-2"></i>زمان انتشار (شمسی)
                             </label>
                             <div class="invalid-feedback">لطفا تاریخ انتشار را انتخاب کنید</div>
                         </div>
@@ -155,7 +158,35 @@
 </div>
 
 @section Scripts {
+    <!-- اضافه کردن کتابخانه‌های JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://npmcdn.com/persian-datepicker/dist/js/persian-datepicker.min.js"></script>
+
     <script>
+        // فعال سازی تقویم شمسی
+        $(document).ready(function () {
+            $('#persianDatePicker').persianDatepicker({
+                format: 'YYYY/MM/DD HH:mm',
+                initialValue: true,
+                initialValueType: 'persian',
+                timePicker: {
+                    enabled: true,
+                    meridiem: {
+                        enabled: true
+                    }
+                },
+                onSelect: function (unixDate) {
+                    const gregorianDate = new Date(unixDate).toISOString();
+                    $('#gregorianDate').val(gregorianDate);
+                }
+            });
+
+            // تنظیم تاریخ پیش‌فرض به امروز شمسی
+            const today = new persianDate().format('YYYY/MM/DD HH:mm');
+            $('#persianDatePicker').val(today);
+            $('#gregorianDate').val(new persianDate().toGregorian().toISOString());
+        });
+
         // پیش نمایش رسانه
         function previewMedia(event) {
             const file = event.target.files[0];
@@ -182,7 +213,7 @@
             document.getElementById('preview-container').style.display = 'none';
         }
 
-        // فعال سازی اعتبارسنجی فرم
+        // اعتبارسنجی فرم
         (function () {
             'use strict'
             var forms = document.querySelectorAll('.needs-validation')

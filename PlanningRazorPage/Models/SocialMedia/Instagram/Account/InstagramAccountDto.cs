@@ -31,7 +31,7 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Account
         public string Link { get; set; }
         public bool IsSend { get; set; } = false;
         public string InstagramId { get; set; }
-        public List<InstagramPostImageDto>? Images { get; set; }
+        //public List<InstagramPostImageDto>? Images { get; set; }
         public List<InstagramPostVideoDto>? Videos { get; set; }
     }
     public class InstagramAccountStoryDto : BaseDto

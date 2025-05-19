@@ -16,8 +16,8 @@
         public long StoryId { get; set; } //TableId
         public DateTime DateOfPosting { get; set; }
         public string Link { get; set; }
-        public IFormFile? Image { get; set; }
-        public IFormFile? Video { get; set; }
+        public IFormFile Image { get; set; }
+        //public IFormFile? Video { get; set; }
     }
     public class DeleteStoryCommand
     {

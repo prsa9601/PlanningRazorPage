@@ -4,9 +4,9 @@
     {
         public long InstagramAccountId { get; set; } //TableId 
         public DateTime DateOfPosting { get; set; }
-        public string Link { get; set; } = string.Empty;
+        public string? Link { get; set; }
         public string Description { get; set; } = string.Empty;
-        public List<IFormFile>? Images { get; set; }
+        //public List<IFormFile>? Images { get; set; }
         public List<IFormFile>? Videos { get; set; }
 
     }
@@ -17,7 +17,7 @@
         public DateTime DateOfPosting { get; set; }
         public string Link { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public List<IFormFile>? Images { get; set; }
+        //public List<IFormFile>? Images { get; set; }
         public List<IFormFile>? Videos { get; set; }
     }
     public record class CreateTelegramAccountCommand

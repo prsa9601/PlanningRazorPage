@@ -63,14 +63,16 @@
 
 
 
-
     <partial name="Shared/Partials/_Scripts" />
-
+    @* <partial name="_ValidationScriptsPartial" /> *@
+        <partial name="_ValidationScriptsPartial" />
+    
     @await RenderSectionAsync("Scripts", required: false)
     <script src="~/global.js"></script>
     <div id="ajax-token">
         @Html.AntiForgeryToken()
     </div>
+
 </body>
 
 </html>

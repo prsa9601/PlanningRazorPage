@@ -73,8 +73,9 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Post
             //public string Slug { get; set; }
             public bool IsSend { get; set; }
             public string postId { get; set; } //InstagramPostId OR TelegramPostId
+            //public List<PostVideoDto> Videos { get; set; }
             public List<PostVideoDto> Videos { get; set; }
-            public List<PostImageDto> Images { get; set; }
+            //public List<PostImageDto> Images { get; set; }
         }
         public enum PostSearchOrderBy
         {
@@ -93,7 +94,7 @@ namespace PlanningRazorPage.Models.SocialMedia.Instagram.Post
             public bool IsSend { get; set; }
             public string postId { get; set; } //InstagramPostId OR TelegramPostId
             public List<PostVideoDto> Videos { get; set; }
-            public List<PostImageDto> Images { get; set; }
+            //public List<PostImageDto> Images { get; set; }
         }
         public class PostImageDto : BaseDto
         {

@@ -1,96 +1,488 @@
 ﻿@page
 @model PlanningRazorPage.Pages.Instagram.Post.EditModel
 @{
+    Layout = "Shared/_Layout";
+    ViewData["Title"] = "ویرایش پست اینستاگرام";
 }
-@section Header
-{
 
+@section Header {
+    <!-- استایل‌های مشابه صفحه Add -->
+    <link rel="stylesheet" href="https://cdn.fontcdn.ir/Font/Persian/IRANSans/IRANSans.css">
+    <style>
+        /* بهبود استایل راستچین تقویم */
+        .flatpickr-calendar {
+            font-family: 'IRANSans', sans-serif !important;
+            direction: rtl !important;
+            text-align: right !important;
+        }
 
-    <link rel="stylesheet" href="~/assets/vendor/libs/flatpickr/flatpickr.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/jquery-timepicker/jquery-timepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/pickr/pickr-themes.css" />
+        .text-danger {
+            display: none;
+            font-size: 0.875em;
+            margin-top: 0.25rem;
+        }
 
-    <script src="~/assets/vendor/js/template-customizer.js"></script>
+        .flatpickr-months .flatpickr-month,
+        .flatpickr-weekdays,
+        .flatpickr-weekday {
+            direction: rtl !important;
+        }
 
+        .flatpickr-weekday {
+            text-align: center !important;
+        }
+
+        .flatpickr-day {
+            font-family: 'IRANSans', sans-serif !important;
+        }
+
+        .numInputWrapper span.arrowUp:after {
+            right: 0 !important;
+            left: auto !important;
+        }
+    </style>
+
+    <style>
+        :root {
+            --ig-gradient: linear-gradient(45deg, #405DE6, #833AB4, #C13584, #E1306C, #FD1D1D);
+            --ig-primary: #E1306C;
+        }
+
+        .ig-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .ig-header {
+            background: var(--ig-gradient);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .ig-btn {
+            background: var(--ig-primary);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+            .ig-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(225, 48, 108, 0.4);
+            }
+
+        .file-upload-box {
+            border: 2px dashed #ddd;
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: border-color 0.3s;
+        }
+
+            .file-upload-box:hover {
+                border-color: var(--ig-primary);
+            }
+
+        .media-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+            .preview-item img,
+            .preview-item video {
+                width: 100%;
+                height: 120px;
+                object-fit: cover;
+            }
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255,255,255,0.9);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .form-switch .form-check-input:not(:checked) {
+            background-color: #6B8DD6;
+            border-color: #6B8DD6;
+        }
+
+        .form-switch .form-check-input:checked {
+            background-color: #dee2e6;
+            border-color: #dee2e6;
+        }
+
+        .form-switch .form-check-input {
+            transition: all 0.3s ease;
+        }
+    </style>
+    <!-- در استایل‌های موجود این موارد را اضافه کنید -->
+    <style>
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
+
+        .error-feedback {
+            font-size: 0.875em;
+            color: #dc3545;
+        }
+    </style>
 }
-<div class="col-12 container-fluid">
-    <div class="card">
-        <h5 class="card-header">ویرایش پست</h5>
-        <form class="form-repeater">
 
-            <div class="card-body">
+<div class="container py-5">
+    <div class="ig-card">
+        <div class="ig-header text-center">
+            <h3><i class="fab fa-instagram me-2"></i>ویرایش پست اینستاگرام</h3>
+        </div>
 
-                <div class="form-floating form-floating-outline mb-5">
-                    <input class="form-control"
-                           type="text"
-                           placeholder="متــریالایز"
-                           id="html5-text-input" />
-                    <label for="html5-text-input">Bio</label>
-                </div>
-                <div class="form-floating form-floating-outline mb-5">
-                    <input class="form-control"
-                           type="text"
-                           placeholder="متــریالایز"
-                           id="description-text-input" />
-                    <label for="description-text-input">توضیحات پست</label>
-                </div>
-                <div class="form-floating form-floating-outline mb-5">
-                    <input class="form-control"
-                           type="text"
-                           placeholder="متــریالایز"
-                           id="link-text-input" />
-                    <label for="link-text-input">لینک پست</label>
-                </div>
-                <div class="mb-3">
-                    <label for="formFile" class="form-label">عکس اینستاگرام</label>
-                    <input class="form-control" type="file" id="formFile" />
-                </div>
-                <div class="mb-3">
-                    <label for="formFile" class="form-label">ویدیو اینستاگرام</label>
-                    <input class="form-control" type="file" id="formFile" />
-                </div>
+        <div class="card-body p-4">
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="PostId" />
+                @* <input type="hidden" asp-for="ExistingMedia" /> *@
 
-                <div class="card-body">
-                    <div class="row">
+                <div class="row mb-9">
+                    <div class="col-md-8">
+                        <div class="row g-3 align-items-center">
+                            <!-- انتخاب حساب -->
+                            <div class="col-md-5">
+                                <div class="form-floating form-floating-outline h-100">
+                                    <select class="form-select" asp-for="@Model.InstagramId" required>
+                                        <option value="">انتخاب حساب اینستاگرام</option>
+                                        @foreach (var account in Model.Accounts!)
+                                        {
+                                            <option value="@account.Id">📱 @account.InstagramUserName</option>
+                                        }
+                                    </select>
+                                    <label class="text-primary">
+                                        <i class="fas fa-instagram me-2"></i>حساب اینستاگرام
+                                    </label>
+                                    <div class="invalid-feedback">لطفا حساب اینستاگرام را انتخاب کنید</div>
+                                </div>
+                                @* <span asp-validation-for="InstagramId" class="text-danger"></span> *@
 
-                        <div class="col-md-6 col-12 mb-4">
-                            <label for="flatpickr-date" class="form-label">تاریخ اعمال تغییرات در پیج</label>
-                            <input type="hidden" class="form-control flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date" value="1403-07-10">
-                            @* <input class="form-control input" placeholder="YYYY/MM/DD" tabindex="0" type="text" readonly="readonly"> *@
+                            </div>
+
+                            <!-- زمان‌بندی -->
+                            <div class="col-md-7">
+                                <div class="d-flex align-items-center gap-3 justify-content-end h-100">
+                                    <!-- چک باکس -->
+                                    <div class="form-check form-switch m-0 flex-shrink-0">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               id="scheduleSwitch"
+                                               checked="checked" />
+                                        <label class="form-check-label text-nowrap" for="scheduleSwitch">
+                                            ⏰ همین الان ارسال شود
+                                        </label>
+                                    </div>
+
+                                    <!-- تاریخ و زمان -->
+                                    <div class="flex-grow-1" style="min-width: 280px; max-width: 320px;">
+                                        <div class="d-flex align-items-center gap-2 w-100">
+                                            <label for="flatpickr-datetime"
+                                                   class="form-label m-0 text-nowrap flex-shrink-0">
+                                                📅 تاریخ و زمان
+                                            </label>
+                                            <input asp-for="DateOfPosting"
+                                                   type="text"
+                                                   class="form-control text-end persian-date flex-grow-1"
+                                                   placeholder="انتخاب تاریخ"
+                                                   id="flatpickr-datetime"
+                                                   dir="ltr"
+                                                   readonly="readonly"
+                                                   style="min-width: 180px;" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
-            </div>
-            <br />
-            <br />
-        </form>
+
+                <!-- توضیحات -->
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label">📝 متن پست</label>
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="4"
+                              placeholder="متن پست را وارد کنید..."
+                              required></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <!-- لینک -->
+                <div class="mb-4">
+                    <label asp-for="Link" class="form-label">🔗 لینک در بیو @* (اختیاری) *@</label>
+                    <input asp-for="Link"
+                           class="form-control"
+                           type="url"
+                           placeholder="https://example.com" />
+                    <span asp-validation-for="Link" class="text-danger"></span>
+                </div>
+
+                <!-- آپلود مدیا -->
+                <div class="row">
+
+                    <div class="card-body p-4">
+
+
+                        <!-- Existing form fields remain unchanged -->
+                        <!-- Media Upload Section -->
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <div class="file-upload-box">
+                                    <label class="form-label">📁 آپلود مدیا (حداکثر ۶ فایل - عکس یا ویدیو)</label>
+                                    <input asp-for="NewVideos"
+                                           class="form-control"
+                                           type="file"
+                                           multiple
+                                           accept=".jpg,.jpeg,.png,.mp4,.mov,.mkv"
+                                           onchange="validateAndPreviewMedia(this, 'mediaPreview')" />
+                                    <div id="mediaPreview" class="media-preview"></div>
+                                    <span class="text-muted">فرمت‌های مجاز: JPG, PNG, MP4, MOV, MKV (حداکثر ۵۰ مگابایت برای هر فایل)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" id="SubmitButton" class="ig-btn w-100">
+                        <i class="fas fa-cloud-upload-alt me-2"></i>ذخیره و برنامه‌ریزی
+                    </button>
+            </form>
+        </div>
     </div>
 </div>
 
-
-
 @section Scripts {
-    @* <script src="~/assets/js/forms-extras.js"></script>
+    <!-- اسکریپت‌های مشابه صفحه Add -->
+    <script>
+        document.getElementById('SubmitButton').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const form = document.querySelector('form');
+            const formData = new FormData(form);
+            const submitBtn = e.currentTarget;
 
-    <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
-    <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
-    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+            try {
+                    const linkInput = document.querySelector('input[name="Link"]');
+                    const linkValue = linkInput.value.trim();
+                    const errorElement = document.querySelector('[data-valmsg-for="Link"]');
+                            // اعتبارسنجی اولیه
 
-    <script src="~/assets/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
- *@
+                    // let isValid = true;
 
-    <!-- Vendors JS -->
-    <script src="~/assets/vendor/libs/moment/moment.js"></script>
-    <script src="~/assets/vendor/libs/jdate/jdate.js"></script>
-    <script src="~/assets/vendor/libs/flatpickr/flatpickr-jdate.js"></script>
-    <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script>
-    <script src="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-    <script src="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js"></script>
-    <script src="~/assets/vendor/libs/jquery-timepicker/jquery-timepicker.js"></script>
-    <script src="~/assets/vendor/libs/pickr/pickr.js"></script>
-    <script src="~/assets/js/forms-pickers.js"></script>
+                    // Reset styles
+                    // linkInput.classList.remove('is-invalid');
+                    errorElement.style.display = 'none';
+                    errorElement.textContent = '';
 
+                // Check if link is not empty and invalid
+                if (linkValue === '') {
+
+                        errorElement.textContent = 'لطفا آدرس را وارد کنید';
+                        errorElement.style.display = 'block';
+                        e.preventDefault();
+                             // isValid = false;
+                        return false;
+
+                }
+                if (linkValue !== '') {
+                    const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i;
+                    if (!urlPattern.test(linkValue)) {
+                        errorElement.textContent = 'لطفا یک آدرس معتبر وارد کنید';
+                        errorElement.style.display = 'block';
+                        e.preventDefault();
+                             // isValid = false;
+                        return false;
+                    }
+                }
+                 //    if(!isValid) {
+                 //     e.preventDefault();
+
+                 //     // Add shake animation
+                 //     linkInput.style.animation = 'none';
+                 //     void linkInput.offsetWidth; // Trigger reflow
+                 //     linkInput.style.animation = 'invalid-shake 0.5s ease';
+                 // }
+                const instagramId = form.querySelector('[name="InstagramId"]').value;
+                if (!instagramId) {
+                    throw new Error('لطفا حساب اینستاگرام را انتخاب کنید');
+                }
+
+                const description = form.querySelector('[name="Description"]').value;
+                if (!description.trim()) {
+                    throw new Error('توضیحات پست الزامی است');
+                }
+
+                const files = form.querySelector('[name="NewVideos"]').files;
+                if (files.length === 0) {
+                    throw new Error('حداقل یک فایل باید انتخاب شود');
+                }
+
+                // تبدیل تاریخ
+                const persianDate = formData.get('DateOfPosting');
+                if (!persianDate) {
+                    throw new Error('تاریخ ارسال الزامی است');
+                }
+
+                // ارسال درخواست
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>در حال ارسال...';
+
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                // بررسی نوع پاسخ
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    // window.location.reload();
+                    // console.log(response);
+                    // throw new Error(`پاسخ نامعتبر: ${text/* .slice(0, 100) */}`);
+                }
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    if (result.errorType === 'validation') {
+                        // نمایش خطاهای اعتبارسنجی
+                        Object.entries(result.errors).forEach(([field, messages]) => {
+                            const element = document.querySelector(`[data-valmsg-for="${field}"]`);
+                            if (element) {
+                                element.textContent = messages.join(', ');
+                                element.style.display = 'block';
+                            }
+                        });
+                        throw new Error('لطفا مقادیر ورودی را بررسی کنید');
+                    }
+                    throw new Error(result.error || 'خطای سرور');
+                }
+
+                // انتقال به صفحه لیست
+                // window.location.href = `@Url.Page("./List")?instagramId=${result.instagramId}`;
+
+                Swal.fire({
+                            icon: 'success',
+                            title: 'پست با موفقیت ثبت شد!',
+                            confirmButtonText: 'باشه'
+                        }).then(() => {
+                            window.location.href = `@Url.Page("./List")?accountId=${result.instagramId}`;
+                        });
+
+            } catch (error) {
+                // window.location.reload();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطا!',
+                    text: error.message,
+                    confirmButtonText: 'متوجه شدم'
+                });
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-cloud-upload-alt me-2"></i>ذخیره و برنامه‌ریزی';
+            }
+        });
+
+        // باقی توابع مربوط به پیش‌نمایش مدیا...
+    </script>
+    <script>
+        // اسکریپت‌های مدیریت تقویم و پیش‌نمایش مشابه صفحه Add
+              function validateAndPreviewMedia(input, previewId) {
+            const maxFiles = 6;
+            if (input.files.length > maxFiles) {
+                alert(`حداکثر ${maxFiles} فایل مجاز است.`);
+                input.value = '';
+                return;
+            }
+
+            const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4', 'video/quicktime', 'video/x-matroska'];
+            for (const file of input.files) {
+                if (!allowedTypes.includes(file.type)) {
+                    alert('فرمت فایل مجاز نیست.');
+                    input.value = '';
+                    return;
+                }
+            }
+
+            previewMedia(input, previewId);
+        }
+
+        function previewMedia(input, previewId) {
+            const previewContainer = document.getElementById(previewId);
+            previewContainer.innerHTML = '';
+
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'preview-item';
+
+                    if (file.type.startsWith('image/')) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        previewItem.appendChild(img);
+                    } else if (file.type.startsWith('video/')) {
+                        const video = document.createElement('video');
+                        video.controls = true;
+                        video.src = e.target.result;
+                        previewItem.appendChild(video);
+                    }
+
+                    const removeBtn = document.createElement('div');
+                    removeBtn.className = 'remove-btn';
+                    removeBtn.innerHTML = '×';
+                    removeBtn.onclick = () => removeFile(input, file, previewItem);
+                    previewItem.appendChild(removeBtn);
+
+                    previewContainer.appendChild(previewItem);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removeFile(input, fileToRemove, previewItem) {
+            const files = Array.from(input.files);
+            const index = files.indexOf(fileToRemove);
+            if (index > -1) {
+                files.splice(index, 1);
+                const dataTransfer = new DataTransfer();
+                files.forEach(file => dataTransfer.items.add(file));
+                input.files = dataTransfer.files;
+                previewItem.remove();
+            }
+        }
+
+        function removeExistingMedia(mediaPath) {
+            // ارسال درخواست حذف مدیا
+            fetch(`?handler=RemoveMedia&mediaPath=${encodeURIComponent(mediaPath)}`)
+                .then(response => {
+                    if (response.ok) location.reload();
+                    else alert('خطا در حذف مدیا');
+                });
+        }
+    </script>
 }

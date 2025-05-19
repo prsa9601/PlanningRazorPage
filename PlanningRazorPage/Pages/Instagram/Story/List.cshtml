@@ -101,6 +101,7 @@
                         <span class="status-badge badge @(story.IsSend ? "bg-success" : "bg-warning")">
                             @(story.IsSend ? "ارسال شده" : "در انتظار ارسال")
                         </span>
+                        @* @story.DateOfPosting.ToPersianDate(); *@
 
                @*          @if (story.Images != null)
                         {
@@ -128,11 +129,8 @@
                                              class="media-preview w-100"
                                              alt="پیش نمایش استوری"
                                              onerror="this.onerror=null;this.src='/assets/img/media-error.jpg';">
-
                                 </div>
-                              
                             }
-
                             @if (story.Videos != null)
                             {
                                  <div class="video-container">
@@ -165,11 +163,10 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="card-footer bg-transparent">
                             <div class="d-flex justify-content-between align-items-center">
                                 <!-- دکمه ویرایش -->
-                                <a href="@Url.Page("Edit", new {id = story.Id})"
+                                <a href="@Url.Page("Edit", new {storyId = story.Id,instagramId=story.InstagramId})"
                                    class="btn btn-sm btn-outline-primary">
                                     <i class="fas fa-edit me-2"></i>
                                     <span class="fw-medium">ویرایش محتوا</span>

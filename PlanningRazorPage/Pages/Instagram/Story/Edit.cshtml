@@ -1,79 +1,322 @@
 ﻿@page
+@using PlanningRazorPage.Infrastructure
 @model PlanningRazorPage.Pages.Instagram.Story.EditModel
 @{
+    ViewData["Title"] = "ویرایش استوری";
+    Layout = "Shared/_Layout";
 }
-@section Header
-{
 
+@section Header {
+    <!-- اضافه کردن کتابخانه‌های تاریخ شمسی -->
+    <link rel="stylesheet" href="https://npmcdn.com/persian-datepicker/dist/css/persian-datepicker.min.css">
+    <style>
+        .media-upload-box {
+            border: 2px dashed #d9dee3;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
 
-    <link rel="stylesheet" href="~/assets/vendor/libs/flatpickr/flatpickr.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/jquery-timepicker/jquery-timepicker.css" />
-    <link rel="stylesheet" href="~/assets/vendor/libs/pickr/pickr-themes.css" />
+            .media-upload-box:hover {
+                border-color: #696cff;
+                background: #f3f4ff;
+            }
 
-    <script src="~/assets/vendor/js/template-customizer.js"></script>
+        .media-preview-container {
+            position: relative;
+            max-width: 400px;
+            margin: 1rem auto;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
 
+        .preview-media {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .remove-media-btn {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            z-index: 10;
+        }
+    </style>
 }
-<div class="col-12 container-fluid">
-    <div class="card">
-        <h5 class="card-header">ویرایش استوری</h5>
-        <form class="form-repeater">
 
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">اینستاگرام /</span> ویرایش استوری
+    </h4>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0">
+                <i class="fas fa-edit me-2"></i>ویرایش مشخصات استوری
+            </h5>
+            <small class="text-muted">فیلدهای ستاره دار اجباری هستند</small>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
             <div class="card-body">
+                <div class="row g-4">
+                    <!-- ستون سمت راست -->
 
-                <div class="form-floating form-floating-outline mb-5">
-                    <input class="form-control"
-                           type="text"
-                           placeholder="متــریالایز"
-                           id="html5-text-input" />
-                    <label for="html5-text-input">Bio</label>
-                </div>
-                <div class="mb-3">
-                    <label for="formFile" class="form-label">عکس اینستاگرام</label>
-                    <input class="form-control" type="file" id="formFile" />
-                </div>
+                    <div class="col-md-6">
+                        <!-- انتخاب حساب -->
+                        <div class="form-floating form-floating-outline mb-4">
+                            <select class="form-select" asp-for="@Model.InstagramId" required>
+                                <option value="">انتخاب حساب اینستاگرام</option>
 
-                <div class="card-body">
-                    <div class="row">
-
-
-                        <div class="col-md-6 col-12 mb-4">
-                            <label for="flatpickr-date" class="form-label">تاریخ اعمال تغییرات در پیج</label>
-                            <input type="hidden" class="form-control flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date" value="1403-07-10">
-                            @* <input class="form-control input" placeholder="YYYY/MM/DD" tabindex="0" type="text" readonly="readonly"> *@
+                                @foreach (var account in Model.Account!)
+                                {
+                                    <option value="@account.Id" selected="@(account.Id == Model.InstagramId)">📱 @account.InstagramUserName</option>
+                                }
+                            </select>
+                            <label class="text-primary">
+                                <i class="fas fa-instagram me-2"></i>حساب اینستاگرام
+                            </label>
+                            <div class="invalid-feedback">لطفا حساب اینستاگرام را انتخاب کنید</div>
                         </div>
 
+                        <!-- فیلد لینک -->
+                        <div class="form-floating form-floating-outline mb-4">
+                            <input type="url"
+                                   class="form-control"
+                                   placeholder="https://example.com"
+                                   asp-for="link"
+                                   required>
+                            <label class="text-primary">
+                                <i class="fas fa-link me-2"></i>لینک استوری
+                            </label>
+                            <div class="invalid-feedback">لطفا لینک معتبر وارد کنید</div>
+                        </div>
+
+                        <!-- تاریخ انتشار شمسی -->
+                        <div class="form-floating form-floating-outline mb-4">
+                            <input class="form-control"
+                                   type="text"
+                                   id="persianDatePicker"
+                                   placeholder="تاریخ انتشار را انتخاب کنید"
+                                   value="@Model.dateOfPosting"
+                                   required>
+                            <input type="hidden" asp-for="dateOfPosting" id="gregorianDate" />
+                            <label class="text-primary">
+                                <i class="fas fa-calendar-alt me-2"></i>زمان انتشار (شمسی)
+                            </label>
+                            <div class="invalid-feedback">لطفا تاریخ انتشار را انتخاب کنید</div>
+                        </div>
+                    </div>
+
+                    <!-- ستون سمت چپ -->
+                    <div class="col-md-6">
+                        <!-- نمایش رسانه موجود -->
+
+                        @*.EndsWith(".mp4")*@
+                        <div class="media-preview-container">
+                            @if (string.IsNullOrWhiteSpace(@Model.Story?.Images?.PictureName) ||
+                            string.IsNullOrWhiteSpace(@Model.Story?.Videos?.VideoPath))
+                            {
+                                <div></div>
+                            }
+                            @if (string.IsNullOrWhiteSpace(@Model.Story?.Images?.PictureName) &&
+                            !string.IsNullOrWhiteSpace(@Model.Story?.Videos?.VideoPath))
+                            {
+                                <video class="preview-media" controls disable>
+                                    <source src="@Directories.GetInstagramStoryVideo(@Model.Story.Videos.VideoPath)" type="video/mp4">
+                                </video>
+                            }
+                            else
+                            {
+                                <img src="@Directories.GetInstagramStoryImages(@Model.Story?.Images?.PictureName!)" disable class="preview-media" alt="پیش نمایش فعلی">
+                            }
+                        </div>
+
+
+                        <!-- آپلود رسانه جدید -->
+                        <div class="media-upload-box mt-4">
+                            <div class="mb-3">
+                                <label class="btn btn-outline-primary btn-lg">
+                                    <i class="fas fa-cloud-upload-alt me-2"></i>
+                                    @(Model.Story?.Images != null || Model.Story?.Videos != null ? "تغییر فایل" : "انتخاب فایل")
+                                    <input type="file"
+                                           asp-for="PreviousVideo"
+                                           accept="image/*,video/*"
+                                           class="d-none"
+                                           onchange="previewMedia(event)">
+                                </label>
+                                <p class="text-muted mt-2 mb-0">حداکثر حجم فایل: 50MB</p>
+                                <p class="text-muted">فرمت‌های مجاز: JPG, PNG, MP4</p>
+                            </div>
+
+                            <!-- پیش نمایش رسانه جدید -->
+                            <div class="media-preview-container" id="preview-container" style="display: none;">
+                                <img id="image-preview" class="preview-media" alt="پیش نمایش جدید">
+                                <video id="video-preview" class="preview-media" controls></video>
+                                <button type="button"
+                                        class="btn btn-danger btn-sm remove-media-btn"
+                                        onclick="clearMedia()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                            <!-- آپلود رسانه جدید -->
+                            @*  <div class="media-upload-box mt-4">
+                            <div class="mb-3">
+                                <label class="btn btn-outline-primary btn-lg">
+                                    <i class="fas fa-cloud-upload-alt me-2"></i>
+                                    انتخاب فایل جدید
+                                    <input type="file"
+                                           asp-for="Video"
+                                           accept="image/*,video/*"
+                                           class="d-none"
+                                           onchange="previewMedia(event)">
+                                </label>
+                                <p class="text-muted mt-2 mb-0">حداکثر حجم فایل: 50MB</p>
+                                <p class="text-muted">فرمت‌های مجاز: JPG, PNG, MP4</p>
+                            </div>
+
+                            <!-- پیش نمایش رسانه جدید -->
+                            <div class="media-preview-container" id="preview-container">
+                                <img id="image-preview" class="preview-media" alt="پیش نمایش جدید">
+                                <video id="video-preview" class="preview-media" controls></video>
+                                <button type="button"
+                                        class="btn btn-danger btn-sm remove-media-btn"
+                                        onclick="clearMedia()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div> *@
+                        </div>
+                    </div>
+
+                    <!-- دکمه ارسال -->
+                    <div class="row mt-5">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                <i class="fas fa-save me-2"></i>ذخیره تغییرات
+                            </button>
+                            <a href="@Url.Page("List")" class="btn btn-outline-secondary btn-lg px-5">
+                                <i class="fas fa-times me-2"></i>انصراف
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <br />
-            <br />
         </form>
     </div>
 </div>
 
-
-
 @section Scripts {
-    @* <script src="~/assets/js/forms-extras.js"></script>
+    <!-- اضافه کردن کتابخانه‌های JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://npmcdn.com/persian-datepicker/dist/js/persian-datepicker.min.js"></script>
 
-    <script src="~/assets/vendor/libs/hammer/hammer.js"></script>
-    <script src="~/assets/vendor/libs/i18n/i18n.js"></script>
-    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script>
+        // فعال سازی تقویم شمسی با مقدار قبلی
+        $(document).ready(function () {
+            const initialDate = '@Model.dateOfPosting';
 
-    <script src="~/assets/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
- *@
+            $('#persianDatePicker').persianDatepicker({
+                format: 'YYYY/MM/DD HH:mm',
+                initialValue: initialDate ? initialDate : true,
+                initialValueType: 'persian',
+                timePicker: {
+                    enabled: true,
+                    meridiem: {
+                        enabled: true
+                    }
+                },
+                onSelect: function (unixDate) {
+                    const gregorianDate = new Date(unixDate).toISOString();
+                    $('#gregorianDate').val(gregorianDate);
+                }
+            });
 
-    <!-- Vendors JS -->
-    <script src="~/assets/vendor/libs/moment/moment.js"></script>
-    <script src="~/assets/vendor/libs/jdate/jdate.js"></script>
-    <script src="~/assets/vendor/libs/flatpickr/flatpickr-jdate.js"></script>
-    <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script>
-    <script src="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-    <script src="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js"></script>
-    <script src="~/assets/vendor/libs/jquery-timepicker/jquery-timepicker.js"></script>
-    <script src="~/assets/vendor/libs/pickr/pickr.js"></script>
-    <script src="~/assets/js/forms-pickers.js"></script>
+            if (!initialDate) {
+                const today = new persianDate().format('YYYY/MM/DD HH:mm');
+                $('#persianDatePicker').val(today);
+                $('#gregorianDate').val(new persianDate().toGregorian().toISOString());
+            }
+        });
 
+        // // پیش نمایش رسانه
+        // function previewMedia(event) {
+        //     const file = event.target.files[0];
+        //     const previewContainer = document.getElementById('preview-container');
+        //     const imagePreview = document.getElementById('image-preview');
+        //     const videoPreview = document.getElementById('video-preview');
+
+        //     previewContainer.style.display = 'block';
+        //     imagePreview.style.display = 'none';
+        //     videoPreview.style.display = 'none';
+
+        //     if (file.type.startsWith('image/')) {
+        //         imagePreview.src = URL.createObjectURL(file);
+        //         imagePreview.style.display = 'block';
+        //     } else if (file.type.startsWith('video/')) {
+        //         videoPreview.src = URL.createObjectURL(file);
+        //         videoPreview.style.display = 'block';
+        //     }
+        // }
+
+              // پیش نمایش رسانه
+        function previewMedia(event) {
+            const file = event.target.files[0];
+            const previewContainer = document.getElementById('preview-container');
+            const imagePreview = document.getElementById('image-preview');
+            const videoPreview = document.getElementById('video-preview');
+
+            previewContainer.style.display = 'block';
+            imagePreview.style.display = 'none';
+            videoPreview.style.display = 'none';
+
+            if (file) {
+                if (file.type.startsWith('image/')) {
+                    imagePreview.src = URL.createObjectURL(file);
+                    imagePreview.style.display = 'block';
+                } else if (file.type.startsWith('video/')) {
+                    videoPreview.src = URL.createObjectURL(file);
+                    videoPreview.style.display = 'block';
+                }
+            }
+        }
+
+        // حذف رسانه جدید
+        function clearMedia() {
+            document.querySelector('input[type="file"]').value = '';
+            document.getElementById('preview-container').style.display = 'none';
+        }
+
+        // // حذف رسانه جدید
+        // function clearMedia() {
+        //     document.querySelector('input[type="file"]').value = '';
+        //     document.getElementById('preview-container').style.display = 'none';
+        // }
+
+        // // حذف رسانه
+        // function clearMedia() {
+        //     document.querySelector('input[type="file"]').value = '';
+        //     document.getElementById('preview-container').style.display = 'none';
+        // }
+
+        // اعتبارسنجی فرم
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
 }

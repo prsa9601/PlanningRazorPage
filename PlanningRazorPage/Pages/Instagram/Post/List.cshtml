@@ -1,291 +1,719 @@
 ﻿@page
+@using PlanningRazorPage.Infrastructure
+@using PlanningRazorPage.Infrastructure.Utils
+@using static PlanningRazorPage.Models.SocialMedia.Instagram.Post.PostFilterData
 @model PlanningRazorPage.Pages.Instagram.Post.ListModel
 @{
     Layout = "Shared/_Layout";
-    ViewData["Title"] = "مدیریت حرفه ای پست های اینستاگرام";
+    ViewData["Title"] = "مدیریت پست های اینستاگرام";
 }
 
 @section Header {
-    <link href="https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
-        :root {
-            --ig-gradient: linear-gradient(45deg, #405DE6, #833AB4, #C13584, #E1306C);
-            --ig-primary: #E1306C;
-            --table-hover: rgba(225, 48, 108, 0.05);
-        }
-
-        .instagram-dashboard {
-            border: none;
-            border-radius: 20px;
+        .instagram-post {
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
-        }
-
-        .dashboard-header {
-            background: var(--ig-gradient);
-            color: white;
-            padding: 1.5rem 2rem;
-            position: relative;
-        }
-
-            .dashboard-header:after {
-                content: '';
-                position: absolute;
-                bottom: -10px;
-                left: 0;
-                width: 100%;
-                height: 20px;
-                background: linear-gradient(180deg, rgba(64,93,230,0.1) 0%, transparent 100%);
-            }
-
-        .instagram-table {
-            --table-accent: rgba(64, 93, 230, 0.03);
-            border-collapse: separate;
-            border-spacing: 0 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             background: #fff;
         }
 
-            .instagram-table thead {
-                background: #f8f9fa;
-            }
-
-            .instagram-table th {
-                border: none;
-                padding: 1.2rem 1.5rem;
-                font-weight: 600;
-                color: #6c757d;
-                font-size: 0.95rem;
-            }
-
-            .instagram-table td {
-                background: #fff;
-                padding: 1.2rem 1.5rem;
-                vertical-align: middle;
-                border: none;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                position: relative;
-            }
-
-            .instagram-table tr {
-                transition: all 0.3s ease;
-            }
-
-                .instagram-table tr:hover td {
-                    transform: translateX(10px);
-                    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-                }
-
-        .project-card {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+        .media-slider {
+            position: relative;
+            height: 500px;
+            background: #000;
+            touch-action: pan-y;
         }
 
-        .project-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
+        .slider-container {
+            display: flex;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .slide {
+            min-width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 1.4rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .user-stack {
-            display: flex;
             position: relative;
         }
 
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border: 2px solid #fff;
+        .media-item {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .media-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 2;
+        }
+
+        .slider-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 2;
+        }
+
+        .slider-dot {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.5);
             transition: all 0.3s ease;
-            margin-left: -8px;
+            cursor: pointer;
         }
 
-            .user-avatar:first-child {
-                margin-left: 0;
+            .slider-dot.active {
+                background: #fff;
+                width: 24px;
+                border-radius: 4px;
             }
 
-            .user-avatar:hover {
-                transform: translateY(-5px);
-                z-index: 2;
-            }
+        .post-status {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 2;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
 
-        .status-indicator {
-            display: inline-flex;
+        .post-actions {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        .action-btn {
+            background: rgba(0,0,0,0.3);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
             align-items: center;
-            padding: 0.6rem 1.2rem;
-            border-radius: 24px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            gap: 0.6rem;
-            background: rgba(225, 48, 108, 0.1);
-            color: var(--ig-primary);
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-            .status-indicator i {
-                font-size: 0.6rem;
+            .action-btn:hover {
+                background: rgba(0,0,0,0.5);
             }
+    </style>
+    <style>
+        /* استایل اصلی کانتینر دکمه‌ها */
+        .post-actions {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 2;
+            backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.15);
+            padding: 8px;
+            border-radius: 30px;
+        }
 
-        .action-menu {
+        /* استایل پایه دکمه‌ها */
+        .action-btn {
+            background: rgba(255,255,255,0.95);
+            color: #2E7D32;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-            border-radius: 12px;
-            padding: 0.5rem;
-            min-width: 180px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .action-item {
-            padding: 0.75rem 1.25rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-            .action-item:hover {
-                background: #f8f9fa;
-                transform: translateX(8px);
+            /* افکت‌های تعاملی */
+            .action-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             }
 
-        .table-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            background: #f8f9fa;
+            /* استایل مخصوص دکمه ویرایش */
+            .action-btn[href*="Edit"] {
+                background: #2E7D32;
+                color: white;
+            }
+
+            /* استایل مخصوص دکمه حذف */
+            .action-btn[onclick*="deletePost"] {
+                background: #D32F2F;
+                color: white;
+            }
+
+            /* افکت‌های هاور */
+            .action-btn[href*="Edit"]:hover {
+                background: #388E3C !important;
+            }
+
+            .action-btn[onclick*="deletePost"]:hover {
+                background: #FF5252 !important;
+            }
+
+            /* استایل تولتیپ */
+            .action-btn::before {
+                content: attr(data-tooltip);
+                position: absolute;
+                top: -35px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #2E7D32;
+                color: white;
+                padding: 6px 12px;
+                border-radius: 4px;
+                font-size: 12px;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                white-space: nowrap;
+                pointer-events: none;
+                z-index: 10;
+                font-family: 'Yekan', sans-serif;
+            }
+
+            /* پیکان تولتیپ */
+            .action-btn::after {
+                content: "";
+                position: absolute;
+                top: -12px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-width: 5px;
+                border-style: solid;
+                border-color: #2E7D32 transparent transparent transparent;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            /* نمایش تولتیپ */
+            .action-btn:hover::before {
+                opacity: 1;
+                visibility: visible;
+                top: -30px;
+            }
+
+            .action-btn:hover::after {
+                opacity: 1;
+                visibility: visible;
+                top: -20px;
+            }
+
+            /* انیمیشن آیکون */
+            .action-btn i {
+                font-size: 1.1rem;
+                transition: transform 0.3s ease;
+            }
+
+            .action-btn:hover i {
+                transform: scale(1.15);
+            }
+
+            .action-btn::before {
+                content: attr(data-tooltip);
+                position: absolute;
+                top: -35px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #2E7D32;
+                color: white;
+                padding: 6px 12px;
+                border-radius: 4px;
+                font-size: 12px;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                white-space: nowrap;
+                pointer-events: none;
+                z-index: 10;
+                font-family: 'Yekan', sans-serif; /* فونت فارسی */
+            }
+
+            /* پیکان تولتیپ */
+            .action-btn::after {
+                content: "";
+                position: absolute;
+                top: -12px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-width: 5px;
+                border-style: solid;
+                border-color: #2E7D32 transparent transparent transparent;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            /* نمایش تولتیپ هنگام هاور */
+            .action-btn:hover::before,
+            .action-btn:hover::after {
+                opacity: 1;
+                visibility: visible;
+                top: -30px;
+            }
+
+            .action-btn:hover::after {
+                top: -20px;
+            }
+            /* استایل تولتیپ طلایی */
+            .action-btn::before {
+                background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%); /* گرادینت طلایی */
+                color: #2c2c2c; /* متن مشکی */
+                font-weight: 500;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                border: 1px solid rgba(255,215,0,0.3);
+                text-shadow: 0 1px 1px rgba(255,255,255,0.3);
+            }
+
+            /* استایل تولتیپ نقره‌ای برای حذف */
+            .action-btn[onclick*="deletePost"]::before {
+                background: linear-gradient(135deg, #C0C0C0 0%, #A8A8A8 100%); /* گرادینت نقره‌ای */
+                border-color: rgba(192,192,192,0.3);
+            }
+
+            /* پیکان طلایی */
+            .action-btn::after {
+                border-color: #FFD700 transparent transparent transparent;
+            }
+
+            /* پیکان نقره‌ای برای حذف */
+            .action-btn[onclick*="deletePost"]::after {
+                border-color: #C0C0C0 transparent transparent transparent;
+            }
+
+        .action-btn {
+            position: relative !important;
+            overflow: visible !important;
         }
+
+            /* استایل تولتیپ اصلاح شده */
+            .action-btn::before {
+                content: attr(data-tooltip) !important;
+                position: absolute;
+                top: -45px !important;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #2E7D32;
+                color: white !important;
+                padding: 8px 15px;
+                border-radius: 6px;
+                font-size: 14px;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease-in-out;
+                white-space: nowrap;
+                pointer-events: none;
+                z-index: 9999;
+                font-family: 'Yekan', Tahoma, sans-serif;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+
+            /* پیکان زیر متن */
+            .action-btn::after {
+                content: "";
+                position: absolute;
+                top: -15px !important;
+                left: 50%;
+                transform: translateX(-50%);
+                border: 8px solid transparent;
+                border-top-color: #2E7D32;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease-in-out;
+            }
+
+            /* نمایش تولتیپ */
+            .action-btn:hover::before,
+            .action-btn:hover::after {
+                opacity: 1 !important;
+                visibility: visible !important;
+                top: -35px !important;
+            }
+
+            .action-btn:hover::after {
+                top: -25px !important;
+            }
+
+            .action-btn::before {
+                content: attr(data-tooltip);
+                position: absolute;
+                top: -40px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #1a237e; /* آبی پریماری ماتریال */
+                color: white;
+                padding: 8px 16px;
+                border-radius: 25px;
+                font-size: 13px;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+                white-space: nowrap;
+                pointer-events: none;
+                z-index: 1000;
+                font-family: 'Vazir', sans-serif; /* فونت زیبای وزیر */
+                box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+                letter-spacing: 0.5px;
+            }
+
+            /* پیکان مدرن */
+            .action-btn::after {
+                content: "";
+                position: absolute;
+                top: -12px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 12px;
+                height: 12px;
+                background: #1a237e;
+                clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            }
+
+            /* انیمیشن ظاهر شدن */
+            .action-btn:hover::before {
+                opacity: 1;
+                visibility: visible;
+                top: -45px;
+            }
+
+            .action-btn:hover::after {
+                opacity: 1;
+                visibility: visible;
+                top: -17px;
+            }
+
+            /* استایل متفاوت برای دکمه حذف */
+            .action-btn[onclick*="deletePost"]::before,
+            .action-btn[onclick*="deletePost"]::after {
+                background: #d32f2f; /* قرمز ماتریال */
+                box-shadow: 0 5px 15px rgba(211, 47, 47, 0.3);
+            }
+
+            /* افکت نورپردازی */
+            .action-btn:hover::before {
+                filter: brightness(1.1);
+            }
+
+        /* نسخه موبایل */
+        @@media (max-width: 768px) {
+            .action-btn::before {
+                font-size: 12px;
+                padding: 6px 12px;
+                border-radius: 20px;
+            }
+
+            .action-btn::after {
+                width: 10px;
+                height: 10px;
+            }
+        }
+        /* نسخه موبایل */
+      /*   @@media (max-width: 768px) {
+            .post-actions {
+                bottom: 15px;
+                right: 15px;
+                gap: 10px;
+                padding: 6px;
+            }
+
+            .action-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+                .action-btn::before {
+                    font-size: 10px;
+                    padding: 4px 8px;
+                }
+        } */
     </style>
 }
 
-<div class="instagram-dashboard">
-    <div class="dashboard-header">
-        <h4 class="mb-0">
-            <i class="fab fa-instagram me-2"></i>
-            مدیریت پیشرفته پست ها
-        </h4>
-    </div>
-
-    <div class="table-controls">
-        <div class="d-flex gap-2">
-            <button class="btn btn-ig">
-                <i class="fas fa-plus-circle me-2"></i>
-                پست جدید
-            </button>
-            <button class="btn btn-light">
-                <i class="fas fa-filter me-2"></i>
-                فیلترها
-            </button>
+<div class="container-fluid">
+    <div class="dashboard-container mt-4">
+        <div class="dashboard-header bg-gradient-instagram text-white py-3">
+            <h4 class="mb-0 px-3">
+                <i class="fab fa-instagram me-2"></i>
+                مدیریت پست‌ها - @Model.PostResult.Data.FirstOrDefault()?.InstagramUserName
+            </h4>
         </div>
-        <div class="d-flex align-items-center gap-2">
-            <div class="input-group" style="max-width: 300px;">
-                <span class="input-group-text bg-transparent">
-                    <i class="fas fa-search"></i>
-                </span>
-                <input type="text" class="form-control" placeholder="جستجوی پست...">
+
+        <form method="get" class="filter-card mt-4 p-3 bg-light rounded">
+            <div class="row g-3 align-items-end">
+                <input type="hidden" asp-for="InstagramId" />
+                <div class="col-md-6">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="جستجوی پست..."
+                           asp-for="FilterParams.Search">
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-instagram w-100">
+                        <i class="fas fa-filter me-2"></i>فیلتر
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <a href="@Url.Page("./List", new {InstagramId = Model.InstagramId})"
+                       class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-undo me-2"></i>بازنشانی
+                    </a>
+                </div>
             </div>
+        </form>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3">
+            @foreach (var post in Model.PostResult.Data)
+            {
+                <div class="col">
+                    <div class="instagram-post">
+                        <div class="media-slider" id="slider-@post.Id">
+                            <div class="slider-container">
+                                @foreach (var media in post.Videos)
+                                {
+                                    <div class="slide">
+                                        @if (IsImage(media))
+                                        {
+                                            <div class="media-badge">
+                                                <i class="fas fa-image me-1"></i>عکس
+                                            </div>
+                                            <img src="@Directories.GetInstagramPostVideo(media.VideoName)"
+                                                 class="media-item"
+                                                 alt="محتوای پست"
+                                                 @* onerror="this.onerror=null;this.src='/assets/img/media-error.jpg';"*@> 
+                                        }
+                                        else
+                                        {
+                                            <div class="media-badge">
+                                                <i class="fas fa-video me-1"></i>ویدیو
+                                            </div>
+                                            <video class="media-item" controls>
+                                                <source src="@Directories.GetInstagramPostVideo(media.VideoName)" type="video/mp4">
+                                            </video>
+                                        }
+                                    </div>
+                                }
+                            </div>
+
+                            <span class="post-status bg-@(post.IsSend ? "success" : "warning")">
+                                @(post.IsSend ? "ارسال شده" : "در انتظار")
+                            </span>
+
+                            @if (post.Videos.Count > 1)
+                            {
+                                <div class="slider-controls">
+                                    @for (int i = 0; i < post.Videos.Count; i++)
+                                    {
+                                        <div class="slider-dot @(i == 0 ? "active" : "")"
+                                             data-slide="@i"
+                                             onclick="goToSlide(@i, '@post.Id')"></div>
+                                    }
+                                </div>
+                            }
+                            <!-- تغییر در بخش دکمه‌ها -->
+                            <div class="post-actions">
+                                <a asp-page="./Edit"
+                                   asp-route-postId="@post.Id"
+                                   asp-route-instagramId="@Model.InstagramId"
+                                   class="action-btn"
+                                   data-tooltip="ویرایش پست">
+                                    <!-- تغییر متن تولتیپ -->
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="action-btn"
+                                        onclick="deletePost('@post.Id')"
+                                        data-tooltip="حذف پست">
+                                    <!-- تغییر متن تولتیپ -->
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                          @*   <div class="post-actions">
+                                <a asp-page="./Edit"
+                                   asp-route-postId="@post.Id"
+                                   asp-route-instagramId="@Model.InstagramId"
+                                   class="action-btn">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="action-btn"
+                                        onclick="deletePost('@post.Id')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div> *@
+                        </div>
+
+                        <div class="p-3">
+                            <p class="mb-2 text-secondary">@post.Description.Truncate(120)</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar-alt me-2"></i>
+                                    @post.DateOfPosting.ToPersianDateTime()
+                                </small>
+                                <a href="@post.Link" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-external-link-alt me-2"></i>مشاهده
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
-    </div>
 
-    <div class="table-responsive">
-        <table class="table instagram-table">
-            <thead>
-                <tr>
-                    <th>پست</th>
-                    <th>مشتری</th>
-                    <th>تیم</th>
-                    <th>وضعیت</th>
-                    <th>مدیریت</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- ردیف نمونه -->
-                <tr>
-                    <td>
-                        <div class="project-card">
-                            <div class="project-icon" style="background: #E1306C;">
-                                <i class="fas fa-camera-retro"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-1">کمپین تبلیغاتی بهار</h6>
-                                <small class="text-muted">25 اردیبهشت 1403</small>
-                            </div>
-                        </div>
-                    </td>
-                    <td>آلبرت کوک</td>
-                    <td>
-                        <div class="user-stack">
-                            <img src="~/assets/img/avatars/5.png" class="user-avatar" alt="عضو تیم">
-                            <img src="~/assets/img/avatars/6.png" class="user-avatar" alt="عضو تیم">
-                            <img src="~/assets/img/avatars/7.png" class="user-avatar" alt="عضو تیم">
-                        </div>
-                    </td>
-                    <td>
-                        <span class="status-indicator">
-                            <i class="fas fa-circle"></i>
-                            منتشر شده
-                        </span>
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-icon"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end action-menu">
-                                <li>
-                                    <a class="dropdown-item action-item" href="#">
-                                        <i class="fas fa-chart-pie text-info"></i>
-                                        آمار پیشرفته
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item action-item" href="#">
-                                        <i class="fas fa-edit text-success"></i>
-                                        ویرایش پست
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item action-item" href="#">
-                                        <i class="fas fa-copy text-warning"></i>
-                                        ایجاد کپی
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item action-item text-danger" href="#">
-                                        <i class="fas fa-trash-alt"></i>
-                                        حذف دائمی
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
+        <nav class="my-4">
+            <ul class="pagination justify-content-center">
+                @if (Model.PostResult.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@Url.Page("./List", new {
+                               accountId = Model.InstagramId,
+                               PageId = Model.PostResult.CurrentPage - 1,
+                               Search = Model.FilterParams.Search
+                           })">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                }
 
-                <!-- ردیف های دیگر با ساختار مشابه -->
+                @for (int i = 1; i <= Model.PostResult.PageCount; i++)
+                {
+                    <li class="page-item @(i == Model.PostResult.CurrentPage ? "active" : "")">
+                        <a class="page-link"
+                           href="@Url.Page("./List", new {
+                               accountId = Model.InstagramId,
+                               PageId = i,
+                               Search = Model.FilterParams.Search
+                           })">
+                            @i
+                        </a>
+                    </li>
+                }
 
-            </tbody>
-        </table>
+                @if (Model.PostResult.CurrentPage < Model.PostResult.PageCount)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@Url.Page("./List", new {
+                               accountId = Model.InstagramId,
+                               PageId = Model.PostResult.CurrentPage + 1,
+                               Search = Model.FilterParams.Search
+                           })">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        // فعال سازی tooltip
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+        const sliders = {};
+
+        function initSlider(postId, totalSlides) {
+            sliders[postId] = {
+                currentIndex: 0,
+                container: document.querySelector(`#slider-${postId} .slider-container`),
+                dots: document.querySelectorAll(`#slider-${postId} .slider-dot`),
+                totalSlides: totalSlides
+            };
+            updateSlider(postId);
+        }
+
+        function goToSlide(index, postId) {
+            if (index >= 0 && index < sliders[postId].totalSlides) {
+                sliders[postId].currentIndex = index;
+                updateSlider(postId);
+            }
+        }
+
+        function updateSlider(postId) {
+            const slider = sliders[postId];
+            slider.container.style.transform = `translateX(-${slider.currentIndex * 100}%)`;
+
+            slider.dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === slider.currentIndex);
+            });
+        }
+
+        function deletePost(postId) {
+            Swal.fire({
+                title: 'حذف پست',
+                text: "آیا از حذف این پست مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'حذف',
+                cancelButtonText: 'انصراف'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`?handler=Delete&id=${postId}`, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': document
+                                .querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    }).then(response => {
+                        if (response.ok) window.location.reload();
+                    });
+                }
+            });
+        }
+
+        // Initialize sliders on page load
+        document.addEventListener('DOMContentLoaded', () => {
+        @foreach (var post in Model.PostResult.Data)
+        {
+            <text>
+                        initSlider('@post.Id', @post.Videos.Count);
+            </text>
+        }
+        });
     </script>
+}
+
+@functions {
+    private bool IsImage(PostVideoDto media)
+    {
+        var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+        return imageExtensions.Any(ext =>
+            media.VideoName.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private string GetMediaPath(PostVideoDto media)
+    {
+        return IsImage(media)
+            ? Directories.GetInstagramPostImage(media.VideoName)
+            : Directories.GetInstagramPostVideo(media.VideoName);
+    }
 }

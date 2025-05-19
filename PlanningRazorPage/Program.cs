@@ -1,4 +1,4 @@
-using PlanningRazorPage.Infrastructure;
+﻿using PlanningRazorPage.Infrastructure;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -53,14 +53,22 @@ builder.Services.AddDataProtection();
 builder.Services.AddScoped<DecryptionService>();
 
 // Program.cs
+//builder.Services.Configure<IISServerOptions>(options =>
+//{
+//    options.MaxRequestBodySize = 52428800; // 50MB
+//});
 builder.Services.Configure<IISServerOptions>(options =>
 {
-    options.MaxRequestBodySize = 52428800; // 50MB
+    options.MaxRequestBodySize = 100 * 1024 * 1024; // 100 مگابایت
 });
 
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    serverOptions.Limits.MaxRequestBodySize = 52428800; // 50MB
+//});
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    serverOptions.Limits.MaxRequestBodySize = 52428800; // 50MB
+    serverOptions.Limits.MaxRequestBodySize = 100 * 1024 * 1024;
 });
 var app = builder.Build();
 
