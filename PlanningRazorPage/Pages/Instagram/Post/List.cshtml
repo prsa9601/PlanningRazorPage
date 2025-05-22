@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{handler?}"
 @using PlanningRazorPage.Infrastructure
 @using PlanningRazorPage.Infrastructure.Utils
 @using static PlanningRazorPage.Models.SocialMedia.Instagram.Post.PostFilterData
@@ -28,6 +28,7 @@
             display: flex;
             height: 100%;
             transition: transform 0.3s ease;
+            /* flex-direction: row-reverse; /* جهت معکوس */ */
         }
 
         .slide {
@@ -438,24 +439,24 @@
             }
         }
         /* نسخه موبایل */
-      /*   @@media (max-width: 768px) {
-            .post-actions {
-                bottom: 15px;
-                right: 15px;
-                gap: 10px;
-                padding: 6px;
-            }
+        /*   @@media (max-width: 768px) {
+                                            .post-actions {
+                                                bottom: 15px;
+                                                right: 15px;
+                                                gap: 10px;
+                                                padding: 6px;
+                                            }
 
-            .action-btn {
-                width: 40px;
-                height: 40px;
-            }
+                                            .action-btn {
+                                                width: 40px;
+                                                height: 40px;
+                                            }
 
-                .action-btn::before {
-                    font-size: 10px;
-                    padding: 4px 8px;
-                }
-        } */
+                                                .action-btn::before {
+                                                    font-size: 10px;
+                                                    padding: 4px 8px;
+                                                }
+                                        } */
     </style>
 }
 
@@ -500,7 +501,7 @@
                             <div class="slider-container">
                                 @foreach (var media in post.Videos)
                                 {
-                                    <div class="slide">
+                                    @*  <div class="slide">
                                         @if (IsImage(media))
                                         {
                                             <div class="media-badge">
@@ -508,10 +509,10 @@
                                             </div>
                                             <img src="@Directories.GetInstagramPostVideo(media.VideoName)"
                                                  class="media-item"
-                                                 alt="محتوای پست"
-                                                 @* onerror="this.onerror=null;this.src='/assets/img/media-error.jpg';"*@> 
-                                        }
-                                        else
+                                                 alt="محتوای پست"> 
+                                                  onerror="this.onerror=null;this.src='/assets/img/media-error.jpg';"
+                                        } *@
+                                    @* else
                                         {
                                             <div class="media-badge">
                                                 <i class="fas fa-video me-1"></i>ویدیو
@@ -520,7 +521,33 @@
                                                 <source src="@Directories.GetInstagramPostVideo(media.VideoName)" type="video/mp4">
                                             </video>
                                         }
+                                    </div> *@
+                                    <div class="slide">
+                                        @if (IsImage(media))
+                                        {
+                                            <div class="media-badge">
+                                                <i class="fas fa-image me-1"></i>عکس
+                                            </div>
+                                            <img id="media-{@media.PostId-@media.Id}" src="@Directories.GetInstagramPostVideo(media.VideoName)"
+                                                 class="media-item"
+                                                 alt="محتوای پست"
+                                                 data-media-type="image"
+                                                 data-media-url="@Directories.GetInstagramPostVideo(media.VideoName)"
+                                                 onerror="this.onerror=null;this.src='/assets/img/media-error.jpg';">
+                                        }
+                                        else
+                                        {
+                                            <div class="media-badge">
+                                                <i class="fas fa-video me-1"></i>ویدیو
+                                            </div>
+                                            <video id="media-{@media.PostId-@media.Id}" class="media-item" controls
+                                                   data-media-type="video"
+                                                   data-media-url="@Directories.GetInstagramPostVideo(media.VideoName)">
+                                                <source src="@Directories.GetInstagramPostVideo(media.VideoName)" type="video/mp4">
+                                            </video>
+                                        }
                                     </div>
+
                                 }
                             </div>
 
@@ -556,7 +583,7 @@
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
-                          @*   <div class="post-actions">
+                            @*   <div class="post-actions">
                                 <a asp-page="./Edit"
                                    asp-route-postId="@post.Id"
                                    asp-route-instagramId="@Model.InstagramId"
@@ -581,6 +608,7 @@
                                     <i class="fas fa-external-link-alt me-2"></i>مشاهده
                                 </a>
                             </div>
+                            @* <small class="text-muted d-block mt-2" id="media-url-display-@post.Id"></small> *@
                         </div>
                     </div>
                 </div>
@@ -636,18 +664,55 @@
 </div>
 
 @section Scripts {
+
     <script>
+        // مدیریت اسلایدرها
         const sliders = {};
 
         function initSlider(postId, totalSlides) {
+            const sliderElement = document.querySelector(`#slider-${postId}`);
+
             sliders[postId] = {
                 currentIndex: 0,
-                container: document.querySelector(`#slider-${postId} .slider-container`),
-                dots: document.querySelectorAll(`#slider-${postId} .slider-dot`),
+                container: sliderElement.querySelector('.slider-container'),
+                dots: sliderElement.querySelectorAll('.slider-dot'),
                 totalSlides: totalSlides
             };
+
+            // افزودن رویدادهای لمسی
+            let touchStartX = 0;
+            let isDragging = false;
+
+            sliderElement.addEventListener('touchstart', e => {
+                touchStartX = e.touches[0].clientX;
+                isDragging = true;
+            });
+
+            sliderElement.addEventListener('touchmove', e => {
+                if (!isDragging) return;
+                e.preventDefault();
+            });
+
+            sliderElement.addEventListener('touchend', e => {
+                if (!isDragging) return;
+                isDragging = false;
+
+                const touchEndX = e.changedTouches[0].clientX;
+                const diff = touchStartX - touchEndX;
+
+                if (Math.abs(diff) > 50) {
+                    const direction = diff > 0 ? -1 : 1;
+                    const newIndex = Math.max(0, Math.min(
+                        sliders[postId].currentIndex + direction,
+                        totalSlides - 1
+                    ));
+                    goToSlide(newIndex, postId);
+                }
+            });
+
             updateSlider(postId);
         }
+
 
         function goToSlide(index, postId) {
             if (index >= 0 && index < sliders[postId].totalSlides) {
@@ -656,53 +721,119 @@
             }
         }
 
-        function updateSlider(postId) {
-            const slider = sliders[postId];
-            slider.container.style.transform = `translateX(-${slider.currentIndex * 100}%)`;
+        // function updateSlider(postId) {
+        //     const slider = sliders[postId];
+        //     const translateValue = -slider.currentIndex * 100;
 
-            slider.dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === slider.currentIndex);
+        //     // اعمال انتقال با استفاده از transform
+        //     slider.container.style.transform = `translateX(${translateValue}%)`;
+
+        //     // به روزرسانی نقاط فعال
+        //     slider.dots.forEach((dot, i) => {
+        //         dot.classList.toggle('active', i === slider.currentIndex);
+        //     });
+        // }
+                function updateSlider(postId) {
+            // const slider = sliders[postId];
+            // const translateValue = -slider.currentIndex * 100;
+                 const slider = sliders[postId];
+            const translateValue = slider.currentIndex * 100; // تغییر به مقدار مثبت
+            slider.container.style.transform = `translateX(${translateValue}%)`;
+
+            // slider.container.style.transform = `translateX(${translateValue}%)`;
+
+            // به روزرسانی نقاط فعال
+            slider.dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === slider.currentIndex);
             });
+
+            // بخش جدید: به روزرسانی data-media-url و نمایش URL
+            const activeSlide = slider.container.children[slider.currentIndex];
+            const mediaElement = activeSlide.querySelector('.media-item'); // img یا video
+
+            if (mediaElement) {
+                const mediaUrl = mediaElement.getAttribute('data-media-url');
+
+                // 1. به روزرسانی data-media-url در خود المان
+                mediaElement.setAttribute('data-media-url', mediaUrl);
+
+                // 2. نمایش URL در رابط کاربری (اگر نیاز دارید)
+                // const q = doc.getElementById(`media-${postId}`);
+                // const e = q.getAttribute(`data-media-url`);
+                // console.log(e);
+                const urlDisplay = document.getElementById(`media-url-display-${postId}`);
+                if (urlDisplay) {
+                    urlDisplay.textContent = mediaUrl;
+                }
+
+                // 3. اگر ویدیو است، آن را ریلود کنید
+                if (mediaElement.tagName.toLowerCase() === 'video') {
+                    const video = mediaElement;
+                    video.querySelector('source').src = mediaUrl;
+                    video.load();
+                }
+                // var q = Model.PostResult.Data.
+                // id="media-{media.PostId-media.Id}"
+                 // data-media-url="Directories.GetInstagramPostVideo(media.VideoName)"
+
+            }
         }
 
-        function deletePost(postId) {
-            Swal.fire({
+        // مدیریت حذف پست
+        async function deletePost(postId) {
+            const { isConfirmed } = await Swal.fire({
                 title: 'حذف پست',
-                text: "آیا از حذف این پست مطمئن هستید؟",
+                text: "آیا مطمئن هستید؟",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#6c757d',
                 confirmButtonText: 'حذف',
-                cancelButtonText: 'انصراف'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch(`?handler=Delete&id=${postId}`, {
-                        method: 'POST',
-                        headers: {
-                            'RequestVerificationToken': document
-                                .querySelector('input[name="__RequestVerificationToken"]').value
-                        }
-                    }).then(response => {
-                        if (response.ok) window.location.reload();
-                    });
+                cancelButtonText: 'انصراف',
+                customClass: {
+                    confirmButton: 'swal-confirm-fa',
+                    cancelButton: 'swal-cancel-fa'
                 }
             });
+
+            if (isConfirmed) {
+                try {
+                    const response = await fetch(
+                        `?handler=Delete&postId=${postId}&instagramId=${@Model.InstagramId}`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'RequestVerificationToken': document.querySelector(
+                                    'input[name="__RequestVerificationToken"]'
+                                ).value
+                            }
+                        }
+                    );
+
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        throw new Error(await response.text());
+                    }
+                } catch (error) {
+                    Swal.fire('خطا!', error.message, 'error');
+                }
+            }
         }
 
-        // Initialize sliders on page load
+        // مقداردهی اولیه اسلایدرها
         document.addEventListener('DOMContentLoaded', () => {
         @foreach (var post in Model.PostResult.Data)
         {
             <text>
-                        initSlider('@post.Id', @post.Videos.Count);
+                                    initSlider('@post.Id', @post.Videos.Count);
             </text>
         }
         });
     </script>
 }
 
-@functions {
+@* @functions {
     private bool IsImage(PostVideoDto media)
     {
         var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
@@ -715,5 +846,31 @@
         return IsImage(media)
             ? Directories.GetInstagramPostImage(media.VideoName)
             : Directories.GetInstagramPostVideo(media.VideoName);
+    }
+} *@
+@using System.IO
+@using System.Linq
+@* 
+@functions {
+    private bool IsImage(PostVideoDto media)
+    {
+        var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+        var videoExtensions = new[] { ".mp4", ".mov", ".avi", ".mkv", ".webm" };
+
+        var extension = System.IO.Path.GetExtension(media.VideoName)?.ToLower();
+
+        if (imageExtensions.Any(ext => ext == extension)) return true;
+        if (videoExtensions.Any(ext => ext == extension)) return false;
+        return false;
+    }
+} *@
+
+
+@functions {
+    private bool IsImage(PostVideoDto media)
+    {
+        var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+        var extension = System.IO.Path.GetExtension(media.VideoName)?.ToLower();
+        return imageExtensions.Contains(extension);
     }
 }

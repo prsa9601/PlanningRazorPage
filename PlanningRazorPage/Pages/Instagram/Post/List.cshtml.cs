@@ -21,7 +21,7 @@ namespace PlanningRazorPage.Pages.Instagram.Post
         //public PostDto? Result { get; set; }
         public async Task<IActionResult> OnGet(long accountId)
         {
-         
+
             PostResult = await _service.GetPostByFilter(new InstagramPostFilterParam
             {
                 InstagramId = accountId,
@@ -33,6 +33,20 @@ namespace PlanningRazorPage.Pages.Instagram.Post
             InstagramId = accountId;
             //Result = PostResult.Data.FirstOrDefault(i => i.InstagramUserName.Equals(InstagramId));
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostDelete(long postId, long instagramId)
+        {
+            var result = await _service.DeletePost(new Models.SocialMedia.Instagram.Post.DeletePostInstagramCommand
+            {
+                Id = postId,
+                InstagramId = InstagramId
+            });
+            return new JsonResult(new
+            {
+                success = result.IsSuccess,
+                message = result.MetaData.Message
+            });
         }
     }
 }
