@@ -440,23 +440,23 @@
         }
         /* نسخه موبایل */
         /*   @@media (max-width: 768px) {
-                                            .post-actions {
-                                                bottom: 15px;
-                                                right: 15px;
-                                                gap: 10px;
-                                                padding: 6px;
-                                            }
+                                                    .post-actions {
+                                                        bottom: 15px;
+                                                        right: 15px;
+                                                        gap: 10px;
+                                                        padding: 6px;
+                                                    }
 
-                                            .action-btn {
-                                                width: 40px;
-                                                height: 40px;
-                                            }
+                                                    .action-btn {
+                                                        width: 40px;
+                                                        height: 40px;
+                                                    }
 
-                                                .action-btn::before {
-                                                    font-size: 10px;
-                                                    padding: 4px 8px;
-                                                }
-                                        } */
+                                                        .action-btn::before {
+                                                            font-size: 10px;
+                                                            padding: 4px 8px;
+                                                        }
+                                                } */
     </style>
 }
 
@@ -471,7 +471,7 @@
 
         <form method="get" class="filter-card mt-4 p-3 bg-light rounded">
             <div class="row g-3 align-items-end">
-                <input type="hidden" asp-for="InstagramId" />
+                <input type="hidden" asp-for="InstagramId" value="@Model.InstagramId" />
                 <div class="col-md-6">
                     <input type="text"
                            class="form-control"
@@ -809,12 +809,19 @@
                             }
                         }
                     );
+                     const result = await response.json();
 
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        throw new Error(await response.text());
-                    }
+                     if (response.ok) {
+                         Swal.fire({
+                             title: result.message,
+                             icon: "success",
+                             confirmButtonText: "باشه",
+                         }).then(() => {
+                             window.location.reload();
+                         });
+                     } else {
+                         throw new Error(result.message || 'خطا در حذف پست');
+                     }
                 } catch (error) {
                     Swal.fire('خطا!', error.message, 'error');
                 }
@@ -826,7 +833,7 @@
         @foreach (var post in Model.PostResult.Data)
         {
             <text>
-                                    initSlider('@post.Id', @post.Videos.Count);
+                                        initSlider('@post.Id', @post.Videos.Count);
             </text>
         }
         });

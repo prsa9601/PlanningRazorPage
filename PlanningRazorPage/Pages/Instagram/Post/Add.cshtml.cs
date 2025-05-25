@@ -54,7 +54,7 @@ namespace PlanningRazorPage.Pages.Instagram.Post
         [MaxFileCount(6, ErrorMessage = "حداکثر ۶ فایل مجاز است")]
         [AllowedFileExtensions(new[] { ".jpg", ".jpeg", ".png", ".mp4", ".mov", ".mkv" })]
         [MaxFileSize(100 * 1024 * 1024, ErrorMessage = "حجم هر فایل باید کمتر از ۵۰ مگابایت باشد")]
-        public List<IFormFile> Videos { get; set; } = new List<IFormFile>();
+        public IFormFileCollection Videos { get; set; } 
         [BindProperty(SupportsGet = true)]
         public List<InstagramAccountDto> Account { get; set; }
         [BindProperty]
@@ -97,7 +97,7 @@ namespace PlanningRazorPage.Pages.Instagram.Post
                 // پردازش داده‌ها
                 var result = await _service.AddPost(new AddPostInstagramCommand
                 {
-                    Videos = Videos,
+                    Videos = Videos.ToList(),
                     DateOfPosting = DateOfPosting,
                     Description = Description,
                     InstagramAccountId = InstagramId,
