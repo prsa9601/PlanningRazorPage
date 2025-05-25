@@ -52,7 +52,11 @@ namespace PlanningRazorPage.Pages.Instagram.Post
         [BindProperty]
         [Required(ErrorMessage = "حداقل یک فایل الزامی است")]
         [MaxFileCount(6, ErrorMessage = "حداکثر ۶ فایل مجاز است")]
-        [AllowedFileExtensions(new[] { ".jpg", ".jpeg", ".png", ".mp4", ".mov", ".mkv" })]
+        [AllowedFileExtensions(new[] {
+    ".jpg", ".jpeg", ".png", // تصاویر
+    ".mp4", ".mov", ".mkv", ".webm", ".avi", // ویدیوها
+    ".gif" // GIF های متحرک
+}, ErrorMessage = "فرمت فایل مجاز نیست")]
         [MaxFileSize(100 * 1024 * 1024, ErrorMessage = "حجم هر فایل باید کمتر از ۵۰ مگابایت باشد")]
         public IFormFileCollection Videos { get; set; } 
         [BindProperty(SupportsGet = true)]

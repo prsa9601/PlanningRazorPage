@@ -7,7 +7,7 @@
 
 @section Header {
     <link rel="stylesheet" href="https://cdn.fontcdn.ir/Font/Persian/IRANSans/IRANSans.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    @* <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> *@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.css">
     <style>
         :root {
@@ -276,7 +276,156 @@
         let selectedFiles = [];
         const MAX_FILES = 6;
         const MAX_SIZE_MB = 50;
+        const ALLOWED_MIME_TYPES = [
+            'image/jpeg', 'image/png', 'image/gif',
+            'video/mp4', 'video/quicktime', 'video/x-matroska',
+            'video/webm', 'video/x-msvideo'
+        ];
         let sortableInstance = null;
+
+        // --------------- اعتبارسنجی پیشرفته ---------------
+        function showFieldError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'text-danger mt-1 small';
+            errorDiv.id = `${fieldId}-error`;
+            errorDiv.textContent = message;
+
+            if (!document.getElementById(`${fieldId}-error`)) {
+                field.parentElement.appendChild(errorDiv);
+            }
+        }
+
+        function clearFieldError(fieldId) {
+            const errorElement = document.getElementById(`${fieldId}-error`);
+            if (errorElement) errorElement.remove();
+        }
+
+        // اعتبارسنجی URL با الگوی اینستاگرام
+        function isValidInstagramLink(url) {
+            try {
+                const parsed = new URL(url);
+                return parsed.hostname === 'instagram.com' ||
+                       parsed.hostname === 'www.instagram.com';
+            } catch {
+                return false;
+            }
+        }
+
+        function isValidURL(url) {
+            const pattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+            return pattern.test(url);
+        }
+        // اعتبارسنجی پیشرفته فایل‌ها
+        function validateFiles(files) {
+            let isValid = true;
+
+            // اعتبارسنجی تعداد فایل‌ها
+            if (files.length + selectedFiles.length > MAX_FILES) {
+                showError(`حداکثر ${MAX_FILES} فایل مجاز است`);
+                isValid = false;
+            }
+
+            files.forEach(file => {
+                // اعتبارسنجی حجم فایل
+                if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+                    showError(`حجم فایل ${file.name} باید کمتر از ${MAX_SIZE_MB} مگابایت باشد`);
+                    isValid = false;
+                }
+
+                // اعتبارسنجی نوع فایل
+                const fileType = file.type.toLowerCase();
+                if (!ALLOWED_MIME_TYPES.includes(fileType)) {
+                    showError(`فرمت ${file.name} (${fileType}) پشتیبانی نمی‌شود`);
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        // اعتبارسنجی پیشرفته متن پست
+        function validateDescription(text) {
+            const forbiddenWords = ['اسپم', 'تبلیغ', 'فیلترشده'];
+            const hasForbidden = forbiddenWords.some(word => text.includes(word));
+            if (hasForbidden) {
+                showFieldError('Description', 'متن حاوی کلمات ممنوعه است');
+                return false;
+            }
+            return true;
+        }
+
+        // اعتبارسنجی جامع فرم
+        function validateForm() {
+            let isValid = true;
+
+            // اعتبارسنجی حساب اینستاگرام
+            const instagramId = document.getElementById('InstagramId').value;
+            if (!instagramId) {
+                showFieldError('InstagramId', 'انتخاب حساب الزامی است');
+                isValid = false;
+            } else {
+                clearFieldError('InstagramId');
+            }
+
+            // اعتبارسنجی متن پست
+            const description = document.getElementById('Description').value.trim();
+            if (!description) {
+                showFieldError('Description', 'متن پست الزامی است');
+                isValid = false;
+            } else if (description.length > 2200) {
+                showFieldError('Description', 'حداکثر ۲۲۰۰ کاراکتر مجاز است');
+                isValid = false;
+            } else if (!validateDescription(description)) {
+                isValid = false;
+            } else {
+                clearFieldError('Description');
+            }
+
+            // اعتبارسنجی لینک
+            const link = document.getElementById('Link').value;
+            // if (link) {
+            //     if (!isValidInstagramLink(link)) {
+            //         showFieldError('لینک باید مرتبط با اینستاگرام باشد (instagram.com)');
+            //         isValid = false;
+            //     } else {
+            //         clearFieldError('Link');
+            //     }
+            // }
+            if (link) {
+                if (!isValidURL(link)) {
+                    showFieldError('فزمت لینک اشتباه است ');
+                    isValid = false;
+                } else {
+                    clearFieldError('Link');
+                }
+            }
+
+            // اعتبارسنجی فایل‌ها
+            if (selectedFiles.length === 0) {
+                showFieldError('mediaInput', 'حداقل یک فایل الزامی است');
+                isValid = false;
+            } else {
+                clearFieldError('mediaInput');
+            }
+
+            // اعتبارسنجی پیشرفته تاریخ
+            const scheduleSwitch = document.getElementById('scheduleSwitch');
+            if (!scheduleSwitch.checked) {
+                const dateValue = document.getElementById('flatpickr-datetime').value;
+                const persianDate = moment(dateValue, 'jYYYY/jMM/jDD HH:mm', 'fa');
+
+                if (!persianDate.isValid()) {
+                    showFieldError('flatpickr-datetime', 'فرمت تاریخ نادرست است');
+                    isValid = false;
+                } else if (persianDate.isBefore(moment().add(30, 'minutes'))) {
+                    showFieldError('flatpickr-datetime', 'حداقل ۳۰ دقیقه تا ارسال');
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
 
         function initSortable() {
             const previewContainer = document.getElementById('mediaPreview');
@@ -316,26 +465,6 @@
             }
         }
 
-        function validateFiles(files) {
-            if (files.length + selectedFiles.length > MAX_FILES) {
-                showError(`حداکثر ${MAX_FILES} فایل مجاز است`);
-                return false;
-            }
-
-            for (const file of files) {
-                if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-                    showError(`حجم فایل ${file.name} بیش از حد مجاز است`);
-                    return false;
-                }
-
-                if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
-                    showError(`فرمت ${file.name} پشتیبانی نمی‌شود`);
-                    return false;
-                }
-            }
-            return true;
-        }
-
         function updateFilePreview() {
             const previewContainer = document.getElementById('mediaPreview');
             previewContainer.innerHTML = '';
@@ -344,11 +473,16 @@
                 return new Promise((resolve) => {
                     const reader = new FileReader();
                     reader.onload = (e) => {
+                        const isVideo = file.type.startsWith('video/');
+                        const isGif = file.type === 'image/gif';
+
                         resolve(`
                             <div class="preview-item">
-                                ${file.type.startsWith('image')
-                                    ? `<img src="${e.target.result}" alt="Preview">`
-                                    : `<video controls><source src="${e.target.result}" type="${file.type}"></video>`}
+                                ${isVideo || isGif
+                                    ? `<video ${isGif ? 'autoplay loop muted playsinline' : 'controls'}>
+                                        <source src="${e.target.result}" type="${file.type}">
+                                      </video>`
+                                    : `<img src="${e.target.result}" alt="Preview">`}
                                 <div class="remove-btn" onclick="removeFile(${index})">&times;</div>
                                 <div class="file-order">${index + 1}</div>
                                 <div class="move-buttons">
@@ -412,25 +546,22 @@
         // مدیریت ارسال فرم
         document.getElementById('submitBtn').addEventListener('click', async function(e) {
             e.preventDefault();
+
+            if (!validateForm()) return;
+
             const form = document.querySelector('form');
             const formData = new FormData(form);
-
-            // تبدیل تاریخ شمسی به میلادی
-            const persianDate = document.getElementById('flatpickr-datetime').value;
-            const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD HH:mm', 'fa')
-                .locale('en')
-                .format('YYYY-MM-DDTHH:mm:ssZ');
-            formData.set('DateOfPosting', gregorianDate);
-
-            // اعتبارسنجی فایل‌ها
-            if (selectedFiles.length === 0) {
-                showError('لطفا حداقل یک فایل انتخاب کنید');
-                return;
-            }
 
             try {
                 this.disabled = true;
                 this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>در حال ارسال...';
+
+                // تبدیل تاریخ
+                const persianDate = document.getElementById('flatpickr-datetime').value;
+                const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD HH:mm', 'fa')
+                    .locale('en')
+                    .format('YYYY-MM-DDTHH:mm:ssZ');
+                formData.set('DateOfPosting', gregorianDate);
 
                 const response = await fetch(form.action, {
                     method: 'POST',
@@ -441,21 +572,34 @@
                 });
 
                 const result = await response.json();
-                if (result.success) {
+
+                if (!result.success) {
+                    if (result.errorType === 'validation') {
+                        // نمایش خطاهای سمت سرور
+                        Object.entries(result.errors).forEach(([field, errors]) => {
+                            const fieldId = field.replace('Model.', '');
+                            showFieldError(fieldId, errors.join(', '));
+                        });
+                    } else {
+                        throw new Error(result.error || 'خطای سرور');
+                    }
+                } else {
                     Swal.fire({
                         icon: 'success',
                         title: 'پست با موفقیت ثبت شد!',
                         showConfirmButton: false,
                         timer: 1500
-                    }).then(() => window.location.href = '@Url.Page("./List")');
-                } else {
-                    throw new Error(result.error || 'خطا در ارسال اطلاعات');
+                    }).then(() =>{
+                        // const accountId = @Model.InstagramId;
+                        window.location.href = `./List?accountId=${result.instagramId}`;
+                    });
                 }
             } catch (error) {
                 Swal.fire({
                     icon: 'error',
                     title: 'خطا!',
-                    text: error.message
+                    text: error.message,
+                    confirmButtonText: 'متوجه شدم'
                 });
             } finally {
                 this.disabled = false;

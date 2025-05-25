@@ -18,17 +18,23 @@ namespace PlanningRazorPage.Infrastructure.FileUtil
     public class AllowedFileExtensionsAttribute : ValidationAttribute
     {
         private readonly string[] _extensions;
-        public AllowedFileExtensionsAttribute(string[] extensions) => _extensions = extensions;
 
-        protected override ValidationResult IsValid(object value, ValidationContext context)
+        public AllowedFileExtensionsAttribute(string[] extensions)
         {
-            if (value is IList<IFormFile> files)
+            _extensions = extensions;
+        }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            if (value is IFormFileCollection files)
             {
                 foreach (var file in files)
                 {
-                    var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-                    if (!_extensions.Contains(ext))
+                    var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+                    if (!_extensions.Contains(extension))
+                    {
                         return new ValidationResult(ErrorMessage);
+                    }
                 }
             }
             return ValidationResult.Success;
