@@ -40,7 +40,9 @@ namespace PlanningRazorPage.Pages.Instagram.Post
         //public List<IFormFile> NewImages { get; set; }
 
         [BindProperty]
-        public List<IFormFile> NewVideos { get; set; }
+        public List<IFormFile> Videos { get; set; }
+        [BindProperty]
+        public List<string> ExistingMedia { get; set; }
 
         //[BindProperty]
         //public string ExistingMedia { get; set; }
@@ -91,7 +93,7 @@ namespace PlanningRazorPage.Pages.Instagram.Post
                 Link = Link,
                 Description = Description,
                 //Images = NewImages,
-                Videos = NewVideos,
+                Videos = Videos,
                 //ExistingMedia = ExistingMedia,
                 //IsScheduled = IsScheduled
             });

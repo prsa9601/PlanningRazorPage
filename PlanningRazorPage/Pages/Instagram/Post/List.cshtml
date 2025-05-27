@@ -440,23 +440,228 @@
         }
         /* نسخه موبایل */
         /*   @@media (max-width: 768px) {
-                                                    .post-actions {
-                                                        bottom: 15px;
-                                                        right: 15px;
-                                                        gap: 10px;
-                                                        padding: 6px;
-                                                    }
+                                                            .post-actions {
+                                                                bottom: 15px;
+                                                                right: 15px;
+                                                                gap: 10px;
+                                                                padding: 6px;
+                                                            }
 
-                                                    .action-btn {
-                                                        width: 40px;
-                                                        height: 40px;
-                                                    }
+                                                            .action-btn {
+                                                                width: 40px;
+                                                                height: 40px;
+                                                            }
 
-                                                        .action-btn::before {
-                                                            font-size: 10px;
-                                                            padding: 4px 8px;
-                                                        }
-                                                } */
+                                                                .action-btn::before {
+                                                                    font-size: 10px;
+                                                                    padding: 4px 8px;
+                                                                }
+                                                        } */
+    </style>
+    <style>
+        /* استایل تاریخ فارسی */
+        .persian-date {
+            font-family: 'Vazir', 'Yekan', Tahoma;
+            direction: ltr;
+            display: inline-block;
+            background: rgba(0,0,0,0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        /* آیکون‌های اختصاصی */
+        .text-purple {
+            color: #6f42c1;
+        }
+
+        .text-success {
+            color: #28a745 !important;
+        }
+
+        /* کارت تاریخ */
+        .date-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            padding: 8px 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* دکمه مشاهده */
+        .btn-instagram {
+            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+            color: white !important;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+            .btn-instagram:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            }
+    </style>
+    <style>
+        /* استایل بهبود یافته برای بخش تاریخ‌ها */
+        .date-meta {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #eee;
+            margin: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .persian-date {
+            font-family: 'Vazir', 'Yekan', Tahoma;
+            color: #2c3e50;
+            font-size: 0.95em;
+            background: rgba(255,255,255,0.9);
+            padding: 6px 12px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            direction: rtl; /* اصلاح جهت متن */
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* آیکون‌های اختصاصی */
+        .fa-calendar-plus {
+            color: #3498db !important;
+            font-size: 1.1em;
+        }
+
+        .fa-paper-plane {
+            color: #27ae60 !important;
+            font-size: 1.1em;
+        }
+
+        /* استایل وضعیت پست */
+        .post-status {
+            background: #fff !important;
+            color: #2c3e50 !important;
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+
+        /* دکمه مشاهده بهبود یافته */
+        .btn-instagram {
+            background: linear-gradient(45deg, #405de6, #833ab4, #e1306c);
+            color: white !important;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Vazir', sans-serif;
+        }
+
+            .btn-instagram:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                opacity: 0.9;
+            }
+
+            .btn-instagram i {
+                font-size: 1.1em;
+            }
+
+        /* بهبود ترازبندی آیتم‌ها */
+        .date-meta .d-flex {
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.8);
+        }
+
+        .fw-bold {
+            color: #2c3e50;
+            font-weight: 600 !important;
+        }
+    </style>
+    <style>
+        /* استایل بخش توضیحات */
+        .description-box {
+            position: relative;
+            margin: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .description-text {
+            font-family: 'Vazir', sans-serif;
+            color: #4a5568;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* محدودیت خطوط */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .char-counter {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+            .char-counter .used {
+                color: #2b6cb0;
+                font-weight: bold;
+            }
+
+            .char-counter .total {
+                color: #718096;
+            }
+
+        /* نمایش تولتیپ برای توضیحات کامل */
+        .description-text[data-fulltext]:hover::after {
+            content: attr(data-fulltext);
+            position: absolute;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            z-index: 1000;
+            max-width: 300px;
+            width: max-content;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85em;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .description-text[data-fulltext]:hover::before {
+            content: '';
+            position: absolute;
+            bottom: calc(100% - 5px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0,0,0,0.9) transparent transparent transparent;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .description-text[data-fulltext]:hover::after,
+        .description-text[data-fulltext]:hover::before {
+            opacity: 1;
+        }
     </style>
 }
 
@@ -482,11 +687,18 @@
 
                 <div class="col-md-3">
                     <select asp-for="FilterParams.SearchOrderBy"
+                            class="form-select">
+                        <option value="">مرتب سازی بر اساس...</option>
+                        <option value="@PostSearchOrderBy.latest">جدیدترین ها</option>
+                    </select>
+                </div>
+                @*     <div class="col-md-3">
+                    <select asp-for="FilterParams.SearchOrderBy"
                             asp-items="Html.GetEnumSelectList<PostSearchOrderBy>()"
                             class="form-select">
                         <option value="">مرتب سازی بر اساس...</option>
                     </select>
-                </div>
+                </div> *@
 
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-instagram w-100">
@@ -607,20 +819,59 @@
                                 </button>
                             </div> *@
                         </div>
-
-                        <div class="p-3">
-                            <p class="mb-2 text-secondary">@post.Description.Truncate(120)</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">
-                                    <i class="fas fa-calendar-alt me-2"></i>
-                                    @post.DateOfPosting.ToPersianDateTime()
+                         <div class="description-box">
+            <div class="description-text"
+                 data-fulltext="@post.Description"
+                 title="توضیحات کامل">
+                @{
+                    var maxLength = 50;
+                    var description = post.Description ?? "";
+                    var truncated = description.Length > maxLength 
+                        ? description.Substring(0, maxLength) + "..." 
+                        : description;
+                }
+                @truncated
+            </div>
+            <div class="char-counter">
+                <span class="used">@description.Length</span>
+                <span class="total">/50</span>
+            </div>
+        </div>
+                        <div class="date-meta mb-3">
+                            <!-- تاریخ ساخت -->
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-calendar-plus text-primary me-2"></i>
+                                <small class="text-muted d-flex align-items-center">
+                                    <span class="fw-bold">تاریخ ساخت:</span>
+                                    <span class="persian-date">
+                                        @post.CreationDate.ToPersianDateTime()
+                                        <i class="fas fa-clock ms-2"></i>
+                                    </span>
                                 </small>
-                                <a href="@post.Link" target="_blank" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-external-link-alt me-2"></i>مشاهده
+                            </div>
+
+                            <!-- تاریخ ارسال -->
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-paper-plane text-success me-2"></i>
+                                <small class="text-muted d-flex align-items-center">
+                                    <span class="fw-bold">تاریخ ارسال:</span>
+                                    <span class="persian-date">
+                                        @post.DateOfPosting.ToPersianDateTime()
+                                        <i class="fas @(post.IsSend ? "fa-check-circle text-success" : "fa-clock text-warning") ms-2"></i>
+                                    </span>
+                                </small>
+                            </div>
+
+                            <!-- دکمه مشاهده -->
+                            <div class="mt-3 text-center">
+                                <a href="@post.Link" target="_blank"
+                                   class="btn btn-instagram btn-sm w-100">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    مشاهده پست در اینستاگرام
                                 </a>
                             </div>
-                            @* <small class="text-muted d-block mt-2" id="media-url-display-@post.Id"></small> *@
                         </div>
+
                     </div>
                 </div>
             }
@@ -635,6 +886,7 @@
                            href="@Url.Page("./List", new {
                                instagramId = Model.InstagramId,
                                PageId = Model.PostResult.CurrentPage - 1,
+                               PostSearchOrderBy = Model.FilterParams.SearchOrderBy,
                                Search = Model.FilterParams.Search
                            })">
                             <i class="fas fa-chevron-right"></i>
@@ -649,6 +901,7 @@
                            href="@Url.Page("./List", new {
                                instagramId = Model.InstagramId,
                                PageId = i,
+                               PostSearchOrderBy = Model.FilterParams.SearchOrderBy,
                                Search = Model.FilterParams.Search
                            })">
                             @i
@@ -663,6 +916,7 @@
                            href="@Url.Page("./List", new {
                                instagramId = Model.InstagramId,
                                PageId = Model.PostResult.CurrentPage + 1,
+                               PostSearchOrderBy = Model.FilterParams.SearchOrderBy,
                                Search = Model.FilterParams.Search
                            })">
                             <i class="fas fa-chevron-left"></i>
@@ -844,7 +1098,7 @@
         @foreach (var post in Model.PostResult.Data)
         {
             <text>
-                                        initSlider('@post.Id', @post.Videos.Count);
+                                            initSlider('@post.Id', @post.Videos.Count);
             </text>
         }
         });

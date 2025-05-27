@@ -263,18 +263,14 @@
 </div>
 
 @section Scripts {
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
-    @* <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> *@
-    <script src="~/assets/vendor/libs/flatpickr/fa-jdate.js"></script><!-- Flatpickr اصلی -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.js"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.js"></script> *@
 
     <!-- زبان فارسی برای Flatpickr -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/l10n/fa.js"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/l10n/fa.js"></script> *@
 
     <!-- پلاگین تقویم جلالی -->
-    <script src="https://unpkg.com/flatpickr-jalali@1.0.1/dist/plugin.js"></script>
+    @* <script src="https://unpkg.com/flatpickr-jalali@1.0.1/dist/plugin.js"></script> *@
 
     <!-- کتابخانه moment-jalaali برای تبدیل تاریخ -->
     <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.9.2/build/moment-jalaali.js"></script>
@@ -396,14 +392,14 @@
 
             // اعتبارسنجی لینک
             const link = document.getElementById('Link').value;
-            // if (link) {
-            //     if (!isValidInstagramLink(link)) {
-            //         showFieldError('لینک باید مرتبط با اینستاگرام باشد (instagram.com)');
-            //         isValid = false;
-            //     } else {
-            //         clearFieldError('Link');
-            //     }
-            // }
+            if (link) {
+                if (!isValidInstagramLink(link)) {
+                    showFieldError('لینک باید مرتبط با اینستاگرام باشد (instagram.com)');
+                    isValid = false;
+                } else {
+                    clearFieldError('Link');
+                }
+            }
             if (link) {
                 if (!isValidURL(link)) {
                     showFieldError('فزمت لینک اشتباه است ');
@@ -430,10 +426,11 @@
                 if (!persianDate.isValid()) {
                     showFieldError('flatpickr-datetime', 'فرمت تاریخ نادرست است');
                     isValid = false;
-                } else if (persianDate.isBefore(moment().add(30, 'minutes'))) {
-                    showFieldError('flatpickr-datetime', 'حداقل ۳۰ دقیقه تا ارسال');
-                    isValid = false;
                 }
+                // else if (persianDate.isBefore(moment().add(30, 'minutes'))) {
+                //     showFieldError('flatpickr-datetime', 'حداقل ۳۰ دقیقه تا ارسال');
+                //     isValid = false;
+                // }
             }
 
             return isValid;
@@ -552,6 +549,15 @@
             static: true, // نمایش ثابت تقویم
           defaultDate: moment().format('jYYYY/jMM/jDD HH:mm'),
         });
+        //         const flatpickrInstance = flatpickr('#flatpickr-datetime', {
+        //     locale: 'fa',
+        //     jalali: true,
+        //     enableTime: true,
+        //     dateFormat: 'Y/m/d H:i',
+        //     time_24hr: true,
+        //     static: true,
+        //     defaultDate: moment().format('jYYYY/jMM/jDD HH:mm'),
+        // });
 
         document.getElementById('scheduleSwitch').addEventListener('change', function() {
             document.getElementById('flatpickr-datetime').disabled = this.checked;

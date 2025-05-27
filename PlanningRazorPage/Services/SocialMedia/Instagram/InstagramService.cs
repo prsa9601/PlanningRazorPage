@@ -360,7 +360,7 @@ namespace PlanningRazorPage.Services.SocialMedia.Instagram
             //    url += $"&UserName={param.UserName}";
 
             if (param.SearchOrderBy != null)
-                url += $"&SearchOrderBy={param.SearchOrderBy}";
+                url += $"&InstagramPostSearchOrderBy={param.SearchOrderBy}";
 
             if (param.InstagramId != null)
                 url += $"&InstagramId={param.InstagramId}";

@@ -1,48 +1,16 @@
 ﻿@page
 @model PlanningRazorPage.Pages.Instagram.Post.EditModel
+@using PlanningRazorPage.Infrastructure; 
 @{
     Layout = "Shared/_Layout";
     ViewData["Title"] = "ویرایش پست اینستاگرام";
 }
 
 @section Header {
-    <!-- استایل‌های مشابه صفحه Add -->
     <link rel="stylesheet" href="https://cdn.fontcdn.ir/Font/Persian/IRANSans/IRANSans.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.css">
     <style>
-        /* بهبود استایل راستچین تقویم */
-        .flatpickr-calendar {
-            font-family: 'IRANSans', sans-serif !important;
-            direction: rtl !important;
-            text-align: right !important;
-        }
-
-        .text-danger {
-            display: none;
-            font-size: 0.875em;
-            margin-top: 0.25rem;
-        }
-
-        .flatpickr-months .flatpickr-month,
-        .flatpickr-weekdays,
-        .flatpickr-weekday {
-            direction: rtl !important;
-        }
-
-        .flatpickr-weekday {
-            text-align: center !important;
-        }
-
-        .flatpickr-day {
-            font-family: 'IRANSans', sans-serif !important;
-        }
-
-        .numInputWrapper span.arrowUp:after {
-            right: 0 !important;
-            left: auto !important;
-        }
-    </style>
-
-    <style>
+        /* استایل‌های مشابه صفحه Add با تغییرات جزئی */
         :root {
             --ig-gradient: linear-gradient(45deg, #405DE6, #833AB4, #C13584, #E1306C, #FD1D1D);
             --ig-primary: #E1306C;
@@ -70,11 +38,6 @@
             transition: all 0.3s;
         }
 
-            .ig-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(225, 48, 108, 0.4);
-            }
-
         .file-upload-box {
             border: 2px dashed #ddd;
             border-radius: 15px;
@@ -82,13 +45,9 @@
             transition: border-color 0.3s;
         }
 
-            .file-upload-box:hover {
-                border-color: var(--ig-primary);
-            }
-
         .media-preview {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 1rem;
             margin-top: 1rem;
         }
@@ -98,55 +57,182 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            aspect-ratio: 1;
+            flex: 0 0 calc(16.666% - 1rem);
+            max-width: calc(16.666% - 1rem);
+            cursor: move;
         }
+
+        .existing-media-item {
+            border: 2px solid #4CAF50;
+        }
+
+        /* سایر استایل‌ها مشابه صفحه Add */
+
+        :root {
+            --ig-gradient: linear-gradient(45deg, #405DE6, #833AB4, #C13584, #E1306C, #FD1D1D);
+            --ig-primary: #E1306C;
+        }
+
+        .ig-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .ig-header {
+            background: var(--ig-gradient);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .ig-btn {
+            background: var(--ig-primary);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .file-upload-box {
+            border: 2px dashed #ddd;
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: border-color 0.3s;
+        }
+
+        .media-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            aspect-ratio: 1;
+            flex: 0 0 calc(16.666% - 1rem);
+            max-width: calc(16.666% - 1rem);
+            cursor: move;
+        }
+
+            .preview-item.dragging {
+                opacity: 0.5;
+                transform: scale(0.95);
+            }
 
             .preview-item img,
             .preview-item video {
                 width: 100%;
-                height: 120px;
+                height: 100%;
                 object-fit: cover;
+                object-position: center;
             }
 
         .remove-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(255,255,255,0.9);
-            width: 25px;
-            height: 25px;
+            top: 8px;
+            left: 8px;
+            background: rgba(255, 73, 73, 0.9);
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.2s ease;
         }
 
-        .form-switch .form-check-input:not(:checked) {
-            background-color: #6B8DD6;
-            border-color: #6B8DD6;
+            .remove-btn:hover {
+                background: #ff0000;
+                transform: scale(1.1);
+            }
+
+        .file-order {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            backdrop-filter: blur(2px);
         }
 
-        .form-switch .form-check-input:checked {
-            background-color: #dee2e6;
-            border-color: #dee2e6;
+        .move-buttons {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            gap: 4px;
         }
 
-        .form-switch .form-check-input {
-            transition: all 0.3s ease;
+        .move-btn {
+            background: rgba(0, 0, 0, 0.7);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: all 0.2s;
+        }
+
+            .move-btn:hover {
+                background: rgba(0, 0, 0, 0.9);
+                transform: scale(1.1);
+            }
+
+        @@media (max-width: 1200px) {
+            .preview-item {
+                flex: 0 0 calc(20% - 1rem);
+                max-width: calc(20% - 1rem);
+            }
+        }
+
+        @@media (max-width: 992px) {
+            .preview-item {
+                flex: 0 0 calc(25% - 1rem);
+                max-width: calc(25% - 1rem);
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .preview-item {
+                flex: 0 0 calc(33.333% - 1rem);
+                max-width: calc(33.333% - 1rem);
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .preview-item {
+                flex: 0 0 calc(50% - 1rem);
+                max-width: calc(50% - 1rem);
+            }
+        }
+
+        .flatpickr-calendar {
+            font-family: 'IRANSans', sans-serif !important;
+            direction: rtl !important;
         }
     </style>
-    <!-- در استایل‌های موجود این موارد را اضافه کنید -->
-    <style>
-        .is-invalid {
-            border-color: #dc3545 !important;
-        }
-
-        .error-feedback {
-            font-size: 0.875em;
-            color: #dc3545;
-        }
     </style>
 }
+
 
 <div class="container py-5">
     <div class="ig-card">
@@ -156,245 +242,428 @@
 
         <div class="card-body p-4">
             <form method="post" enctype="multipart/form-data">
-                <input type="hidden" asp-for="PostId" />
-                @* <input type="hidden" asp-for="ExistingMedia" /> *@
+                <div class="row mb-4">
+                    <div class="col-md-5">
+                        <div class="form-floating">
+                            <select class="form-select" asp-for="InstagramId" required>
+                                <option value="">انتخاب حساب اینستاگرام</option>
+                                @foreach (var account in Model.Accounts!)
+                                {
+                                    <option value="@account.Id">📱 @account.InstagramUserName</option>
+                                }
+                            </select>
+                            <label class="text-primary">
+                                <i class="fas fa-instagram me-2"></i>حساب اینستاگرام
+                            </label>
+                        </div>
+                    </div>
 
-                <div class="row mb-9">
-                    <div class="col-md-8">
-                        <div class="row g-3 align-items-center">
-                            <!-- انتخاب حساب -->
-                            <div class="col-md-5">
-                                <div class="form-floating form-floating-outline h-100">
-                                    <select class="form-select" asp-for="@Model.InstagramId" required>
-                                        <option value="">انتخاب حساب اینستاگرام</option>
-                                        @foreach (var account in Model.Accounts!)
-                                        {
-                                            <option value="@account.Id">📱 @account.InstagramUserName</option>
-                                        }
-                                    </select>
-                                    <label class="text-primary">
-                                        <i class="fas fa-instagram me-2"></i>حساب اینستاگرام
-                                    </label>
-                                    <div class="invalid-feedback">لطفا حساب اینستاگرام را انتخاب کنید</div>
-                                </div>
-                                @* <span asp-validation-for="InstagramId" class="text-danger"></span> *@
-
+                    <div class="col-md-7">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="scheduleSwitch">
+                                <label class="form-check-label">⏰ ارسال فوری</label>
                             </div>
 
-                            <!-- زمان‌بندی -->
-                            <div class="col-md-7">
-                                <div class="d-flex align-items-center gap-3 justify-content-end h-100">
-                                    <!-- چک باکس -->
-                                    <div class="form-check form-switch m-0 flex-shrink-0">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               id="scheduleSwitch"
-                                               checked="checked" />
-                                        <label class="form-check-label text-nowrap" for="scheduleSwitch">
-                                            ⏰ همین الان ارسال شود
-                                        </label>
-                                    </div>
-
-                                    <!-- تاریخ و زمان -->
-                                    <div class="flex-grow-1" style="min-width: 280px; max-width: 320px;">
-                                        <div class="d-flex align-items-center gap-2 w-100">
-                                            <label for="flatpickr-datetime"
-                                                   class="form-label m-0 text-nowrap flex-shrink-0">
-                                                📅 تاریخ و زمان
-                                            </label>
-                                            <input asp-for="DateOfPosting"
-                                                   type="text"
-                                                   class="form-control text-end persian-date flex-grow-1"
-                                                   placeholder="انتخاب تاریخ"
-                                                   id="flatpickr-datetime"
-                                                   dir="ltr"
-                                                   readonly="readonly"
-                                                   style="min-width: 180px;" />
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="flex-grow-1">
+                                <input asp-for="DateOfPosting"
+                                       type="text"
+                                       class="form-control text-end"
+                                       placeholder="انتخاب تاریخ"
+                                       id="flatpickr-datetime"
+                                       dir="ltr"
+                                       readonly>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- توضیحات -->
                 <div class="mb-4">
-                    <label asp-for="Description" class="form-label">📝 متن پست</label>
+                    <label class="form-label">📝 متن پست</label>
                     <textarea asp-for="Description"
                               class="form-control"
                               rows="4"
                               placeholder="متن پست را وارد کنید..."
                               required></textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
 
-                <!-- لینک -->
                 <div class="mb-4">
-                    <label asp-for="Link" class="form-label">🔗 لینک در بیو @* (اختیاری) *@</label>
+                    <label class="form-label">🔗 لینک در بیو</label>
                     <input asp-for="Link"
                            class="form-control"
                            type="url"
-                           placeholder="https://example.com" />
-                    <span asp-validation-for="Link" class="text-danger"></span>
+                           placeholder="https://example.com">
                 </div>
 
-                <!-- آپلود مدیا -->
-                <div class="row">
-
-                    <div class="card-body p-4">
-
-
-                        <!-- Existing form fields remain unchanged -->
-                        <!-- Media Upload Section -->
-                        <div class="row">
-                            <div class="col-12 mb-4">
-                                <div class="file-upload-box">
-                                    <label class="form-label">📁 آپلود مدیا (حداکثر ۶ فایل - عکس یا ویدیو)</label>
-                                    <input asp-for="NewVideos"
-                                           class="form-control"
-                                           type="file"
-                                           multiple
-                                           accept=".jpg,.jpeg,.png,.mp4,.mov,.mkv"
-                                           onchange="validateAndPreviewMedia(this, 'mediaPreview')" />
-                                    <div id="mediaPreview" class="media-preview"></div>
-                                    <span class="text-muted">فرمت‌های مجاز: JPG, PNG, MP4, MOV, MKV (حداکثر ۵۰ مگابایت برای هر فایل)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="button" id="SubmitButton" class="ig-btn w-100">
-                        <i class="fas fa-cloud-upload-alt me-2"></i>ذخیره و برنامه‌ریزی
+                <div class="file-upload-box mb-4">
+                    <label class="form-label">📁 آپلود مدیا (حداکثر ۶ فایل)</label>
+                    <input asp-for="Videos"
+                           type="file"
+                           multiple
+                           accept="image/*,video/*"
+                           id="mediaInput"
+                           hidden
+                           onchange="handleFileSelect(event)">
+                    <button type="button"
+                            onclick="document.getElementById('mediaInput').click()"
+                            class="ig-btn mb-3">
+                        <i class="fas fa-plus me-2"></i>انتخاب فایل‌ها
                     </button>
+                    <div id="mediaPreview" class="media-preview"></div>
+                    <span class="text-muted">فرمت‌های مجاز: JPG, PNG, MP4, MOV, MKV (حداکثر ۵۰ مگابایت)</span>
+                </div>
+
+                <button type="button" id="submitBtn" class="ig-btn w-100">
+                    <i class="fas fa-cloud-upload-alt me-2"></i>ذخیره و برنامه‌ریزی
+                </button>
             </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <!-- اسکریپت‌های مشابه صفحه Add -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.js"></script> *@
+
+    <!-- زبان فارسی برای Flatpickr -->
+    @* <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/l10n/fa.js"></script> *@
+
+    <!-- پلاگین تقویم جلالی -->
+    @* <script src="https://unpkg.com/flatpickr-jalali@1.0.1/dist/plugin.js"></script> *@
+
+    <!-- کتابخانه moment-jalaali برای تبدیل تاریخ -->
+    <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.9.2/build/moment-jalaali.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
     <script>
-        document.getElementById('SubmitButton').addEventListener('click', async (e) => {
+        // مدیریت فایل‌ها
+        let selectedFiles = [];
+        const MAX_FILES = 6;
+        const MAX_SIZE_MB = 50;
+        const ALLOWED_MIME_TYPES = [
+            'image/jpeg', 'image/png', 'image/gif',
+            'video/mp4', 'video/quicktime', 'video/x-matroska',
+            'video/webm', 'video/x-msvideo'
+        ];
+        let sortableInstance = null;
+
+        // --------------- اعتبارسنجی پیشرفته ---------------
+        function showFieldError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'text-danger mt-1 small';
+            errorDiv.id = `${fieldId}-error`;
+            errorDiv.textContent = message;
+
+            if (!document.getElementById(`${fieldId}-error`)) {
+                field.parentElement.appendChild(errorDiv);
+            }
+        }
+
+        function clearFieldError(fieldId) {
+            const errorElement = document.getElementById(`${fieldId}-error`);
+            if (errorElement) errorElement.remove();
+        }
+
+        // اعتبارسنجی URL با الگوی اینستاگرام
+        function isValidInstagramLink(url) {
+            try {
+                const parsed = new URL(url);
+                return parsed.hostname === 'instagram.com' ||
+                       parsed.hostname === 'www.instagram.com';
+            } catch {
+                return false;
+            }
+        }
+
+        function isValidURL(url) {
+            const pattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+            return pattern.test(url);
+        }
+        // اعتبارسنجی پیشرفته فایل‌ها
+        function validateFiles(files) {
+            let isValid = true;
+
+            // اعتبارسنجی تعداد فایل‌ها
+            if (files.length + selectedFiles.length > MAX_FILES) {
+                showError(`حداکثر ${MAX_FILES} فایل مجاز است`);
+                isValid = false;
+            }
+
+            files.forEach(file => {
+                // اعتبارسنجی حجم فایل
+                if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+                    showError(`حجم فایل ${file.name} باید کمتر از ${MAX_SIZE_MB} مگابایت باشد`);
+                    isValid = false;
+                }
+
+                // اعتبارسنجی نوع فایل
+                const fileType = file.type.toLowerCase();
+                if (!ALLOWED_MIME_TYPES.includes(fileType)) {
+                    showError(`فرمت ${file.name} (${fileType}) پشتیبانی نمی‌شود`);
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        // اعتبارسنجی پیشرفته متن پست
+        function validateDescription(text) {
+            const forbiddenWords = ['اسپم', 'تبلیغ', 'فیلترشده'];
+            const hasForbidden = forbiddenWords.some(word => text.includes(word));
+            if (hasForbidden) {
+                showFieldError('Description', 'متن حاوی کلمات ممنوعه است');
+                return false;
+            }
+            return true;
+        }
+
+        // اعتبارسنجی جامع فرم
+        function validateForm() {
+            let isValid = true;
+
+            // اعتبارسنجی حساب اینستاگرام
+            const instagramId = document.getElementById('InstagramId').value;
+            if (!instagramId) {
+                showFieldError('InstagramId', 'انتخاب حساب الزامی است');
+                isValid = false;
+            } else {
+                clearFieldError('InstagramId');
+            }
+
+            // اعتبارسنجی متن پست
+            const description = document.getElementById('Description').value.trim();
+            if (!description) {
+                showFieldError('Description', 'متن پست الزامی است');
+                isValid = false;
+            } else if (description.length > 2200) {
+                showFieldError('Description', 'حداکثر ۲۲۰۰ کاراکتر مجاز است');
+                isValid = false;
+            } else if (!validateDescription(description)) {
+                isValid = false;
+            } else {
+                clearFieldError('Description');
+            }
+
+            // اعتبارسنجی لینک
+            const link = document.getElementById('Link').value;
+            if (link) {
+                if (!isValidInstagramLink(link)) {
+                    showFieldError('لینک باید مرتبط با اینستاگرام باشد (instagram.com)');
+                    isValid = false;
+                } else {
+                    clearFieldError('Link');
+                }
+            }
+            if (link) {
+                if (!isValidURL(link)) {
+                    showFieldError('فزمت لینک اشتباه است ');
+                    isValid = false;
+                } else {
+                    clearFieldError('Link');
+                }
+            }
+
+            // اعتبارسنجی فایل‌ها
+            if (selectedFiles.length === 0) {
+                showFieldError('mediaInput', 'حداقل یک فایل الزامی است');
+                isValid = false;
+            } else {
+                clearFieldError('mediaInput');
+            }
+
+            // اعتبارسنجی پیشرفته تاریخ
+            const scheduleSwitch = document.getElementById('scheduleSwitch');
+            if (!scheduleSwitch.checked) {
+                const dateValue = document.getElementById('flatpickr-datetime').value;
+                const persianDate = moment(dateValue, 'jYYYY/jMM/jDD HH:mm', 'fa');
+
+                if (!persianDate.isValid()) {
+                    showFieldError('flatpickr-datetime', 'فرمت تاریخ نادرست است');
+                    isValid = false;
+                } 
+                // else if (persianDate.isBefore(moment().add(30, 'minutes'))) {
+                //     showFieldError('flatpickr-datetime', 'حداقل ۳۰ دقیقه تا ارسال');
+                //     isValid = false;
+                // }
+            }
+
+            return isValid;
+        }
+
+        function initSortable() {
+            const previewContainer = document.getElementById('mediaPreview');
+            sortableInstance = new Sortable(previewContainer, {
+                animation: 150,
+                ghostClass: 'dragging',
+                onUpdate: function(evt) {
+                    const movedItem = selectedFiles[evt.oldIndex];
+                    selectedFiles.splice(evt.oldIndex, 1);
+                    selectedFiles.splice(evt.newIndex, 0, movedItem);
+                    updateOrderNumbers();
+                    updateInputFiles();
+                }
+            });
+        }
+
+        function updateOrderNumbers() {
+            document.querySelectorAll('.file-order').forEach((el, index) => {
+                el.textContent = index + 1;
+            });
+        }
+
+        function handleFileSelect(e) {
+            const newFiles = Array.from(e.target.files);
+
+            if (!validateFiles(newFiles)) {
+                e.target.value = '';
+                return;
+            }
+
+            selectedFiles = [...selectedFiles, ...newFiles].slice(0, MAX_FILES);
+            updateFilePreview();
+            updateInputFiles();
+
+            if (!sortableInstance) {
+                initSortable();
+            }
+        }
+
+        function updateFilePreview() {
+            const previewContainer = document.getElementById('mediaPreview');
+            previewContainer.innerHTML = '';
+
+            const previewPromises = selectedFiles.map((file, index) => {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const isVideo = file.type.startsWith('video/');
+                        const isGif = file.type === 'image/gif';
+
+                        resolve(`
+                            <div class="preview-item">
+                                ${isVideo || isGif
+                                    ? `<video ${isGif ? 'autoplay loop muted playsinline' : 'controls'}>
+                                        <source src="${e.target.result}" type="${file.type}">
+                                      </video>`
+                                    : `<img src="${e.target.result}" alt="Preview">`}
+                                <div class="remove-btn" onclick="removeFile(${index})">&times;</div>
+                                <div class="file-order">${index + 1}</div>
+                                <div class="move-buttons">
+                                    <div class="move-btn" onclick="moveUp(${index})">↑</div>
+                                    <div class="move-btn" onclick="moveDown(${index})">↓</div>
+                                </div>
+                            </div>
+                        `);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            Promise.all(previewPromises).then(htmls => {
+                previewContainer.innerHTML = htmls.join('');
+                updateOrderNumbers();
+            });
+        }
+
+        function moveUp(index) {
+            if (index > 0) {
+                [selectedFiles[index], selectedFiles[index - 1]] = [selectedFiles[index - 1], selectedFiles[index]];
+                updateFilePreview();
+                updateInputFiles();
+            }
+        }
+
+        function moveDown(index) {
+            if (index < selectedFiles.length - 1) {
+                [selectedFiles[index], selectedFiles[index + 1]] = [selectedFiles[index + 1], selectedFiles[index]];
+                updateFilePreview();
+                updateInputFiles();
+            }
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFilePreview();
+            updateInputFiles();
+        }
+
+        function updateInputFiles() {
+            const dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => dataTransfer.items.add(file));
+            document.getElementById('mediaInput').files = dataTransfer.files;
+        }
+
+        // مدیریت تاریخ
+            flatpickr('#flatpickr-datetime', {
+            locale: 'fa', // فعالسازی زبان فارسی
+            jalali: true, // فعالسازی تقویم جلالی (شمسی)
+            enableTime: true, // فعالسازی انتخاب زمان
+            dateFormat: 'Y/m/d H:i', // فرمت تاریخ: سال/ماه/روز ساعت:دقیقه
+            time_24hr: true, // فرمت 24 ساعته
+            static: true, // نمایش ثابت تقویم
+          defaultDate: moment().format('jYYYY/jMM/jDD HH:mm'),
+        });
+
+        document.getElementById('scheduleSwitch').addEventListener('change', function() {
+            document.getElementById('flatpickr-datetime').disabled = this.checked;
+        });
+
+        // مدیریت ارسال فرم
+        document.getElementById('submitBtn').addEventListener('click', async function(e) {
             e.preventDefault();
+
+            if (!validateForm()) return;
+
             const form = document.querySelector('form');
             const formData = new FormData(form);
-            const submitBtn = e.currentTarget;
 
             try {
-                    const linkInput = document.querySelector('input[name="Link"]');
-                    const linkValue = linkInput.value.trim();
-                    const errorElement = document.querySelector('[data-valmsg-for="Link"]');
-                            // اعتبارسنجی اولیه
-
-                    // let isValid = true;
-
-                    // Reset styles
-                    // linkInput.classList.remove('is-invalid');
-                    errorElement.style.display = 'none';
-                    errorElement.textContent = '';
-
-                // Check if link is not empty and invalid
-                if (linkValue === '') {
-
-                        errorElement.textContent = 'لطفا آدرس را وارد کنید';
-                        errorElement.style.display = 'block';
-                        e.preventDefault();
-                             // isValid = false;
-                        return false;
-
-                }
-                if (linkValue !== '') {
-                    const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i;
-                    if (!urlPattern.test(linkValue)) {
-                        errorElement.textContent = 'لطفا یک آدرس معتبر وارد کنید';
-                        errorElement.style.display = 'block';
-                        e.preventDefault();
-                             // isValid = false;
-                        return false;
-                    }
-                }
-                 //    if(!isValid) {
-                 //     e.preventDefault();
-
-                 //     // Add shake animation
-                 //     linkInput.style.animation = 'none';
-                 //     void linkInput.offsetWidth; // Trigger reflow
-                 //     linkInput.style.animation = 'invalid-shake 0.5s ease';
-                 // }
-                const instagramId = form.querySelector('[name="InstagramId"]').value;
-                if (!instagramId) {
-                    throw new Error('لطفا حساب اینستاگرام را انتخاب کنید');
-                }
-
-                const description = form.querySelector('[name="Description"]').value;
-                if (!description.trim()) {
-                    throw new Error('توضیحات پست الزامی است');
-                }
-
-                const files = form.querySelector('[name="NewVideos"]').files;
-                if (files.length === 0) {
-                    throw new Error('حداقل یک فایل باید انتخاب شود');
-                }
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>در حال ارسال...';
 
                 // تبدیل تاریخ
-                const persianDate = formData.get('DateOfPosting');
-                if (!persianDate) {
-                    throw new Error('تاریخ ارسال الزامی است');
-                }
-
-                // ارسال درخواست
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>در حال ارسال...';
+                const persianDate = document.getElementById('flatpickr-datetime').value;
+                const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD HH:mm', 'fa')
+                    .locale('en')
+                    .format('YYYY-MM-DDTHH:mm:ssZ');
+                formData.set('DateOfPosting', gregorianDate);
 
                 const response = await fetch(form.action, {
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
-                        'Accept': 'application/json'
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
                     }
                 });
-
-                // بررسی نوع پاسخ
-                const contentType = response.headers.get('content-type');
-                if (!contentType || !contentType.includes('application/json')) {
-                    const text = await response.text();
-                    // window.location.reload();
-                    // console.log(response);
-                    // throw new Error(`پاسخ نامعتبر: ${text/* .slice(0, 100) */}`);
-                }
 
                 const result = await response.json();
 
                 if (!result.success) {
                     if (result.errorType === 'validation') {
-                        // نمایش خطاهای اعتبارسنجی
-                        Object.entries(result.errors).forEach(([field, messages]) => {
-                            const element = document.querySelector(`[data-valmsg-for="${field}"]`);
-                            if (element) {
-                                element.textContent = messages.join(', ');
-                                element.style.display = 'block';
-                            }
+                        // نمایش خطاهای سمت سرور
+                        Object.entries(result.errors).forEach(([field, errors]) => {
+                            const fieldId = field.replace('Model.', '');
+                            showFieldError(fieldId, errors.join(', '));
                         });
-                        throw new Error('لطفا مقادیر ورودی را بررسی کنید');
+                    } else {
+                        throw new Error(result.error || 'خطای سرور');
                     }
-                    throw new Error(result.error || 'خطای سرور');
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'پست با موفقیت ثبت شد!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() =>{
+                        // const accountId = @Model.InstagramId;
+                        window.location.href = `./List?instagramId=${result.instagramId}`;
+                    });
                 }
-
-                // انتقال به صفحه لیست
-                // window.location.href = `@Url.Page("./List")?instagramId=${result.instagramId}`;
-
-                Swal.fire({
-                            icon: 'success',
-                            title: 'پست با موفقیت ثبت شد!',
-                            confirmButtonText: 'باشه'
-                        }).then(() => {
-                            window.location.href = `@Url.Page("./List")?accountId=${result.instagramId}`;
-                        });
-
             } catch (error) {
-                // window.location.reload();
                 Swal.fire({
                     icon: 'error',
                     title: 'خطا!',
@@ -402,87 +671,44 @@
                     confirmButtonText: 'متوجه شدم'
                 });
             } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-cloud-upload-alt me-2"></i>ذخیره و برنامه‌ریزی';
+                this.disabled = false;
+                this.innerHTML = '<i class="fas fa-cloud-upload-alt me-2"></i>ذخیره و برنامه‌ریزی';
             }
         });
 
-        // باقی توابع مربوط به پیش‌نمایش مدیا...
-    </script>
-    <script>
-        // اسکریپت‌های مدیریت تقویم و پیش‌نمایش مشابه صفحه Add
-              function validateAndPreviewMedia(input, previewId) {
-            const maxFiles = 6;
-            if (input.files.length > maxFiles) {
-                alert(`حداکثر ${maxFiles} فایل مجاز است.`);
-                input.value = '';
-                return;
-            }
+        function toggleCalendar() {
+            const checkbox = document.getElementById('scheduleSwitch');
+            if (checkbox.checked) {
+                calendar.disable(); // اگر چکباکس فعال است، تقویم را غیرفعال کن
+                calendar.defaultDate = moment().format('jYYYY/jMM/jDD HH:mm');
+            } else {
+                calendar.enable(); // اگر چکباکس غیرفعال است، تقویم را فعال کن
+                calendar.defaultDate = moment().format('jYYYY/jMM/jDD HH:mm');
 
-            const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4', 'video/quicktime', 'video/x-matroska'];
-            for (const file of input.files) {
-                if (!allowedTypes.includes(file.type)) {
-                    alert('فرمت فایل مجاز نیست.');
-                    input.value = '';
-                    return;
-                }
             }
-
-            previewMedia(input, previewId);
         }
 
-        function previewMedia(input, previewId) {
-            const previewContainer = document.getElementById(previewId);
-            previewContainer.innerHTML = '';
-
-            Array.from(input.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const previewItem = document.createElement('div');
-                    previewItem.className = 'preview-item';
-
-                    if (file.type.startsWith('image/')) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        previewItem.appendChild(img);
-                    } else if (file.type.startsWith('video/')) {
-                        const video = document.createElement('video');
-                        video.controls = true;
-                        video.src = e.target.result;
-                        previewItem.appendChild(video);
-                    }
-
-                    const removeBtn = document.createElement('div');
-                    removeBtn.className = 'remove-btn';
-                    removeBtn.innerHTML = '×';
-                    removeBtn.onclick = () => removeFile(input, file, previewItem);
-                    previewItem.appendChild(removeBtn);
-
-                    previewContainer.appendChild(previewItem);
-                };
-                reader.readAsDataURL(file);
+        function showError(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'خطا!',
+                text: message,
+                confirmButtonText: 'متوجه شدم'
             });
         }
-
-        function removeFile(input, fileToRemove, previewItem) {
-            const files = Array.from(input.files);
-            const index = files.indexOf(fileToRemove);
-            if (index > -1) {
-                files.splice(index, 1);
-                const dataTransfer = new DataTransfer();
-                files.forEach(file => dataTransfer.items.add(file));
-                input.files = dataTransfer.files;
-                previewItem.remove();
-            }
-        }
-
-        function removeExistingMedia(mediaPath) {
-            // ارسال درخواست حذف مدیا
-            fetch(`?handler=RemoveMedia&mediaPath=${encodeURIComponent(mediaPath)}`)
-                .then(response => {
-                    if (response.ok) location.reload();
-                    else alert('خطا در حذف مدیا');
-                });
-        }
     </script>
+}
+@functions {
+    private bool IsImage(string media)
+    {
+        var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+        var extension = System.IO.Path.GetExtension(media)?.ToLower();
+        return imageExtensions.Contains(extension);
+    }
+    // private bool IsImage(PostVideoDto media)
+    // {
+    //     var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+    //     var extension = System.IO.Path.GetExtension(media.VideoName)?.ToLower();
+    //     return imageExtensions.Contains(extension);
+    // }
 }
