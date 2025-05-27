@@ -472,19 +472,30 @@
         <form method="get" class="filter-card mt-4 p-3 bg-light rounded">
             <div class="row g-3 align-items-end">
                 <input type="hidden" asp-for="InstagramId" value="@Model.InstagramId" />
-                <div class="col-md-6">
+
+                <div class="col-md-4">
                     <input type="text"
                            class="form-control"
                            placeholder="جستجوی پست..."
                            asp-for="FilterParams.Search">
                 </div>
+
                 <div class="col-md-3">
+                    <select asp-for="FilterParams.SearchOrderBy"
+                            asp-items="Html.GetEnumSelectList<PostSearchOrderBy>()"
+                            class="form-select">
+                        <option value="">مرتب سازی بر اساس...</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
                     <button type="submit" class="btn btn-instagram w-100">
                         <i class="fas fa-filter me-2"></i>فیلتر
                     </button>
                 </div>
+
                 <div class="col-md-3">
-                    <a href="@Url.Page("./List", new {InstagramId = Model.InstagramId})"
+                    <a href="@Url.Page("./List", new {instagramId = @Model.InstagramId})"
                        class="btn btn-outline-secondary w-100">
                         <i class="fas fa-undo me-2"></i>بازنشانی
                     </a>
@@ -622,7 +633,7 @@
                     <li class="page-item">
                         <a class="page-link"
                            href="@Url.Page("./List", new {
-                               accountId = Model.InstagramId,
+                               instagramId = Model.InstagramId,
                                PageId = Model.PostResult.CurrentPage - 1,
                                Search = Model.FilterParams.Search
                            })">
@@ -636,7 +647,7 @@
                     <li class="page-item @(i == Model.PostResult.CurrentPage ? "active" : "")">
                         <a class="page-link"
                            href="@Url.Page("./List", new {
-                               accountId = Model.InstagramId,
+                               instagramId = Model.InstagramId,
                                PageId = i,
                                Search = Model.FilterParams.Search
                            })">
@@ -650,7 +661,7 @@
                     <li class="page-item">
                         <a class="page-link"
                            href="@Url.Page("./List", new {
-                               accountId = Model.InstagramId,
+                               instagramId = Model.InstagramId,
                                PageId = Model.PostResult.CurrentPage + 1,
                                Search = Model.FilterParams.Search
                            })">
