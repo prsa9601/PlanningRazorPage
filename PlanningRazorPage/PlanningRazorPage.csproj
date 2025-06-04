@@ -40,6 +40,7 @@
     <None Include="Pages\Instagram\Post\Edit.cshtml" />
     <None Include="Pages\Shared\Partials\_Aside.cshtml" />
     <None Include="Pages\Shared\_LayoutProfile.cshtml" />
+    <None Include="wwwroot\ckeditor\.circleci\config.yml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,6 +49,13 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Shared\_LayoutFront.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="_ViewStart.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

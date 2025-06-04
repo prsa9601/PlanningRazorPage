@@ -1,4 +1,6 @@
-﻿namespace PlanningRazorPage.Models.Blog
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PlanningRazorPage.Models.Blog
 {
     public class AddBlogCommand
     {
@@ -8,7 +10,20 @@
         public string Title { get; set; }
         public string Description { get; set; }
         public string CreatorUserName { get; set; }
-        public SeoData SeoData { get; set; }
+        public SeoData SeoData { get; set; }=new SeoData();
+        public bool IsSend { get; set; }
+        public long CategoryId { get; set; }
+    }
+    public class AddBlogCommandViewModel
+    {
+        public string Slug { get; set; }
+        public IFormFile Image { get; set; }
+        public string SendTime { get; set; }
+        public string Title { get; set; }
+        [UIHint("ckEditor")]
+        public string Description { get; set; }
+        public string CreatorUserName { get; set; }
+        public SeoData SeoData { get; set; }=new SeoData();
         public bool IsSend { get; set; }
         public long CategoryId { get; set; }
     }

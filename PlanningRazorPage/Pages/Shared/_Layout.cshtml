@@ -35,11 +35,14 @@
 <body>
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
-            <partial name="Shared/Partials/_Aside" />
+            <partial name="../../../../Pages/Shared/Partials/_Aside" />
+           @*  @await Html.PartialAsync("Shared/Partials/_Aside")
+            @await Html.PartialAsync("Partials/_Aside") *@
+
             <div class="layout-page">
                 
                 <!-- Navbar -->
-                <partial name="Shared/Partials/_Nav" />
+                <partial name="../../../../Pages/Shared/Partials/_Nav" />
                 <div class="content-wrapper">
                                 @RenderBody()
 
@@ -63,9 +66,9 @@
 
 
 
-    <partial name="Shared/Partials/_Scripts" />
+    <partial name="../../../../Pages/Shared/Partials/_Scripts" />
     @* <partial name="_ValidationScriptsPartial" /> *@
-        <partial name="_ValidationScriptsPartial" />
+    <partial name="../../../../Pages/Shared/_ValidationScriptsPartial" />
     
     @await RenderSectionAsync("Scripts", required: false)
     <script src="~/global.js"></script>

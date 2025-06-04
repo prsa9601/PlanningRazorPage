@@ -1,0 +1,436 @@
+﻿@* @using PlanningRazorPage.Areas.Models *@
+
+@* @model Areas_Admin_Views_Blog_ckeditor *@
+@model PlanningRazorPage.Areas.AdminPanel.Models.CkeditorViewModel
+@{
+    Layout = "Shared/_Layout";
+    ViewData["Title"] = "AddBlog";
+}
+
+@section Header
+    {
+    <script src="../../../../ckeditor/ckeditor.js"></script>
+}
+
+
+
+<body>
+    <!-- tap on top start -->
+    <div class="tap-top">
+        <span class="lnr lnr-chevron-up"></span>
+    </div>
+    <!-- tap on tap end -->
+    <!-- page-wrapper start -->
+    <div>
+        <!-- Page Header Start-->
+        <!-- Page Header Ends-->
+        <!-- Page Body start -->
+        <div class="page-body-wrapper">
+            <!-- Page Sidebar Start-->
+            <div class="sidebar-wrapper">
+                <div id="sidebarEffect"></div>
+                <div>
+                    <div class="logo-wrapper logo-wrapper-center">
+                        <a href="index.html" data-bs-original-title="" title="">
+                            <img class="img-fluid for-white" src="~/AdminAssets/assets/images/logo/full-white.png" alt="logo">
+                        </a>
+                        <div class="back-btn">
+                            <i class="fa fa-angle-left"></i>
+                        </div>
+                        <div class="toggle-sidebar">
+                            <i class="ri-apps-line status_toggle middle sidebar-toggle"></i>
+                        </div>
+                    </div>
+                    <div class="logo-icon-wrapper">
+                        <a href="index.html">
+                            <img class="img-fluid main-logo main-white" src="~/AdminAssets/assets/images/logo/1-white.png" alt="logo">
+                            <img class="img-fluid main-logo main-dark" src="~/AdminAssets/assets/images/logo/logo-white.png"
+                                 alt="logo">
+                        </a>
+                    </div>
+                    <nav class="sidebar-main">
+                        <div class="left-arrow" id="left-arrow">
+                            <i data-feather="arrow-left"></i>
+                        </div>
+
+                        <div id="sidebar-menu">
+                            <ul class="sidebar-links" id="simple-bar">
+                                <li class="back-btn"></li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="index.html">
+                                        <i class="ri-home-line"></i>
+                                        <span>پیشخوان</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                                        <i class="ri-store-3-line"></i>
+                                        <span>محصولات</span>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li>
+                                            <a href="products.html">محصولات</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="add-new-product.html">افزودن محصول جدید</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                                        <i class="ri-list-check-2"></i>
+                                        <span>دسته بندی</span>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li>
+                                            <a href="category.html">لیست دسته ها</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="add-new-category.html">افزودن دسته جدید</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                                        <i class="ri-list-settings-line"></i>
+                                        <span>ویژگی ها</span>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li>
+                                            <a href="attributes.html">ویژگی ها</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="add-new-attributes.html">افزودن جدید</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title" href="javascript:void(0)">
+                                        <i class="ri-user-3-line"></i>
+                                        <span>کاربران</span>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li>
+                                            <a href="all-users.html">نمایش کاربران</a>
+                                        </li>
+                                        <li>
+                                            <a href="add-new-user.html">افزودن کاربر جدید</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title" href="javascript:void(0)">
+                                        <i class="ri-user-3-line"></i>
+                                        <span>نقش ها</span>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li>
+                                            <a href="role.html">تمام نقش ها</a>
+                                        </li>
+                                        <li>
+                                            <a href="create-role.html">افزودن نقش جدید</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="media.html">
+                                        <i class="ri-price-tag-3-line"></i>
+                                        <span>رسانه</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title" href="javascript:void(0)">
+                                        <i class="ri-archive-line"></i>
+                                        <span>سفارشات</span>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li>
+                                            <a href="order-list.html">لیست سفارشات</a>
+                                        </li>
+                                        <li>
+                                            <a href="order-detail.html">جزئیات سفارش</a>
+                                        </li>
+                                        <li>
+                                            <a href="order-tracking.html">رهگیری سفارش</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                                        <i class="ri-focus-3-line"></i>
+                                        <span>قطب نما</span>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li>
+                                            <a href="translation.html">ترجمه</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="currency-rates.html">نرخ ارز</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                                        <i class="ri-price-tag-3-line"></i>
+                                        <span>کد تخفیف</span>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li>
+                                            <a href="coupon-list.html">لیست تخفیف ها</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="create-coupon.html">افزودن</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="taxes.html">
+                                        <i class="ri-price-tag-3-line"></i>
+                                        <span>مالیات</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="product-review.html">
+                                        <i class="ri-star-line"></i>
+                                        <span>بررسی محصول</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="support-ticket.html">
+                                        <i class="ri-phone-line"></i>
+                                        <span>تیکت ها</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="linear-icon-link sidebar-link sidebar-title" href="javascript:void(0)">
+                                        <i class="ri-settings-line"></i>
+                                        <span>تنظیمات</span>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li>
+                                            <a href="profile-setting.html">تنظیمات حساب</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="reports.html">
+                                        <i class="ri-file-chart-line"></i>
+                                        <span>گزارشات</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-list">
+                                    <a class="sidebar-link sidebar-title link-nav" href="list-page.html">
+                                        <i class="ri-list-check"></i>
+                                        <span>لیست برگه ها</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="right-arrow" id="right-arrow">
+                            <i data-feather="arrow-right"></i>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="page-body">
+
+                <!-- New Product Add Start -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-sm-8 m-auto">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header-2">
+                                                <h5>ایجاد محصول جدید</h5>
+                                            </div>
+
+                                            <form class="theme-form theme-form-2 mega-form">
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">نام محصول</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text"
+                                                               placeholder="عنوان محصول">
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="col-sm-3 col-form-label form-label-title">دسته بندی</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="js-example-basic-single w-100" name="state">
+                                                            <option disabled>انتخاب دسته ها</option>
+                                                            <option>الکترونیک</option>
+                                                            <option>تلویزیون و مانیتور</option>
+                                                            <option>خانه و آشپزخانه</option>
+                                                            <option>لوازم بهداشتی</option>
+                                                            <option>گوشت و خوارکی</option>
+                                                            <option>سلامتی دهان و دندان</option>
+                                                            <option>دسته بندی نشده</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="row">
+                                                                <label class="form-label-title col-sm-3 mb-0">توضیحات محصول</label>
+                                                                <div class="col-md-12">
+                                                                    @Html.EditorFor(s=>s.Description)
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br />
+
+                                                <div class="row align-items-center">
+                                                    <label class="col-sm-3 col-form-label form-label-title">تصویر شاخص</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control form-choose" type="file" id="formFileMultiple1" multiple>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header-2">
+                                                <h5>سئو و موتور جستجو</h5>
+                                            </div>
+
+                                            <div class="seo-view">
+                                                <span class="link">https://farscod.ir</span>
+                                                <h5>فلش 64 گیگ sandisk با گارانتی 18 ماهه متین</h5>
+                                                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. </p>
+                                            </div>
+
+                                            <form class="theme-form theme-form-2 mega-form">
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">عنوان صفحه</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="search"
+                                                               placeholder="فلش 64 گیگ sandisk با گارانتی 18 ماهه متین">
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 row">
+                                                    <label class="form-label-title col-sm-3 mb-0">توضیحات متا</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea class="form-control" rows="3"></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <label class="form-label-title col-sm-3 mb-0">لینک شما</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="search"
+                                                               placeholder="https://farscod.ir/">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- New Product Add End -->
+                <!-- footer Start -->
+                <div class="container-fluid">
+                    <footer class="footer">
+                        <div class="row">
+                            <div class="col-md-12 footer-copyright text-center">
+                                <p class="mb-0">راست چین شده توسط : امین احمدی</p>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+                <!-- footer En -->
+            </div>
+            <!-- Container-fluid End -->
+        </div>
+        <!-- Page Body End -->
+    </div>
+    <!-- page-wrapper End -->
+    <!-- Modal Start -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5 class="modal-title" id="staticBackdropLabel">خروج</h5>
+                    <p>آیا برای خارج شدن مطمئن هستید؟</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <div class="button-box">
+                        <button type="button" class="btn btn--no" data-bs-dismiss="modal">خیر</button>
+                        <button type="button" class="btn  btn--yes btn-primary">بله</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+    @section Scripts
+        {
+
+
+
+        <script src="//cdn.ckeditor.com/4.24.0-lts/full/ckeditor.js"></script>
+
+        @*  <script>
+    CKEDITOR.create(document.querySelector('#ckEditor4'), {
+
+    }).catch(error => {
+    console.error(error);
+    });
+    </script>
+    *@
+        <script>
+            $(document).ready(function () {
+                //console.log("1");
+                CKEDITOR.replace('ckEditor4', {
+
+                    licenseKey: "GNU General Public License(GPL) Version 2",
+
+                    customConfig: '../../../../config.js',
+                    //              language: 'fa',
+                    //ckfinder: { uploadUrl: '/index/Upload' }
+                });
+            });
+
+        </script>
+
+    }
+
+</body>
+
+
+

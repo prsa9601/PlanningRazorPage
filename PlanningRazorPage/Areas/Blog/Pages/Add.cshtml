@@ -1,0 +1,887 @@
+﻿@page
+@model PlanningRazorPage.Areas.AdminPanel.Blog.AddModel
+@{
+}
+@section Header {
+    @*     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"> *@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #6f42c1;
+            --success-color: #1cc88a;
+            --dark-color: #2e3a59;
+            --darker-color: #1a233a;
+        }
+
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Vazir', 'Segoe UI', Tahoma, sans-serif;
+            color: #4e4e4e;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            border: none;
+            margin-left: 0;
+            margin-right: 0;
+            width: 100%;
+        }
+
+        .card-header {
+            background-color: var(--dark-color);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            font-weight: 700;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            transition: all 0.3s;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+            }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 10px;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+            .btn-primary:hover {
+                background-color: #2e59d9;
+                border-color: #2653d4;
+                transform: translateY(-2px);
+            }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #4e4e4e;
+        }
+
+        .validation-summary {
+            border-radius: 10px;
+            border-left: 5px solid #e74a3b;
+        }
+
+        .seo-section {
+            background-color: #f8f9fe;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .upload-area:hover {
+                border-color: var(--primary-color);
+                background-color: rgba(78, 115, 223, 0.05);
+            }
+
+        .upload-icon {
+            font-size: 50px;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+
+        .dark-mode {
+            background-color: var(--darker-color);
+            color: #d1d4e7;
+        }
+
+            .dark-mode .card {
+                background-color: #252d48;
+                box-shadow: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.3);
+            }
+
+            .dark-mode .form-control, .dark-mode .form-select {
+                background-color: #1e263e;
+                border-color: #2a3655;
+                color: #d1d4e7;
+            }
+
+            .dark-mode .form-label {
+                color: #d1d4e7;
+            }
+
+            .dark-mode .seo-section {
+                background-color: #1e263e;
+            }
+
+        .ckeditor-container {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        .ck-editor {
+            width: 100% !important;
+        }
+
+        .ck-editor__editable {
+            min-height: 400px !important;
+            width: 100% !important;
+            background-color: white !important;
+            color: #333 !important;
+            padding: 15px !important;
+        }
+
+        .dark-mode .ck-editor__editable {
+            background-color: #1e263e !important;
+            color: #d1d4e7 !important;
+            border: 1px solid #2a3655 !important;
+        }
+
+        .container-fluid {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .col-lg-10 {
+            max-width: 100%;
+            flex: 0 0 100%;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .layout-page {
+            margin-right: 0 !important;
+        }
+
+        .layout-menu-fixed .layout-page {
+            padding-top: 0;
+        }
+
+        .content-wrapper {
+            padding: 0 !important;
+        }
+
+        /* media (max-width: 768px) {
+                                    .row
+
+                                {
+                                    flex-direction: column;
+                                }
+
+                                .col-md-8, .col-md-4 {
+                                    width: 100%;
+                                    max-width: 100%;
+                                }
+
+                                .ck-editor__editable {
+                                    min-height: 300px !important;
+                                }
+
+                                 */ }
+
+        .switch-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .form-check-label {
+            margin-right: 10px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .dark-mode .form-check-label {
+            color: #d1d4e7;
+        }
+
+        .flatpickr-input[disabled] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        .dark-mode .flatpickr-input[disabled] {
+            background-color: #2a3655;
+        }
+
+        .file-manager-modal .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .file-manager-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+        }
+
+        .file-item {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+            .file-item:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                border-color: var(--primary-color);
+            }
+
+        .file-icon {
+            font-size: 36px;
+            color: #6c757d;
+        }
+
+        .file-name {
+            font-weight: 600;
+            margin-top: 10px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .file-size {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .file-manager-body {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .file-type-filter {
+            margin-bottom: 20px;
+        }
+
+        .file-type-btn {
+            margin: 0 5px;
+            border-radius: 20px;
+        }
+
+        .file-manager-footer {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+    </style>
+}
+<div class="container-fluid px-4 py-3">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>افزودن وبلاگ جدید</h5>
+                    <button id="theme-toggle" class="btn btn-sm btn-outline-light">
+                        <i class="bi bi-moon"></i> تغییر تم
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger validation-summary mb-4 d-none">
+                        <i class="bi bi-exclamation-circle me-2"></i>
+                        <span id="error-message">لطفا خطاهای فرم را برطرف کنید</span>
+                    </div>
+
+                    <form asp-area="AdminPanel" method="post" enctype="multipart/form-data">
+                        @* id="blog-form"<form id="blog-form" asp-action="Create" method="post" enctype="multipart/form-data"> *@
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-4">
+                                    <label for="Title" class="form-label">عنوان</label>
+                                    <input aps-for="@Model.Title" name="Title" type="text" class="form-control" id="Title" placeholder="عنوان وبلاگ را وارد کنید">
+                                    <div class="invalid-feedback">لطفاً عنوان را وارد کنید</div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="Slug" class="form-label">Slug</label>
+                                    <input asp-for="@Model.Slug" name="Slug" type="text" class="form-control" id="Slug" placeholder="slug-مطلب">
+                                    <div class="invalid-feedback">لطفاً slug را وارد کنید</div>
+                                </div>
+                            </div>
+                            @Html.AntiForgeryToken()
+                            <div class="col-md-4">
+                                <div class="mb-4">
+                                    <div class="switch-container">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               id="scheduleSwitch">
+                                        <label class="form-check-label" for="scheduleSwitch">⏰ ارسال فوری</label>
+                                    </div>
+                                    <label for="SendTime" class="form-label">تاریخ ارسال</label>
+                                    <input asp-for="@Model.SendTime" name="SendTime" type="text" class="form-control" id="SendTime" readonly>
+                                    <div class="invalid-feedback">لطفاً تاریخ ارسال را انتخاب کنید</div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="CategoryId" class="form-label">دسته بندی</label>
+                                    <select asp-for="@Model.CategoryId" name="CategoryId" class="form-select" id="CategoryId">
+                                        <option value="">انتخاب دسته بندی</option>
+                                        <option value="1">تکنولوژی</option>
+                                        <option value="2">برنامه نویسی</option>
+                                        <option value="3">طراحی وب</option>
+                                        <option value="4">هوش مصنوعی</option>
+                                        <option value="5">مدیریت پروژه</option>
+                                    </select>
+                                    <div class="invalid-feedback">لطفاً دسته بندی را انتخاب کنید</div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label">تصویر شاخص</label>
+                                    <div class="upload-area" id="upload-area">
+                                        <i class="bi bi-cloud-arrow-up upload-icon"></i>
+                                        <p class="mb-2">برای آپلود تصویر کلیک کنید</p>
+                                        <p class="text-muted small mb-0">فرمت‌های مجاز: JPG, PNG (حداکثر 2MB)</p>
+                                        <input asp-for="@Model.Image" name="Image" type="file" class="d-none" id="Image">
+                                    </div>
+                                    <div class="preview mt-3 text-center d-none" id="image-preview">
+                                        <img src="" class="img-thumbnail" style="max-height: 150px">
+                                        <button type="button" class="btn btn-sm btn-danger mt-2" id="remove-image">
+                                            <i class="bi bi-trash"></i> حذف تصویر
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <label for="Description" class="form-label">متن وبلاگ</label>
+                                        @*  <button type="button" class="btn btn-sm btn-outline-primary" id="open-file-manager">
+                                                <i class="bi bi-folder2-open"></i> انتخاب از فایل‌ها
+                                            </button> *@
+                                    </div>
+                                    <div class="ckeditor-container">
+                                        <textarea asp-for="@Model.Description" name="Description" class="form-control" id="Description" rows="6" placeholder="محتویات وبلاگ را بنویسید..."></textarea>
+                                    </div>
+                                    <div class="invalid-feedback">لطفاً متن وبلاگ را وارد کنید</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*        <div class="seo-section mb-4">
+                                <h5 class="mb-4"><i class="bi bi-search me-2"></i>تنظیمات سئو</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="MetaTitle" class="form-label">عنوان متا</label>
+                                        <input type="text" class="form-control" id="MetaTitle" placeholder="عنوان برای موتورهای جستجو">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="MetaKeywords" class="form-label">کلمات کلیدی</label>
+                                        <input type="text" class="form-control" id="MetaKeywords" placeholder="کلمات کلیدی را با کاما جدا کنید">
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="MetaDescription" class="form-label">توضیحات متا</label>
+                                        <textarea class="form-control" id="MetaDescription" rows="3" placeholder="توضیحات مختصر برای موتورهای جستجو"></textarea>
+                                    </div>
+                                </div>
+                            </div> *@
+                        <div class="seo-section mb-4">
+                            <h5 class="mb-4"><i class="bi bi-search me-2"></i>تنظیمات سئو</h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="MetaTitle" class="form-label">عنوان متا</label>
+                                    <input asp-for="@Model.SeoData.MetaTitle" name="SeoData.MetaTitle" type="text" class="form-control" id="MetaTitle" placeholder="عنوان برای موتورهای جستجو">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="MetaKeywords" class="form-label">کلمات کلیدی</label>
+                                    <input asp-for="@Model.SeoData.MetaKeyWords" name="SeoData.MetaKeyWords" type="text" class="form-control" id="MetaKeywords" placeholder="کلمات کلیدی را با کاما جدا کنید">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="MetaDescription" class="form-label">توضیحات متا</label>
+                                    <textarea asp-for="@Model.SeoData.MetaDescription" name="SeoData.MetaDescription" class="form-control" id="MetaDescription" rows="3" placeholder="توضیحات مختصر برای موتورهای جستجو"></textarea>
+                                </div>
+
+                                <!-- New SEO Fields -->
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check form-switch">
+                                        <input asp-for="@Model.SeoData.IndexPage" name="SeoData.IndexPage" class="form-check-input" type="checkbox" id="IndexPage" checked>
+                                        <label class="form-check-label" for="IndexPage">فهرست‌بندی در موتورهای جستجو</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="Canonical" class="form-label">لینک کانونیکال</label>
+                                    <input asp-for="@Model.SeoData.Canonical" name="SeoData.Canonical" type="text" class="form-control" id="Canonical" placeholder="https://example.com/page">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="Schema" class="form-label">ساختار داده‌ها (Schema)</label>
+                                    <textarea asp-for="@Model.SeoData.Schema" name="SeoData.Schema" class="form-control" id="Schema" rows="5" placeholder='{"context":"https://schema.org","type":"BlogPosting"...}'></textarea>
+                                    <div class="form-text">داده‌های ساختاریافته به صورت JSON-LD وارد کنید</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-secondary">
+                                <i class="bi bi-x-circle me-2"></i>انصراف
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>ذخیره وبلاگ
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal File Manager -->
+<div class="modal fade" id="fileManagerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content file-manager-modal">
+            <div class="file-manager-header">
+                <h5 class="modal-title"><i class="bi bi-folder-fill me-2"></i>مدیریت فایل‌ها</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body file-manager-body">
+                <div class="file-type-filter text-center mb-4">
+                    <button class="btn btn-sm file-type-btn active" data-type="all">همه</button>
+                    <button class="btn btn-sm file-type-btn" data-type="image"><i class="bi bi-image"></i> تصاویر</button>
+                    <button class="btn btn-sm file-type-btn" data-type="video"><i class="bi bi-film"></i> ویدیوها</button>
+                    <button class="btn btn-sm file-type-btn" data-type="document"><i class="bi bi-file-earmark"></i> اسناد</button>
+                </div>
+
+                <div class="row" id="file-list">
+                    <!-- Files will be loaded here -->
+                </div>
+            </div>
+            <div class="file-manager-footer d-flex justify-content-between">
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-upload"></i> آپلود فایل جدید
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-secondary me-2" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> انصراف
+                    </button>
+                    <button class="btn btn-sm btn-primary" id="insert-file">
+                        <i class="bi bi-check-circle"></i> درج فایل انتخاب شده
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @*  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> *@
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+    <script src="https://cdn.ckeditor.com/4.21.0/full/ckeditor.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Persian Datepicker
+            $("#SendTime").persianDatepicker({
+                format: 'YYYY/MM/DD HH:mm',
+                observer: true,
+                autoClose: true,
+                initialValue: true,
+                timePicker: {
+                    enabled: true,
+                    meridiem: {
+                        enabled: true
+                    }
+                }
+            });
+
+            // Set initial date
+            const now = new persianDate();
+            $("#SendTime").val(now.toLocale('fa').format('YYYY/MM/DD HH:mm'));
+
+            // Theme toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('dark-mode');
+                    const icon = themeToggle.querySelector('i');
+                    if (document.body.classList.contains('dark-mode')) {
+                        icon.classList.remove('bi-moon');
+                        icon.classList.add('bi-sun');
+                    } else {
+                        icon.classList.remove('bi-sun');
+                        icon.classList.add('bi-moon');
+                    }
+                });
+            }
+
+            // Schedule switch functionality
+            const scheduleSwitch = document.getElementById('scheduleSwitch');
+            if (scheduleSwitch) {
+                scheduleSwitch.addEventListener('change', function() {
+                    if (this.checked) {
+                        // Disable the datepicker and set value
+                        $("#SendTime").attr('disabled', true);
+                        $("#SendTime").val(now.toLocale('fa').format('YYYY/MM/DD HH:mm'));
+                        $("#SendTime").value=now.toLocale('fa').format('YYYY/MM/DD HH:mm');
+                    } else {
+                        // Enable the datepicker and set current date
+                        $("#SendTime").attr('disabled', false);
+                        const now = new persianDate();
+                        $("#SendTime").val(now.toLocale('fa').format('YYYY/MM/DD HH:mm'));
+                    }
+                });
+            }
+
+            // Upload image preview
+            const uploadArea = document.getElementById('upload-area');
+            const imageInput = document.getElementById('Image');
+            const imagePreview = document.getElementById('image-preview');
+            const previewImg = imagePreview ? imagePreview.querySelector('img') : null;
+            const removeImageBtn = document.getElementById('remove-image');
+
+            if (uploadArea && imageInput) {
+                uploadArea.addEventListener('click', () => {
+                    imageInput.click();
+                });
+            }
+
+            if (imageInput) {
+                imageInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+
+                        reader.onload = function(e) {
+                            if (previewImg) {
+                                previewImg.src = e.target.result;
+                            }
+                            if (imagePreview) {
+                                imagePreview.classList.remove('d-none');
+                            }
+                            if (uploadArea) {
+                                uploadArea.classList.add('d-none');
+                            }
+                        }
+
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+            }
+
+            if (removeImageBtn) {
+                removeImageBtn.addEventListener('click', () => {
+                    if (imageInput) {
+                        imageInput.value = '';
+                    }
+                    if (previewImg) {
+                        previewImg.src = '';
+                    }
+                    if (imagePreview) {
+                        imagePreview.classList.add('d-none');
+                    }
+                    if (uploadArea) {
+                        uploadArea.classList.remove('d-none');
+                    }
+                });
+            }
+
+            // Initialize CKEditor with file management
+            function initializeCKEditor() {
+                try {
+                    if (typeof CKEDITOR === 'undefined') {
+                        console.error('کتابخانه CKEditor لود نشده است!');
+                        document.getElementById('Description').style.display = 'block';
+                        return null;
+                    }
+
+                    // Add external plugins
+                    CKEDITOR.plugins.addExternal('filebrowser', 'https://cdn.ckeditor.com/4.21.0/standard/plugins/filebrowser/', 'plugin.js');
+                    CKEDITOR.plugins.addExternal('uploadimage', 'https://cdn.ckeditor.com/4.21.0/standard/plugins/uploadimage/', 'plugin.js');
+
+                    const editor = CKEDITOR.replace('Description', {
+                        language: 'fa',
+                        height: 500,
+                        width: '100%',
+                        removePlugins: 'resize',
+                        skin: 'moono-lisa',
+                        extraPlugins: 'filebrowser,uploadimage',
+
+                        // File browser configuration
+                        filebrowserBrowseUrl: '/file-manager',
+                        filebrowserUploadUrl: '/upload',
+                        filebrowserImageUploadUrl: '/Upload/Article',
+
+                        toolbar: [
+                            { name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates'] },
+                            { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+                            { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'] },
+                            { name: 'forms', items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'] },
+                            '/',
+                            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat'] },
+                            { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language'] },
+                            { name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+                            { name: 'insert', items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'] },
+                            '/',
+                            { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+                            { name: 'colors', items: ['TextColor', 'BGColor'] },
+                            { name: 'tools', items: ['Maximize', 'ShowBlocks'] },
+                            { name: 'about', items: ['About'] },
+                            { name: 'filemanager', items: ['FileBrowser', 'Upload'] }
+                        ],
+
+                        on: {
+                            instanceReady: function(evt) {
+                                console.log('CKEditor با موفقیت مقداردهی اولیه شد!');
+                            },
+                            error: function(evt) {
+                                console.error('خطای CKEditor:', evt.message);
+                            }
+                        }
+                    });
+
+                    // Apply styles to editor
+                    editor.on('instanceReady', function() {
+                        const editorElement = document.querySelector('.ck-editor');
+                        if (editorElement) {
+                            editorElement.style.borderRadius = '10px';
+                            editorElement.style.overflow = 'hidden';
+                        }
+                    });
+
+                    return editor;
+                } catch (error) {
+                    console.error('خطا در مقداردهی اولیه CKEditor:', error);
+                    document.getElementById('Description').style.display = 'block';
+                    return null;
+                }
+            }
+
+            // Initialize CKEditor with delay
+            setTimeout(initializeCKEditor, 300);
+
+            // File Manager Modal
+            const fileManagerModal = new bootstrap.Modal(document.getElementById('fileManagerModal'));
+            const openFileManagerBtn = document.getElementById('open-file-manager');
+            const insertFileBtn = document.getElementById('insert-file');
+            const fileList = document.getElementById('file-list');
+            const fileTypeBtns = document.querySelectorAll('.file-type-btn');
+
+            // Sample files data
+            const files = [
+                { id: 1, name: 'تصویر طبیعت.jpg', type: 'image', size: '2.4 مگابایت', date: '1402/05/15' },
+                { id: 2, name: 'ویدیو آموزشی.mp4', type: 'video', size: '24.1 مگابایت', date: '1402/05/12' },
+                { id: 3, name: 'مقاله علمی.pdf', type: 'document', size: '1.1 مگابایت', date: '1402/05/10' },
+                { id: 4, name: 'طراحی لوگو.png', type: 'image', size: '0.8 مگابایت', date: '1402/05/08' },
+                { id: 5, name: 'گزارش مالی.xlsx', type: 'document', size: '0.5 مگابایت', date: '1402/05/05' },
+                { id: 6, name: 'تور مجازی.mp4', type: 'video', size: '56.7 مگابایت', date: '1402/05/01' },
+                { id: 7, name: 'عکس محصول.jpg', type: 'image', size: '3.2 مگابایت', date: '1402/04/28' },
+                { id: 8, name: 'قرارداد.docx', type: 'document', size: '0.3 مگابایت', date: '1402/04/25' }
+            ];
+
+            // Open file manager
+            if (openFileManagerBtn) {
+                openFileManagerBtn.addEventListener('click', () => {
+                    renderFiles('all');
+                    fileManagerModal.show();
+                });
+            }
+
+            // Render files in file manager
+            function renderFiles(type) {
+                fileList.innerHTML = '';
+
+                const filteredFiles = type === 'all' ? files : files.filter(file => file.type === type);
+
+                filteredFiles.forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'col-md-4 mb-3 file-item';
+                    fileItem.dataset.id = file.id;
+                    fileItem.dataset.type = file.type;
+                    fileItem.dataset.name = file.name;
+
+                    let iconClass = 'bi-file-earmark';
+                    if (file.type === 'image') iconClass = 'bi-image';
+                    if (file.type === 'video') iconClass = 'bi-film';
+
+                    fileItem.innerHTML = `
+                        <div class="text-center">
+                            <i class="bi ${iconClass} file-icon"></i>
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${file.size}</div>
+                            <div class="file-date text-muted small">${file.date}</div>
+                        </div>
+                    `;
+
+                    fileItem.addEventListener('click', function() {
+                        // Remove active class from all items
+                        document.querySelectorAll('.file-item').forEach(item => {
+                            item.classList.remove('border-primary', 'bg-light');
+                        });
+
+                        // Add active class to selected item
+                        this.classList.add('border-primary', 'bg-light');
+                    });
+
+                    fileList.appendChild(fileItem);
+                });
+            }
+
+            // File type filtering
+            fileTypeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    fileTypeBtns.forEach(b => b.classList.remove('active'));
+
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    // Filter files
+                    renderFiles(this.dataset.type);
+                });
+            });
+
+            // Insert selected file
+            if (insertFileBtn) {
+                insertFileBtn.addEventListener('click', function() {
+                    const selectedFile = document.querySelector('.file-item.border-primary');
+
+                    if (selectedFile) {
+                        const fileName = selectedFile.dataset.name;
+                        const fileType = selectedFile.dataset.type;
+
+                        // For demonstration - in a real app, you would insert the file into CKEditor
+                        alert(`فایل "${fileName}" انتخاب شد و در محتوا درج خواهد شد.`);
+
+                        // Close modal
+                        fileManagerModal.hide();
+                    } else {
+                        alert('لطفاً یک فایل را انتخاب کنید.');
+                    }
+                });
+            }
+
+            // Form validation
+            const form = document.getElementById('blog-form');
+            // if (form) {
+            //     form.addEventListener('submit', function(e) {
+            //         e.preventDefault();
+            //         let isValid = true;
+
+            //         // Reset validation
+            //         form.querySelectorAll('.form-control, .form-select').forEach(el => {
+            //             el.classList.remove('is-invalid');
+            //         });
+
+            //         // Check required fields
+            //         const requiredFields = ['Title', 'Slug', 'SendTime', 'CategoryId'];
+            //         requiredFields.forEach(id => {
+            //             const field = document.getElementById(id);
+            //             if (field && !field.value.trim()) {
+            //                 field.classList.add('is-invalid');
+            //                 isValid = false;
+            //             }
+            //         });
+
+            //         // Check CKEditor content
+            //         let editorContent = '';
+            //         try {
+            //             if (CKEDITOR.instances.Description) {
+            //                 editorContent = CKEDITOR.instances.Description.getData();
+            //             } else {
+            //                 // Fallback to textarea value if CKEditor not initialized
+            //                 const textarea = document.getElementById('Description');
+            //                 if (textarea) {
+            //                     editorContent = textarea.value;
+            //                 }
+            //             }
+            //         } catch (error) {
+            //             console.error('خطا در دریافت محتوای CKEditor:', error);
+            //         }
+
+            //         if (!editorContent.trim()) {
+            //             const descriptionField = document.getElementById('Description');
+            //             if (descriptionField) {
+            //                 descriptionField.classList.add('is-invalid');
+            //             }
+            //             isValid = false;
+            //         }
+
+            //         // Show/hide error message
+            //         const errorAlert = document.querySelector('.validation-summary');
+            //         if (errorAlert) {
+            //             if (!isValid) {
+            //                 errorAlert.classList.remove('d-none');
+            //                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            //             } else {
+            //                 errorAlert.classList.add('d-none');
+            //                 // Simulate form submission
+            //                 alert('فرم با موفقیت ارسال شد! در حال انتقال به صفحه مدیریت وبلاگ...');
+            //                 form.submit();
+            //                 // form.reset();
+
+            //                 // Reset CKEditor
+            //                 try {
+            //                     if (CKEDITOR.instances.Description) {
+            //                         CKEDITOR.instances.Description.setData('');
+            //                     } else {
+            //                         const textarea = document.getElementById('Description');
+            //                         if (textarea) {
+            //                             textarea.value = '';
+            //                         }
+            //                     }
+            //                 } catch (error) {
+            //                     console.error('خطا در بازنشانی CKEditor:', error);
+            //                 }
+
+            //                 // Reset image upload
+            //                 if (imageInput) {
+            //                     imageInput.value = '';
+            //                 }
+            //                 if (previewImg) {
+            //                     previewImg.src = '';
+            //                 }
+            //                 if (imagePreview) {
+            //                     imagePreview.classList.add('d-none');
+            //                 }
+            //                 if (uploadArea) {
+            //                     uploadArea.classList.remove('d-none');
+            //                 }
+            //             }
+            //         }
+            //     });
+            // }
+           var checkBox = document.getElementById("IndexPage");
+            checkBox.value = true;
+            if (checkBox) {
+                checkBox.addEventListener('change', function() {
+                    if (this.checked) {
+                         checkBox.value = true;
+                    } else {
+                    checkBox.value = false;
+                    }
+                });
+            }
+
+        });
+    </script>
+}

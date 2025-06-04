@@ -4,24 +4,30 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using PlanningRazorPage.Infrastructure.Utils.Decryption;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+//builder.Services.Configure<RazorViewEngineOptions>(options =>
+//{
+//    options.ViewLocationFormats.Add("/Pages/Shared/{0}.cshtml");
+//});
 
 builder.Services.RegisterApiServices();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthorization();
 
-builder.Services.AddRazorPages()
-    .AddRazorRuntimeCompilation()
-    .AddRazorPagesOptions(options =>
-    {
-        // options.Conventions.AuthorizeFolder("/Profile", "Account");
-        options.Conventions.AuthorizeFolder("/SellerPanel", "SellerPanel");
-    });
+//builder.Services.AddRazorPages()
+//    .AddRazorRuntimeCompilation()
+//    .AddRazorPagesOptions(options =>
+//    {
+//        // options.Conventions.AuthorizeFolder("/Profile", "Account");
+//        options.Conventions.AuthorizeFolder("/SellerPanel", "SellerPanel");
+//    });
 
 //builder.Services.AddAuthentication(option =>
 //{
@@ -94,18 +100,19 @@ app.Use(async (context, next) =>
 
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); 
+app.UseStaticFiles();
 
 app.UseRouting();
 app.Use(async (context, next) =>
 {
-    await next();
+
     var status = context.Response.StatusCode;
     if (status == 401)
     {
         var path = context.Request.Path;
         context.Response.Redirect($"../../../Front/Auth/Login?redirectTo={path}");
     }
+    await next();
 });
 app.UseAuthentication();
 
@@ -125,6 +132,21 @@ app.UseAuthorization();
 
 //    endpoints.MapAreaControllerRoute(name: "AdminPanel", areaName: "Admin1", pattern: "CodeYad{controller-Home}/{action-Index}/{id?}");
 //});
+
+//app.UseEndpoints(endpoints =>
+//{
+app.MapControllerRoute(name: "Default",
+   pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+//app.MapAreaControllerRoute(
+//    name: "AdminPanel",
+//    areaName: "AdminPanel",
+//    pattern: "AdminPanel/{controller=Home}/{action=Index}/{id?}");
+
+
+//});
+app.MapControllers();
 app.MapRazorPages();
+//app.MapRazorPages();
 
 app.Run();
