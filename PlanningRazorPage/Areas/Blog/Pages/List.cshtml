@@ -1,0 +1,490 @@
+﻿@page "{handler?}"
+@using PlanningRazorPage.Infrastructure
+@using PlanningRazorPage.Infrastructure.Utils
+@using PlanningRazorPage.Models.Blog
+@using PlanningRazorPage.Models.Category
+@model PlanningRazorPage.Areas.Blog.Pages.ListModel
+@{
+    ViewData["Title"] = "مدیریت وبلاگ‌ها";
+}
+
+@section Header {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #6f42c1;
+            --success-color: #1cc88a;
+            --info-color: #36b9cc;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --dark-color: #2e3a59;
+            --darker-color: #1a233a;
+        }
+
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Vazir', 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            border: none;
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            background-color: var(--dark-color);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            font-weight: 700;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table th {
+            background-color: #f8f9fc;
+            color: var(--dark-color);
+            font-weight: 700;
+            border-top: none;
+            border-bottom: 2px solid #e3e6f0;
+        }
+
+        .table td {
+            vertical-align: middle;
+            border-top: 1px solid #e3e6f0;
+        }
+
+        .badge {
+            padding: 0.5em 0.8em;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .btn-sm {
+            border-radius: 8px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .pagination .page-item .page-link {
+            border-radius: 10px;
+            margin: 0 3px;
+            border: none;
+            color: var(--dark-color);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .search-box {
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+        }
+
+            .search-box:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+            }
+
+        .filter-section {
+            background-color: #f8f9fe;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .dark-mode {
+            background-color: var(--darker-color);
+            color: #d1d4e7;
+        }
+
+            .dark-mode .card {
+                background-color: #252d48;
+                box-shadow: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.3);
+            }
+
+            .dark-mode .table th {
+                background-color: #1e263e;
+                color: #d1d4e7;
+                border-bottom: 2px solid #2a3655;
+            }
+
+            .dark-mode .table td {
+                background-color: #252d48;
+                color: #d1d4e7;
+                border-top: 1px solid #2a3655;
+            }
+
+            .dark-mode .filter-section {
+                background-color: #1e263e;
+            }
+
+        .thumbnail {
+            width: 60px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
+    <style>
+        /* Add to existing style block */
+        .btn-sm {
+            padding: 0.3rem 0.65rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary, .btn-primary span {
+            color: white !important;
+        }
+
+        .btn-danger, .btn-danger span {
+            color: white !important;
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            border-color: #4e73df;
+        }
+
+        .btn-danger {
+            background-color: #e74a3b;
+            border-color: #e74a3b;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+            border-color: #2653d4;
+        }
+
+        .btn-danger:hover {
+            background-color: #d52a1a;
+            border-color: #ca2819;
+        }
+
+        .dark-mode .btn-primary {
+            background-color: #3d5ec6;
+            border-color: #3757b8;
+        }
+
+        .dark-mode .btn-danger {
+            background-color: #d52a1a;
+            border-color: #c52617;
+        }
+
+        .dark-mode .btn-primary:hover {
+            background-color: #2d4db0;
+        }
+
+        .dark-mode .btn-danger:hover {
+            background-color: #b52214;
+        }
+    </style>
+}
+
+<div class="container-fluid px-4 py-3">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-journal-text me-2"></i>مدیریت وبلاگ‌ها</h5>
+                    <div>
+                        <button id="theme-toggle" class="btn btn-sm btn-outline-light me-2">
+                            <i class="bi bi-moon"></i> تغییر تم
+                        </button>
+                        <a href="/Blog/Add" class="btn btn-sm btn-success">
+                            <i class="bi bi-plus-circle me-2"></i>افزودن وبلاگ جدید
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="filter-section">
+                        <form method="get" class="row g-3">
+                            <div class="col-md-4">
+                                <label for="search" class="form-label">جستجو</label>
+                                <input type="text" class="form-control search-box" name="search"
+                                       value="@Model.FilterParams.Search" placeholder="جستجو بر اساس عنوان یا توضیحات...">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="category" class="form-label">دسته بندی</label>
+                                <select class="form-select" name="categoryId">
+                                    <option value="">همه دسته‌ها</option>
+                                    @foreach (var category in @Model.CategoryList)
+                                    {
+                                        <option value="@category.Id"
+                                                selected="@(Model.FilterParams.CategoryId == category.Id)">
+                                            @category.Title
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="orderBy" class="form-label">مرتب‌سازی بر اساس</label>
+                                <select class="form-select" name="searchOrderBy">
+                                    <option value="">پیش‌فرض</option>
+                                    <option value="visit" selected="@(Model.FilterParams.SearchOrderBy == PostSearchOrderBy.visit)">
+                                        بیشترین بازدید
+                                    </option>
+                                    <option value="latest" selected="@(Model.FilterParams.SearchOrderBy == PostSearchOrderBy.latest)">
+                                        جدیدترین
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-funnel me-2"></i>اعمال فیلتر
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">تصویر</th>
+                                    <th scope="col">عنوان</th>
+                                    <th scope="col">دسته بندی</th>
+                                    <th scope="col">تاریخ انتشار</th>
+                                    <th scope="col">بازدید</th>
+                                    <th scope="col">وضعیت</th>
+                                    <th scope="col">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.BlogFilter?.Data != null && Model.BlogFilter.Data.Any())
+                                {
+                                    @foreach (var item in Model.BlogFilter.Data)
+                                    {
+                                        <tr>
+                                            <td>@item.Id</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.ImageName))
+                                                {
+                                                    <img src="@Directories.GetBlogImage(item.ImageName)" class="thumbnail" alt="تصویر شاخص">
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">بدون تصویر</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="fw-bold">@item.Title</div>
+                                                <div class="text-muted small mt-1">@item.Slug</div>
+                                            </td>
+                                            <td> @Model.CategoryList.FirstOrDefault(i => i.Id == item.CategoryId)?.Title</td>
+                                            <td>
+                                                <div>@item.SendTime.ToPersianDateTime()</div>
+                                                <div class="small text-muted">@item.CreatorUserName</div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info">@item.Visit</span>
+                                            </td>
+                                            <td>
+                                                @if (item.IsSend)
+                                                {
+                                                    <span class="badge bg-success">منتشر شده</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning">پیش‌نویس</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <a asp-area="Blog" asp-page="Edit" asp-route-id="@item.Id"
+                                                       class="btn btn-sm btn-primary d-flex align-items-center">
+                                                        <i class="bi bi-pencil-square me-1"></i>
+                                                        <span class="text-white">ویرایش</span>
+                                                    </a>
+                                                    @*     <form method="post" asp-page="/Blog/List" asp-page-handler="Delete" asp-route-id="@item.Id" class="d-inline">
+                                                        @Html.AntiForgeryToken()
+                                                        <button type="submit" class="btn btn-sm btn-danger d-flex align-items-center">
+                                                            <i class="bi bi-trash me-1"></i>
+                                                            <span class="text-white">حذف</span>
+                                                        </button>
+                                                    </form> *@
+                                                    <button type="button" onclick="deleteItem(@item.Id)" class="btn btn-sm btn-danger d-flex align-items-center">
+                                                        <i class="bi bi-trash me-1"></i>
+                                                        <span class="text-white">حذف</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="8" class="text-center py-4">
+                                            <div class="alert alert-info">
+                                                <i class="bi bi-info-circle me-2"></i>موردی یافت نشد
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    @if (Model.BlogFilter != null && Model.BlogFilter.PageCount > 1)
+                    {
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                @if (Model.BlogFilter.CurrentPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           asp-route-pageId="@(Model.BlogFilter.CurrentPage - 1)"
+                                           asp-route-search="@Model.FilterParams.Search"
+                                           asp-route-categoryId="@Model.FilterParams.CategoryId"
+                                           asp-route-searchOrderBy="@Model.FilterParams.SearchOrderBy">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                }
+
+                                @for (int i = Model.BlogFilter.StartPage; i <= Model.BlogFilter.EndPage; i++)
+                                {
+                                    <li class="page-item @(i == Model.BlogFilter.CurrentPage ? "active" : "")">
+                                        <a class="page-link"
+                                           asp-route-pageId="@i"
+                                           asp-route-search="@Model.FilterParams.Search"
+                                           asp-route-categoryId="@Model.FilterParams.CategoryId"
+                                           asp-route-searchOrderBy="@Model.FilterParams.SearchOrderBy">@i</a>
+                                    </li>
+                                }
+
+                                @if (Model.BlogFilter.CurrentPage < Model.BlogFilter.PageCount)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           asp-route-pageId="@(Model.BlogFilter.CurrentPage + 1)"
+                                           asp-route-search="@Model.FilterParams.Search"
+                                           asp-route-categoryId="@Model.FilterParams.CategoryId"
+                                           asp-route-searchOrderBy="@Model.FilterParams.SearchOrderBy">
+                                            <i class="bi bi-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('dark-mode');
+                    const icon = themeToggle.querySelector('i');
+                    if (document.body.classList.contains('dark-mode')) {
+                        icon.classList.remove('bi-moon');
+                        icon.classList.add('bi-sun');
+                    } else {
+                        icon.classList.remove('bi-sun');
+                        icon.classList.add('bi-moon');
+                    }
+                });
+            }
+
+            // Delete confirmation
+            const deleteButtons = document.querySelectorAll('form[method="post"] button[type="submit"]');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const form = this.closest('form');
+
+                    Swal.fire({
+                        title: 'آیا مطمئن هستید؟',
+                        text: "این عملیات قابل بازگشت نیست!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'بله، حذف شود',
+                        cancelButtonText: 'لغو'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+            async function deleteItem(id) {
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            const url = `/Blog/List?handler=Delete&id=${id}`;
+
+            try {
+                const result = await Swal.fire({
+                    title: 'آیا مطمئن هستید؟',
+                    text: "این عملیات قابل بازگشت نیست!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'بله، حذف شود',
+                    cancelButtonText: 'لغو'
+                });
+
+                if (result.isConfirmed) {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': token,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        // حذف سطر از جدول
+                        const row = document.getElementById(`row-${id}`);
+                        if (row) row.remove();
+                         window.location.reload();
+                        // نمایش پیام موفقیت با SweetAlert
+                        // Swal.fire(
+                        //     'حذف شد!',
+                        //     'آیتم با موفقیت حذف شد.',
+                        //     'success'
+                        // );
+                    } else {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'خطا در حذف');
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire(
+                    'خطا!',
+                    'خطا در حذف: ' + error.message,
+                    'error'
+                );
+            }
+        }
+    </script>
+}

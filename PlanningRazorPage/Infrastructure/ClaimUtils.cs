@@ -18,4 +18,11 @@ public static class ClaimUtils
 
         return Convert.ToString(principal.FindFirst(ClaimTypes.MobilePhone)?.Value)!;
     }
+    public static string GetUserName(this ClaimsPrincipal principal)
+    {
+        if (principal == null)
+            throw new ArgumentNullException(nameof(principal));
+
+        return Convert.ToString(principal.FindFirst(ClaimTypes.Name)?.Value)!;
+    }
 }

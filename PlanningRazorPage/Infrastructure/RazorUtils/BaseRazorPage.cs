@@ -80,6 +80,14 @@ public class BaseRazorPage : PageModel
         var model = JsonConvert.SerializeObject(ApiResult.Success(message));
         HttpContext.Response.Cookies.Append("SystemAlert", model);
     }
+    protected IActionResult SuccessAlert(ApiResult result, IActionResult redirectPath)
+    {
+        var model = JsonConvert.SerializeObject(result);
+        HttpContext.Response.Cookies.Append("SystemAlert", model);
+        if (result.IsSuccess == false)
+            return Page();
+        return redirectPath;
+    }
     protected void ErrorAlert()
     {
         var model = JsonConvert.SerializeObject(ApiResult.Error());

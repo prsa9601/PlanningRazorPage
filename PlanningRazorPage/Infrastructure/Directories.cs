@@ -5,7 +5,8 @@
         public const string ProductImages = "/images/products";
         public const string ArticleImages = "wwwroot/images/Article";
 
-        public static string GetArticleImages(string imageName) => $"{ArticleImages.Replace("wwwroot", "")}/{imageName}";
+        public static string GetArticleImages(string imageName)
+            => $"{ArticleImages.Replace("wwwroot", "")}/{imageName}";
 
         public const string ProductGalleryImage = "/images/products/gallery";
 
@@ -74,6 +75,10 @@
         public static string GetProductImageGallery(string imageName)
         {
             return $"{SiteSettings.ServerPath}{ProductGalleryImage}/{imageName}";
+        }
+        public static string GetBlogImage(string imageName)
+        {
+            return $"{SiteSettings.ServerPath}{BlogImage}/{imageName}";
         }
         public static string GetBannerImage(string imageName)
         {
