@@ -1,0 +1,116 @@
+﻿<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+            <i class="mdi mdi-menu mdi-24px"></i>
+        </a>
+    </div>
+
+    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+        <!-- Search -->
+        <div class="navbar-nav align-items-center">
+            <div class="nav-item d-flex align-items-center">
+                <i class="mdi mdi-magnify mdi-24px lh-0"></i>
+                <input type="text" class="form-control border-0 shadow-none" placeholder="جستجو..." aria-label="جستجو...">
+            </div>
+        </div>
+        <!-- /Search -->
+
+        <ul class="navbar-nav flex-row align-items-center ms-auto">
+            <!-- Notification -->
+            <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    <i class="mdi mdi-bell-outline mdi-24px"></i>
+                    <span class="badge bg-danger rounded-pill badge-notifications">5</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end py-0">
+                    <li class="dropdown-menu-header border-bottom">
+                        <div class="dropdown-header d-flex align-items-center py-3">
+                            <h5 class="text-body mb-0 me-auto">اعلان‌ها</h5>
+                            <a href="javascript:void(0)" class="dropdown-notifications-all text-body" data-bs-toggle="tooltip" data-bs-placement="top" title="مشاهده همه">
+                                <i class="mdi mdi-checkbox-marked-outline mdi-24px"></i>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="dropdown-notifications-list scrollable-container">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar">
+                                            <span class="avatar-initial rounded-circle bg-label-success">
+                                                <i class="mdi mdi-calendar-check mdi-24px"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">جلسه جدید</h6>
+                                        <p class="mb-0">جلسه برنامه‌ریزی هفتگی در 30 دقیقه آینده شروع می‌شود</p>
+                                        <small class="text-muted">10 دقیقه پیش</small>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown-menu-footer border-top">
+                        <a href="javascript:void(0);" class="dropdown-item d-flex justify-content-center p-3">
+                            مشاهده همه اعلان‌ها
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!--/ Notification -->
+
+            <!-- User -->
+            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                        <img src="~/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle">
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar avatar-online">
+                                        <img src="~/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle">
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <span class="fw-semibold d-block">کاربر</span>
+                                    <small class="text-muted">مدیر</small>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="mdi mdi-account-outline me-2"></i>
+                            <span class="align-middle">پروفایل من</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="mdi mdi-cog-outline me-2"></i>
+                            <span class="align-middle">تنظیمات</span>
+                        </a>
+                    </li>
+                    <li>
+                        <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="mdi mdi-power me-2"></i>
+                            <span class="align-middle">خروج</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!--/ User -->
+        </ul>
+    </div>
+</nav>
+

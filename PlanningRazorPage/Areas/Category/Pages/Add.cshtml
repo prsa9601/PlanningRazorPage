@@ -1,0 +1,413 @@
+﻿@page
+@model PlanningRazorPage.Areas.Category.AddModel
+@{
+    ViewData["Title"] = "افزودن دسته بندی جدید";
+    Layout = "_Layout";
+}
+@section Header
+{
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #6f42c1;
+            --success-color: #1cc88a;
+            --dark-color: #2e3a59;
+            --darker-color: #1a233a;
+        }
+
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Vazir', 'Segoe UI', Tahoma, sans-serif;
+            color: #4e4e4e;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            border: none;
+            width: 100%;
+        }
+
+        .card-header {
+            background-color: var(--dark-color);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            font-weight: 700;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            transition: all 0.3s;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+            }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 10px;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+            .btn-primary:hover {
+                background-color: #2e59d9;
+                border-color: #2653d4;
+                transform: translateY(-2px);
+            }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #4e4e4e;
+        }
+
+        .validation-summary {
+            border-radius: 10px;
+            border-left: 5px solid #e74a3b;
+        }
+
+        .seo-section {
+            background-color: #f8f9fe;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        .dark-mode {
+            background-color: var(--darker-color);
+            color: #d1d4e7;
+        }
+
+            .dark-mode .card {
+                background-color: #252d48;
+                box-shadow: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.3);
+            }
+
+            .dark-mode .form-control, .dark-mode .form-select {
+                background-color: #1e263e;
+                border-color: #2a3655;
+                color: #d1d4e7;
+            }
+
+            .dark-mode .form-label {
+                color: #d1d4e7;
+            }
+
+            .dark-mode .seo-section {
+                background-color: #1e263e;
+            }
+
+        .container-fluid {
+            padding: 20px;
+        }
+
+        .switch-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .form-check-label {
+            margin-right: 10px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .dark-mode .form-check-label {
+            color: #d1d4e7;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dark-mode .form-section {
+            border-bottom-color: #2a3655;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            border-right: 4px solid var(--primary-color);
+            padding-right: 15px;
+            margin-bottom: 20px;
+        }
+
+        .dark-mode .section-title {
+            color: #d1d4e7;
+        }
+
+        .category-icon {
+            font-size: 24px;
+            margin-left: 10px;
+            color: var(--primary-color);
+        }
+
+        .dark-mode .category-icon {
+            color: #d1d4e7;
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+            .form-header h2 {
+                display: flex;
+                align-items: center;
+                margin: 0;
+            }
+
+        /*      media (max-width: 768px) {
+                    .card-body
+
+                {
+                    padding: 1.5rem;
+                }
+
+                .form-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                .theme-toggle-container {
+                    margin-top: 15px;
+                }
+
+                } */
+    </style>
+}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-header">
+                        <h2>
+                            <i class="bi bi-plus-circle category-icon"></i>
+                            افزودن دسته بندی جدید
+                        </h2>
+                        <div class="theme-toggle-container">
+                            <button id="theme-toggle" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-moon"></i> تغییر تم
+                            </button>
+                        </div>
+                    </div>
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger validation-summary mb-4">
+                            <i class="bi bi-exclamation-circle me-2"></i>
+                            <span>لطفا خطاهای فرم را برطرف کنید</span>
+                            <ul class="mt-2 mb-0">
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                    <form method="post" asp-page="/Category/Add">
+                         @Html.AntiForgeryToken() 
+
+                        <div class="form-section">
+                            <h4 class="section-title">اطلاعات اصلی</h4>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label asp-for="Title" class="form-label"></label>
+                                    <input asp-for="@Model.Title" id="Title" name="Title" type="text" class="form-control" placeholder="عنوان دسته بندی را وارد کنید">
+                                    <span asp-validation-for="Title" class="text-danger small mt-1 d-block"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label asp-for="Slug" class="form-label"></label>
+                                    <input asp-for="@Model.Slug" id="Slug" name="Slug" type="text" class="form-control" placeholder="slug-دسته-بندی">
+                                    <span asp-validation-for="Slug" class="text-danger small mt-1 d-block"></span>
+                                    <div class="form-text mt-1">این slug در آدرس دسته بندی استفاده خواهد شد</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4 class="section-title d-flex align-items-center">
+                                <i class="bi bi-search me-2"></i> تنظیمات سئو
+                            </h4>
+
+                            <div class="seo-section">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="seoData.MetaTitle" class="form-label"></label>
+                                        <input asp-for="@Model.seoData.MetaTitle" id="seoData.MetaTitle" name="seoData.MetaTitle" type="text" class="form-control" placeholder="عنوان برای موتورهای جستجو">
+                                        <span asp-validation-for="seoData.MetaTitle" class="text-danger small mt-1 d-block"></span>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="seoData.MetaKeyWords" class="form-label"></label>
+                                        <input asp-for="@Model.seoData.MetaKeyWords" id="seoData.MetaKeyWords" name="seoData.MetaKeyWords" type="text" class="form-control" placeholder="کلمات کلیدی را با کاما جدا کنید">
+                                        <span asp-validation-for="seoData.MetaKeyWords" class="text-danger small mt-1 d-block"></span>
+                                    </div>
+
+                                    <div class="col-12 mb-3">
+                                        <label asp-for="seoData.MetaDescription" class="form-label"></label>
+                                        <textarea asp-for="@Model.seoData.MetaDescription" name="seoData.MetaDescription" id="seoData.MetaDescription" class="form-control" rows="3" placeholder="توضیحات مختصر برای موتورهای جستجو"></textarea>
+                                        <span asp-validation-for="seoData.MetaDescription" class="text-danger small mt-1 d-block"></span>
+                                    </div>
+
+                                   @*  <div class="col-md-6 mb-3">
+                                        <div class="form-check form-switch">
+                                            <input asp-for="seoData.IndexPage" class="form-check-input" type="checkbox">
+                                            <label class="form-check-label" asp-for="seoData.IndexPage"></label>
+                                        </div>
+                                    </div> *@
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-check form-switch">
+                                            <input asp-for="@Model.seoData.IndexPage" id="seoData.IndexPage" name="seoData.IndexPage" class="form-check-input" type="checkbox" checked>
+                                            <label class="form-check-label" for="IndexPage">فهرست‌بندی در موتورهای جستجو</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="seoData.Canonical" class="form-label"></label>
+                                        <input asp-for="seoData.Canonical" name="seoData.Canonical" id="seoData.Canonical" type="text" class="form-control" placeholder="https://example.com/page">
+                                        <span asp-validation-for="seoData.Canonical" class="text-danger small mt-1 d-block"></span>
+                                    </div>
+
+                                    <div class="col-12 mb-3">
+                                        <label asp-for="seoData.Schema" class="form-label"></label>
+                                        <textarea asp-for="@Model.seoData.Schema" name="seoData.Schema" id="seoData.Schema" class="form-control" rows="5" placeholder='{"context":"https://schema.org","type":"BlogPosting"...}'></textarea>
+                                        <span asp-validation-for="seoData.Schema" class="text-danger small mt-1 d-block"></span>
+                                        <div class="form-text">داده‌های ساختاریافته به صورت JSON-LD وارد کنید</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-area="Blog" asp-page="/Category/List" class="btn btn-secondary">
+                                <i class="bi bi-x-circle me-2"></i>انصراف
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>ذخیره دسته بندی
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تغییر تم
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('dark-mode');
+                    const icon = themeToggle.querySelector('i');
+                    if (document.body.classList.contains('dark-mode')) {
+                        icon.classList.remove('bi-moon');
+                        icon.classList.add('bi-sun');
+                        themeToggle.innerHTML = '<i class="bi bi-sun"></i> تغییر تم';
+                    } else {
+                        icon.classList.remove('bi-sun');
+                        icon.classList.add('bi-moon');
+                        themeToggle.innerHTML = '<i class="bi bi-moon"></i> تغییر تم';
+                    }
+                });
+            }
+
+            // تولید خودکار Slug
+            const titleInput = document.querySelector('input[name="Title"]');
+            const slugInput = document.querySelector('input[name="Slug"]');
+
+            if (titleInput && slugInput) {
+                titleInput.addEventListener('input', function() {
+                    if (!slugInput.value) {
+                        const title = this.value;
+                        const slug = title
+                            .trim()
+                            .toLowerCase()
+                            .replace(/[^a-z0-9\u0600-\u06FF\s-]/g, '')
+                            .replace(/\s+/g, '-')
+                            .replace(/-+/g, '-');
+
+                        slugInput.value = slug;
+                    }
+                });
+            }
+
+            // اعتبارسنجی فرم
+            // const form = document.querySelector('form');
+            // if (form) {
+            //     form.addEventListener('submit', function(e) {
+            //         let isValid = true;
+
+            //         // فیلدهای اجباری
+            //         const requiredFields = [
+            //             document.querySelector('input[name="Title"]'),
+            //             document.querySelector('input[name="Slug"]'),
+            //             document.querySelector('input[name="seoData.MetaTitle"]'),
+            //             document.querySelector('input[name="seoData.MetaKeyWords"]'),
+            //             document.querySelector('textarea[name="seoData.MetaDescription"]')
+            //         ];
+
+            //         requiredFields.forEach(field => {
+            //             if (field && !field.value.trim()) {
+            //                 isValid = false;
+            //                 field.classList.add('is-invalid');
+
+            //                 // نمایش پیام خطا
+            //                 const errorSpan = field.closest('.mb-3, .mb-4')?.querySelector('.invalid-feedback');
+            //                 if (errorSpan) {
+            //                     errorSpan.style.display = 'block';
+            //                 }
+            //             } else if (field) {
+            //                 field.classList.remove('is-invalid');
+            //             }
+            //         });
+
+            //         if (!isValid) {
+            //             e.preventDefault();
+            //             const errorAlert = document.querySelector('.validation-summary');
+            //             if (errorAlert) {
+            //                 errorAlert.classList.remove('d-none');
+            //                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            //             }
+            //         }
+            //     });
+            // }
+               var checkBox = document.getElementById("seoData.IndexPage");
+            checkBox.value = true;
+            if (checkBox) {
+                checkBox.addEventListener('change', function() {
+                    if (this.checked) {
+                         checkBox.value = true;
+                    } else {
+                    checkBox.value = false;
+                    }
+                });
+            }
+
+        });
+    </script>
+}

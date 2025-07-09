@@ -31,7 +31,7 @@ namespace PlanningRazorPage.Models.Blog
     {
         public long BlogId { get; set; }
         public string Slug { get; set; }
-        public IFormFile Image { get; set; }
+        //public IFormFile? Image { get; set; }
         public DateTime SendTime { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -39,6 +39,11 @@ namespace PlanningRazorPage.Models.Blog
         public SeoData SeoData { get; set; }
         public bool IsSend { get; set; }
         public long CategoryId { get; set; }
+    }
+    public class SetImageBlogCommand
+    {
+        public IFormFile Image { get; set; }
+        public long Id { get; set; }
     }
     public class IncreaseBlogVisitCommand 
     {

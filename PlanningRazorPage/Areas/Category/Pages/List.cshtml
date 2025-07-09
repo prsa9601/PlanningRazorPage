@@ -1,0 +1,455 @@
+﻿@page
+@using PlanningRazorPage.Infrastructure.Utils
+@model PlanningRazorPage.Areas.Category.ListModel
+@{
+    ViewData["Title"] = "مدیریت دسته‌بندی‌ها";
+}
+
+@section Header {
+    <style>
+        :root {
+        --primary-color: #4e73df;
+        --secondary-color: #6f42c1;
+        --success-color: #1cc88a;
+        --info-color: #36b9cc;
+        --warning-color: #f6c23e;
+        --danger-color: #e74a3b;
+        --dark-color: #2e3a59;
+        --darker-color: #1a233a;
+        }
+
+        body {
+        background-color: #f8f9fc;
+        font-family: 'Vazir', 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        .card {
+        border-radius: 15px;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        border: none;
+        margin-bottom: 2rem;
+        }
+
+        .card-header {
+        background-color: var(--dark-color);
+        color: white;
+        border-radius: 15px 15px 0 0 !important;
+        font-weight: 700;
+        padding: 1.25rem 1.5rem;
+        }
+
+        .table-responsive {
+        border-radius: 10px;
+        overflow: hidden;
+        }
+
+        .table th {
+        background-color: #f8f9fc;
+        color: var(--dark-color);
+        font-weight: 700;
+        border-top: none;
+        border-bottom: 2px solid #e3e6f0;
+        }
+
+        .table td {
+        vertical-align: middle;
+        border-top: 1px solid #e3e6f0;
+        }
+
+        .badge {
+        padding: 0.5em 0.8em;
+        border-radius: 10px;
+        font-weight: 600;
+        }
+
+        .btn-sm {
+        border-radius: 8px;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        }
+
+        .pagination .page-item .page-link {
+        border-radius: 10px;
+        margin: 0 3px;
+        border: none;
+        color: var(--dark-color);
+        }
+
+        .pagination .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        }
+
+        .search-box {
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s;
+        }
+
+        .search-box:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+        }
+
+        .filter-section {
+        background-color: #f8f9fe;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        }
+
+        .dark-mode {
+        background-color: var(--darker-color);
+        color: #d1d4e7;
+        }
+
+        .dark-mode .card {
+        background-color: #252d48;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .dark-mode .table th {
+        background-color: #1e263e;
+        color: #d1d4e7;
+        border-bottom: 2px solid #2a3655;
+        }
+
+        .dark-mode .table td {
+        background-color: #252d48;
+        color: #d1d4e7;
+        border-top: 1px solid #2a3655;
+        }
+
+        .dark-mode .filter-section {
+        background-color: #1e263e;
+        }
+
+        /* Button styles */
+        .btn-sm {
+        padding: 0.3rem 0.65rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        }
+
+        .btn-primary, .btn-primary span {
+        color: white !important;
+        }
+
+        .btn-danger, .btn-danger span {
+        color: white !important;
+        }
+
+        .btn-primary {
+        background-color: #4e73df;
+        border-color: #4e73df;
+        }
+
+        .btn-danger {
+        background-color: #e74a3b;
+        border-color: #e74a3b;
+        }
+
+        .btn-primary:hover {
+        background-color: #2e59d9;
+        border-color: #2653d4;
+        }
+
+        .btn-danger:hover {
+        background-color: #d52a1a;
+        border-color: #ca2819;
+        }
+
+        .dark-mode .btn-primary {
+        background-color: #3d5ec6;
+        border-color: #3757b8;
+        }
+
+        .dark-mode .btn-danger {
+        background-color: #d52a1a;
+        border-color: #c52617;
+        }
+
+        .dark-mode .btn-primary:hover {
+        background-color: #2d4db0;
+        }
+
+        .dark-mode .btn-danger:hover {
+        background-color: #b52214;
+        }
+
+        .seo-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        margin-right: 0.25rem;
+        border-radius: 4px;
+        }
+    </style>
+}
+
+<div class="container-fluid px-4 py-3">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-tags me-2"></i>مدیریت دسته‌بندی‌ها</h5>
+                    <div>
+                        <button id="theme-toggle" class="btn btn-sm btn-outline-light me-2">
+                            <i class="bi bi-moon"></i> تغییر تم
+                        </button>
+                        <a href="/Category/Add" class="btn btn-sm btn-success">
+                            <i class="bi bi-plus-circle me-2"></i>افزودن دسته جدید
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="filter-section">
+                        <form method="get" class="row g-3">
+                            <div class="col-md-10">
+                                <label for="search" class="form-label">جستجو</label>
+                                <input type="text" class="form-control search-box" name="FilterParams.Search"
+                                placeholder="جستجو بر اساس عنوان...">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-funnel me-2"></i>اعمال فیلتر
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">عنوان</th>
+                                    <th scope="col">اسلاگ</th>
+                                    <th scope="col">تنظیمات SEO</th>
+                                    <th scope="col">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.categories != null && Model.categories.Data.Any())
+                                {
+                                    int number = 0;
+                                    @foreach (var category in Model.categories.Data)
+                                    {
+                                       
+                                        number++;
+                                        <tr id="row-@category.Id" data-index="@number">
+                                            <!-- تغییر در سلول شماره ردیف -->
+                                            <td class="row-number">@number</td>
+                                            <td>
+                                                <div class="fw-bold">@category.Title</div>
+                                            </td>
+                                            <td>@category.Slug</td>
+                                            <td>
+                                                @if (category.SeoData != null)
+                                                {
+                                                    <div class="d-flex flex-wrap">
+                                                        @if (!string.IsNullOrEmpty(category.SeoData.MetaTitle))
+                                                        {
+                                                            <span class="badge bg-info seo-badge">عنوان: @category.SeoData.MetaTitle.Truncate(15)</span>
+                                                        }
+                                                        @if (!string.IsNullOrEmpty(category.SeoData.MetaDescription))
+                                                        {
+                                                            <span class="badge bg-secondary seo-badge">توضیحات: @category.SeoData.MetaDescription.Truncate(20)</span>
+                                                        }
+                                                        <span class="badge @(category.SeoData.IndexPage ? "bg-success" : "bg-warning") seo-badge">
+                                                            @(category.SeoData.IndexPage ? "ایندکس" : "عدم ایندکس")
+                                                        </span>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted small">بدون تنظیمات</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <a href="/Category/Edit?id=@category.Id"
+                                                    class="btn btn-sm btn-primary d-flex align-items-center">
+                                                        <i class="bi bi-pencil-square me-1"></i>
+                                                        <span class="text-white">ویرایش</span>
+                                                    </a>
+                                                    <button type="button" onclick="deleteCategory(@category.Id)"
+                                                    class="btn btn-sm btn-danger d-flex align-items-center">
+                                                        <i class="bi bi-trash me-1"></i>
+                                                        <span class="text-white">حذف</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4">
+                                            <div class="alert alert-info">
+                                                <i class="bi bi-info-circle me-2"></i>هیچ دسته‌بندی یافت نشد
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Pagination -->
+                @if (Model.categories != null && Model.categories.PageCount > 1)
+                {
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            @if (Model.categories.CurrentPage > 1)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link"
+                                    @*     asp-route-FilterParams.PageId="1"
+                                           asp-route-FilterParams.Search="@Model.FilterParams.Search"
+                                           asp-route-FilterParams.SearchOrderBy="@Model.FilterParams.SearchOrderBy"
+                                           asp-route-FilterParams.CategoryId="@Model.FilterParams.CategoryId"
+ *@
+                                       href="@Url.Page("./List", new {
+                                               PageId = 1,
+                                               Search = @Model.FilterParams.Search,
+                                           })">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            }
+
+                            @for (int i = Model.categories.StartPage; i <= Model.categories.EndPage; i++)
+                            {
+                                <li class="page-item @(i == Model.categories.CurrentPage ? "active" : "")
+                                                         @(i == Model.categories.CurrentPage ? "disabled" : "")">
+                                    <a class="page-link"
+                                    @*  asp-route-FilterParams.PageId="@i"
+                                           asp-route-FilterParams.Search="@Model.FilterParams.Search"
+                                           asp-route-FilterParams.SearchOrderBy="@Model.FilterParams.SearchOrderBy"
+                                           asp-route-FilterParams.CategoryId="@Model.FilterParams.CategoryId"
+ *@
+                                       href="@Url.Page("./List", new {
+                                               PageId = i,
+                                               Search = @Model.FilterParams.Search,
+                                           })">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+
+                            @if (Model.categories.CurrentPage < Model.categories.PageCount)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link"
+                                    @* asp-route-FilterParams.PageId="@Model.categories.EndPage"
+                                           asp-route-FilterParams.Search="@Model.FilterParams.Search"
+                                           asp-route-FilterParams.SearchOrderBy="@Model.FilterParams.SearchOrderBy"
+                                           asp-route-FilterParams.CategoryId="@Model.FilterParams.CategoryId" *@
+                                       href="@Url.Page("./List", new {
+                                               PageId = Model.categories.EntityCount,
+                                               Search = @Model.FilterParams.Search,
+                                           })">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('dark-mode');
+                    const icon = themeToggle.querySelector('i');
+                    if (document.body.classList.contains('dark-mode')) {
+                        icon.classList.remove('bi-moon');
+                        icon.classList.add('bi-sun');
+                    } else {
+                        icon.classList.remove('bi-sun');
+                        icon.classList.add('bi-moon');
+                    }
+                });
+            }
+        });
+
+           // تابع به‌روزرسانی شماره ردیف‌ها
+        function updateRowNumbers() {
+            const dataRows = document.querySelectorAll('tr[id^="row-"]');
+            dataRows.forEach((row, index) => {
+                const rowNumberCell = row.querySelector('.row-number');
+                if (rowNumberCell) {
+                    rowNumberCell.textContent = index + 1;
+                }
+            });
+        }
+
+        async function deleteCategory(id) {
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            const url = `/Category/List?handler=Delete&id=${id}`;
+
+            try {
+                const result = await Swal.fire({
+                    title: 'آیا مطمئن هستید؟',
+                    text: "این عملیات قابل بازگشت نیست!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'بله، حذف شود',
+                    cancelButtonText: 'لغو'
+                });
+
+                if (result.isConfirmed) {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': token,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        // Remove row from table
+                        const row = document.getElementById(`row-${id}`);
+                        if (row) row.remove();
+                       
+                         updateRowNumbers();
+
+                        // Show success message
+                    
+                        location.reload();
+                        // Swal.fire(
+                        //     'حذف شد!',
+                        //     'دسته‌بندی با موفقیت حذف شد.',
+                        //     'success'
+                        // );
+                    } else {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'خطا در حذف دسته‌بندی');
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire(
+                    'خطا!',
+                    'خطا در حذف دسته‌بندی: ' + error.message,
+                    'error'
+                );
+            }
+        }
+    </script>
+}

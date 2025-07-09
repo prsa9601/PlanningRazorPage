@@ -10,6 +10,8 @@ namespace PlanningRazorPage.Services.Blog
         Task<ApiResult> Edit(EditBlogCommand command);
         Task<ApiResult> Remove(long BlogId);
         Task<ApiResult> IncreaseVisit(IncreaseBlogVisitCommand command);
+        Task<ApiResult> SetImage(SetImageBlogCommand command);
+
         Task<BlogDto?> GetBlogById(long BlogId);
         Task<BlogDto?> GetBlogBySlug(string Slug);
         Task<BlogFilterResult> GetBlogByFilter(BlogFilterParam filterParams);
@@ -41,7 +43,7 @@ namespace PlanningRazorPage.Services.Blog
             formData.Add(new StringContent(command.SeoData.Schema), "Schema");
             //formData.Add(new StringContent(JsonConvert.SerializeObject(command.SeoData)), "SeoData");
             formData.Add(new StreamContent(command.Image.OpenReadStream()), "ImageName", command.Image.FileName);
-            formData.Add(new StringContent(command.IsSend.ToString()),"IsSend");
+            formData.Add(new StringContent(command.IsSend.ToString()), "IsSend");
             formData.Add(new StringContent(command.SendTime.ToString("o")), "SendTime");
             var result = await _client.PostAsync($"{ModuleName}/CreateBlog", formData);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
@@ -57,7 +59,12 @@ namespace PlanningRazorPage.Services.Blog
             formData.Add(new StringContent(command.CreatorUserName.ToString()), "CreatorUserName");
             formData.Add(new StringContent(command.Title.ToString()), "Title");
             //formData.Add(new StringContent(JsonConvert.SerializeObject(command.SeoData)), "SeoData");
-            formData.Add(new StreamContent(command.Image.OpenReadStream()), "ImageName", command.Image.FileName);
+            //if (command.Image != null)
+            //{
+            //    formData.Add(new StreamContent(command.Image.OpenReadStream()), "ImageName", command.Image.FileName);
+            //}
+            //formData.Add(new StreamContent(new IFormFile { }, "ImageName", null);
+
             formData.Add(new StringContent(command.IsSend.ToString()), "IsSend");
             formData.Add(new StringContent(command.SendTime.ToString("o")), "SendTime");
 
@@ -68,6 +75,15 @@ namespace PlanningRazorPage.Services.Blog
             formData.Add(new StringContent(command.SeoData.Canonical), "Canonical");
             formData.Add(new StringContent(command.SeoData.Schema), "Schema");
             var result = await _client.PatchAsync($"{ModuleName}/EditBlog", formData);
+            return await result.Content.ReadFromJsonAsync<ApiResult>();
+        }
+        public async Task<ApiResult> SetImage(SetImageBlogCommand command)
+        {
+            var formData = new MultipartFormDataContent();
+            formData.Add(new StreamContent(command.Image.OpenReadStream()), "Image", command.Image.FileName);
+            formData.Add(new StringContent(command.Id.ToString()), "Id");
+
+            var result = await _client.PatchAsync($"{ModuleName}/SetImageBlog", formData);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 
@@ -84,7 +100,7 @@ namespace PlanningRazorPage.Services.Blog
             if (filterParams.Search != null)
                 url += $"&Search={filterParams.Search}";
 
-            if (filterParams.CategoryId != null && filterParams.CategoryId != 0)
+            if (filterParams.CategoryId > 0)
                 url += $"&CategoryId={filterParams.CategoryId}";
 
             if (filterParams.SearchOrderBy != null)
@@ -108,7 +124,7 @@ namespace PlanningRazorPage.Services.Blog
 
         public async Task<ApiResult> IncreaseVisit(IncreaseBlogVisitCommand command)
         {
-            var result = await _client.PatchAsJsonAsync($"{ModuleName}/IncreaseVisit",command);
+            var result = await _client.PatchAsJsonAsync($"{ModuleName}/IncreaseVisit", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 

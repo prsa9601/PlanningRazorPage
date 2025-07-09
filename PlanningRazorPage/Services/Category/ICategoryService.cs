@@ -23,7 +23,7 @@ namespace PlanningRazorPage.Services.Category
         }
         public async Task<ApiResult?> Create(CreateCategoryCommand command)
         {
-            var result = await _client.PostAsJsonAsync(ModuleName, command);
+            var result = await _client.PostAsJsonAsync($"{ModuleName}/CreateCategory", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 
@@ -35,7 +35,7 @@ namespace PlanningRazorPage.Services.Category
 
         public async Task<ApiResult?> Edit(EditCategoryCommand command)
         {
-            var result = await _client.PatchAsJsonAsync(ModuleName, command);
+            var result = await _client.PatchAsJsonAsync($"{ModuleName}/EditCategory", command);
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 

@@ -15,6 +15,7 @@ using PlanningRazorPage.Services.Role;
 using PlanningRazorPage.Services.SocialMedia.Instagram;
 using PlanningRazorPage.Services.SocialMedia.Telegram;
 using PlanningRazorPage.Services.User;
+using PlanningRazorPage.Services.User.UserNotification;
 using PlanningRazorPage.Services.User.UserPackage;
 
 namespace PlanningRazorPage.Infrastructure;
@@ -48,6 +49,11 @@ public static class RegisterDependencyServices
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
         
         services.AddHttpClient<IUserPackageService, UserPackageService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(baseAddress);
+        }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+        
+        services.AddHttpClient<IUserNotificationService, UserNotificationService>(httpClient =>
         {
             httpClient.BaseAddress = new Uri(baseAddress);
         }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();

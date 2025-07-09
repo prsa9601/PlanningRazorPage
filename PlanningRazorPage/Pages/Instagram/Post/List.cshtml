@@ -440,23 +440,23 @@
         }
         /* نسخه موبایل */
         /*   @@media (max-width: 768px) {
-                                                            .post-actions {
-                                                                bottom: 15px;
-                                                                right: 15px;
-                                                                gap: 10px;
-                                                                padding: 6px;
-                                                            }
+                                                                    .post-actions {
+                                                                        bottom: 15px;
+                                                                        right: 15px;
+                                                                        gap: 10px;
+                                                                        padding: 6px;
+                                                                    }
 
-                                                            .action-btn {
-                                                                width: 40px;
-                                                                height: 40px;
-                                                            }
+                                                                    .action-btn {
+                                                                        width: 40px;
+                                                                        height: 40px;
+                                                                    }
 
-                                                                .action-btn::before {
-                                                                    font-size: 10px;
-                                                                    padding: 4px 8px;
-                                                                }
-                                                        } */
+                                                                        .action-btn::before {
+                                                                            font-size: 10px;
+                                                                            padding: 4px 8px;
+                                                                        }
+                                                                } */
     </style>
     <style>
         /* استایل تاریخ فارسی */
@@ -819,24 +819,24 @@
                                 </button>
                             </div> *@
                         </div>
-                         <div class="description-box">
-            <div class="description-text"
-                 data-fulltext="@post.Description"
-                 title="توضیحات کامل">
-                @{
-                    var maxLength = 50;
-                    var description = post.Description ?? "";
-                    var truncated = description.Length > maxLength 
-                        ? description.Substring(0, maxLength) + "..." 
-                        : description;
-                }
-                @truncated
-            </div>
-            <div class="char-counter">
-                <span class="used">@description.Length</span>
-                <span class="total">/50</span>
-            </div>
-        </div>
+                        <div class="description-box">
+                            <div class="description-text"
+                                 data-fulltext="@post.Description"
+                                 title="توضیحات کامل">
+                                @{
+                                    var maxLength = 50;
+                                    var description = post.Description ?? "";
+                                    var truncated = description.Length > maxLength
+                                    ? description.Substring(0, maxLength) + "..."
+                                    : description;
+                                }
+                                @truncated
+                            </div>
+                            <div class="char-counter">
+                                <span class="used">@description.Length</span>
+                                <span class="total">/50</span>
+                            </div>
+                        </div>
                         <div class="date-meta mb-3">
                             <!-- تاریخ ساخت -->
                             <div class="d-flex align-items-center mb-2">
@@ -1098,7 +1098,7 @@
         @foreach (var post in Model.PostResult.Data)
         {
             <text>
-                                            initSlider('@post.Id', @post.Videos.Count);
+                                                initSlider('@post.Id', @post.Videos.Count);
             </text>
         }
         });

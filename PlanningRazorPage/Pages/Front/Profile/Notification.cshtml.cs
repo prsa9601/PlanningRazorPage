@@ -15,11 +15,11 @@ namespace PlanningRazorPage.Pages.Front.Profile
             _service = service;
         }
         public NotificationFilterResult? Notifications { get; set; }
-        public async Task<IActionResult> OnGet(string UserName = "", int Take = 8, int PageId = 1)
+        public async Task<IActionResult> OnGet(int Take = 8, int PageId = 1)
         {
             Notifications = await _service.GetFilterNotificationsCurrentUser(new Models.Notification.NotificationFilterParamViewModel
             {
-                //UserName = UserName,
+                //UserName = UserName,string UserName = "", 
                 Take = Take,
                 PageId = PageId
 

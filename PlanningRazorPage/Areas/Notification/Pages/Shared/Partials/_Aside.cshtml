@@ -1,0 +1,176 @@
+﻿<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a href="index.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+                <i class="mdi mdi-rocket-launch mdi-24px text-primary"></i>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-2">پلنیفای</span>
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="mdi mdi-menu mdi-24px"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <!-- داشبورد -->
+        <li class="menu-item">
+            <a href="~/Index" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-home-outline"></i>
+                <div>داشبورد</div>
+            </a>
+        </li>
+
+        <!-- حساب کاربری -->
+        <li class="menu-header fw-light mt-4">
+            <span class="menu-header-text">حساب کاربری</span>
+        </li>
+        <li class="menu-item">
+            <a href="~/Front/Profile/Account" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-account-outline"></i>
+                <div>پروفایل</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="~/Front/Profile/Notification" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-bell-outline"></i>
+                <div>اعلان‌ها</div>
+                <span class="badge bg-danger rounded-pill ms-auto">3</span>
+            </a>
+        </li>
+
+        <!-- شبکه‌های اجتماعی -->
+        <li class="menu-header fw-light mt-4">
+            <span class="menu-header-text">شبکه‌های اجتماعی</span>
+        </li>
+
+        <!-- اینستاگرام -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons mdi mdi-instagram"></i>
+                <div>اینستاگرام</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons mdi mdi-post"></i>
+                        <div>پست</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="~/Instagram/Post/Add" class="menu-link">
+                                <div>افزودن پست</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="~/Instagram/Post/List" class="menu-link">
+                                <div>لیست پست‌ها</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons mdi mdi-story"></i>
+                        <div>استوری</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="~/Instagram/Story/Add" class="menu-link">
+                                <div>افزودن استوری</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="~/Instagram/Story/List" class="menu-link">
+                                <div>لیست استوری‌ها</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+
+        <!-- تلگرام -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons mdi mdi-telegram"></i>
+                <div>تلگرام</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons mdi mdi-post"></i>
+                        <div>پست</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="~/Telegram/Post/Add" class="menu-link">
+                                <div>افزودن پست</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="~/Telegram/Post/List" class="menu-link">
+                                <div>لیست پست‌ها</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+
+        <!-- برنامه‌ریزی -->
+        <li class="menu-header fw-light mt-4">
+            <span class="menu-header-text">برنامه‌ریزی</span>
+        </li>
+        <li class="menu-item">
+            <a href="~/Index" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-calendar-check"></i>
+                <div>تقویم</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="~/Index" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-clipboard-check"></i>
+                <div>وظایف</div>
+            </a>
+        </li>
+
+        <!-- گزارشات -->
+        <li class="menu-header fw-light mt-4">
+            <span class="menu-header-text">گزارشات</span>
+        </li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons mdi mdi-chart-bar"></i>
+                <div>آمار و گزارشات</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="charts-apex.html" class="menu-link">
+                        <div>گزارش عملکرد</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="charts-chartjs.html" class="menu-link">
+                        <div>تحلیل داده‌ها</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- تنظیمات -->
+        <li class="menu-header fw-light mt-4">
+            <span class="menu-header-text">تنظیمات</span>
+        </li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-cog-outline"></i>
+                <div>تنظیمات سیستم</div>
+            </a>
+        </li>
+    </ul>
+</aside>
+</aside>
+</aside>

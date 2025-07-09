@@ -22,18 +22,26 @@ namespace PlanningRazorPage.Areas.Blog.Pages
             _service = service;
             _categoryService = categoryService;
         }
+        [BindProperty]
         public long Id { get; set; }
+        [BindProperty]
         public string Title { get; set; }
-        public bool IsSend { get; set; }
+        //public bool IsSend { get; set; }
+        [BindProperty]
         public string Slug { get; set; }
+        [BindProperty]
         [UIHint("ckEditor")]
         public string Description { get; set; }
+        [BindProperty]
         public long CategoryId { get; set; }
-        public IFormFile Image { get; set; }
+        [BindProperty]
+        public IFormFile? Image { get; set; }
+        [BindProperty]
         public DateTime SendTime { get; set; }
+        [BindProperty]
         public SeoData SeoData { get; set; }
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public List<CategoryDto?> Categories { get; set; }
         public string CurrentImage { get; set; }
 
@@ -58,9 +66,6 @@ namespace PlanningRazorPage.Areas.Blog.Pages
             CategoryId = blog.CategoryId;
             SendTime = blog.SendTime;
             SeoData = blog.SeoData;
-
-
-
             return Page();
         }
 
@@ -69,7 +74,7 @@ namespace PlanningRazorPage.Areas.Blog.Pages
             var result = await _service.Edit(new EditBlogCommand
             {
                 BlogId = Id,
-                Image = Image,
+                //Image = Image,
                 Title = Title,
                 Slug = Slug,
                 Description = Description,
@@ -77,14 +82,29 @@ namespace PlanningRazorPage.Areas.Blog.Pages
                 SendTime = SendTime,
                 SeoData = SeoData,
                 CreatorUserName = User.GetUserName(),
-                IsSend = IsSend
+                IsSend = false
             });
-            if (result!.IsSuccess)
-                return RedirectToPage("List");
+            if (result.IsSuccess && Image != null)
+            {
+                var setImageResult = await _service.SetImage(new SetImageBlogCommand
+                {
+                    Image = Image,
+                    Id = Id,
+                });
 
-            ModelState.AddModelError("", "خطا در ویرایش وبلاگ");
-            Categories = await _categoryService.GetList();
-            return Page();
+                if (!setImageResult.IsSuccess)
+                {
+                    ErrorAlert(setImageResult.MetaData.Message);
+                    return Page();
+                }
+            }
+            return RedirectAndShowAlert(result, Redirect("List"));
+            //if (result!.IsSuccess)
+            //    return RedirectToPage("List");
+
+            //ModelState.AddModelError("", "خطا در ویرایش وبلاگ");
+            //Categories = await _categoryService.GetList();
+            //return Page();
         }
     }
 

@@ -6,11 +6,11 @@ using PlanningRazorPage.Models.Friend;
 using PlanningRazorPage.Services.Event;
 using System.Globalization;
 using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using PlanningRazorPage.Services.Friend;
 using PlanningRazorPage.Services.Notification;
 using PlanningRazorPage.Models.Notification;
+using PlanningRazorPage.Models.GlobalNotification;
+using PlanningRazorPage.Services.User.UserNotification;
 
 namespace PlanningRazorPage.Pages
 {
@@ -18,12 +18,14 @@ namespace PlanningRazorPage.Pages
     {
         public IEventService _service { get; set; }
         public INotificationService _notificationService { get; set; }
+        public IUserNotificationService _userNotificationService { get; set; }
         public IFriendService _friendService { get; set; }
-        public IndexModel(IEventService service, IFriendService friendService, INotificationService notificationService)
+        public IndexModel(IEventService service, IFriendService friendService, INotificationService notificationService, IUserNotificationService userNotificationService)
         {
             _service = service;
             _friendService = friendService;
             _notificationService = notificationService;
+            _userNotificationService = userNotificationService;
         }
 
         public string Title { get; set; }
@@ -39,14 +41,21 @@ namespace PlanningRazorPage.Pages
         public List<SearchFriendDto>? FriendResult { get; set; }
         public List<EventDtoViewModel>? EventDto { get; set; }
 
-        public NotificationFilterResult? Notifications { get; set; }
+        public GlobalNotificationFilterResult Notifications { get; set; }
         public async Task OnGet(CancellationToken cancel)
         {
-            Notifications = await _notificationService.GetFilterNotificationsCurrentUser(new NotificationFilterParamViewModel
+            var notificationResult = await _notificationService.GetFilterNotificationsCurrentUser(new NotificationFilterParamViewModel
             {
                 PageId = 1,
                 Take = 8
             });
+            var userNotificationResult = await _userNotificationService.GetUserNotificationFilterForLayout(new Models.User.UserNotification.UserNotificationFilterParamViewModel
+            {
+                PageId = 1,
+                Take = 8
+            });
+            Notifications = notificationResult.Map(userNotificationResult);
+
             var friends = await _friendService.SearchFriendForEvent(
                 new SearchFriendForEventFilterParamModel()
                 {
@@ -63,21 +72,45 @@ namespace PlanningRazorPage.Pages
             //    item.Link = FormatDateTime(item.EndTime);
             //}
         }
-        public async Task<JsonResult> OnPostMarkNotificationAsRead([FromForm] long notificationId)
+        public async Task<JsonResult> OnPostMarkNotificationAsRead([FromForm] long notificationId,
+            [FromForm] GlobalGetType type)
         {
             //foreach (var item in notificationId)
             //{
-
+            if (type == GlobalGetType.Notification)
+            {
                 var notification = await _notificationService.MarkAsRead(new MarkAsReadNotificationViewModel
                 {
-                    NotificationId = notificationId
+                    NotificationId = notificationId,
+                }); 
+
+                if (notification.IsSuccess)
+                {
+                    return new JsonResult(new { success = true });
+                }
+
+                return new JsonResult(new { success = false });
+            }
+            else if (type == GlobalGetType.UserNotification)
+            {
+                var notification = await _userNotificationService.MarkAsRead(new MarkAsReadUserNotificationViewModel
+                {
+                    UserNotificationId = notificationId,
                 });
+
+                if (notification.IsSuccess)
+                {
+                    return new JsonResult(new { success = true, message = notification.MetaData.Message });
+                }
+
+                return new JsonResult(new { success = false , message = notification.MetaData.Message});
+            }
             //}
 
-            if (notification.IsSuccess)
-            {
-                return new JsonResult(new { success = true });
-            }
+            //if (notification.IsSuccess)
+            //{
+            //    return new JsonResult(new { success = true });
+            //}
 
             return new JsonResult(new { success = false });
         }
@@ -101,13 +134,17 @@ namespace PlanningRazorPage.Pages
             //    item.Link = FormatDateTime(item.EndTime);
             //}
             // Transform EventDto to FullCalendar format
+
             var calendarEvents = EventDto.Select(e => new
             {
                 id = e.Id,
                 url = e.Link,
                 title = e.Title,
+                description = e.Description,
                 start = e.StartTime,
                 end = e.EndTime,
+                location = e.EventAddress,
+                guests = e.UserNames,
                 allDay = false, // Adjust this according to your requirements
                 extendedProps = new
                 {
@@ -126,7 +163,7 @@ namespace PlanningRazorPage.Pages
                 StartTime = newStart,
                 EndTime = newEnd
             });
-            await _notificationService.ChangeDate(new ChangeDateNotificationCommand
+            var notificationResult = await _notificationService.ChangeDate(new ChangeDateNotificationCommand
             {
                 EventId = id,
                 SendTime = newStart,
@@ -142,7 +179,7 @@ namespace PlanningRazorPage.Pages
             {
                 var result = await _notificationService.Remove(new Models.Notification.RemoveNotificationCommand
                 {
-                   EventId = id
+                    EventId = id
                 });
                 return new JsonResult(result.MetaData.Message);
             }
@@ -221,21 +258,29 @@ namespace PlanningRazorPage.Pages
             //if (accessNotification = Notification.Email)
             //{
             //long f = result.Data;
-            var AddNotificationResult = await _notificationService.Add(new Models.Notification.AddNotificationViewModel
+            if (result.IsSuccess)
             {
-                EventId = result.Data,
-                SendTime = startTime.ToString().ToMiladi(),
-                EventStartTime = startTime.ToString().ToMiladi(),
-                NotificationType = notificationType,
-                UserIds = friendUserNames.ToList(),
-            });
+                var AddNotificationResult = await _notificationService.Add(
+                    new Models.Notification.AddNotificationViewModel
+                    {
+                        EventId = result.Data,
+                        SendTime = startTime.ToString().ToMiladi(),
+                        EventStartTime = startTime.ToString().ToMiladi(),
+                        NotificationType = notificationType,
+                        UserNames = friendUserNames.ToList(),
+                        Title = title,
+                        Description = description,
+                    });
+
+                return new JsonResult(AddNotificationResult.MetaData.Message);
+            }
             //OnGetEvents(cancel);
-            return new JsonResult(AddNotificationResult.MetaData.Message);
+            return new JsonResult(result.MetaData.Message);
         }
 
         #region Edit Event
         public async Task<IActionResult> OnPostEditEvent(string title,
-                  DateTime startTime, DateTime endTime, string link, string eventAddress,
+                  DateTime startTime, DateTime endTime, string? link, string eventAddress,
                   string tag, string description, string[] friendUserNames, bool accessNotification,
                   string[] notification, long id)
         {
@@ -316,6 +361,8 @@ namespace PlanningRazorPage.Pages
                 NotificationType = notificationType,
                 SendTime = startTime.ToString().ToMiladi(),
                 UserNames = friendUserNames.ToList(),
+                Title = title,
+                Description = description,
             });
             return new JsonResult(editNotificationResult.MetaData.Message);
         }
@@ -453,6 +500,7 @@ namespace PlanningRazorPage.Pages
                     Title = item.Title,
                     CreationDate = item.CreationDate,
                     Id = item.Id,
+                    UserNames = item.UserNames,
                     Tag = tagBuilder.ToString()
 
                 });

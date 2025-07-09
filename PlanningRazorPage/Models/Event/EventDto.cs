@@ -8,6 +8,7 @@
         public string Description { get; set; }
         public string Link { get; set; }
         public string EventAddress { get; set; }
+        public List<string> UserNames { get; set; }
 
         public Tagged tag { get; set; }
         public NotificationEnum notification { get; set; }
@@ -23,6 +24,7 @@
         public string Description { get; set; }
         public string Link { get; set; }
         public string EventAddress { get; set; }
+        public List<string> UserNames { get; set; }
 
         public string Tag { get; set; }
         public NotificationEnum notification { get; set; }

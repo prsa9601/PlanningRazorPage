@@ -1,5 +1,5 @@
 ﻿@page
-@model PlanningRazorPage.Areas.AdminPanel.Blog.AddModel
+@model PlanningRazorPage.Areas.Blog.AddModel
 @{
 }
 @section Header {
@@ -180,22 +180,22 @@
         }
 
         /* media (max-width: 768px) {
-                                    .row
+                                            .row
 
-                                {
-                                    flex-direction: column;
-                                }
+                                        {
+                                            flex-direction: column;
+                                        }
 
-                                .col-md-8, .col-md-4 {
-                                    width: 100%;
-                                    max-width: 100%;
-                                }
+                                        .col-md-8, .col-md-4 {
+                                            width: 100%;
+                                            max-width: 100%;
+                                        }
 
-                                .ck-editor__editable {
-                                    min-height: 300px !important;
-                                }
+                                        .ck-editor__editable {
+                                            min-height: 300px !important;
+                                        }
 
-                                 */ }
+                                         */ }
 
         .switch-container {
             display: flex;
@@ -309,7 +309,7 @@
                         <span id="error-message">لطفا خطاهای فرم را برطرف کنید</span>
                     </div>
 
-                    <form asp-area="AdminPanel" method="post" enctype="multipart/form-data">
+                    <form asp-area="Blog" method="post" enctype="multipart/form-data">
                         @* id="blog-form"<form id="blog-form" asp-action="Create" method="post" enctype="multipart/form-data"> *@
                         <div class="row">
                             <div class="col-md-8">
@@ -342,12 +342,16 @@
                                 <div class="mb-4">
                                     <label for="CategoryId" class="form-label">دسته بندی</label>
                                     <select asp-for="@Model.CategoryId" name="CategoryId" class="form-select" id="CategoryId">
-                                        <option value="">انتخاب دسته بندی</option>
-                                        <option value="1">تکنولوژی</option>
+                                        @foreach (var item in Model.Categories)
+                                        {
+                                            <option value="@item.Id">@item.Title</option>
+                                        }
+
+                                        @*  <option value="1">تکنولوژی</option>
                                         <option value="2">برنامه نویسی</option>
                                         <option value="3">طراحی وب</option>
                                         <option value="4">هوش مصنوعی</option>
-                                        <option value="5">مدیریت پروژه</option>
+                                        <option value="5">مدیریت پروژه</option> *@
                                     </select>
                                     <div class="invalid-feedback">لطفاً دسته بندی را انتخاب کنید</div>
                                 </div>

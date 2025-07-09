@@ -1,4 +1,5 @@
 ﻿@page "{handler?}"
+@using PlanningRazorPage.Models.GlobalNotification
 @using PlanningRazorPage.Services.Notification
 @model PlanningRazorPage.Pages.IndexModel
 @{
@@ -13,7 +14,7 @@
           set="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>برنامه ها - تقویم |متــریالایز</title>
+    <title>@* برنامه ها - تقویم |متــریالایز *@Planify</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="~/assets/img/favicon/favicon.ico" />
@@ -91,964 +92,185 @@
         <div class="layout-container">
 
 
+
+
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-
-
-                <div class="app-brand demo ">
+                <div class="app-brand demo">
                     <a href="index.html" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <span style="color:var(--bs-primary);">
-                                <svg width="268" height="150" viewBox="0 0 38 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M30.0944 2.22569C29.0511 0.444187 26.7508 -0.172113 24.9566 0.849138C23.1623 1.87039 22.5536 4.14247 23.5969 5.92397L30.5368 17.7743C31.5801 19.5558 33.8804 20.1721 35.6746 19.1509C37.4689 18.1296 38.0776 15.8575 37.0343 14.076L30.0944 2.22569Z" fill="currentColor" />
-                                    <path d="M30.171 2.22569C29.1277 0.444187 26.8274 -0.172113 25.0332 0.849138C23.2389 1.87039 22.6302 4.14247 23.6735 5.92397L30.6134 17.7743C31.6567 19.5558 33.957 20.1721 35.7512 19.1509C37.5455 18.1296 38.1542 15.8575 37.1109 14.076L30.171 2.22569Z" fill="url(#paint0_linear_2989_100980)" fill-opacity="0.4" />
-                                    <path d="M22.9676 2.22569C24.0109 0.444187 26.3112 -0.172113 28.1054 0.849138C29.8996 1.87039 30.5084 4.14247 29.4651 5.92397L22.5251 17.7743C21.4818 19.5558 19.1816 20.1721 17.3873 19.1509C15.5931 18.1296 14.9843 15.8575 16.0276 14.076L22.9676 2.22569Z" fill="currentColor" />
-                                    <path d="M14.9558 2.22569C13.9125 0.444187 11.6122 -0.172113 9.818 0.849138C8.02377 1.87039 7.41502 4.14247 8.45833 5.92397L15.3983 17.7743C16.4416 19.5558 18.7418 20.1721 20.5361 19.1509C22.3303 18.1296 22.9391 15.8575 21.8958 14.076L14.9558 2.22569Z" fill="currentColor" />
-                                    <path d="M14.9558 2.22569C13.9125 0.444187 11.6122 -0.172113 9.818 0.849138C8.02377 1.87039 7.41502 4.14247 8.45833 5.92397L15.3983 17.7743C16.4416 19.5558 18.7418 20.1721 20.5361 19.1509C22.3303 18.1296 22.9391 15.8575 21.8958 14.076L14.9558 2.22569Z" fill="url(#paint1_linear_2989_100980)" fill-opacity="0.4" />
-                                    <path d="M7.82901 2.22569C8.87231 0.444187 11.1726 -0.172113 12.9668 0.849138C14.7611 1.87039 15.3698 4.14247 14.3265 5.92397L7.38656 17.7743C6.34325 19.5558 4.04298 20.1721 2.24875 19.1509C0.454514 18.1296 -0.154233 15.8575 0.88907 14.076L7.82901 2.22569Z" fill="currentColor" />
-                                    <defs>
-                                        <linearGradient id="paint0_linear_2989_100980" x1="5.36642" y1="0.849138" x2="10.532" y2="24.104" gradientUnits="userSpaceOnUse">
-                                            <stop offset="0" stop-opacity="1" />
-                                            <stop offset="1" stop-opacity="0" />
-                                        </linearGradient>
-                                        <linearGradient id="paint1_linear_2989_100980" x1="5.19475" y1="0.849139" x2="10.3357" y2="24.1155" gradientUnits="userSpaceOnUse">
-                                            <stop offset="0" stop-opacity="1" />
-                                            <stop offset="1" stop-opacity="0" />
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                            </span>
+                            <i class="mdi mdi-rocket-launch mdi-24px text-primary"></i>
                         </span>
-                        <span class="app-brand-text demo menu-text fw-bold ms-2">متــریالایز</span>
+                        <span class="app-brand-text demo menu-text fw-bold ms-2">پلنیفای</span>
                     </a>
 
                     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
-                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M11.4854 4.88844C11.0081 4.41121 10.2344 4.41121 9.75715 4.88844L4.51028 10.1353C4.03297 10.6126 4.03297 11.3865 4.51028 11.8638L9.75715 17.1107C10.2344 17.5879 11.0081 17.5879 11.4854 17.1107C11.9626 16.6334 11.9626 15.8597 11.4854 15.3824L7.96672 11.8638C7.48942 11.3865 7.48942 10.6126 7.96672 10.1353L11.4854 6.61667C11.9626 6.13943 11.9626 5.36568 11.4854 4.88844Z" fill="currentColor" fill-opacity="0.6" />
-                            <path d="M15.8683 4.88844L10.6214 10.1353C10.1441 10.6126 10.1441 11.3865 10.6214 11.8638L15.8683 17.1107C16.3455 17.5879 17.1192 17.5879 17.5965 17.1107C18.0737 16.6334 18.0737 15.8597 17.5965 15.3824L14.0778 11.8638C13.6005 11.3865 13.6005 10.6126 14.0778 10.1353L17.5965 6.61667C18.0737 6.13943 18.0737 5.36568 17.5965 4.88844C17.1192 4.41121 16.3455 4.41121 15.8683 4.88844Z" fill="currentColor" fill-opacity="0.38" />
-                        </svg>
+                        <i class="mdi mdi-menu mdi-24px"></i>
                     </a>
                 </div>
 
                 <div class="menu-inner-shadow"></div>
 
-
-
                 <ul class="menu-inner py-1">
-                    <!-- Dashboards -->
+                    <!-- داشبورد -->
                     <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <a href="~/Index" class="menu-link">
                             <i class="menu-icon tf-icons mdi mdi-home-outline"></i>
-                            <div>داشبوردها</div>
-                            <div class="badge bg-primary rounded-pill ms-auto">3</div>
+                            <div>داشبورد</div>
                         </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="dashboards-ecommerce.html" class="menu-link">
-                                    <div>تجارت الکترونیک</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="dashboards-crm.html" class="menu-link">
-                                    <div>ارتباط با مشتریان</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="index.html" class="menu-link">
-                                    <div>تجزیه و تحلیل</div>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
 
-                    <!-- Layouts -->
+                    <!-- حساب کاربری -->
+                    <li class="menu-header fw-light mt-4">
+                        <span class="menu-header-text">حساب کاربری</span>
+                    </li>
+                    <li class="menu-item">
+                        <a href="~/Front/Profile/Account" class="menu-link">
+                            <i class="menu-icon tf-icons mdi mdi-account-outline"></i>
+                            <div>پروفایل</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="~/Front/Profile/Notification" class="menu-link">
+                            <i class="menu-icon tf-icons mdi mdi-bell-outline"></i>
+                            <div>اعلان‌ها</div>
+                            <span class="badge bg-danger rounded-pill ms-auto">3</span>
+                        </a>
+                    </li>
+
+                    <!-- شبکه‌های اجتماعی -->
+                    <li class="menu-header fw-light mt-4">
+                        <span class="menu-header-text">شبکه‌های اجتماعی</span>
+                    </li>
+
+                    <!-- اینستاگرام -->
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-window-maximize"></i>
-                            <div>طرح بندی ها</div>
+                            <i class="menu-icon tf-icons mdi mdi-instagram"></i>
+                            <div>اینستاگرام</div>
                         </a>
-
                         <ul class="menu-sub">
                             <li class="menu-item">
-                                <a href="layouts-collapsed-menu.html" class="menu-link">
-                                    <div>منوی جمع شده</div>
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons mdi mdi-post"></i>
+                                    <div>پست</div>
                                 </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item">
+                                        <a href="~/Instagram/Post/Add" class="menu-link">
+                                            <div>افزودن پست</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="~/Instagram/Post/List" class="menu-link">
+                                            <div>لیست پست‌ها</div>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="menu-item">
-                                <a href="layouts-content-navbar.html" class="menu-link">
-                                    <div>نوار ناوبری محتوا</div>
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons mdi mdi-story"></i>
+                                    <div>استوری</div>
                                 </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="layouts-content-navbar-with-sidebar.html" class="menu-link">
-                                    <div>ناوبری محتوا + نوار کناری</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="../horizontal-menu-template/index.html" class="menu-link" target="_blank">
-                                    <div>افقی</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="layouts-without-menu.html" class="menu-link">
-                                    <div>بدون منو</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="layouts-without-navbar.html" class="menu-link">
-                                    <div>بدون نوار ناوبری</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="layouts-fluid.html" class="menu-link">
-                                    <div>شناور</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="layouts-container.html" class="menu-link">
-                                    <div>دربرگیرنده</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="layouts-blank.html" class="menu-link">
-                                    <div>خالی</div>
-                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item">
+                                        <a href="~/Instagram/Story/Add" class="menu-link">
+                                            <div>افزودن استوری</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="~/Instagram/Story/List" class="menu-link">
+                                            <div>لیست استوری‌ها</div>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
 
-                    <!-- Apps & Pages -->
+                    <!-- تلگرام -->
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons mdi mdi-telegram"></i>
+                            <div>تلگرام</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons mdi mdi-post"></i>
+                                    <div>پست</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item">
+                                        <a href="~/Telegram/Post/Add" class="menu-link">
+                                            <div>افزودن پست</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="~/Telegram/Post/List" class="menu-link">
+                                            <div>لیست پست‌ها</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- برنامه‌ریزی -->
                     <li class="menu-header fw-light mt-4">
-                        <span class="menu-header-text">برنامه‌ها و صفحات</span>
+                        <span class="menu-header-text">برنامه‌ریزی</span>
                     </li>
                     <li class="menu-item">
-                        <a href="app-email.html" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-email-outline"></i>
-                            <div>ایمیل</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="app-chat.html" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-message-outline"></i>
-                            <div>چت</div>
-                        </a>
-                    </li>
-                    <li class="menu-item active">
-                        <a href="app-calendar.html" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-calendar-blank-outline"></i>
+                        <a href="~/Index" class="menu-link">
+                            <i class="menu-icon tf-icons mdi mdi-calendar-check"></i>
                             <div>تقویم</div>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="app-kanban.html" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-view-grid-outline"></i>
-                            <div>کانبان</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class='menu-icon tf-icons mdi mdi-file-document-outline'></i>
-                            <div>صورت حساب</div>
-                            <div class="badge bg-danger rounded-pill ms-auto">4</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="app-invoice-list.html" class="menu-link">
-                                    <div>لیست</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="app-invoice-preview.html" class="menu-link">
-                                    <div>پیش نمایش</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="app-invoice-edit.html" class="menu-link">
-                                    <div>ویرایش</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="app-invoice-add.html" class="menu-link">
-                                    <div>اضافه کردن</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-account-outline"></i>
-                            <div>کاربران</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="app-user-list.html" class="menu-link">
-                                    <div>لیست</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>نمایش</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="app-user-view-account.html" class="menu-link">
-                                            <div>حساب کاربری</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="app-user-view-security.html" class="menu-link">
-                                            <div>امنیت</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="app-user-view-billing.html" class="menu-link">
-                                            <div>صورتحساب و طرح ها</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="app-user-view-notifications.html" class="menu-link">
-                                            <div>اعلان ها</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="app-user-view-connections.html" class="menu-link">
-                                            <div>اتصالات</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class='menu-icon tf-icons mdi mdi-shield-outline'></i>
-                            <div>نقش ها و مجوز</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="app-access-roles.html" class="menu-link">
-                                    <div>نقش ها</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="app-access-permission.html" class="menu-link">
-                                    <div>اجازه</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-file-outline"></i>
-                            <div>صفحات</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>مشخصات کاربر</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="pages-profile-user.html" class="menu-link">
-                                            <div>پروفایل</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-profile-teams.html" class="menu-link">
-                                            <div>تیم ها</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-profile-projects.html" class="menu-link">
-                                            <div>پروژه ها</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-profile-connections.html" class="menu-link">
-                                            <div>اتصالات</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>تنظیمات حساب</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="pages-account-settings-account.html" class="menu-link">
-                                            <div>حساب کاربری</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-account-settings-security.html" class="menu-link">
-                                            <div>امنیت</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-account-settings-billing.html" class="menu-link">
-                                            <div>صورتحساب و طرح ها</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-account-settings-notifications.html" class="menu-link">
-                                            <div>اعلان ها</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-account-settings-connections.html" class="menu-link">
-                                            <div>اتصالات</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="menu-item">
-                                <a href="pages-faq.html" class="menu-link">
-                                    <div>سوالات متداول</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>مرکز راهنمایی</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="pages-help-center-landing.html" class="menu-link">
-                                            <div>لندینگ</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-help-center-categories.html" class="menu-link">
-                                            <div>دسته بندی ها</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-help-center-article.html" class="menu-link">
-                                            <div>مقاله</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="menu-item">
-                                <a href="pages-pricing.html" class="menu-link">
-                                    <div>قیمت گذاری</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>متفرقه</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="pages-misc-error.html" class="menu-link" target="_blank">
-                                            <div>خطا</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-misc-under-maintenance.html" class="menu-link" target="_blank">
-                                            <div>در دست تعمیر</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-misc-comingsoon.html" class="menu-link" target="_blank">
-                                            <div>به زودی</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-misc-not-authorized.html" class="menu-link" target="_blank">
-                                            <div>غیر مجاز</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="pages-misc-server-error.html" class="menu-link" target="_blank">
-                                            <div>خطای سرور</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-lock-outline"></i>
-                            <div>احراز هویت</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>ورود</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="auth-login-basic.html" class="menu-link" target="_blank">
-                                            <div>پایه</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="auth-login-cover.html" class="menu-link" target="_blank">
-                                            <div>کاور</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>ثبت نام</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="auth-register-basic.html" class="menu-link" target="_blank">
-                                            <div>پایه</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="auth-register-cover.html" class="menu-link" target="_blank">
-                                            <div>کاور</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="auth-register-multisteps.html" class="menu-link" target="_blank">
-                                            <div>چند مرحله ای</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>تأیید ایمیل</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="auth-verify-email-basic.html" class="menu-link" target="_blank">
-                                            <div>پایه</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="auth-verify-email-cover.html" class="menu-link" target="_blank">
-                                            <div>کاور</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>بازنشانی رمز عبور</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="auth-reset-password-basic.html" class="menu-link" target="_blank">
-                                            <div>پایه</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="auth-reset-password-cover.html" class="menu-link" target="_blank">
-                                            <div>کاور</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>رمز عبور را فراموش کرده اید</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="auth-forgot-password-basic.html" class="menu-link" target="_blank">
-                                            <div>پایه</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="auth-forgot-password-cover.html" class="menu-link" target="_blank">
-                                            <div>کاور</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>دو مرحله ای</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="auth-two-steps-basic.html" class="menu-link" target="_blank">
-                                            <div>پایه</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="auth-two-steps-cover.html" class="menu-link" target="_blank">
-                                            <div>کاور</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-transit-connection-horizontal"></i>
-                            <div>نمونه های چند مرحله ای</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="wizard-ex-checkout.html" class="menu-link">
-                                    <div>پرداخت</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="wizard-ex-property-listing.html" class="menu-link">
-                                    <div>فهرست اموال</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="wizard-ex-create-deal.html" class="menu-link">
-                                    <div>ایجاد معامله</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="modal-examples.html" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-vector-arrange-below"></i>
-                            <div>نمونه های مدال</div>
+                        <a href="~/Index" class="menu-link">
+                            <i class="menu-icon tf-icons mdi mdi-clipboard-check"></i>
+                            <div>وظایف</div>
                         </a>
                     </li>
 
-                    <!-- Components -->
+                    <!-- گزارشات -->
                     <li class="menu-header fw-light mt-4">
-                        <span class="menu-header-text">کامپوننت</span>
-                    </li>
-                    <!-- Cards -->
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-credit-card-outline"></i>
-                            <div>کارت ها</div>
-                            <div class="badge bg-primary rounded-pill ms-auto">6</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="cards-basic.html" class="menu-link">
-                                    <div>پایه</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="cards-advance.html" class="menu-link">
-                                    <div>پیشرفته</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="cards-statistics.html" class="menu-link">
-                                    <div>آمار</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="cards-analytics.html" class="menu-link">
-                                    <div>تجزیه و تحلیل</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="cards-gamifications.html" class="menu-link">
-                                    <div>بازی وار سازی</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="cards-actions.html" class="menu-link">
-                                    <div>عمل ها</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- User interface -->
-                    <li class="menu-item">
-                        <a href="javascript:void(0)" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-archive-outline"></i>
-                            <div>رابط کاربری</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="ui-accordion.html" class="menu-link">
-                                    <div>باز و بسته شونده</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-alerts.html" class="menu-link">
-                                    <div>هشدارها</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-badges.html" class="menu-link">
-                                    <div>نشان ها</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-buttons.html" class="menu-link">
-                                    <div>دکمه ها</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-carousel.html" class="menu-link">
-                                    <div>گردونه</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-collapse.html" class="menu-link">
-                                    <div>جمع شونده</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-dropdowns.html" class="menu-link">
-                                    <div>منوی کشویی</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-footer.html" class="menu-link">
-                                    <div>پاورقی</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-list-groups.html" class="menu-link">
-                                    <div>گروه های لیست</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-modals.html" class="menu-link">
-                                    <div>مدال ها</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-navbar.html" class="menu-link">
-                                    <div>نوار ناوبری</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-offcanvas.html" class="menu-link">
-                                    <div>خارج از کادر</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-pagination-breadcrumbs.html" class="menu-link">
-                                    <div>صفحه‌بندی و مسیرهای راهنما</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-progress.html" class="menu-link">
-                                    <div>پیشرفت</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-spinners.html" class="menu-link">
-                                    <div>چرخنده ها</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-tabs-pills.html" class="menu-link">
-                                    <div>تب ها و سربرگ ها</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-toasts.html" class="menu-link">
-                                    <div>اعلان های تست</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-tooltips-popovers.html" class="menu-link">
-                                    <div>راهنمای ابزار و پاپاور</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ui-typography.html" class="menu-link">
-                                    <div>تایپوگرافی</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Extended components -->
-                    <li class="menu-item">
-                        <a href="javascript:void(0)" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-star-outline"></i>
-                            <div>رابط کاربری توسعه یافته</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="extended-ui-avatar.html" class="menu-link">
-                                    <div>آواتار</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="extended-ui-blockui.html" class="menu-link">
-                                    <div>رابط کاربری بلوک</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="extended-ui-drag-and-drop.html" class="menu-link">
-                                    <div>کشیدن و رها کردن</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="extended-ui-media-player.html" class="menu-link">
-                                    <div>دستگاه پخش رسانه ای</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="extended-ui-perfect-scrollbar.html" class="menu-link">
-                                    <div>نوار اسکرول کامل</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="extended-ui-star-ratings.html" class="menu-link">
-                                    <div>رتبه بندی ستاره ها</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="extended-ui-sweetalert2.html" class="menu-link">
-                                    <div>هشدار sweet2</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="extended-ui-text-divider.html" class="menu-link">
-                                    <div>تقسیم کننده متن</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <div>خط زمانی</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="extended-ui-timeline-basic.html" class="menu-link">
-                                            <div>پایه</div>
-                                        </a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a href="extended-ui-timeline-fullscreen.html" class="menu-link">
-                                            <div>تمام صفحه</div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="menu-item">
-                                <a href="extended-ui-tour.html" class="menu-link">
-                                    <div>تور</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="extended-ui-treeview.html" class="menu-link">
-                                    <div>نمای درختی</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="extended-ui-misc.html" class="menu-link">
-                                    <div>متفرقه</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Icons -->
-                    <li class="menu-item">
-                        <a href="icons-mdi.html" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-google-circles-extended"></i>
-                            <div>آیکون ها</div>
-                        </a>
-                    </li>
-
-                    <!-- Forms & Tables -->
-                    <li class="menu-header fw-light mt-4">
-                        <span class="menu-header-text">فرم‌ها و جدول‌ها</span>
-                    </li>
-                    <!-- Forms -->
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-form-select"></i>
-                            <div>عناصر فرم</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="forms-basic-inputs.html" class="menu-link">
-                                    <div>ورودی های پایه</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="forms-input-groups.html" class="menu-link">
-                                    <div>گروه های ورودی</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="forms-custom-options.html" class="menu-link">
-                                    <div>گزینه های سفارشی</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="forms-editors.html" class="menu-link">
-                                    <div>ویراستاران</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="forms-file-upload.html" class="menu-link">
-                                    <div>آپلود فایل</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="forms-pickers.html" class="menu-link">
-                                    <div>انتخاب کنندگان</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="forms-selects.html" class="menu-link">
-                                    <div>انتخاب و برچسب ها</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="forms-sliders.html" class="menu-link">
-                                    <div>اسلایدرها</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="forms-switches.html" class="menu-link">
-                                    <div>سوویچ ها</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="forms-extras.html" class="menu-link">
-                                    <div>موارد بیشتر</div>
-                                </a>
-                            </li>
-                        </ul>
+                        <span class="menu-header-text">گزارشات</span>
                     </li>
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-cube-outline"></i>
-                            <div>طرح بندی فرم ها</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="form-layouts-vertical.html" class="menu-link">
-                                    <div>فرم عمودی</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="form-layouts-horizontal.html" class="menu-link">
-                                    <div>فرم افقی</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="form-layouts-sticky.html" class="menu-link">
-                                    <div>اقدامات چسبنده</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-dots-horizontal"></i>
-                            <div>فرم مرحله ای</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="form-wizard-numbered.html" class="menu-link">
-                                    <div>شماره گذاری شده</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="form-wizard-icons.html" class="menu-link">
-                                    <div>آیکون ها</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="form-validation.html" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-checkbox-marked-circle-outline"></i>
-                            <div>فرم اعتبارسنجی</div>
-                        </a>
-                    </li>
-                    <!-- Tables -->
-                    <li class="menu-item">
-                        <a href="tables-basic.html" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-table"></i>
-                            <div>جدول ها</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-grid"></i>
-                            <div>جدول های داده</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="tables-datatables-basic.html" class="menu-link">
-                                    <div>پایه</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="tables-datatables-advanced.html" class="menu-link">
-                                    <div>پیشرفته</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="tables-datatables-extensions.html" class="menu-link">
-                                    <div>برنامه های افزودنی</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Charts & Maps -->
-                    <li class="menu-header fw-light mt-4">
-                        <span class="menu-header-text">نمودارها و نقشه‌ها</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons mdi mdi-chart-pie-outline"></i>
-                            <div>نمودارها</div>
+                            <i class="menu-icon tf-icons mdi mdi-chart-bar"></i>
+                            <div>آمار و گزارشات</div>
                         </a>
                         <ul class="menu-sub">
                             <li class="menu-item">
                                 <a href="charts-apex.html" class="menu-link">
-                                    <div>نمودارهای اوج</div>
+                                    <div>گزارش عملکرد</div>
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a href="charts-chartjs.html" class="menu-link">
-                                    <div>نمودار js</div>
+                                    <div>تحلیل داده‌ها</div>
                                 </a>
                             </li>
                         </ul>
                     </li>
-                    <li class="menu-item">
-                        <a href="maps-leaflet.html" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-map-outline"></i>
-                            <div>نقشه های جزوه</div>
-                        </a>
-                    </li>
 
-                    <!-- Misc -->
+                    <!-- تنظیمات -->
                     <li class="menu-header fw-light mt-4">
-                        <span class="menu-header-text">پشتیبانی</span>
+                        <span class="menu-header-text">تنظیمات</span>
                     </li>
                     <li class="menu-item">
-                        <a href="https://pixinvent.ticksy.com/" target="_blank" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-lifebuoy"></i>
-                            <div>پشتیبانی</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="https://demos.pixinvent.com/materialize-html-admin-template/documentation/" target="_blank" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-file-document-multiple-outline"></i>
-                            <div>مستندات</div>
+                        <a href="javascript:void(0);" class="menu-link">
+                            <i class="menu-icon tf-icons mdi mdi-cog-outline"></i>
+                            <div>تنظیمات سیستم</div>
                         </a>
                     </li>
                 </ul>
-
-
-
             </aside>
             <!-- / Menu -->
             <!-- Layout container -->
             <div class="layout-page">
-
-
-
-
 
                 <!-- Navbar -->
 
@@ -1230,7 +452,7 @@
                             <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                     <i class="mdi mdi-bell-outline mdi-24px"></i>
-                                    @if (Model.Notifications!.Data.Count() == 0)
+                                    @if (Model.Notifications!.Data.Count() == 0 || Model.Notifications.Data == null)
                                     {
                                         @*    <span id="notificationBadge"
                                               class="position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border"></span>
@@ -1246,7 +468,7 @@
                                     <li class="dropdown-menu-header border-bottom">
                                         <div class="dropdown-header d-flex align-items-center py-3">
                                             <h6 class="mb-0 me-auto">اعلان ها</h6>
-                                      
+
                                             @if (Model.Notifications!.Data.Where(i => i.IsSeen == false).Count() > 0)
                                             {
                                                 <span class="badge rounded-pill bg-label-primary notification-count">
@@ -1300,7 +522,10 @@
                                                     <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect waves-light
                                                              @(!notification.IsSeen ? "unread" : "")"
                                                         data-notification-id="@notification.Id"
+                                                        @* data-type="@(notification.globalGetType == GlobalGetType.UserNotification? "UserNotification" : "Notification")" *@
+                                                        data-notification-type="@notification.globalGetType"
                                                         data-is-read="@notification.IsSeen.ToString().ToLower()">
+
                                                         @if (!notification.IsSeen)
                                                         {
                                                             <span class="badge badge-dot bg-danger position-absolute start-0 top-0 mt-1 ms-1"></span>
@@ -1315,9 +540,9 @@
                                                             </div>
                                                             <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
                                                                 <h6 class="mb-1 text-truncate">
-                                                                    لورم ایپسوم متن ساختگی با
+                                                                    @notification.Title
                                                                 </h6>
-                                                                <small class="text-truncate text-body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</small>
+                                                                <small class="text-truncate text-body">@notification.Description</small>
                                                             </div>
                                                             <div class="flex-shrink-0 dropdown-notifications-actions">
                                                                 <small class="text-muted">1ساعت قبل</small>
@@ -1351,7 +576,7 @@
                                                 </li> *@
                                     </li>
                                     <li class="dropdown-menu-footer border-top p-2">
-                                        <a href="javascript:void(0);"
+                                        <a href="Front/Profile/Notification"
                                            class="btn btn-primary d-flex justify-content-center waves-effect waves-light">
                                             مشاهده همه اعلان ها
                                         </a>
@@ -1394,7 +619,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item waves-effect"
-                                           href="pages-profile-user.html">
+                                           href="/Front/Profile/Account">
                                             <i class="mdi mdi-account-outline me-2"></i>
                                             <span class="align-middle">پروفایل من</span>
                                         </a>
@@ -1655,8 +880,8 @@
 
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="eventURL">آدرس URL رویداد</label>
-                                                    <input type="url" class="form-control" id="eventURL" name="eventURL" placeholder="https://www.google.com/">
+                                                    <label class="form-label" for="eventUR">آدرس URL رویداد</label>
+                                                    <input type="url" class="form-control" id="eventUR" name="eventUR" placeholder="https://www.google.com/">
                                                 </div>
                                                 @*  <div class="mb-3 select2-primary">
                                                     <label class="form-label" for="eventGuests">افزودن مهمانان</label>
@@ -1774,13 +999,7 @@
     <!-- / Layout wrapper -->
 
 
-    <div class="buy-now">
-        <a href="https://www.rtl-theme.com/"
-           target="_blank"
-           class="btn btn-danger btn-buy-now">خرید قالب</a>
-    </div>
-
-
+   
 
 
     <!-- Core JS -->
@@ -1983,7 +1202,7 @@
               eventTitle = document.querySelector('#eventTitle'),
               eventStartDate = document.querySelector('#eventStartDate'),
               eventEndDate = document.querySelector('#eventEndDate'),
-              eventUrl = document.querySelector('#eventURL'),
+              eventUrl = document.querySelector('#eventUR'),
               eventLabel = $('#eventLabel'), // ! Using jquery vars due to select2 jQuery dependency
               eventGuests = $('#eventGuests'), // ! Using jquery vars due to select2 jQuery dependency
               eventLocation = document.querySelector('#eventLocation'),
@@ -2159,6 +1378,9 @@
               eventToUpdate.extendedProps.description !== undefined
                 ? (eventDescription.value = eventToUpdate.extendedProps.description)
                 : null;
+                eventToUpdate.url!== undefined
+                ? (eventUrl.value = eventToUpdate.url)
+                : null;
 
               // // Call removeEvent function
               // btnDeleteEvent.addEventListener('click', e => {
@@ -2254,6 +1476,7 @@
         //         alert('خطا در دریافت رویدادها');
         //     });
         // }
+        //GetEvents
         function fetchEvents(info, successCallback) {
             var token = $("#ajax-token input[name='__RequestVerificationToken']").val();
 
@@ -2277,7 +1500,9 @@
                     // تبدیل تاریخ‌ها با استفاده از JDate برای تاریخ شمسی
                     // const startDate = new JDate(event.start);
                     // const endDate = new JDate(event.end);
-
+                    //         var q = document.querySelector("input#eventUR.form-control");
+                    // q.value=event.url;
+                    // console.log(q.value);
                     return {
                         id: event.id, // تبدیل به string برای مطابقت با FullCalendar
                         title: event.title || 'بدون عنوان',
@@ -2285,9 +1510,14 @@
                         end:new Date(event.end),
                         allDay: event.allDay || false,
                         extendedProps: {
-                            calendar: (event.extendedProps.calendar || 'ETC').trim()/* .toLowerCase() */ // تبدیل به حروف کوچک
+                            calendar: (event.extendedProps.calendar || 'ETC').trim(),/* .toLowerCase() */ // تبدیل به حروف کوچک
+                            location: event.location || '',
+                            description: event.description || '',
+                            guests: event.guests || [],
                         },
                         url: event.url || '',
+                        // url: event.url || '',
+                        // description: event.description,
                         display: 'auto'
                     };
                 }).filter(event => event !== null); // حذف رویدادهای نامعتبر
@@ -2548,7 +1778,7 @@
                 var eventStartDate = document.getElementById("eventStartDate").value;
                 var eventEndDate = document.getElementById("eventEndDate").value;
                 var allDaySwitch = document.querySelector(".allDay-switch").checked;
-                var eventUrl = document.getElementById("eventURL").value;
+                var eventUrl = document.getElementById("eventUR").value;
                 var eventGuests = Array.from(document.getElementById("eventGuests").selectedOptions).map(option => option.value);
                 var eventLocation = document.getElementById("eventLocation").value;
                 var eventDescription = document.getElementById("eventDescription").value;
@@ -2619,7 +1849,7 @@
                 var eventStartDate = document.getElementById("eventStartDate").value;
                 var eventEndDate = document.getElementById("eventEndDate").value;
                 var allDaySwitch = document.querySelector(".allDay-switch").checked;
-                var eventUrl = document.getElementById("eventURL").value;
+                var eventUrl = document.getElementById("eventUR").value;
                 var eventGuests = Array.from(document.getElementById("eventGuests").selectedOptions).map(option => option.value);
                 var eventLocation = document.getElementById("eventLocation").value;
                 var eventDescription = document.getElementById("eventDescription").value;
@@ -2918,115 +2148,78 @@
         //         console.error('خطا در بروزرسانی نوتیفیکیشن:', error);
         //     }
         // }
-        document.addEventListener('DOMContentLoaded', function() {
+               document.addEventListener('DOMContentLoaded', function() {
             const token = document.querySelector('#ajax-token input[name="__RequestVerificationToken"]').value;
             const notificationList = document.querySelector('.dropdown-notifications-list');
 
-            // تابع علامت گذاری به عنوان خوانده شده
-            async function markAsRead(notificationId, element) {
+            async function markAsRead(notificationId, type, element) {
                 try {
-                    // alert(notificationId);
-                          if (!element.classList.contains('unread')) {
-            return; // اگر خوانده شده بود ادامه نده
-        }
+                    if (!element.classList.contains('unread')) return;
 
                     const response = await fetch('/Index?handler=MarkNotificationAsRead', {
                         method: 'POST',
                         headers: {
-                            'Content-Type':  'application/x-www-form-urlencoded',
-                           'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'RequestVerificationToken': token
                         },
-                        body:  new URLSearchParams({ 'notificationId':notificationId })
+                        body: new URLSearchParams({
+                            'notificationId': notificationId,
+                            'type': type
+                        })
                     });
 
                     if (response.ok) {
-                        // حذف نشانگر و به روزرسانی وضعیت
-                           element.classList.remove('unread');
-                const badge = element.querySelector('.badge-dot');
-                if (badge) badge.remove();
+                        const data = await response.json();
+                        if (data.success) {
+                            element.classList.remove('unread');
+                            const badge = element.querySelector('.badge-dot');
+                            if (badge) badge.remove();
 
-                const badge2 = document.getElementById("notificationBadge");
-
-        // بررسی وجود المان و حذف کلاس
-        if (badge2) {
-            // روش صحیح حذف کلاس در جاوااسکریپت خالص
-            badge2.classList.remove("badge");
-
-            // اگر قصد حذف کامل المان را دارید:
-            // badge2.remove();
-        }
-
-                // const badge-span = element.querySelector('#notification-badge');
-                // if (badge-span) badge-span.remove();
-
-                // به روزرسانی شمارنده
-                updateNotificationCount(0);
-            }
-        } catch (error) {
-            console.error('خطا در بروزرسانی نوتیفیکیشن:', error);
-        }
-            }
-                    function updateNotificationCount(count) {
-            const notificationCount = document.querySelector('.notification-count');
-            const mainBadge = document.getElementById('notification-badge');
-
-            if (notificationCount) {
-                notificationCount.textContent = count;
-
-                if (count <= 0 && mainBadge) {
-                    mainBadge.remove();
-                } else if (count > 0 && !mainBadge) {
-                    // ایجاد نشانگر اگر وجود نداشت
-                    const newBadge = document.createElement('span');
-                    newBadge.id = 'notification-badge';
-                    newBadge.className = 'position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border';
-                    document.querySelector('.nav-link').appendChild(newBadge);
+                            updateNotificationCount();
+                        }
+                    }
+                } catch (error) {
+                    console.error('خطا در بروزرسانی نوتیفیکیشن:', error);
                 }
             }
-        }
-            // Intersection Observer برای تشخیص مشاهده
-           const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const element = entry.target;
-                    const isRead = element.dataset.isRead === 'true';
 
-                    // فقط برای نوتیفیکیشن‌های خوانده نشده
-                    if (!isRead) {
-                        const notificationId = element.dataset.notificationId;
-                        markAsRead(notificationId, element);
-                        observer.unobserve(element);
+            function updateNotificationCount() {
+                const notificationCount = document.querySelector('.notification-count');
+                const unreadItems = document.querySelectorAll('.dropdown-notifications-item.unread');
+                const mainBadge = document.getElementById('notificationBadge');
+
+                if (notificationCount) {
+                    notificationCount.textContent = unreadItems.length;
+
+                    if (unreadItems.length === 0 && mainBadge) {
+                        mainBadge.remove();
+                    } else if (unreadItems.length > 0 && !mainBadge) {
+                        const newBadge = document.createElement('span');
+                        newBadge.id = 'notificationBadge';
+                        newBadge.className = 'position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border';
+                        document.querySelector('.nav-link').appendChild(newBadge);
                     }
                 }
-            });
-        }, {
-            threshold: 0.5
-        });
-
-            // Mutation Observer برای تغییرات داینامیک لیست
-            const mutationObserver = new MutationObserver((mutations) => {
-                mutations.forEach(mutation => {
-                    mutation.addedNodes.forEach(node => {
-                        if (node.nodeType === 1 && node.matches('.dropdown-notifications-item')) {
-                            observer.observe(node);
-                        }
-                    });
-                });
-            });
-
-            // شروع مشاهده تغییرات
-            if (notificationList) {
-                mutationObserver.observe(notificationList, {
-                    childList: true,
-                    subtree: true
-                });
-
-                // مشاهده آیتم‌های موجود
-                document.querySelectorAll('.dropdown-notifications-item').forEach(item => {
-                    observer.observe(item);
-                });
             }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const element = entry.target;
+                        const notificationId = element.dataset.notificationId;
+                        const type = element.dataset.notificationType || 'Notification'; // مقدار پیشفرض
+
+                        markAsRead(notificationId, type, element);
+                        observer.unobserve(element);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            // اضافه کردن ویژگی data-type به آیتم‌های نوتیفیکیشن
+            document.querySelectorAll('.dropdown-notifications-item').forEach(item => {
+                item.dataset.type = 'Notification'; // یا 'UserNotification' بسته به نوع
+                observer.observe(item);
+            });
         });
     </script>
     <div id="ajax-token">

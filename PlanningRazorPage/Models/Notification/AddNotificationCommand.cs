@@ -24,8 +24,10 @@ namespace PlanningRazorPage.Models.Notification
         public NotificationType NotificationType { get; set; }
         public DateTime SendTime { get; set; }
         public long EventId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
         public DateTime EventStartTime { get; set; }
-        public List<string> UserIds { get; set; }
+        public List<string> UserNames { get; set; }
     }
     [Flags]
     public enum NotificationType
@@ -34,6 +36,7 @@ namespace PlanningRazorPage.Models.Notification
         Email,
         Sms
     }
+    
     public class EditNotificationCommand 
     {
         public long EventId { get; set; }
@@ -49,7 +52,7 @@ namespace PlanningRazorPage.Models.Notification
         public string ScheduleId { get; set; }
 
         public NotificationType NotificationType { get; set; }
-        public ICollection<string> UserIds { get; set; }
+        public ICollection<string> UserNames { get; set; }
     }
     public class RemoveNotificationCommand 
     {
@@ -74,6 +77,8 @@ namespace PlanningRazorPage.Models.Notification
         public NotificationType NotificationType { get; set; }
         public DateTime SendTime { get; set; }
         public DateTime EventEndTime { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
         public long EventId { get; set; }
         public DateTime EventStartTime { get; set; }
         public List<string> UserNames { get; set; }
@@ -94,6 +99,8 @@ namespace PlanningRazorPage.Models.Notification
         public DateTime EventEndTime { get; set; }
         public DateTime SendTime { get; set; }
         public bool IsSeen { get; set; }
+        public required string Title { get; set; }
+        public required string Description { get; set; }
 
 
         public NotificationType NotificationType { get; set; }
@@ -104,7 +111,7 @@ namespace PlanningRazorPage.Models.Notification
 
     public class NotificationFilterParam : BaseFilterParam
     {
-        public required string UserName { get; set; }
+        public required string UserId { get; set; }
     }
     public class NotificationFilterParamViewModel : BaseFilterParam
     {
@@ -121,6 +128,8 @@ namespace PlanningRazorPage.Models.Notification
         public DateTime EventEndTime { get; set; }
         public DateTime SendTime { get; set; }
 
+        public required string Title { get; set; }
+        public required string Description { get; set; }
         public NotificationType NotificationType { get; set; }
         public ICollection<string>? UserNames { get; set; }
 
@@ -134,4 +143,5 @@ namespace PlanningRazorPage.Models.Notification
 
         public bool AccessNotification { get; set; } = true;
     }
+    
 }
