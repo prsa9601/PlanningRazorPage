@@ -20,7 +20,7 @@ namespace PlanningRazorPage.Pages.Front.Profile
         }
 
         public long id { get; set; }
-        public List<PackageDtoForUserProfile?> packages { get; set; }
+        public List<PackageDtoForUserProfile> packages { get; set; }
         public async Task<IActionResult> OnGet()
         {
             packages = await _service.GetListActiveForCurrentUser();

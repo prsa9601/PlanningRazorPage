@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Content Remove="Areas\Blog\Pages\Shared\Partials\_Aside.cshtml" />
+    <Content Remove="Areas\Category\Pages\Shared\Partials\_Aside.cshtml" />
+    <Content Remove="Areas\Notification\Pages\Shared\Partials\_Aside.cshtml" />
     <Content Remove="Pages\Front\Profile\Security.cshtml" />
     <Content Remove="Pages\Shared\Partials\_Aside.cshtml" />
     <Content Remove="Pages\Shared\_LayoutFront.cshtml" />
@@ -38,6 +40,8 @@
 
   <ItemGroup>
     <None Include="Areas\Blog\Pages\Shared\Partials\_Aside.cshtml" />
+    <None Include="Areas\Category\Pages\Shared\Partials\_Aside.cshtml" />
+    <None Include="Areas\Notification\Pages\Shared\Partials\_Aside.cshtml" />
     <None Include="Pages\Front\Profile\Security.cshtml" />
     <None Include="Pages\Instagram\Post\Edit.cshtml" />
     <None Include="Pages\Shared\Partials\_Aside.cshtml" />

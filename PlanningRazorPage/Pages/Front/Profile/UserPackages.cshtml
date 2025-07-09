@@ -8,7 +8,7 @@
 @{
     Layout = "Shared/_LayoutProfile";
 }
- @section Header {
+@section Header {
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
@@ -58,6 +58,7 @@
             border: 2px solid #FF6B6B;
             box-shadow: var(--neon-shadow);
         }
+
         .billing-card {
             border-radius: 2rem;
             background: rgba(255,255,255,0.95);
@@ -91,7 +92,7 @@
             border-collapse: collapse;
         }
 
-            .billing-table th, 
+            .billing-table th,
             .billing-table td {
                 padding: 1.5rem 2rem;
                 text-align: center;
@@ -160,24 +161,24 @@
                 min-width: 800px;
             }
 
-            .billing-table td {
-                white-space: normal;
-                padding: 1rem;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-                .billing-table td::before {
-                    content: attr(data-label);
-                    font-weight: bold;
-                    color: #FF6B6B;
-                    margin-left: 1rem;
+                .billing-table td {
+                    white-space: normal;
+                    padding: 1rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
                 }
 
-            .billing-table th {
-                display: none;
-            }
+                    .billing-table td::before {
+                        content: attr(data-label);
+                        font-weight: bold;
+                        color: #FF6B6B;
+                        margin-left: 1rem;
+                    }
+
+                .billing-table th {
+                    display: none;
+                }
 
             .action-btn {
                 width: 100%;
@@ -230,7 +231,7 @@
         <div class="table-header-custom">
             <h5 class="table-title mb-0">
                 💳 مدیریت پکیج های فعال
-                <span class="badge bg-light text-dark ms-2">@Model.packages.Count() پکیج</span>
+                <span class="badge bg-light text-dark ms-2">@(Model.packages != null ? Model.packages.Count() : 0) پکیج</span>
             </h5>
         </div>
 
@@ -250,7 +251,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model.packages.Count() == 0)
+                    @if (Model.packages == null || Model.packages.Count()==0)
                     {
                         <tr>
                             <td colspan="9" class="text-center py-4">

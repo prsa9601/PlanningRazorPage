@@ -69,9 +69,16 @@
                         <div class="form-floating form-floating-outline mb-4">
                             <select class="form-select" asp-for="@Model.InstagramId" required>
                                 <option value="">انتخاب حساب اینستاگرام</option>
-                                @foreach (var account in Model.Account!)
+                                @if (Model.Account == null)
                                 {
-                                    <option value="@account.Id">📱 @account.InstagramUserName</option>
+                                    <option value="null">📱 شما حسابی در سایت نساخته اید!</option>
+                                }
+                                else
+                                {
+                                    @foreach (var account in Model.Account!)
+                                    {
+                                        <option value="@account.Id">📱 @account.InstagramUserName</option>
+                                    }
                                 }
                             </select>
                             <label class="text-primary">

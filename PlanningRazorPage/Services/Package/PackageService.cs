@@ -99,7 +99,7 @@ public class PackageService : IPackageService
         var result = await _client.GetFromJsonAsync<ApiResult<List<PackageDto>?>>($"{ModuleName}/GetList");
         return result?.Data!;
     }
-    public async Task<List<PackageDtoForUserProfile?>> GetListActiveForCurrentUser()
+    public async Task<List<PackageDtoForUserProfile>> GetListActiveForCurrentUser()
     { 
         var result = await _client.GetFromJsonAsync<ApiResult<List<PackageDtoForUserProfile?>>>($"{ModuleName}/GetListActiveForCurrentUser");
         return result?.Data!;

@@ -276,14 +276,16 @@
                         }
                     });
 
-                    const result = await response.json();
+                    location.reload();
+                    // const result = await JSON.parse(response);
+                    // // const result = await response.json();
 
-                    if (result.success) {
-                        showToast('success', result.message);
-                        setTimeout(() => location.reload(), 1500);
-                    } else {
-                        showToast('error', result.message);
-                    }
+                    // if (result.success) {
+                    //     showToast('success', result.message);
+                    //     setTimeout(() => window.reload(), 1500);
+                    // } else {
+                    //     showToast('error', result.message);
+                    // }
                 } catch (error) {
                     console.error('خطا در انجام عملیات:', error);
                     showToast('error', 'خطا در ارتباط با سرور');
@@ -291,20 +293,20 @@
             }
         }
 
-        // نمایش نوتیفیکیشن
-        // function showToast(type, message) {
-        //     const Toast = Swal.mixin({
-        //         toast: true,
-        //         position: 'top-start',
-        //         showConfirmButton: false,
-        //         timer: 3000,
-        //         timerProgressBar: true,
-        //     });
+        // // نمایش نوتیفیکیشن
+        function showToast(type, message) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-start',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
 
-        //     Toast.fire({
-        //         icon: type,
-        //         title: message
-        //     });
-        // }
+            Toast.fire({
+                icon: type,
+                title: message
+            });
+        }
     </script>
 }

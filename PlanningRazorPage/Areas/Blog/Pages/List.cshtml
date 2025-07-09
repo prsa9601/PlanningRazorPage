@@ -215,12 +215,12 @@
                         <form method="get" class="row g-3">
                             <div class="col-md-4">
                                 <label for="search" class="form-label">جستجو</label>
-                                <input type="text" class="form-control search-box" name="search"
+                                <input type="text" class="form-control search-box" name="FilterParams.Search"
                                        value="@Model.FilterParams.Search" placeholder="جستجو بر اساس عنوان یا توضیحات...">
                             </div>
                             <div class="col-md-3">
                                 <label for="category" class="form-label">دسته بندی</label>
-                                <select class="form-select" name="categoryId">
+                                <select class="form-select" name="FilterParams.CategoryId">
                                     <option value="">همه دسته‌ها</option>
                                     @foreach (var category in @Model.CategoryList)
                                     {
@@ -233,7 +233,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="orderBy" class="form-label">مرتب‌سازی بر اساس</label>
-                                <select class="form-select" name="searchOrderBy">
+                                <select class="form-select" name="FilterParams.SearchOrderBy">
                                     <option value="">پیش‌فرض</option>
                                     <option value="visit" selected="@(Model.FilterParams.SearchOrderBy == PostSearchOrderBy.visit)">
                                         بیشترین بازدید
@@ -259,6 +259,7 @@
                                     <th scope="col">تصویر</th>
                                     <th scope="col">عنوان</th>
                                     <th scope="col">دسته بندی</th>
+                                    <th scope="col">تاریخ ساخت</th>
                                     <th scope="col">تاریخ انتشار</th>
                                     <th scope="col">بازدید</th>
                                     <th scope="col">وضعیت</th>
@@ -268,10 +269,13 @@
                             <tbody>
                                 @if (Model.BlogFilter?.Data != null && Model.BlogFilter.Data.Any())
                                 {
+                                    int number = 0;
                                     @foreach (var item in Model.BlogFilter.Data)
                                     {
-                                        <tr>
-                                            <td>@item.Id</td>
+                                        number++;
+                                        <tr id="row-@item.Id" data-index="@number">
+                                            <!-- تغییر در سلول شماره ردیف -->
+                                            <td class="row-number">@number</td>
                                             <td>
                                                 @if (!string.IsNullOrEmpty(item.ImageName))
                                                 {
@@ -287,6 +291,9 @@
                                                 <div class="text-muted small mt-1">@item.Slug</div>
                                             </td>
                                             <td> @Model.CategoryList.FirstOrDefault(i => i.Id == item.CategoryId)?.Title</td>
+                                            <td>
+                                                <div>@item.CreationDate.ToPersianDateTime()</div>
+                                            </td>
                                             <td>
                                                 <div>@item.SendTime.ToPersianDateTime()</div>
                                                 <div class="small text-muted">@item.CreatorUserName</div>
@@ -306,7 +313,7 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2">
-                                                    <a asp-area="Blog" asp-page="Edit" asp-route-id="@item.Id"
+                                                    <a href="/Blog/Edit?id=@item.Id"
                                                        class="btn btn-sm btn-primary d-flex align-items-center">
                                                         <i class="bi bi-pencil-square me-1"></i>
                                                         <span class="text-white">ویرایش</span>
@@ -350,10 +357,17 @@
                                 {
                                     <li class="page-item">
                                         <a class="page-link"
-                                           asp-route-pageId="@(Model.BlogFilter.CurrentPage - 1)"
-                                           asp-route-search="@Model.FilterParams.Search"
-                                           asp-route-categoryId="@Model.FilterParams.CategoryId"
-                                           asp-route-searchOrderBy="@Model.FilterParams.SearchOrderBy">
+                                       @*     asp-route-FilterParams.PageId="1"
+                                           asp-route-FilterParams.Search="@Model.FilterParams.Search"
+                                           asp-route-FilterParams.SearchOrderBy="@Model.FilterParams.SearchOrderBy"
+                                           asp-route-FilterParams.CategoryId="@Model.FilterParams.CategoryId"
+ *@
+                                             href="@Url.Page("./List", new {
+                                               CategoryId = @Model.FilterParams.CategoryId,
+                                               PageId = 1,
+                                               Search = @Model.FilterParams.Search,
+                                               SearchOrderBy = @Model.FilterParams.SearchOrderBy
+                                           })">
                                             <i class="bi bi-chevron-right"></i>
                                         </a>
                                     </li>
@@ -361,12 +375,22 @@
 
                                 @for (int i = Model.BlogFilter.StartPage; i <= Model.BlogFilter.EndPage; i++)
                                 {
-                                    <li class="page-item @(i == Model.BlogFilter.CurrentPage ? "active" : "")">
+                                    <li class="page-item @(i == Model.BlogFilter.CurrentPage ? "active" : "")
+                                                         @(i == Model.BlogFilter.CurrentPage ? "disabled" : "")">
                                         <a class="page-link"
-                                           asp-route-pageId="@i"
-                                           asp-route-search="@Model.FilterParams.Search"
-                                           asp-route-categoryId="@Model.FilterParams.CategoryId"
-                                           asp-route-searchOrderBy="@Model.FilterParams.SearchOrderBy">@i</a>
+                                          @*  asp-route-FilterParams.PageId="@i"
+                                           asp-route-FilterParams.Search="@Model.FilterParams.Search"
+                                           asp-route-FilterParams.SearchOrderBy="@Model.FilterParams.SearchOrderBy"
+                                           asp-route-FilterParams.CategoryId="@Model.FilterParams.CategoryId"
+ *@
+                                           href="@Url.Page("./List", new {
+                                               CategoryId = @Model.FilterParams.CategoryId,
+                                               PageId = i,
+                                               Search = @Model.FilterParams.Search,
+                                               SearchOrderBy = @Model.FilterParams.SearchOrderBy
+                                           })">
+                                            @i
+                                        </a>
                                     </li>
                                 }
 
@@ -374,10 +398,16 @@
                                 {
                                     <li class="page-item">
                                         <a class="page-link"
-                                           asp-route-pageId="@(Model.BlogFilter.CurrentPage + 1)"
-                                           asp-route-search="@Model.FilterParams.Search"
-                                           asp-route-categoryId="@Model.FilterParams.CategoryId"
-                                           asp-route-searchOrderBy="@Model.FilterParams.SearchOrderBy">
+                                           @* asp-route-FilterParams.PageId="@Model.BlogFilter.EndPage"
+                                           asp-route-FilterParams.Search="@Model.FilterParams.Search"
+                                           asp-route-FilterParams.SearchOrderBy="@Model.FilterParams.SearchOrderBy"
+                                           asp-route-FilterParams.CategoryId="@Model.FilterParams.CategoryId" *@
+                                        href="@Url.Page("./List", new {
+                                               CategoryId = @Model.FilterParams.CategoryId,
+                                               PageId = Model.BlogFilter.EntityCount,
+                                               Search = @Model.FilterParams.Search,
+                                               SearchOrderBy = @Model.FilterParams.SearchOrderBy
+                                           })">
                                             <i class="bi bi-chevron-left"></i>
                                         </a>
                                     </li>
@@ -440,6 +470,15 @@
             const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
             const url = `/Blog/List?handler=Delete&id=${id}`;
 
+                    function updateRowNumbers() {
+            const dataRows = document.querySelectorAll('tr[id^="row-"]');
+            dataRows.forEach((row, index) => {
+                const rowNumberCell = row.querySelector('.row-number');
+                if (rowNumberCell) {
+                    rowNumberCell.textContent = index + 1;
+                }
+            });
+        }
             try {
                 const result = await Swal.fire({
                     title: 'آیا مطمئن هستید؟',
@@ -466,6 +505,12 @@
                         const row = document.getElementById(`row-${id}`);
                         if (row) row.remove();
                          window.location.reload();
+
+                         updateRowNumbers();
+
+                        location.reload();
+
+
                         // نمایش پیام موفقیت با SweetAlert
                         // Swal.fire(
                         //     'حذف شد!',

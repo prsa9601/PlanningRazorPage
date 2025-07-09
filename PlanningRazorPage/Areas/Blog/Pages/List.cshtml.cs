@@ -8,7 +8,7 @@ using PlanningRazorPage.Services.Category;
 
 namespace PlanningRazorPage.Areas.Blog.Pages
 {
-    [Area("Blog")]
+    //[Area("Blog")]
     public class ListModel : BaseRazorFilter<BlogFilterParam>
     {
         private readonly IBlogService _service;
@@ -21,6 +21,7 @@ namespace PlanningRazorPage.Areas.Blog.Pages
         }
         [BindProperty(SupportsGet = true)]
         public BlogFilterResult BlogFilter { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public List<CategoryDto?> CategoryList { get; set; }
         public async Task<IActionResult> OnGet()

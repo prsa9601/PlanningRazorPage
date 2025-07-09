@@ -1,0 +1,580 @@
+﻿@page
+@using PlanningRazorPage.Infrastructure.Utils
+@using PlanningRazorPage.Models.User.UserNotification
+@model PlanningRazorPage.Areas.Notification.Pages.IndexModel
+@{
+    // Layout = "Shared/_Layout";
+    ViewData["Title"] = "📣 مدیریت اعلانات کاربران";
+}
+
+@section Header {
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            --secondary-gradient: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            --glass-effect: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            --neon-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
+        }
+        
+        .notification-management-card {
+            border-radius: 2rem;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin: 2rem;
+            overflow: hidden;
+            border: 2px solid #3498db;
+        }
+        
+        .table-header-custom {
+            background: var(--primary-gradient);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .table-header-custom::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        .table-title {
+            font-family: 'Yekan', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .filter-section {
+            background: rgba(236, 240, 241, 0.3);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .notification-table {
+            --hover-scale: 1.02;
+            --hover-bg: rgba(236, 240, 241, 0.5);
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .notification-table tr {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255,255,255,0.9);
+        }
+        
+        .notification-table tr:hover {
+            transform: scale(var(--hover-scale));
+            background: var(--hover-bg);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .notification-table th,
+        .notification-table td {
+            padding: 1.2rem;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .notification-table th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .status-sent {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .status-pending {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .status-active {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .status-inactive {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .status-seen {
+            background-color: var(--info-color);
+            color: white;
+        }
+        
+        .status-unseen {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .send-type {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 1.5rem;
+            background-color: #e0f7fa;
+            color: #00838f;
+            font-weight: bold;
+        }
+        
+        .users-list {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            background-color: #f5f5f5;
+            transition: all 0.3s ease;
+        }
+        
+        .users-list:hover {
+            overflow: visible;
+            white-space: normal;
+            z-index: 10;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+        }
+        
+        .btn-action {
+            padding: 0.7rem 1.2rem;
+            border-radius: 1.5rem;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .btn-edit {
+            background: var(--secondary-gradient);
+            color: white !important;
+        }
+        
+        .btn-delete {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white !important;
+        }
+        
+        .btn-view {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white !important;
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .btn-action span::after {
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn-edit span::after {
+            content: '✏️';
+        }
+        
+        .btn-delete span::after {
+            content: '🗑️';
+        }
+        
+        .btn-view span::after {
+            content: '👁️';
+        }
+        
+        .btn-action:hover span::after {
+            transform: rotate(15deg) scale(1.2);
+        }
+        
+        .floating-action-btn {
+            background: var(--primary-gradient);
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            box-shadow: var(--neon-shadow);
+            transition: all 0.3s ease;
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            color: white;
+            font-size: 1.8rem;
+            text-decoration: none;
+        }
+        
+        .floating-action-btn:hover {
+            transform: rotate(360deg) scale(1.1);
+            color: white;
+        }
+        
+        .no-data-box {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.5rem;
+            color: #3498db;
+            border: 2px dashed #3498db;
+            border-radius: 1rem;
+            margin: 2rem;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .pagination {
+            --pagination-color: #3498db;
+            --pagination-active-bg: var(--success-color);
+            --pagination-hover-color: #2980b9;
+        }
+        
+        .page-item.active .page-link {
+            background-color: var(--pagination-active-bg);
+            border-color: var(--pagination-active-bg);
+            color: white;
+        }
+        
+        .page-link {
+            color: var(--pagination-color);
+            border: 2px solid rgba(52, 152, 219, 0.3);
+            margin: 0 4px;
+            border-radius: 1rem !important;
+            transition: all 0.3s ease;
+        }
+        
+        .page-link:hover {
+            color: var(--pagination-hover-color);
+            background-color: rgba(52, 152, 219, 0.1);
+            border-color: var(--pagination-color);
+        }
+        
+        .page-item:first-child .page-link,
+        .page-item:last-child .page-link {
+            border-radius: 1rem !important;
+        }
+        
+        @@keyframes shine {
+            100% {
+                transform: translate(100%, 100%) rotate(45deg);
+            }
+        }
+        
+        @@media (max-width: 768px) {
+            .notification-management-card {
+                margin: 1rem;
+                border-radius: 1.5rem;
+            }
+            
+            .table-header-custom {
+                padding: 1.5rem;
+            }
+            
+            .table-title {
+                font-size: 2rem;
+            }
+            
+            .notification-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .notification-table thead {
+                display: none;
+            }
+            
+            .notification-table tr {
+                display: block;
+                margin-bottom: 1rem;
+                border-radius: 1rem;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+            
+            .notification-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                border-bottom: 1px solid #eee;
+                text-align: right;
+            }
+            
+            .notification-table td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                flex: 0 0 120px;
+                color: #3498db;
+                margin-left: 1rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .btn-action {
+                width: 100%;
+                justify-content: center;
+                padding: 0.7rem 1rem;
+            }
+            
+            .floating-action-btn {
+                width: 50px;
+                height: 50px;
+                bottom: 1rem;
+                left: 1rem;
+            }
+        }
+    </style>
+}
+
+<div class="notification-management-card">
+    <div class="table-header-custom">
+        <h5 class="table-title mb-0">
+            📣 مدیریت اعلانات کاربران
+        </h5>
+    </div>
+    
+    <div class="filter-section">
+        <form method="get" asp-page="Index" class="row g-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" value="@Model.FilterParams.Search" placeholder="جستجوی عنوان یا متن" name="FilterParams.Search">
+            </div>
+            <div class="col-md-4">
+                <select class="form-select"  name="FilterParams.IsSend">
+                    <option value="" selected="@(!Model.FilterParams.IsSend.HasValue)">وضعیت ارسال</option>
+                    <option value="true" selected="@(Model.FilterParams.IsSend.HasValue && 
+Model.FilterParams.IsSend.Value ? "selected" : null)">ارسال شده</option>
+                    <option value="false"
+                            selected="@(Model.FilterParams.IsSend.HasValue && 
+!Model.FilterParams.IsSend.Value ? "selected" : null)">ارسال نشده</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-filter me-2"></i>فیلتر
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive p-4">
+        <table class="table notification-table">
+            <thead>
+                <tr>
+                    <th data-label="عنوان">📌 عنوان</th>
+                    <th data-label="متن">✉️ متن</th>
+                    <th data-label="وضعیت ارسال">📤 وضعیت ارسال</th>
+                    <th data-label="وضعیت فعال">✅ وضعیت فعال</th>
+                    <th data-label="تاریخ ارسال">📅 تاریخ ارسال</th>
+                    <th data-label="نوع ارسال">📨 نوع ارسال</th>
+                    <th data-label="وضعیت مشاهده">👁️ وضعیت مشاهده</th>
+                    <th data-label="کاربران">👥 کاربران</th>
+                    <th data-label="عملیات">⚙️ عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.UserNotifications?.Data?.Count > 0)
+                {
+                    @foreach (var notification in Model.UserNotifications.Data)
+                    {
+                        <tr>
+                            <td data-label="عنوان">@notification.Title</td>
+                            <td data-label="متن">
+                                <div class="notification-description">
+                                    @notification.Description.Truncate(30)
+                                </div>
+                            </td>
+                            <td data-label="وضعیت ارسال">
+                                <span class="status-badge @(notification.IsSend ? "status-sent" : "status-pending")">
+                                    @(notification.IsSend ? "ارسال شده" : "در انتظار")
+                                </span>
+                            </td>
+                            <td data-label="وضعیت فعال">
+                                <span class="status-badge @(notification.IsActive ? "status-active" : "status-inactive")">
+                                    @(notification.IsActive ? "فعال" : "غیرفعال")
+                                </span>
+                            </td>
+                            <td data-label="تاریخ ارسال">@notification.SendTime.ToPersianDate()</td>
+                            <td data-label="نوع ارسال">
+                                <span class="send-type">@notification.SendType</span>
+                            </td> @*.GetDisplayName() *@
+                            <td data-label="وضعیت مشاهده">
+                                <span class="status-badge @(notification.IsSeen ? "status-seen" : "status-unseen")">
+                                    @(notification.IsSeen ? "مشاهده شده" : "مشاهده نشده")
+                                </span>
+                            </td>
+                            <td data-label="کاربران">
+                                <div class="users-list" title="@string.Join(", ", notification.UserNames)">
+                                    @string.Join(", ", notification.UserNames.Take(2))
+                                    @if (notification.UserNames.Count > 2)
+                                    {
+                                        <span> و @(notification.UserNames.Count - 2) نفر دیگر</span>
+                                    }
+                                </div>
+                            </td>
+                            <td data-label="عملیات">
+                                <div class="action-buttons">
+                                    <a asp-page="Edit" asp-route-id="@notification.Id" class="btn-action btn-edit">
+                                        <span>ویرایش</span>
+                                    </a>
+                                    <button class="btn-action btn-delete" data-notification-id="@notification.Id" data-notification-title="@notification.Title">
+                                        <span>حذف</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9">
+                            <div class="no-data-box">
+                                📭 هیچ اعلانی یافت نشد!
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination -->
+    @if (Model.UserNotifications?.PageCount > 1)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center mt-4">
+                @if (Model.UserNotifications.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@Url.Page("./Index", new {
+                                               PageId = @Model.UserNotifications.CurrentPage - 1,
+                                               Search = @Model.FilterParams.Search,
+                                               IsSend = @Model.FilterParams.IsSend
+                                           })"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= Model.UserNotifications.PageCount; i++)
+                {
+                    <li class="page-item @(i == Model.UserNotifications.CurrentPage ? "active" : "")">
+                        <a class="page-link"
+                           href="@Url.Page("./Index", new {
+                                               PageId = @i,
+                                               Search = @Model.FilterParams.Search,
+                                               IsSend = @Model.FilterParams.IsSend
+                                           })">@i</a>
+                    </li>
+                }
+
+                @if (Model.UserNotifications.CurrentPage < Model.UserNotifications.PageCount)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@Url.Page("./Index", new {
+                                               PageId = @Model.UserNotifications.CurrentPage + 1,
+                                               Search = @Model.FilterParams.Search,
+                                               IsSend = @Model.FilterParams.IsSend
+                                           })"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                } @*  asp-area="Notification"
+                           asp-page="/Index" *@
+            </ul>
+        </nav>
+    }
+    
+    <a href="@Url.Page("./Add")" class="floating-action-btn">
+        ➕
+    </a>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const notificationId = this.dataset.notificationId;
+                const notificationTitle = this.dataset.notificationTitle;
+
+                Swal.fire({
+                    title: 'آیا مطمئن هستید؟',
+                    html: `در حال حذف اعلان <b>${notificationTitle}</b> هستید`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e74c3c',
+                    cancelButtonColor: '#3498db',
+                    confirmButtonText: 'تایید حذف',
+                    cancelButtonText: 'انصراف'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        try {
+                            const response = await fetch(`?handler=Delete&id=${notificationId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            if (response.ok) {
+                                const row = this.closest('tr');
+                                row.style.transition = 'opacity 0.5s';
+                                row.style.opacity = '0';
+
+                                setTimeout(() => {
+                                    row.remove();
+                                    Swal.fire('حذف شد!', 'اعلان با موفقیت حذف شد', 'success');
+                                }, 500);
+                            } else {
+                                Swal.fire('خطا!', 'حذف اعلان انجام نشد', 'error');
+                            }
+                        } catch (error) {
+                            console.error('خطا در حذف اعلان:', error);
+                            Swal.fire('خطا!', 'ارتباط با سرور برقرار نشد', 'error');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -7,13 +7,13 @@ namespace PlanningRazorPage.Services.Notification
     public interface INotificationService
     {
         Task<ApiResult?> SendEmail(SendNotificationByEmailCommand command);
-        Task<ApiResult<long>?> Add(AddNotificationViewModel command);
+        Task<ApiResult<long>> Add(AddNotificationViewModel command);
         Task<ApiResult?> Edit(EditNotificationViewModel command);
         Task<ApiResult?> MarkAsRead(MarkAsReadNotificationViewModel command);
         Task<ApiResult?> ChangeDate(ChangeDateNotificationCommand command);
         Task<ApiResult?> Remove(RemoveNotificationCommand command);
         Task<NotificationDto?> GetByIdNotificationsCurrentUser(long NotificationId);
-        Task<NotificationFilterResult?> GetFilterNotificationsCurrentUser(NotificationFilterParamViewModel param);
+        Task<NotificationFilterResult> GetFilterNotificationsCurrentUser(NotificationFilterParamViewModel param);
     }
     public class NotificationService : INotificationService
     {
@@ -31,7 +31,7 @@ namespace PlanningRazorPage.Services.Notification
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 
-        public async Task<ApiResult<long>?> Add(AddNotificationViewModel command)
+        public async Task<ApiResult<long>> Add(AddNotificationViewModel command)
         {
             var result = await _client.PostAsJsonAsync($"{ModuleName}/AddNotification", command);
             return await result.Content.ReadFromJsonAsync<ApiResult<long>>();
@@ -62,13 +62,13 @@ namespace PlanningRazorPage.Services.Notification
             return result?.Data;
         }
 
-        public async Task<NotificationFilterResult?> GetFilterNotificationsCurrentUser(NotificationFilterParamViewModel param)
+        public async Task<NotificationFilterResult> GetFilterNotificationsCurrentUser(NotificationFilterParamViewModel param)
         {
             //var url = $"{ModuleName}/filter?PageId={param.PageId}&Take={param.Take}";
             var url = $"{ModuleName}/GetFilterNotificationsCurrentUser?PageId={param.PageId}&Take={param.Take}";
 
-            var result = await _client.GetFromJsonAsync<ApiResult<NotificationFilterResult?>>(url);
-            return result?.Data;
+            var result = await _client.GetFromJsonAsync<ApiResult<NotificationFilterResult>>(url);
+            return result.Data;
         }
 
         public async Task<ApiResult?> MarkAsRead(MarkAsReadNotificationViewModel command)

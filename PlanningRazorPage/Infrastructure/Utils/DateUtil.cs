@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
-
+using System.Text;
+using System;
+using System.Globalization;
 namespace PlanningRazorPage.Infrastructure.Utils;
 
 public static class DateUtil
@@ -21,6 +23,47 @@ public static class DateUtil
     //        return DateTime.MinValue;
     //    }
     //}
+
+
+    public static DateTime ConvertToGregorianDateTime(this string persianDateTime)
+    {
+        try
+        {
+            PersianCalendar pc = new PersianCalendar();
+
+            // Convert Persian digits to standard Arabic digits
+            persianDateTime = ConvertPersianDigitsToEnglish(persianDateTime);
+
+            // Extract year, month, day, hour, and minute
+            string[] parts = persianDateTime.Split(' ');
+            string[] dateParts = parts[0].Split('/');
+            string[] timeParts = parts.Length > 1 ? parts[1].Split(':') : new string[] { "0", "0" };
+
+            int year = int.Parse(dateParts[0]);
+            int month = int.Parse(dateParts[1]);
+            int day = int.Parse(dateParts[2]);
+            int hour = int.Parse(timeParts[0]);
+            int minute = int.Parse(timeParts[1]);
+
+            // Convert to Gregorian
+            DateTime gregorianDate = new DateTime(year, month, day, hour, minute, 0, pc);
+            return gregorianDate;
+        }
+        catch
+        {
+            return DateTime.MinValue;
+        }
+    }
+
+    private static string ConvertPersianDigitsToEnglish(string input)
+    {
+        string[] persianDigits = { "۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹" };
+        for (int i = 0; i < persianDigits.Length; i++)
+        {
+            input = input.Replace(persianDigits[i], i.ToString());
+        }
+        return input;
+    }
     public static DateTime ToMiladi(this string persianDate)
     {
         try

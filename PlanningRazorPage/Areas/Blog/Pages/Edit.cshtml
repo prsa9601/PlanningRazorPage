@@ -1,4 +1,5 @@
 ﻿@page
+@using PlanningRazorPage.Infrastructure
 @model PlanningRazorPage.Areas.Blog.Pages.EditModel
 @{
     ViewData["Title"] = "ویرایش وبلاگ";
@@ -216,6 +217,18 @@
             max-width: 200px;
             border: 1px solid #eee;
         }
+
+        .no-category-alert {
+            border-radius: 10px;
+            border-left: 5px solid #e74a3b;
+            margin-bottom: 20px;
+        }
+
+        .disabled-form {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
     </style>
 }
 
@@ -231,10 +244,29 @@
                     </button>
                 </div>
                 <div class="card-body">
+                    <!-- Category Warning -->
+                    @if (Model.Categories.Count() == 0)
+                    {
+                        <div class="alert alert-danger no-category-alert">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            <strong>دسته بندی وجود ندارد!</strong> برای افزودن دسته بندی روی این دکمه کلیک کنید
+                            <div class="mt-3">
+                                <a asp-area="Blog" asp-page="AddCategory" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-2"></i>افزودن دسته بندی
+                                </a>
+                            </div>
+                        </div>
+                    }
+
                     <div class="alert alert-danger validation-summary mb-4 d-none">
                         <i class="bi bi-exclamation-circle me-2"></i>
                         <span id="error-message">لطفا خطاهای فرم را برطرف کنید</span>
                     </div>
+
+                    @*   <div class="alert alert-danger validation-summary mb-4 d-none">
+                        <i class="bi bi-exclamation-circle me-2"></i>
+                        <span id="error-message">لطفا خطاهای فرم را برطرف کنید</span>
+                    </div> *@
 
                     <form asp-area="AdminPanel" method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="Id" />
@@ -242,13 +274,13 @@
                             <div class="col-md-8">
                                 <div class="mb-4">
                                     <label for="Title" class="form-label">عنوان</label>
-                                    <input asp-for="Title" type="text" class="form-control" id="Title" placeholder="عنوان وبلاگ را وارد کنید">
+                                    <input asp-for="Title" type="text" class="form-control" name="Title" id="Title" value="@Model.Title" placeholder="عنوان وبلاگ را وارد کنید">
                                     <div class="invalid-feedback">لطفاً عنوان را وارد کنید</div>
                                 </div>
 
                                 <div class="mb-4">
                                     <label for="Slug" class="form-label">Slug</label>
-                                    <input asp-for="Slug" type="text" class="form-control" id="Slug" placeholder="slug-مطلب">
+                                    <input asp-for="Slug" type="text" class="form-control" name="Slug" id="Slug" value="@Model.Slug" placeholder="slug-مطلب">
                                     <div class="invalid-feedback">لطفاً slug را وارد کنید</div>
                                 </div>
                             </div>
@@ -258,18 +290,18 @@
                                     <div class="switch-container">
                                         <input class="form-check-input"
                                                type="checkbox"
-                                               id="scheduleSwitch" 
-                                               @(Model.SendTime <= DateTime.Now ? "checked" : "")>
+                                               id="scheduleSwitch"
+                                        @(Model.SendTime <= DateTime.Now ? "checked" : "")>
                                         <label class="form-check-label" for="scheduleSwitch">⏰ ارسال فوری</label>
                                     </div>
                                     <label for="SendTime" class="form-label">تاریخ ارسال</label>
-                                    <input asp-for="SendTime" type="text" class="form-control" id="SendTime" readonly>
+                                    <input asp-for="SendTime" type="text" value="@Model.SendTime" class="form-control" id="SendTime" readonly>
                                     <div class="invalid-feedback">لطفاً تاریخ ارسال را انتخاب کنید</div>
                                 </div>
 
                                 <div class="mb-4">
                                     <label for="CategoryId" class="form-label">دسته بندی</label>
-                                    <select asp-for="CategoryId" class="form-select" id="CategoryId">
+                                    <select asp-for="CategoryId" class="form-select" id="CategoryId" name="CategoryId">
                                         <option value="">انتخاب دسته بندی</option>
                                         @foreach (var category in Model.Categories)
                                         {
@@ -283,19 +315,19 @@
 
                                 <div class="mb-4">
                                     <label class="form-label">تصویر شاخص</label>
-                                    
+
                                     @if (!string.IsNullOrEmpty(Model.CurrentImage))
                                     {
                                         <div class="current-image mb-3">
-                                            <img src="/images/blogs/@Model.CurrentImage" class="img-fluid" alt="تصویر فعلی">
+                                            <img src="@Directories.GetBlogImage(Model.CurrentImage)" asp-for="@Model.CurrentImage" id="CurrentImage" class="img-fluid" alt="تصویر فعلی">
                                         </div>
                                     }
-                                    
+
                                     <div class="upload-area" id="upload-area">
                                         <i class="bi bi-cloud-arrow-up upload-icon"></i>
                                         <p class="mb-2">برای تغییر تصویر کلیک کنید</p>
                                         <p class="text-muted small mb-0">فرمت‌های مجاز: JPG, PNG (حداکثر 2MB)</p>
-                                        <input asp-for="Image" type="file" class="d-none" id="Image">
+                                        <input asp-for="Image" type="file" class="d-none" id="Image" name="Image">
                                     </div>
                                     <div class="preview mt-3 text-center d-none" id="image-preview">
                                         <img src="" class="img-thumbnail" style="max-height: 150px">
@@ -314,7 +346,7 @@
                                         <label for="Description" class="form-label">متن وبلاگ</label>
                                     </div>
                                     <div class="ckeditor-container">
-                                        <textarea asp-for="Description" class="form-control" id="Description" rows="6" placeholder="محتویات وبلاگ را بنویسید..."></textarea>
+                                        <textarea asp-for="Description" class="form-control" name="Description" id="Description" rows="6" placeholder="محتویات وبلاگ را بنویسید..."> @Model.Description</textarea>
                                     </div>
                                     <div class="invalid-feedback">لطفاً متن وبلاگ را وارد کنید</div>
                                 </div>
@@ -326,30 +358,30 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="MetaTitle" class="form-label">عنوان متا</label>
-                                    <input asp-for="SeoData.MetaTitle" type="text" class="form-control" id="MetaTitle" placeholder="عنوان برای موتورهای جستجو">
+                                    <input asp-for="SeoData.MetaTitle" type="text" class="form-control" name="MetaTitle" id="MetaTitle" value="@Model.SeoData.MetaTitle" placeholder="عنوان برای موتورهای جستجو">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="MetaKeywords" class="form-label">کلمات کلیدی</label>
-                                    <input asp-for="SeoData.MetaKeyWords" type="text" class="form-control" id="MetaKeywords" placeholder="کلمات کلیدی را با کاما جدا کنید">
+                                    <input asp-for="SeoData.MetaKeyWords" type="text" class="form-control" name="MetaKeywords" id="MetaKeywords" value="@Model.SeoData.MetaKeyWords" placeholder="کلمات کلیدی را با کاما جدا کنید">
                                 </div>
                                 <div class="col-12 mb-3">
                                     <label for="MetaDescription" class="form-label">توضیحات متا</label>
-                                    <textarea asp-for="SeoData.MetaDescription" class="form-control" id="MetaDescription" rows="3" placeholder="توضیحات مختصر برای موتورهای جستجو"></textarea>
+                                    <textarea asp-for="SeoData.MetaDescription" class="form-control" name="MetaDescription" id="MetaDescription" rows="3" placeholder="توضیحات مختصر برای موتورهای جستجو">@Model.SeoData.MetaDescription</textarea>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <div class="form-check form-switch">
-                                        <input asp-for="SeoData.IndexPage" class="form-check-input" type="checkbox" id="IndexPage">
+                                        <input asp-for="SeoData.IndexPage" class="form-check-input" type="checkbox" name="IndexPage" id="IndexPage">
                                         <label class="form-check-label" for="IndexPage">فهرست‌بندی در موتورهای جستجو</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="Canonical" class="form-label">لینک کانونیکال</label>
-                                    <input asp-for="SeoData.Canonical" type="text" class="form-control" id="Canonical" placeholder="https://example.com/page">
+                                    <input asp-for="SeoData.Canonical" type="text" class="form-control" name="Canonical" id="Canonical" value="@Model.SeoData.Canonical" placeholder="https://example.com/page">
                                 </div>
                                 <div class="col-12 mb-3">
                                     <label for="Schema" class="form-label">ساختار داده‌ها (Schema)</label>
-                                    <textarea asp-for="SeoData.Schema" class="form-control" id="Schema" rows="5" placeholder='{"context":"https://schema.org","type":"BlogPosting"...}'></textarea>
+                                    <textarea asp-for="SeoData.Schema" class="form-control" name="Schema" id="Schema" rows="5" placeholder='{"context":"https://schema.org","type":"BlogPosting"...}'>@Model.SeoData.Schema</textarea>
                                     <div class="form-text">داده‌های ساختاریافته به صورت JSON-LD وارد کنید</div>
                                 </div>
                             </div>
@@ -359,7 +391,7 @@
                             <a asp-area="AdminPanel" asp-page="List" class="btn btn-secondary">
                                 <i class="bi bi-x-circle me-2"></i>انصراف
                             </a>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" id="submitButton" class="btn btn-primary">
                                 <i class="bi bi-check-circle me-2"></i>ذخیره تغییرات
                             </button>
                         </div>
@@ -421,7 +453,7 @@
                         $("#SendTime").val(now.toLocale('fa').format('YYYY/MM/DD HH:mm'));
                     }
                 });
-                
+
                 // Set initial state
                 if (scheduleSwitch.checked) {
                     $("#SendTime").attr('disabled', true);
@@ -548,6 +580,35 @@
 
             // Initialize CKEditor with delay
             setTimeout(initializeCKEditor, 300);
+
+            if(@Model.Categories.Count() == 0){
+
+                const submitButton = document.querySelector("#submitButton");
+                submitButton.disabled = true; // Disable the button
+            }
+
+
+             var checkBox = document.getElementById("IndexPage");
+
+            if( @Json.Serialize(Model.SeoData.IndexPage) === true){
+                checkBox.checked = true;
+                checkBox.value = true;
+
+            }else{
+                checkBox.checked = false;
+                checkBox.value = false;
+
+            }
+
+            if (checkBox) {
+                checkBox.addEventListener('change', function() {
+                    if (this.checked) {
+                         checkBox.value = true;
+                    } else {
+                    checkBox.value = false;
+                    }
+                });
+            }
         });
     </script>
 }

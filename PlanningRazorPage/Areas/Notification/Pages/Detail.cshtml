@@ -1,0 +1,511 @@
+﻿@page "{id:long}"
+@using PlanningRazorPage.Infrastructure.Utils
+@model PlanningRazorPage.Areas.Notification.Pages.DetailModel
+@{
+    // Layout = "Shared/_Layout";
+    ViewData["Title"] = "🔍 جزئیات اعلان";
+}
+
+@section Styles {
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            --secondary-gradient: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            --glass-effect: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            --neon-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
+        }
+
+        .notification-detail-card {
+            border-radius: 2rem;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin: 2rem;
+            overflow: hidden;
+            border: 2px solid #3498db;
+            padding: 2rem;
+        }
+
+        .detail-header {
+            background: var(--primary-gradient);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .detail-header::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+                animation: shine 3s infinite;
+            }
+
+        .detail-title {
+            font-family: 'Yekan', sans-serif;
+            font-size: 2.2rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .detail-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .detail-section {
+            background: #f8f9fa;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+            .detail-section:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-value {
+            color: #2c3e50;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .status-sent {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .status-pending {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .status-active {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .status-inactive {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .status-seen {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .status-unseen {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .send-type-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 1.5rem;
+            background-color: #e0f7fa;
+            color: #00838f;
+            font-weight: bold;
+        }
+
+        .users-container {
+            margin-top: 1rem;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            background: white;
+            margin-bottom: 0.8rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+            .user-item:hover {
+                transform: translateX(5px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #3498db;
+            color: white;
+            display: grid;
+            place-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .user-email {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn-action {
+            padding: 0.8rem 2rem;
+            border-radius: 1.5rem;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-edit {
+            background: var(--secondary-gradient);
+            color: white !important;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white !important;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white !important;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .notification-description {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            line-height: 1.8;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            margin-top: 1rem;
+        }
+
+        @@keyframes shine {
+            100% {
+                transform: translate(100%, 100%) rotate(45deg);
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .notification-detail-card {
+                margin: 1rem;
+                border-radius: 1.5rem;
+                padding: 1.5rem;
+            }
+
+            .detail-header {
+                padding: 1.5rem;
+                border-radius: 1rem;
+            }
+
+            .detail-title {
+                font-size: 1.8rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn-action {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+}
+
+<div class="notification-detail-card">
+    <div class="detail-header">
+        <h3 class="detail-title">
+            <i class="fas fa-bell"></i> جزئیات اعلان
+        </h3>
+    </div>
+
+    <div class="detail-content">
+        <div class="detail-section">
+            <h4 class="section-title">
+                <i class="fas fa-info-circle"></i> اطلاعات اصلی
+            </h4>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-heading"></i> عنوان:
+                </span>
+                <span class="detail-value">@Model.Notification.Title</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-calendar-alt"></i> تاریخ ایجاد:
+                </span>
+                <span class="detail-value">@Model.Notification.CreationDate.ToPersianDate()</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-history"></i> تاریخ ارسال:
+                </span>
+                <span class="detail-value">@Model.Notification.SendTime.ToPersianDate()</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-toggle-on"></i> وضعیت فعال:
+                </span>
+                <span class="detail-value">
+                    <span class="status-badge @(Model.Notification.IsActive ? "status-active" : "status-inactive")">
+                        @(Model.Notification.IsActive ? "فعال" : "غیرفعال")
+                    </span>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-paper-plane"></i> وضعیت ارسال:
+                </span>
+                <span class="detail-value">
+                    <span class="status-badge @(Model.Notification.IsSend ? "status-sent" : "status-pending")">
+                        @(Model.Notification.IsSend ? "ارسال شده" : "در انتظار ارسال")
+                    </span>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-eye"></i> وضعیت مشاهده:
+                </span>
+                <span class="detail-value">
+                    <span class="status-badge @(Model.Notification.IsSeen ? "status-seen" : "status-unseen")">
+                        @(Model.Notification.IsSeen ? "مشاهده شده" : "مشاهده نشده")
+                    </span>
+                </span>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h4 class="section-title">
+                <i class="fas fa-paper-plane"></i> تنظیمات ارسال
+            </h4>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-users"></i> نوع ارسال:
+                </span>
+                <span class="detail-value">
+                    @* @(Model.Notification.SendToAllUser ? "همه کاربران" : "کاربران انتخاب شده") *@
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-broadcast-tower"></i> روش‌های ارسال:
+                </span>
+                <span class="detail-value">
+                    @foreach (var type in Model.Notification.SendType.ToString().Split(','))
+                    {
+                        <span class="send-type-badge">@type/* .GetDisplayNames()  */</span>
+                    }
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-user-check"></i> تعداد دریافت‌کنندگان:
+                </span>
+                <span class="detail-value">
+                    @Model.Notification.UserNames.Count نفر
+                </span>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h4 class="section-title">
+                <i class="fas fa-file-alt"></i> محتوای اعلان
+            </h4>
+
+            <div class="notification-description">
+                @Model.Notification.Description
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h4 class="section-title">
+                <i class="fas fa-users"></i> دریافت‌کنندگان
+            </h4>
+
+            <div class="users-container">
+                @if (Model.Notification.UserNames.Any())
+                {
+                    @foreach (var user in Model.Notification.UserNames.Take(5))
+                    {
+                        <div class="user-item">
+                            <div class="user-avatar">
+                                @user.Substring(0, 1)
+                            </div>
+                            <div class="user-info">
+                                <div class="user-name">@user</div>
+                                <div class="user-email">user@example.com</div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.Notification.UserNames.Count > 5)
+                    {
+                        <div class="text-center mt-2">
+                            <span class="text-muted">و @(Model.Notification.UserNames.Count - 5) کاربر دیگر</span>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <span class="text-muted">هیچ کاربری برای این اعلان انتخاب نشده است</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <a asp-page="Index" class="btn-action btn-back">
+            <i class="fas fa-arrow-left"></i> بازگشت به لیست
+        </a>
+        <a asp-page="Edit" asp-route-id="@Model.Notification.Id" class="btn-action btn-edit">
+            <i class="fas fa-edit"></i> ویرایش اعلان
+        </a>
+        <button class="btn-action btn-delete" data-notification-id="@Model.Notification.Id" data-notification-title="@Model.Notification.Title">
+            <i class="fas fa-trash"></i> حذف اعلان
+        </button>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelector('.btn-delete').addEventListener('click', function() {
+            const notificationId = this.dataset.notificationId;
+            const notificationTitle = this.dataset.notificationTitle;
+
+            Swal.fire({
+                title: 'آیا مطمئن هستید؟',
+                html: `در حال حذف اعلان <b>${notificationTitle}</b> هستید`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e74c3c',
+                cancelButtonColor: '#3498db',
+                confirmButtonText: 'تایید حذف',
+                cancelButtonText: 'انصراف'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const response = await fetch(`?handler=Delete&id=${notificationId}`, {
+                            method: 'POST',
+                            headers: {
+                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (response.ok) {
+                            Swal.fire({
+                                title: 'حذف شد!',
+                                text: 'اعلان با موفقیت حذف شد',
+                                icon: 'success',
+                                confirmButtonText: 'باشه'
+                            }).then(() => {
+                                window.location.href = '/Notification';
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'خطا!',
+                                text: 'حذف اعلان انجام نشد',
+                                icon: 'error',
+                                confirmButtonText: 'باشه'
+                            });
+                        }
+                    } catch (error) {
+                        console.error('خطا در حذف اعلان:', error);
+                        Swal.fire({
+                            title: 'خطا!',
+                            text: 'ارتباط با سرور برقرار نشد',
+                            icon: 'error',
+                            confirmButtonText: 'باشه'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+}
