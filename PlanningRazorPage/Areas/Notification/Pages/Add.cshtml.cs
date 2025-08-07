@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PlanningRazorPage.Infrastructure.RazorUtils;
+using PlanningRazorPage.Infrastructure.Utils;
 using PlanningRazorPage.Models.User.UserNotification;
 using PlanningRazorPage.Services.Friend;
 using PlanningRazorPage.Services.User;
@@ -22,7 +23,7 @@ namespace PlanningRazorPage.Areas.Notification
             public required string Title { get; set; }
             public required string Description { get; set; }
             public bool IsActive { get; set; } //ارسال بشه یانه
-            public DateTime SendTimeDate { get; set; }
+            public string SendTimeDate { get; set; }
             public bool SendToAllUser { get; set; }
             public required string NotificationType { get; set; }
 
@@ -38,7 +39,7 @@ namespace PlanningRazorPage.Areas.Notification
         public async Task<IActionResult> OnGetInformation()
         {
             informations = await _service.GetUserNamesForAdmin();
-            return new JsonResult(new {informations = informations });
+            return new JsonResult(new { informations = informations });
         }
         public async void OnPostAddNotification([FromBody] requestData requestData)
         {
@@ -51,7 +52,7 @@ namespace PlanningRazorPage.Areas.Notification
                 i++;
             }
             UserNotificationType NotificationSendType = new UserNotificationType();
-            if (requestUserNotificationType.Any(i=>i.Equals(UserNotificationType.Website.ToString())))
+            if (requestUserNotificationType.Any(i => i.Equals(UserNotificationType.Website.ToString())))
             {
                 NotificationSendType |= UserNotificationType.Website;
             }
@@ -64,7 +65,12 @@ namespace PlanningRazorPage.Areas.Notification
                 NotificationSendType |= UserNotificationType.Sms;
             }
 
+            DateTime date = DateTime.Now;
+            if (requestData.SendTimeDate != null)
+            {
+                date = requestData.SendTimeDate!.ConvertToGregorianDateTime();
 
+            }
             var result = await _service.AddUserNotification(new Models.User.UserNotification.
                 AddUserNotificationCommandViewModel
             {
@@ -73,7 +79,7 @@ namespace PlanningRazorPage.Areas.Notification
                 Title = requestData.Title,
                 NotificationType = NotificationSendType,
                 UserIds = requestData.UserIds,
-                SendTime = requestData.SendTimeDate,
+                SendTime = date == null ? DateTime.MinValue : date,
                 SendToAllUser = requestData.SendToAllUser,
             });
         }

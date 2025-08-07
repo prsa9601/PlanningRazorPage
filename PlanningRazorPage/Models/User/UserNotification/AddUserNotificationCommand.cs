@@ -31,13 +31,25 @@ namespace PlanningRazorPage.Models.User.UserNotification
         //[Description("هیچکدام")]
         //None = 0,
 
+        //[Description("وبسایت")]
+        //Website = 1,
+
+        //[Description("ایمیل")]
+        //Email = 2,
+
+        //[Description("پیامک")]
+        //Sms = 3
+
+        [Description("هیچکدام")]
+        None = 0,          // 0000
+
         [Description("وبسایت")]
-        Website = 1,
+        Website = 1,       // 0001
 
         [Description("ایمیل")]
-        Email = 2,
+        Email = 1 << 1,    // 0010 (یا 2)
 
         [Description("پیامک")]
-        Sms = 4
+        Sms = 1 << 2       // 0100 (یا 4)
     }
 }

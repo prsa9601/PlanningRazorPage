@@ -85,7 +85,7 @@ namespace PlanningRazorPage.Services.User.UserNotification
         public async Task<ApiResult> RemoveUserNotification(RemoveUserNotificationViewModel model)
         {
             var result = await _client.DeleteAsync
-                ($"{ModuleName}/Remove{model.UserNotificationId}");
+                ($"{ModuleName}/Remove?UserNotificationId={model.UserNotificationId}");
             return await result.Content.ReadFromJsonAsync<ApiResult>();
         }
 

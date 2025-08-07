@@ -1,187 +1,304 @@
 ﻿@using PlanningRazorPage.Infrastructure.Utils
+@using PlanningRazorPage.Models.GlobalNotification
 @using PlanningRazorPage.Models.Notification
-@using PlanningRazorPage.Services.Notification;
-@using PlanningRazorPage.Services.User.UserNotification;
-@inject PlanningRazorPage.Services.Notification.INotificationService _notificationService;
-@inject PlanningRazorPage.Services.User.UserNotification.IUserNotificationService _userNotificationService;
+@using PlanningRazorPage.Services.Notification
+@using PlanningRazorPage.Services.User.UserNotification
+@inject INotificationService _notificationService
+@inject IUserNotificationService _userNotificationService
+@{
+    GlobalNotificationFilterResult Notifications = null;
+    if (User.Identity.IsAuthenticated)
+    {
+        var notificationResult = await _notificationService.GetFilterNotificationsCurrentUser(
+            new NotificationFilterParamViewModel
+                    {
+                        PageId = 1,
+                        Take = 8
+                    });
 
-<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
-    <!-- ... کدهای قبلی بدون تغییر ... -->
+        var userNotificationResult = await _userNotificationService.GetUserNotificationFilterForLayout(
+            new Models.User.UserNotification.UserNotificationFilterParamViewModel
+                    {
+                        PageId = 1,
+                        Take = 8
+                    });
+
+        Notifications = notificationResult.Map(userNotificationResult);
+    }
+}
+
+<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+     id="layout-navbar">
+    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+            <i class="mdi mdi-menu mdi-24px"></i>
+        </a>
+    </div>
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-        <!-- ... کدهای جستجو بدون تغییر ... -->
-        @{
-            if (User.Identity.IsAuthenticated)
-            {
+        <!-- Search -->
+        <div class="navbar-nav align-items-center">
+            <div class="nav-item navbar-search-wrapper mb-0">
+                <a class="nav-item nav-link search-toggler fw-normal px-0" href="javascript:void(0);">
+                    <i class="mdi mdi-magnify mdi-24px scaleX-n1-rtl"></i>
+                    <span class="d-none d-md-inline-block text-muted">جستوجو (Ctrl+/)</span>
+                </a>
+            </div>
+        </div>
+        <!-- /Search -->
 
-                NotificationFilterResult Notifications;
-                Notifications = await _notificationService.GetFilterNotificationsCurrentUser(new NotificationFilterParamViewModel
-                {
-                    PageId = 1,
-                    Take = 8
-                });
-
-                <ul class="navbar-nav flex-row align-items-center ms-auto">
-                    <!-- Notification -->
-                    <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
-                        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                            <i class="mdi mdi-bell-outline mdi-24px"></i>
-
-                            @if (Notifications.Data.Any(i => i.IsSeen == false) && User.Identity.IsAuthenticated)
-                            {
-                                <span id="notificationBadge"
-                                class="position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border"></span>
-                            }
+        <ul class="navbar-nav flex-row align-items-center ms-auto">
+            <!-- Language -->
+            <li class="nav-item dropdown-language dropdown me-1 me-xl-0">
+                <a class="nav-link btn btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow waves-effect waves-light"
+                   href="javascript:void(0);"
+                   data-bs-toggle="dropdown">
+                    <i class="mdi mdi-translate mdi-24px"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item waves-effect active"
+                           href="javascript:void(0);"
+                           data-language="fa">
+                            <span class="align-middle">فارسی</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end py-0">
-                            <li class="dropdown-menu-header border-bottom">
-                                <div class="dropdown-header d-flex align-items-center py-3">
-                                    <h6 class="mb-0 me-auto">اعلان ها</h6>
-                                    @{
-                                        var unreadCount = Notifications.Data.Count(i => i.IsSeen == false);
-                                        if (unreadCount > 0)
+                    </li>
+                    <li>
+                        <a class="dropdown-item waves-effect active"
+                           href="javascript:void(0);"
+                           data-language="en">
+                            <span class="align-middle">انگلیسی</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item waves-effect"
+                           href="javascript:void(0);"
+                           data-language="fr">
+                            <span class="align-middle">فرانسوی</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item waves-effect"
+                           href="javascript:void(0);"
+                           data-language="de">
+                            <span class="align-middle">آلمانی</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item waves-effect"
+                           href="javascript:void(0);"
+                           data-language="pt">
+                            <span class="align-middle">پرتغالی</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!--/ Language -->
+            <!-- Style Switcher -->
+            <li class="nav-item me-1 me-xl-0">
+                <a class="nav-link btn btn-text-secondary rounded-pill btn-icon style-switcher-toggle hide-arrow waves-effect waves-light"
+                   href="javascript:void(0);">
+                    <i class="mdi mdi-24px mdi-weather-sunny"></i>
+                </a>
+            </li>
+            <!--/ Style Switcher -->
+            <!-- Quick links  -->
+            <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown me-1 me-xl-0">
+                <a class="nav-link btn btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow waves-effect waves-light"
+                   href="javascript:void(0);"
+                   data-bs-toggle="dropdown"
+                   data-bs-auto-close="outside"
+                   aria-expanded="false">
+                    <i class="mdi mdi-view-grid-plus-outline mdi-24px"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end py-0">
+                    <!-- Quick links content -->
+                </div>
+            </li>
+            <!-- Quick links -->
+            <!-- Notification System -->
+            <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                   data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    <i class="mdi mdi-bell-outline mdi-24px"></i>
+
+                    @if (User.Identity.IsAuthenticated && Notifications!.Data.Any(i => i.IsSeen == false))
+                    {
+                        <span id="notificationBadge"
+                              class="position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border"></span>
+                    }
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end py-0">
+                    <li class="dropdown-menu-header border-bottom">
+                        <div class="dropdown-header d-flex align-items-center py-3">
+                            <h6 class="mb-0 me-auto">اعلان ها</h6>
+                            @if (User.Identity.IsAuthenticated && Notifications!.Data.Where(i => i.IsSeen == false).Count() > 0)
+                            {
+                                <span class="badge rounded-pill bg-label-primary notification-count">
+                                    @Notifications.Data.Where(i => i.IsSeen == false).Count()
+                                </span>
+                            }
+                        </div>
+                    </li>
+                    <li class="dropdown-notifications-list scrollable-container ps">
+                        <ul class="list-group list-group-flush">
+                            @if (!User.Identity.IsAuthenticated || Notifications!.Data.Count() == 0)
+                            {
+                                <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200 text-center">
+                                            <h6 class="mb-1 text-truncate">
+                                                نوتیفیکیشنی یافت نشد!
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                            else
+                            {
+                                @foreach (var notification in Notifications!.Data)
+                                {
+                                    <li class="list-group-item list-group-item-action dropdown-notifications-item
+                                         @(!notification.IsSeen ? "unread" : "")"
+                                        data-notification-id="@notification.Id"
+                                        data-notification-type="@notification.globalGetType">
+
+                                        @if (!notification.IsSeen)
                                         {
-                                            <span class="badge rounded-pill bg-label-primary notification-count">
-                                                @unreadCount
-                                            </span>
+                                            <span class="badge badge-dot bg-danger position-absolute start-0 top-0 mt-1 ms-1"></span>
                                         }
-                                    }
-                                </div>
-                            </li>
-                            <li class="dropdown-notifications-list scrollable-container ps">
-                                <ul class="list-group list-group-flush">
-                                    @if (!Notifications.Data.Any())
-                                    {
-                                        <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                                            <div class="d-flex gap-2 justify-content-center">
-                                                <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200 text-center">
-                                                    <h6 class="mb-1 text-truncate">
-                                                        نوتیفیکیشنی یافت نشد!
-                                                    </h6>
+                                        <div class="d-flex gap-2">
+                                            <div class="flex-shrink-0">
+                                                <div class="avatar me-1">
+                                                    <img src="~/assets/img/avatars/1.png"
+                                                         alt=""
+                                                         class="w-px-40 h-auto rounded-circle" />
                                                 </div>
                                             </div>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        @foreach (var notification in Notifications.Data)
-                                        {
-                                            <li class="list-group-item list-group-item-action dropdown-notifications-item
-                                                             @(!notification.IsSeen ? "unread" : "")"
-                                            data-notification-id="@notification.Id">
-                                                @if (!notification.IsSeen)
-                                                {
-                                                    <span class="badge badge-dot bg-danger position-absolute start-0 top-0 mt-1 ms-1"></span>
-                                                }
-                                                <div class="d-flex gap-2">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar me-1">
-                                                            <img src="~/assets/img/avatars/1.png"
-                                                            alt=""
-                                                            class="w-px-40 h-auto rounded-circle" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
-                                                        <h6 class="mb-1 text-truncate">@notification.Title</h6>
-                                                        <small class="text-truncate text-body">
-                                                            @if (!string.IsNullOrEmpty(notification.Description))
-                                                            {
-                                                                @(notification.Description.Length > 50 ?
-                                                                    notification.Description.Substring(0, 50) + "..." :
-                                                                    notification.Description)
-                                                            }
-                                                        </small>
-                                                    </div>
-                                                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                                                        <small class="text-muted">@notification.SendTime.ToPersianDate()</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        }
-                                    }
-                                </ul>
-                            </li>
-                            <li class="dropdown-menu-footer border-top p-2">
-                                <a href="Front/Profile/Notification"
-                                class="btn btn-primary d-flex justify-content-center waves-effect waves-light">
-                                    مشاهده همه اعلان ها
-                                </a>
-                            </li>
+                                            <div class="d-flex flex-column flex-grow-1 overflow-hidden w-px-200">
+                                                <h6 class="mb-1 text-truncate">
+                                                    @notification.Title
+                                                </h6>
+                                                <small class="text-truncate text-body">
+                                                    @if (!string.IsNullOrEmpty(notification.Description))
+                                                    {
+                                                        @(notification.Description.Length > 50 ?
+                                                            notification.Description.Substring(0, 50) + "..." :
+                                                            notification.Description)
+                                                    }
+                                                </small>
+                                            </div>
+                                            <div class="flex-shrink-0 dropdown-notifications-actions">
+                                                <small class="text-muted">@notification.SendTime.ToPersianDate()</small>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            }
                         </ul>
                     </li>
-                    <!--/ Notification -->
-                    <!-- ... کدهای مربوط به کاربر بدون تغییر ... -->
+                    <li class="dropdown-menu-footer border-top p-2">
+                        <a href="/Front/Profile/Notification"
+                           class="btn btn-primary d-flex justify-content-center waves-effect waves-light">
+                            مشاهده همه اعلان ها
+                        </a>
+                    </li>
                 </ul>
-            }
-            else
-            {
-                
-            }
+            </li>
+            <!--/ Notification System -->
+            <!-- User -->
+            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow"
+                   href="javascript:void(0);"
+                   data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                        <img src="~/assets/img/avatars/1.png"
+                             alt=""
+                             class="w-px-40 h-auto rounded-circle" />
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <!-- User dropdown content -->
+                </ul>
+            </li>
+            <!--/ User -->
+        </ul>
+    </div>
 
-        }
+    <!-- Search Small Screens -->
+    <div class="navbar-search-wrapper search-input-wrapper d-none">
+        <!-- Search content -->
     </div>
 </nav>
+
 @if (User.Identity.IsAuthenticated)
 {
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
             const notificationList = document.querySelector('.dropdown-notifications-list');
 
-            // تابع علامت گذاری به عنوان خوانده شده
-            async function markAsRead(notificationId, element) {
+            async function markAsRead(notificationId, type, element) {
                 try {
                     if (!element.classList.contains('unread')) return;
 
                     const formData = new FormData();
                     formData.append('notificationId', notificationId);
+                    formData.append('type', type);
 
                     const response = await fetch('/Index?handler=MarkNotificationAsRead', {
                         method: 'POST',
                         body: formData,
                         headers: {
-                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                            'RequestVerificationToken': token
                         }
                     });
 
                     if (response.ok) {
-                        // حذف نشانگر خوانده نشده
                         element.classList.remove('unread');
                         const badge = element.querySelector('.badge-dot');
                         if (badge) badge.remove();
 
-                        // به روزرسانی شمارنده
-                        const countElement = document.querySelector('.notification-count');
-                        if (countElement) {
-                            let count = parseInt(countElement.textContent);
-                            count--;
-
-                            if (count <= 0) {
-                                countElement.remove();
-                                const mainBadge = document.getElementById('notificationBadge');
-                                if (mainBadge) mainBadge.remove();
-                            } else {
-                                countElement.textContent = count;
-                            }
-                        }
+                        updateNotificationCount();
                     }
                 } catch (error) {
                     console.error('خطا در بروزرسانی نوتیفیکیشن:', error);
                 }
             }
 
-            // مشاهده آیتم‌های نوتیفیکیشن
-            document.querySelectorAll('.dropdown-notifications-item.unread').forEach(item => {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const notificationId = item.dataset.notificationId;
-                            markAsRead(notificationId, item);
-                            observer.disconnect();
-                        }
-                    });
-                }, { threshold: 0.5 });
+            function updateNotificationCount() {
+                const notificationCount = document.querySelector('.notification-count');
+                const unreadItems = document.querySelectorAll('.dropdown-notifications-item.unread');
+                const mainBadge = document.getElementById('notificationBadge');
 
+                if (notificationCount) {
+                    notificationCount.textContent = unreadItems.length;
+
+                    if (unreadItems.length === 0 && mainBadge) {
+                        mainBadge.remove();
+                    } else if (unreadItems.length > 0 && !mainBadge) {
+                        const newBadge = document.createElement('span');
+                        newBadge.id = 'notificationBadge';
+                        newBadge.className = 'position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border';
+                        document.querySelector('.nav-link').appendChild(newBadge);
+                    }
+                }
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const element = entry.target;
+                        const notificationId = element.dataset.notificationId;
+                        const type = element.dataset.notificationType || 'Notification';
+
+                        markAsRead(notificationId, type, element);
+                        observer.unobserve(element);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelectorAll('.dropdown-notifications-item').forEach(item => {
                 observer.observe(item);
             });
         });

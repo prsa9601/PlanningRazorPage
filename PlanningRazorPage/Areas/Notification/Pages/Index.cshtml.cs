@@ -23,11 +23,18 @@ namespace PlanningRazorPage.Areas.Notification.Pages
             UserNotifications = await _service.GetUserNotificationFilterForAdmin(FilterParams);
             return Page();
         }
-        public void OnPostDelete(long notificationId)
+        public async Task<IActionResult> OnPostDelete(long id)
         {
+            var result = await _service.RemoveUserNotification(
+                new RemoveUserNotificationViewModel(id));
+            return new JsonResult(new
+            {
+                success = result.IsSuccess,
+                isreload = result.IsReload, 
+                notificationId = id
+            });
         }
     }
 }
 
 
-    
